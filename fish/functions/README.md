@@ -1,62 +1,106 @@
-# 🐟 Fish Functions Documentation
+# 🐟 Fish Config Reference
 
-This directory contains custom fish functions designed to enhance the terminal experience with fuzzy finding, better search, and improved workflows.
-
-## 🚀 Quick Reference
-
-| Command | Description |
-| :--- | :--- |
-| `bmo` | Fuzzy find and open Bookmarks (requires `bmm`). |
-| `fkill` | Fuzzy find and kill processes with multi-select support. |
-| `j` | Smart directory jumper (zoxide). Opens fzf if no argument is provided. |
-| `list_all_apps` | Generates a comprehensive software inventory in `~/Downloads/MasterList.md`. |
-| `man` | Enhanced `man` pages with syntax highlighting via `bat`. |
-| `nfzf` | Fuzzy find files and open them in your `$EDITOR`. |
-| `rga-fzf` | Search inside PDFs, Office Docs, etc., and open them. |
-| `sg` | Fuzzy search file contents and open in Neovim at the exact line. |
-| `wtf` | Uses `aider` to diagnose and suggest fixes for recent command failures. |
-| `y` | `yazi` wrapper that syncs your shell's CWD with yazi's exit directory. |
-| `zk` | Fuzzy session manager for Zellij (create or attach). |
+Quick reference for all custom functions, abbreviations, and automation hooks
+configured in this Fish shell environment.
 
 ---
 
-## 🛠️ Detailed Function Overviews
+## Functions (`functions/`)
 
-### `bmo`
-Uses `bmm` to list bookmarks, pipes them to `fzf` for selection, and opens the URI using `xdg-open`.
+| Command | Depends On | Description |
+| :--- | :--- | :--- |
+| `bmo` | `bmm`, `fzf`, `jq` | Fuzzy-find bookmarks and open in browser via `xdg-open`. |
+| `fkill` | `fzf`, `ps` | Fuzzy find and kill processes. `TAB` to multi-select. |
+| `j [path]` | `zoxide`, `fzf`, `eza` | Smart `cd`. No args → fzf over zoxide history with tree preview. |
+| `list_all_apps` | `dnf`, `flatpak`, `cargo` | Generate full software inventory → `~/Downloads/MasterList.md`. |
+| `man` | `bat` | Man pages with `bat` syntax highlighting as pager. |
+| `nfzf` | `fd`, `fzf`, `bat` | Fuzzy find files (incl. hidden, excl. `.git`) and open in `$EDITOR`. |
+| `nvq <pattern>` | `rg`, `nvim` | Ripgrep results piped directly into Neovim quickfix list. |
+| `rga-fzf` | `rga`, `fzf` | Search inside PDFs/Office docs. Opens selected file via `xdg-open`. |
+| `sg` | `rg`, `fzf`, `bat` | Fuzzy search file contents; opens Neovim at the exact match line. |
+| `wtf` | `atuin`, `aider` | Sends last 5 commands + exit codes to `aider` for failure diagnosis. |
+| `y` | `yazi`, `zoxide`, `nvim` | Yazi wrapper: syncs CWD to zoxide on exit, opens selected file in nvim. |
+| `zk` | `zellij`, `fzf` | Fuzzy Zellij session manager — attach to existing or create new. |
 
-### `fkill`
-**Description:** Fuzzy kill processes.
-**Usage:** `fkill`
-- Use `TAB` to multi-select processes.
-- Use `ENTER` to kill the selected PID(s) with `kill -9`.
+---
 
-### `j`
-**Description:** Enhanced directory jumping.
-**Usage:** `j [path]`
-- If a path is provided, it acts as a shortcut for `z [path]`.
-- If no path is provided, it opens a fuzzy list of your `zoxide` history with a directory tree preview (`eza`).
+## Abbreviations (`config.fish`)
 
-### `list_all_apps`
-**Description:** Generates a `MasterList.md` file in your Downloads folder containing all installed software across APT, Flatpak, Homebrew, Cargo, and local binaries.
+### Navigation
+| Abbreviation | Expands To |
+| :--- | :--- |
+| `..` | `cd ..` |
+| `...` | `cd ../..` |
+| `cd` | `z` (zoxide) |
+| `yr` | `yazi` |
+| `bk` | `bmm tui` |
 
-### `man`
-**Description:** Wraps the standard `man` command to use `bat` as the pager, providing syntax highlighting and a better reading experience.
+### File & Text
+| Abbreviation | Expands To |
+| :--- | :--- |
+| `cat` | `bat` |
+| `find` | `fd` |
+| `du` | `dust -r` |
+| `cp` | `rsync -ah --info=progress2` |
+| `ls` | `eza --icons --group-directories-first` |
+| `ll` | `eza -lh --icons --grid --group-directories-first` |
+| `la` | `eza -a --icons --group-directories-first` |
+| `tree` | `eza --tree --icons` |
 
-### `nfzf`
-**Description:** Finds files (hidden files included, `.git` excluded) using `fd` and opens the selection in your default `$EDITOR`.
+### Editor & Clipboard
+| Abbreviation | Expands To |
+| :--- | :--- |
+| `v` | `nvim` |
+| `copy` | `wl-copy` |
+| `paste` | `wl-paste` |
 
-### `rga-fzf`
-**Description:** Uses `ripgrep-all` (rga) to search through "unstructured" data like PDFs and Ebooks. Opens the selected file in the background.
+### Git
+| Abbreviation | Expands To |
+| :--- | :--- |
+| `g` | `git` |
+| `gs` | `git status` |
+| `ga` | `git add` |
+| `gc` | `git commit -m` |
+| `gp` | `git push` |
 
-### `sg`
-**Description:** A powerful content searcher. Uses `ripgrep` for searching and `fzf` for selection. It provides a live preview of the match and opens Neovim at the specific line number when selected.
+### Python (`uv`)
+| Abbreviation | Expands To |
+| :--- | :--- |
+| `py` | `uv run` |
+| `pyr` | `uv run python` |
+| `pyv` | `uv venv` |
 
-### `wtf`
-**Description:** When a command fails, run `wtf`. it grabs the last 5 commands from `atuin` and sends them to `aider` to explain why they failed and how to fix them.
+### Asus Laptop
+| Abbreviation | Expands To |
+| :--- | :--- |
+| `pperf` | `asusctl profile set Performance` |
+| `pbal` | `asusctl profile set Balanced` |
+| `pquiet` | `asusctl profile set Quiet` |
+| `bbstay` | `asusctl battery limit 60` |
 
-### `y`
-**Description:** The standard `yazi` shell wrapper. It ensures that when you quit `yazi`, your shell remains in the last directory you navigated to.
+---
 
-### `zk`
-**Description:** Quickly attach to an existing Zellij session or create a new one based on the current directory name using `fzf`.
+## Key Bindings (`config.fish`)
+
+| Binding | Mode | Action |
+| :--- | :--- | :--- |
+| `Ctrl+R` | Insert + Normal | Atuin history search |
+| `↑` | Insert + Normal | Atuin history up |
+| `Ctrl+G` | Insert + Normal | Navi: smart cheatsheet replace |
+| `Alt+E` | Insert + Normal | Navi: smart cheatsheet replace (alt) |
+
+FZF is configured in Vi-modal mode — press `i` to enter Insert (search) mode,
+`Esc` to return to Normal mode with `j/k/h/l` navigation.
+
+---
+
+## Automation Hooks (`conf.d/zellij_manager.fish`)
+
+Event-driven hooks that fire automatically inside a Zellij session.
+
+| Hook | Trigger | Behaviour |
+| :--- | :--- | :--- |
+| `__on_pwd_change` | Directory change | Notifies if a project-specific Zellij layout (`<dir>.kdl`) exists in `~/.config/zellij/layouts/`. |
+| `__zj_preexec_handler` | Before a TUI app runs | Prints an encouraging message when launching: `nvim`, `spotify-player`, `surge`, `btop`, `lazygit`, `yazi`. |
+| `__zj_postexec_handler` | After a TUI app exits | Prints a welcome-back message when returning from a TUI app. |
+
