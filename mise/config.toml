@@ -18,6 +18,7 @@ watchexec  = "latest"  # Re-run commands on file change (Rust)
 xh         = "latest"  # Fast native HTTP client (Rust)
 usage      = "latest"  # CLI specification tool (Rust)
 carapace   = "latest"  # Multi-shell completion engine (Go)
+zellij     = "latest"  # Terminal Multiplexer (Rust)
 
 # --- Monitoring ---
 btop   = "latest" # Feature-rich resource monitor (C++)
