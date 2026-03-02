@@ -6,9 +6,7 @@
 
 
 [misc]
-disable = [
-    "yazi"
-]
+disable = ["yazi"]
 # On Unix systems, Topgrade should not be run as root, it
 # will run commands with sudo or equivalent where needed.
 # Set this to true to suppress the warning and confirmation
@@ -120,7 +118,7 @@ cleanup = true
 
 # This updates the actual compilers (GCC/GDB) and frameworks (Arduino/ESP-IDF)
 "PlatformIO Core" = "pio pkg update --global"
-"Update LSP DB" = "find ~/projects -name 'platformio.ini' -execdir pio run -t compiledb \\;"
+#"Update LSP DB" = "find ~/projects -name 'platformio.ini' -execdir pio run -t compiledb \\;"
 
 [python]
 # enable_pip_review = true                         ###disabled by default
@@ -251,10 +249,7 @@ dnf_arguments = "--refresh --assumeyes"
 max_concurrency = 5
 
 # Additional git repositories to pull or fetch
-repos = [
-    "~/dotfiles/",
-    "~/.config/nvim/"
-]
+repos = ["~/dotfiles/", "~/.config/nvim/"]
 
 # Set to `false` to skip pulling/fetching the predefined git repos
 # pull_predefined = false
