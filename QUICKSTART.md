@@ -26,7 +26,7 @@ sudo dnf upgrade --refresh -y
 ### 3. Package Deployment
 Deploy the primary toolset including compilers, debuggers, and virtualization layers.
 ```bash
-sudo dnf install -y llvm-devel clang lldb lld ccache git gh ghostty \
+sudo dnf install -y fish llvm-devel clang lldb lld ccache git gh ghostty \
 direnv lnav tree-sitter-cli valgrind gdb \
 flatpak podman toolbox virt-manager \
 thunderbird keepassxc syncthing texlive-scheme-medium libusb1-devel \
@@ -57,9 +57,11 @@ Authorize Git and map configuration state to the local filesystem.
 gh auth login
 
 # Clone and deploy dotfiles
-gh repo clone gsmith-alvarez/.dotfiles ~/dotfiles
-cd ~/dotfiles
-stow .config -t ~
+gh repo clone gsmith-alvarez/.dotfiles ~/dot cd ~/dotfiles
+
+stow --target ~/.config
+
+mise install
 ```
 
 ### 2. Runtime Toolchain
