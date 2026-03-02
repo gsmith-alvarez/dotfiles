@@ -1,79 +1,79 @@
-# Radical CLI Workflow Optimizations
+# .dotfiles
 
-This document outlines the advanced, AI-augmented, and context-aware CLI functions implemented to significantly enhance productivity and reduce cognitive load in your Fish shell environment.
+Personal configuration for a Fedora-based embedded engineering workstation.
+Managed with [GNU Stow](https://www.gnu.org/software/stow/) — all configs live
+at the repo root and are symlinked into `~/.config/`.
 
-## Core Principles
-- **Pattern Recognition & Redundancy:** Abstracting repetitive tasks into intelligent functions.
-- **Integration Opportunities:** Leveraging modern CLI tools like `fzf`, `jq`, `ripgrep`, `delta`, `bat`, `sd`, `watchexec`, and `zellij`.
-- **Context-Aware Automations:** Functions anticipating next moves based on directory or Git branch state.
-- **Modernization:** Replacing legacy patterns with performant, forward-thinking alternatives.
-- **The Unconventional:** Integrating AI-piping and cross-tool hooks to challenge standard CLI conventions.
+> For the full workstation provisioning guide (packages, hardware, kernel tuning,
+> Flatpaks, firewall, etc.) see [`nvim/README.md`](nvim/README.md).
 
-## New Functions & Aliases
+---
 
-### `s` (Unified Multi-Modal Search)
-A powerful interface leveraging `fzf` to dynamically switch between `ripgrep` (text search), `ripgrep-all` (document search), and `fd` (filename search). It offers instant previews, direct `nvim` integration (opening to a specific line or populating the quickfix list for multiple selections), and `xdg-open` for external viewing. This function replaces `rgf`, `sg`, `rga-fzf`, `nvq`, and `peek`.
-`s [query]`
+## Bootstrap
 
-### `q` (Omni-query: JSON/YAML/TOML/JSONL)
-A universal query shortcut that automatically detects file formats (JSON, YAML, TOML) or piped input. It uses `yq` for powerful parsing and `gojq` for superior colorization and interactive exploration. Can also launch `fzf` to pick a config file.
-`q [query] [file]`
-`cat config.toml | q '.version'`
+```bash
+gh repo clone gsmith-alvarez/.dotfiles ~/dotfiles
+cd ~/dotfiles
+stow --target ~/.config .
+mise install
+```
 
-### `openf` (Intelligent File Opener)
-Fuzzy-finds files and opens them intelligently based on file type (e.g., `nvim` for code, `ouch view` for archives, `yazi` for others).
-`openf`
+`stow` will create symlinks for every directory/file at the repo root into
+`~/.config/`. Files listed in `.stow-local-ignore` (`README.md`, `reference.md`,
+`.gitignore`, `.git`) are excluded.
 
-### `aicommits` (AI Git Commit Message Generator)
-Generates a conventional Git commit message for staged changes using `aider-chat`, offering a chance to accept or edit.
-`aicommits`
+---
 
-### `zs` (Smart Zellij Session Manager)
-Manages `zellij` sessions with flexible layout options. Attaches to or creates a project-named session. Can launch a specialized "dashboard" layout for monitoring (`zs dashboard`) or a system "health" dashboard (`zs health`), or use custom layouts (`zs <custom_layout_name>`).
-`zs`
-`zs dashboard`
-`zs health`
-`zs <custom_layout_name>`
+## Configs
 
-### `json_query` (Interactive JSON Query Tool)
-Pipes JSON output to `fzf` and `gojq` for interactive exploration and extraction of data.
-`some_command_output | json_query`
+| Directory / File | Tool |
+|---|---|
+| `nvim/` | Neovim — mini.nvim + snacks.nvim, no Mason, mise-managed LSPs |
+| `VSCodium/` | VSCodium — vscode-neovim bridge, Catppuccin Mocha, clangd, PIO |
+| `fish/` | Fish shell — functions, abbreviations, `zs` session manager |
+| `zellij/` | Zellij — multiplexer layouts (health, dashboard) |
+| `ghostty/` | Ghostty terminal emulator |
+| `mise/` | mise — language runtime & tool version manager |
+| `atuin/` | Atuin — shell history sync |
+| `carapace/` | Carapace — multi-shell completion bridge |
+| `lazygit/` | Lazygit |
+| `starship.toml` | Starship prompt |
+| `topgrade.toml` | Topgrade system updater |
+| `btop/` | btop resource monitor |
+| `bottom/` | bottom (btm) resource monitor |
+| `aichat/` | aichat CLI AI client |
+| `glow/` | Glow markdown renderer |
+| `spotify-player/` | spotify-player TUI |
+| `yazu/` | Yazi file manager |
+| `cosmic/` | COSMIC desktop settings |
+| `easy-effects/` | EasyEffects audio presets |
 
-### `smart_navi_add` (Cheatsheet Addition)
-Adds new commands and their descriptions to your dynamic `navi` cheatsheet, automating cheatsheet maintenance.
-`smart_navi_add "<command>" "<description>"`
+---
 
-### `git_smart_checkout` (AI-Augmented Fuzzy Git Checkout)
-Combines `fzf` for fuzzy branch selection with `git_branch_ai_summary` to show an AI-generated summary of changes for a selected branch *before* you check it out, reducing cognitive load during context switching.
-`git_smart_checkout`
+## Neovim
 
-### `git_sdiff` (Structural Git Diff)
-Leverages `difftastic` for syntax-aware Git diffs, providing semantic changes for code review rather than just line-based differences. Also available via the `git sdiff` alias (requires `.gitconfig` setup).
-`git_sdiff [files...]`
+Lightweight, portable config built on three pillars — see [`nvim/README.md`](nvim/README.md) for the full architecture, plugin inventory, and keymap registry.
 
-### `__on_pwd_change` (Context-aware Project Initialization)
-A silent, event-driven function that automatically triggers when you change directories (`cd`). It renames your current Zellij tab to the project name (if in a Git repo) and proactively notifies you if a project-specific Zellij layout (`<project_name>.kdl`) exists, prompting you to use `zs`.
+**Key design choices:**
+- No Mason — all LSPs, formatters, and tools managed by `mise`
+- `mini.deps` for plugin management (no lazy.nvim)
+- `snacks.nvim` for picker, notifications, and terminal
+- `blink.cmp` for completion
+- Circuit-breaker pattern: every plugin load is wrapped in `pcall`
+- `lua/core/vscode.lua` bridges leader maps to VSCode commands when running inside vscode-neovim
 
-### `log_analyzer` (AI-powered Log Analysis with Safety Filter)
-Pipes log content (e.g., from `journalctl`, `tail`) to `aider-chat` for AI-powered identification of critical errors, patterns, and suggested resolutions, automatically filtering large inputs.
-`some_log_command | log_analyzer`
+---
 
-### `cheat` (Unified Command Help)
-A smart function that first attempts to provide concise usage examples via `tldr`, falling back to a `bat`-enhanced `man` page if a `tldr` page is not available. This offers layered access to command documentation.
-`cheat <command>`
+## VSCodium
 
-## New CLI Tools
-- `difftastic`: A structural diff tool that understands code syntax for more intelligent comparisons.
-- `yq`: A portable `jq` for querying and manipulating YAML, XML, TOML, and other structured data formats.
-- `dog`: A modern, user-friendly command-line DNS client, an intuitive alternative to `dig`.
-- `procs`: A modern replacement for `ps`, offering enhanced process information with better readability.
+Config in `VSCodium/User/`. Mirrors the Neovim experience via `vscode-neovim`:
+- Same `<leader>` key surface — `vscode.lua` remaps snacks/LSP/DAP/PIO maps to native VSCode commands
+- Catppuccin Mocha theme, relative line numbers, no minimap, format on save
+- `tasks.json` includes terminal tasks for `lazygit`, `aider`, `btm`, `spotify_player`
 
-## General Aliases/Improvements
-- `abbr -a grep rg`: Aliases `grep` to `ripgrep` for faster searching.
-- `.gitconfig` additions: Configuration for `delta` for enhanced Git diff viewing.
-
-## Activation
-To ensure all changes are active:
-1. Run `mise install` (to install `delta` and other `mise`-managed tools).
-2. Manually apply the `.gitconfig` changes provided earlier.
-3. Restart your `fish` shell or run `source ~/.config/fish/config.fish`.
+**Recommended extensions (Open VSX):**
+`asvetliakov.vscode-neovim` · `catppuccin.catppuccin-vsc` · `PKief.material-icon-theme` ·
+`usernamehw.errorlens` · `llvm-vs-code-extensions.vscode-clangd` · `platformio.platformio-ide` ·
+`ziglang.vscode-zig` · `rust-lang.rust-analyzer` · `golang.go` · `charliermarsh.ruff` ·
+`tamasfe.even-better-toml` · `johnnymorganz.stylua` · `myriad-dreamin.tinymist` ·
+`mkhl.direnv` · `hbenl.vscode-test-explorer`
