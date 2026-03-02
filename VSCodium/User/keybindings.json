@@ -1,104 +1,51 @@
+// VSCodium keybindings — paired with lua/core/vscode.lua
+// Editor-level leader maps (<leader>ff, gd, etc.) are handled by vscode-neovim
+// via core/vscode.lua. This file covers VSCode UI contexts outside the editor
+// (panels, terminal, quick-open, suggestions).
 [
+    // ================================================================
+    // PANE NAVIGATION  (mirrors smart-splits.nvim <C-hjkl>)
+    // Works in both editor (neovim passes through) and non-editor UI.
+    // ================================================================
+    { "key": "ctrl+h", "command": "workbench.action.navigateLeft" },
+    { "key": "ctrl+l", "command": "workbench.action.navigateRight" },
+    { "key": "ctrl+k", "command": "workbench.action.navigateUp" },
+    { "key": "ctrl+j", "command": "workbench.action.navigateDown" },
+
+    // ================================================================
+    // EDITOR SPLITS  (fallback when not in neovim normal mode)
+    // ================================================================
+    { "key": "ctrl+w v", "command": "workbench.action.splitEditor" },
+    { "key": "ctrl+w s", "command": "workbench.action.splitEditorDown" },
+    { "key": "ctrl+w q", "command": "workbench.action.closeActiveEditor" },
+
+    // ================================================================
+    // BUFFER NAVIGATION  (mirrors H / L in non-editor contexts)
+    // ================================================================
     {
-        "key": "ctrl+h",
-        "command": "workbench.action.navigateLeft"
+        "key": "shift+h",
+        "command": "workbench.action.previousEditorInGroup",
+        "when": "!editorTextFocus"
     },
     {
-        "key": "ctrl+l",
-        "command": "workbench.action.navigateRight"
+        "key": "shift+l",
+        "command": "workbench.action.nextEditorInGroup",
+        "when": "!editorTextFocus"
     },
+
+    // ================================================================
+    // TERMINAL  (mirrors <C-\> toggle + <Esc><Esc> exit)
+    // ================================================================
+    { "key": "ctrl+`", "command": "workbench.action.terminal.toggleTerminal" },
     {
-        "key": "ctrl+k",
-        "command": "workbench.action.navigateUp"
+        "key": "escape escape",
+        "command": "workbench.action.terminal.focus",
+        "when": "terminalFocus"
     },
-    {
-        "key": "ctrl+j",
-        "command": "workbench.action.navigateDown"
-    },
-    {
-        "key": "ctrl+w v",
-        "command": "workbench.action.splitEditor"
-    },
-    {
-        "key": "ctrl+w s",
-        "command": "workbench.action.splitEditorDown"
-    },
-    {
-        "key": "ctrl+w q",
-        "command": "workbench.action.closeActiveEditor"
-    },
-    {
-        "key": "ctrl+`",
-        "command": "workbench.action.terminal.toggleTerminal"
-    },
-    {
-        "key": "space",
-        "command": "vspacecode.space",
-        "when": "editorTextFocus && vim.mode != 'Insert'"
-    },
-    {
-        "key": "x",
-        "command": "magit.discard-at-point",
-        "when": "editorTextFocus && editorLangId == 'magit' && vim.mode =~ /^(?!SearchInProgressMode|CommandlineInProgress).*$/"
-    },
-    {
-        "key": "k",
-        "command": "-magit.discard-at-point"
-    },
-    {
-        "key": "-",
-        "command": "magit.reverse-at-point",
-        "when": "editorTextFocus && editorLangId == 'magit' && vim.mode =~ /^(?!SearchInProgressMode|CommandlineInProgress).*$/"
-    },
-    {
-        "key": "v",
-        "command": "-magit.reverse-at-point"
-    },
-    {
-        "key": "shift+-",
-        "command": "magit.reverting",
-        "when": "editorTextFocus && editorLangId == 'magit' && vim.mode =~ /^(?!SearchInProgressMode|CommandlineInProgress).*$/"
-    },
-    {
-        "key": "shift+v",
-        "command": "-magit.reverting"
-    },
-    {
-        "key": "shift+o",
-        "command": "magit.resetting",
-        "when": "editorTextFocus && editorLangId == 'magit' && vim.mode =~ /^(?!SearchInProgressMode|CommandlineInProgress).*$/"
-    },
-    {
-        "key": "shift+x",
-        "command": "-magit.resetting"
-    },
-    {
-        "key": "x",
-        "command": "-magit.reset-mixed"
-    },
-    {
-        "key": "ctrl+u x",
-        "command": "-magit.reset-hard"
-    },
-    {
-        "key": "y",
-        "command": "-magit.show-refs"
-    },
-    {
-        "key": "y",
-        "command": "vspacecode.showMagitRefMenu",
-        "when": "editorTextFocus && editorLangId == 'magit' && vim.mode == 'Normal'"
-    },
-    {
-        "key": "g",
-        "command": "-magit.refresh",
-        "when": "editorTextFocus && editorLangId == 'magit' && vim.mode =~ /^(?!SearchInProgressMode|CommandlineInProgress).*$/"
-    },
-    {
-        "key": "g",
-        "command": "vspacecode.showMagitRefreshMenu",
-        "when": "editorTextFocus && editorLangId == 'magit' && vim.mode =~ /^(?!SearchInProgressMode|CommandlineInProgress).*$/"
-    },
+
+    // ================================================================
+    // QUICK-OPEN NAVIGATION  (mirrors ctrl+j/k in snacks.picker)
+    // ================================================================
     {
         "key": "ctrl+j",
         "command": "workbench.action.quickOpenSelectNext",
@@ -109,6 +56,10 @@
         "command": "workbench.action.quickOpenSelectPrevious",
         "when": "inQuickOpen"
     },
+
+    // ================================================================
+    // COMPLETION NAVIGATION  (mirrors blink.cmp ctrl+j/k/l)
+    // ================================================================
     {
         "key": "ctrl+j",
         "command": "selectNextSuggestion",
@@ -149,14 +100,18 @@
         "command": "acceptSelectedCodeAction",
         "when": "codeActionMenuVisible"
     },
+
+    // ================================================================
+    // OUTLINE / SYMBOL TREE  (mirrors aerial.nvim ctrl+j/k navigation)
+    // ================================================================
     {
-        "key": "ctrl+h",
-        "command": "file-browser.stepOut",
-        "when": "inFileBrowser"
+        "key": "ctrl+j",
+        "command": "list.focusDown",
+        "when": "listFocus && !inputFocus"
     },
     {
-        "key": "ctrl+l",
-        "command": "file-browser.stepIn",
-        "when": "inFileBrowser"
+        "key": "ctrl+k",
+        "command": "list.focusUp",
+        "when": "listFocus && !inputFocus"
     }
 ]

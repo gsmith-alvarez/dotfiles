@@ -35,6 +35,11 @@ local modules = {
 	-- These often use autocmds that might trigger plugin logic.
 	'core.format',
 	'core.lint',
+
+	-- 6. VSCode Integration (no-op unless vim.g.vscode is set)
+	-- Overrides leader maps with vscode.call() equivalents when running
+	-- inside vscode-neovim. Zero cost in a normal Neovim session.
+	'core.vscode',
 }
 
 for _, module in ipairs(modules) do
