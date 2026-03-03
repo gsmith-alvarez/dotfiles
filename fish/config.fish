@@ -6,7 +6,7 @@ end
 
 ### --- 2. PATH CONSOLIDATION --- ###
 # Use a single, unified path addition for non-mise binaries.
-fish_add_path -g ~/.local/bin ~/.cargo/bin /home/gsmith-alvarez/.lmstudio/bin
+fish_add_path -g ~/.local/bin ~/.cargo/bin ~/.lmstudio/bin
 
 # Go Path Sync
 if type -q go

@@ -52,7 +52,8 @@ Authorize Git and map configuration state to the local filesystem.
 gh auth login
 
 # Clone and deploy dotfiles
-gh repo clone gsmith-alvarez/.dotfiles ~/dot cd ~/dotfiles
+gh repo clone gsmith-alvarez/.dotfiles ~/dotfiles
+cd ~/dotfiles
 
 stow --target ~/.config
 ```
