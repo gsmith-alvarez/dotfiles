@@ -12,6 +12,9 @@ local M = {}
 local cache_path = vim.fn.stdpath("state") .. "/fast_quotes.tmp"
 
 -- [[ THE ASYNC WORKER ]]
+-- Fetches a fresh quote in the background and caches it for the next session.
+-- Called on VimEnter so the current session's quote is already shown instantly
+-- while the next session's quote is being prepared asynchronously.
 M.refresh_quote = function()
   -- Using 'curl' ensures we don't need a heavy Lua socket library.
   local cmd = "curl -s https://zenquotes.io/api/random"
@@ -36,6 +39,12 @@ M.refresh_quote = function()
     end,
   })
 end
+
+-- Refresh in the background on every startup so the cache stays current.
+vim.api.nvim_create_autocmd('VimEnter', {
+  once = true,
+  callback = M.refresh_quote,
+})
 
 -- [[ THE INSTANT ACCESSOR ]]
 M.get_cached_quote = function()

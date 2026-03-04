@@ -6,7 +6,6 @@ local M = {}
 local utils = require 'core.utils'
 
 local modules = {
-	'version_control.lazygit', -- Plants the terminal keymap trap
 	'version_control.mini-diff', -- Plants the hunk navigation keymaps
 }
 

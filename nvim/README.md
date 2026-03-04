@@ -2,7 +2,7 @@
 
 A lightweight, portable, and stable Neovim configuration built on three pillars:
 
-1. **Lightweight** — Fast startup via deferred loading, compile-cached themes, and no Mason/lazy.nvim. Tooling managed by `mise`.
+1. **Lightweight** — Fast startup via deferred loading and no Mason/lazy.nvim. Tooling managed by `mise`.
 2. **Portable** — The entire config can be dropped onto a new machine and work immediately. Binaries resolved via `mise` shims.
 3. **Stable** — Circuit-breaker pattern throughout. Every plugin load is wrapped in `pcall`. Failures notify without crashing.
 
@@ -62,15 +62,15 @@ nvim/
         │   ├── mini-files.lua        # mini.files explorer + split navigation
         │   └── smart-splits.lua      # Neovim ↔ Zellij pane navigation/resize
         ├── notetaking/
-        │   └── obsidian.lua          # obsidian.nvim with mini.pick picker
+        │   └── obsidian.lua          # obsidian-nvim/obsidian.nvim fork, snacks.picker, callback-based keymaps
         ├── searching/
         │   ├── aerial.lua            # JIT structural symbol navigation
         │   ├── init.lua              # Searching domain orchestrator
-        │   └── telescope.lua         # snacks.picker keymaps (ff, sg, sw, sh, sk…)
+        │   └── snacks-picker.lua     # snacks.picker keymaps (ff, fd, sg, sw, sh, sk…)
         ├── ui/
         │   ├── init.lua              # UI domain orchestrator (sync → deferred pipeline)
         │   ├── mini-clue.lua         # Key hint popup (VimEnter deferred)
-        │   ├── mini-colors.lua       # Catppuccin Mocha + compile-cache optimization
+        │   ├── mini-colors.lua       # mini.base16 with Catppuccin Mocha palette
         │   ├── mini-starter.lua      # Dashboard (argc==0 guard, snacks.picker actions)
         │   ├── mini-statusline.lua   # Statusline + mise version telemetry
         │   ├── quotes.lua            # Async quote fetcher (curl → stdpath cache)
@@ -79,7 +79,6 @@ nvim/
         │   └── trouble.lua           # JIT diagnostic aggregator
         ├── version_control/
         │   ├── init.lua              # Git domain orchestrator
-        │   ├── lazygit.lua           # Lazygit via snacks.terminal
         │   └── mini-diff.lua         # mini.diff sign column + mini.bracketed hunks
         └── workflow/
             ├── init.lua              # Workflow domain orchestrator
@@ -122,7 +121,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 |--------|---------|
 | `echasnovski/mini.nvim` | Icons, tabline, statusline, starter, diff, files, ai, surround, move, pairs, indentscope, hipatterns, visits, bracketed, clue |
 | `folke/snacks.nvim` | Notifier, fuzzy picker (replaces telescope), floating terminal, ui_select |
-| `catppuccin/nvim` | Colorscheme (compile-cached) |
+| `echasnovski/mini.base16` (bundled) | Colorscheme (Catppuccin Mocha palette, part of mini.nvim) |
 | `saghen/blink.cmp` | Completion engine |
 | `neovim/nvim-lspconfig` | LSP server stub registry |
 | `nvim-treesitter/nvim-treesitter` | Parsing + syntax |
@@ -133,7 +132,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | `folke/trouble.nvim` | Diagnostic aggregator (JIT) |
 | `mini.sessions` (bundled) | Session management (autowrite, picker restore) |
 | `mrjones2014/smart-splits.nvim` | Neovim ↔ Zellij navigation |
-| `epwalsh/obsidian.nvim` | Notetaking (JIT on markdown) |
+| `obsidian-nvim/obsidian.nvim` | Notetaking (JIT on markdown, snacks.picker) |
 | `chomosuke/typst-preview.nvim` | Typst live preview |
 | `mfussenegger/nvim-dap` | Debugger |
 | `folke/lazydev.nvim` | Lua API intelligence |
@@ -170,7 +169,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n | `<leader>sh` | Search help |
 | n | `<leader>sk` | Search keymaps |
 | n | `<leader>sn` | Search Neovim config files |
-| n | `<leader>cd` | Change directory (Zoxide) |
+| n | `<leader>fd` | Find directory (Zoxide) |
 | n | `<leader><leader>` | Active buffers |
 
 ### LSP
@@ -201,6 +200,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 |------|---------|-------------|
 | n | `<leader>va` | Toggle Aerial symbol sidebar |
 | n | `<leader>vj` | Jump to symbol (Aerial nav) |
+| n | `<leader>vJ` | jless JSON viewer |
 | n | `<leader>xx` | Workspace diagnostics (Trouble) |
 | n | `<leader>xd` | Document diagnostics (Trouble) |
 | n | `<leader>xq` | Quickfix list (Trouble) |
@@ -224,20 +224,25 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n | `<leader>tp` | Process monitor (btm) |
 | n | `<leader>ts` | Spotify player |
 | n | `<leader>ti` | Container infrastructure (podman-tui) |
-| n | `<leader>vg` | Glow markdown preview |
-| n | `<leader>tm` | Markdown preview (alias for vg) |
 
 ### Workflow
 | Mode | Keybind | Description |
 |------|---------|-------------|
-| n | `<leader>Ot` | Overseer: Toggle task list |
-| n | `<leader>Or` | Overseer: Run template |
-| n | `<leader>Oi` | Overseer: Task info |
-| n | `<leader>Oa` | Overseer: Task action menu |
+| n | `<leader>ot` | Overseer: Toggle task list |
+| n | `<leader>or` | Overseer: Run template |
+| n | `<leader>oi` | Overseer: Task info |
+| n | `<leader>oa` | Overseer: Task action menu |
 | n | `<leader>qs` | Session: Restore current dir |
 | n | `<leader>ql` | Session: Picker (select session) |
 | n | `<leader>qw` | Session: Save manually |
 | n | `<leader>qd` | Session: Don't save |
+
+### Typst
+| Mode | Keybind | Description |
+|------|---------|-------------|
+| n | `<leader>typ` | Typst: Start preview |
+| n | `<leader>tyc` | Typst: Close preview |
+| n | `<leader>tys` | Typst: Sync cursor |
 
 ### DAP
 | Mode | Keybind | Description |
@@ -250,9 +255,20 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 ### Notes (Obsidian — JIT on markdown)
 | Mode | Keybind | Description |
 |------|---------|-------------|
-| n | `<leader>oq` | Quick switch |
-| n | `<leader>os` | Search notes |
-| n | `<leader>on` | New note |
+| n | `<leader>nq` | Quick switch |
+| n | `<leader>ns` | Search notes |
+| n | `<leader>nn` | New note |
+| n | `<leader>nf` | Follow link in tab (buffer-local) |
+| n | `<leader>nv` | Follow link vsplit (buffer-local) |
+| n | `<leader>nh` | Follow link hsplit (buffer-local) |
+| n | `<leader>nT` | Search tags (buffer-local) |
+| n | `<leader>no` | Open in Obsidian GUI (buffer-local) |
+| n | `<leader>nc` | Table of contents (buffer-local) |
+| n | `<leader>nt` | Insert template (buffer-local) |
+| n | `<leader>ne` | Extract to note (buffer-local) |
+| n | `<leader>nl` | Link existing note (buffer-local) |
+| n | `<leader>nN` | Link new note (buffer-local) |
+| n | `<leader>np` | Paste image (buffer-local) |
 
 ### Utilities
 | Mode | Keybind | Description |
@@ -263,7 +279,9 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n | `<leader>sR` | Search & replace (sd) |
 | n | `<leader>vx` | XH HTTP client |
 | n | `<leader>ut` | Tool check (mise audit) |
-| n | `<leader>xt` | Run typos checker |
+| n | `<leader>tl` | Toggle diagnostic virtual text |
+| n | `<leader>tu` | Toggle diagnostic underlines |
+| n | `<leader>ct` | Run typos checker |
 | n | `<leader>yp` | Yank absolute path |
 | n | `<leader>yr` | Yank relative path |
 | n | `<leader>zv` | Zellij: Vertical split |
@@ -287,5 +305,5 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 
 **Formatters / Linters:** `stylua`, `oxfmt`, `markdownlint-cli2`, `shellcheck`
 
-**Utilities:** `rg`, `fd`, `make`, `gcc`, `lazygit`, `btm`, `dlv`, `watchexec`, `uv`, `go`, `zig`, `zellij`, `gojq`, `sd`, `xh`, `bat`, `zoxide`, `cargo`, `curl`, `spotify_player`, `podman-tui`, `aider`, `glow`, `pio`, `typos`
+**Utilities:** `rg`, `fd`, `make`, `gcc`, `lazygit`, `btm`, `dlv`, `watchexec`, `uv`, `go`, `zig`, `zellij`, `gojq`, `sd`, `xh`, `bat`, `zoxide`, `cargo`, `curl`, `spotify_player`, `podman-tui`, `aider`, `pio`, `typos`
 

@@ -15,13 +15,14 @@ function M.setup()
 
   -- 2. Imperative Dependency Fetch via mini.deps
   require('mini.deps').add({
-    source = 'epwalsh/obsidian.nvim',
-    depends = { 'nvim-lua/plenary.nvim' } -- mini.pick is GONE.
+    source = 'obsidian-nvim/obsidian.nvim',
+    depends = { 'nvim-lua/plenary.nvim' }
   })
 
   -- 3. Execute the Setup Logic
   require("obsidian").setup({
     ui = { enable = false },
+    legacy_commands = false,
 
     -- MANDATORY: Must be the root to access both 201-University and 500-Resources
     workspaces = {
@@ -31,8 +32,7 @@ function M.setup()
       },
     },
 
-    -- Native mini.pick integration (mini.nvim is already in rtp)
-    picker = { name = "mini.pick" },
+    picker = { name = "snacks" },
 
     -- Matches your descriptive filename preference (No Zettelkasten IDs)
     note_id_func = function(title)
@@ -40,29 +40,30 @@ function M.setup()
       return tostring(os.time())
     end,
 
-    -- Attachments relative to the course/folder
-    attachments = { img_folder = "attachments" },
+    attachments = { folder = "attachments" },
 
     -- ========================================================================
     -- AUTOMATED FRONTMATTER (MOC-Oriented)
     -- ========================================================================
-    note_frontmatter_func = function(note)
-      local out = {
-        id = note.id,
-        aliases = note.aliases,
-        tags = note.tags,
-        created = os.date("%Y-%m-%d %H:%M"),
-      }
+    frontmatter = {
+      func = function(note)
+        local out = {
+          id = note.id,
+          aliases = note.aliases,
+          tags = note.tags,
+          created = os.date("%Y-%m-%d %H:%M"),
+        }
 
-      if not out.tags then out.tags = {} end
+        if not out.tags then out.tags = {} end
 
-      -- Auto-tag MOCs for pattern recognition
-      if note.title and string.match(string.lower(note.title), "moc") then
-        table.insert(out.tags, "MOC")
-      end
+        -- Auto-tag MOCs for pattern recognition
+        if note.title and string.match(string.lower(note.title), "moc") then
+          table.insert(out.tags, "MOC")
+        end
 
-      return out
-    end,
+        return out
+      end,
+    },
 
     -- ========================================================================
     -- TEMPLATE CONFIGURATION
@@ -76,67 +77,33 @@ function M.setup()
       substitutions = {},
     },
 
-    -- Buffer-local keymaps (only active inside a note)
-    mappings = {
-      -- 1. Navigation & MOC Workflow
-      ["gf"] = {
-        action = function() return require("obsidian").util.gf_passthrough() end,
-        opts = { noremap = false, expr = true, buffer = true, desc = "Obsidian: Follow Link" },
-      },
-      ["<leader>nf"] = {
-        action = function() return vim.cmd("ObsidianFollowLink tab") end,
-        opts = { buffer = true, desc = "Obsidian: [F]ollow Link in Tab" },
-      },
-      ["<leader>nv"] = {
-        action = function() vim.cmd("ObsidianFollowLink vsplit") end,
-        opts = { buffer = true, desc = "Obsidian: Follow Link (V-Split)" },
-      },
-      ["<leader>nh"] = {
-        action = function() vim.cmd("ObsidianFollowLink hsplit") end,
-        opts = { buffer = true, desc = "Obsidian: Follow Link (H-Split)" },
-      },
-      ["<leader>nT"] = {
-        action = function() vim.cmd("ObsidianTags") end,
-        opts = { buffer = true, desc = "Obsidian: Search [T]ags" },
-      },
-      ["<leader>no"] = {
-        -- Opens the current file in the Obsidian Desktop App
-        action = function() vim.cmd("ObsidianOpen") end,
-        opts = { buffer = true, desc = "Obsidian: [O]pen in GUI" },
-      },
-      ["<leader>nc"] = {
-        action = function() vim.cmd("ObsidianTOC") end,
-        opts = { buffer = true, desc = "Obsidian: [C]ontents (TOC)" },
-      },
+    -- ========================================================================
+    -- CALLBACKS: Buffer-local keymaps (mappings option removed in 4.0)
+    -- ========================================================================
+    callback = {
+      enter_note = function(_note)
+        local map = vim.keymap.set
+        local function buf(desc) return { buffer = true, desc = desc } end
 
+        -- 1. Navigation & MOC Workflow
+        map("n", "gf",         function() return require("obsidian").util.gf_passthrough() end, { buffer = true, noremap = false, expr = true, desc = "Obsidian: Follow Link" })
+        map("n", "<leader>nf", function() vim.cmd("Obsidian follow_link tab")    end, buf("Obsidian: [F]ollow Link in Tab"))
+        map("n", "<leader>nv", function() vim.cmd("Obsidian follow_link vsplit") end, buf("Obsidian: Follow Link (V-Split)"))
+        map("n", "<leader>nh", function() vim.cmd("Obsidian follow_link hsplit") end, buf("Obsidian: Follow Link (H-Split)"))
+        map("n", "<leader>nT", function() vim.cmd("Obsidian tags")               end, buf("Obsidian: Search [T]ags"))
+        map("n", "<leader>no", function() vim.cmd("Obsidian open")               end, buf("Obsidian: [O]pen in GUI"))
+        map("n", "<leader>nc", function() vim.cmd("Obsidian toc")                end, buf("Obsidian: [C]ontents (TOC)"))
 
-      -- 2. Note Creation & Templates
-      ["<leader>nt"] = {
-        action = function() vim.cmd("ObsidianTemplate") end,
-        opts = { buffer = true, desc = "Obsidian: Insert [T]emplate" },
-      },
-      ["<leader>ne"] = {
-        action = function() vim.cmd("ObsidianExtractNote") end,
-        opts = { buffer = true, desc = "Obsidian: [E]xtract Selection to [N]ote" },
-      },
-      ["<leader>nl"] = {
-        -- Prompts for a search query to link an existing note
-        action = function() vim.cmd("ObsidianLink") end,
-        opts = { buffer = true, desc = "Obsidian: [L]ink Existing [N]ote" },
-      },
-      ["<leader>nN"] = {
-        -- Prompts for a title to create and link a NEW note
-        action = function() vim.cmd("ObsidianLinkNew") end,
-        opts = { buffer = true, desc = "Obsidian: Link [N]ew Note" },
-      },
+        -- 2. Note Creation & Templates
+        map("n", "<leader>nt", function() vim.cmd("Obsidian template")           end, buf("Obsidian: Insert [T]emplate"))
+        map("n", "<leader>ne", function() vim.cmd("Obsidian extract_note")       end, buf("Obsidian: [E]xtract to Note"))
+        map("n", "<leader>nl", function() vim.cmd("Obsidian link")               end, buf("Obsidian: [L]ink Existing Note"))
+        map("n", "<leader>nN", function() vim.cmd("Obsidian link_new")           end, buf("Obsidian: Link [N]ew Note"))
 
-      -- 3. Media & Attachments
-      ["<leader>np"] = {
-        action = function() vim.cmd("ObsidianPasteImg") end,
-        opts = { buffer = true, desc = "Obsidian: [P]aste Image from Clipboard" },
-      },
+        -- 3. Media & Attachments
+        map("n", "<leader>np", function() vim.cmd("Obsidian paste_img")          end, buf("Obsidian: [P]aste Image"))
+      end,
     },
-
 
   })
 end

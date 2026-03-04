@@ -6,7 +6,7 @@ local utils = require 'core.utils'
 
 local modules = {
 	'searching.aerial', -- Structural navigation
-	'searching.telescope', -- JIT Finding Engine
+	'searching.snacks-picker', -- JIT Finding Engine
 }
 
 for _, mod in ipairs(modules) do

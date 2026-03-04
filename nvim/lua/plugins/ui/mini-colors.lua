@@ -1,54 +1,40 @@
--- [[ CATPPUCCIN: Core Aesthetic Engine ]]
+-- [[ MINI.BASE16: Catppuccin Mocha ]]
 -- Domain: UI & Aesthetics
+--
+-- Uses mini.base16 (already in mini.nvim) instead of the catppuccin/nvim plugin.
+-- No external dependency, no compile step, no cache management.
+-- Palette sourced from the official Catppuccin Mocha spec.
 
 local M = {}
 local utils = require 'core.utils'
 
-local compiled_path = vim.fn.stdpath("cache") .. "/catppuccin"
-
-local catppuccin_config = {
-	compile_path = compiled_path,
-	flavour = 'mocha',
-	transparent_background = false,
-	integrations = {
-		cmp = false,
-		blink_cmp = true,
-		gitsigns = true,
-		mini = { enabled = true },
-		telescope = { enabled = false },
-		treesitter = true,
-	},
-}
-
-local function setup_and_compile()
-	require('catppuccin').setup(catppuccin_config)
-	vim.cmd("CatppuccinCompile")
-end
-
 local ok, err = pcall(function()
-	require('mini.deps').add {
-		source = 'catppuccin/nvim',
-		name = 'catppuccin',
-	}
-
-	-- Skip setup when compiled cache exists — colorscheme entry point sources
-	-- the compiled file directly, bypassing all integration setup code.
-	if vim.fn.filereadable(compiled_path .. "/mocha") == 0 then
-		setup_and_compile()
-	end
-
-	vim.cmd.colorscheme 'catppuccin-mocha'
+  require('mini.base16').setup({
+    palette = {
+      base00 = '#1e1e2e', -- base        (background)
+      base01 = '#181825', -- mantle      (lighter background)
+      base02 = '#313244', -- surface0    (selection background)
+      base03 = '#585b70', -- surface2    (comments)
+      base04 = '#a6adc8', -- subtext0    (dark foreground)
+      base05 = '#cdd6f4', -- text        (foreground)
+      base06 = '#f5e0dc', -- rosewater   (light foreground)
+      base07 = '#b4befe', -- lavender    (brightest foreground)
+      base08 = '#f38ba8', -- red         (variables, xml tags)
+      base09 = '#fab387', -- peach       (integers, booleans)
+      base0A = '#f9e2af', -- yellow      (classes, search)
+      base0B = '#a6e3a1', -- green       (strings)
+      base0C = '#94e2d5', -- teal        (support, regex)
+      base0D = '#89b4fa', -- blue        (functions)
+      base0E = '#cba6f7', -- mauve       (keywords)
+      base0F = '#f2cdcd', -- flamingo    (deprecated, embedded)
+    },
+    use_cterm = false,
+  })
 end)
 
--- Re-compile whenever this file is saved
-vim.api.nvim_create_autocmd("BufWritePost", {
-	pattern = "*/plugins/ui/mini-colors.lua",
-	callback = setup_and_compile,
-})
-
 if not ok then
-	vim.cmd.colorscheme 'habamax'
-	utils.soft_notify('Catppuccin failed to load. Falling back to native theme. Error: ' .. err, vim.log.levels.ERROR)
+  vim.cmd.colorscheme 'habamax'
+  utils.soft_notify('mini.base16 failed to load. Falling back to native theme. Error: ' .. err, vim.log.levels.ERROR)
 end
 
 return M

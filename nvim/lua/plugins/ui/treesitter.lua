@@ -15,6 +15,11 @@ M.setup = function()
     local MiniDeps = require('mini.deps')
 
     MiniDeps.later(function()
+      -- tree-sitter build uses CC from the environment. The global mise config
+      -- sets CC="zig cc" for Rust/C/Zig projects, but tree-sitter needs a
+      -- plain C compiler. Override for this process only.
+      vim.env.CC = "gcc"
+
       MiniDeps.add({
         source = 'nvim-treesitter/nvim-treesitter',
         hooks = {

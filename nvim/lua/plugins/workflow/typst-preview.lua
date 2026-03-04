@@ -57,14 +57,14 @@ vim.api.nvim_create_autocmd("FileType", {
 			has_notified = true
 		end
 
-		vim.keymap.set("n", "<leader>tp", "<cmd>TypstPreview<cr>",
-			{ buffer = event.buf, desc = "Typst: Open Preview" })
-		vim.keymap.set("n", "<leader>tc", "<cmd>TypstPreviewStop<cr>",
-			{ buffer = event.buf, desc = "Typst: Stop Preview" })
+		vim.keymap.set("n", "<leader>typ", "<cmd>TypstPreview<cr>",
+			{ buffer = event.buf, desc = "Typst: Open [P]review" })
+		vim.keymap.set("n", "<leader>tyc", "<cmd>TypstPreviewStop<cr>",
+			{ buffer = event.buf, desc = "Typst: [C]lose Preview" })
 
 		-- "Sync" map: Force the preview to jump to your current cursor position
-		vim.keymap.set("n", "<leader>ts", "<cmd>TypstPreviewSync<cr>",
-			{ buffer = event.buf, desc = "Typst: Sync Preview" })
+		vim.keymap.set("n", "<leader>tys", "<cmd>TypstPreviewSync<cr>",
+			{ buffer = event.buf, desc = "Typst: [S]ync Preview" })
 	end,
 })
 

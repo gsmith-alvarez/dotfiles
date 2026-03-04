@@ -19,7 +19,7 @@ local function bootstrap_trouble()
     require('mini.deps').add('folke/trouble.nvim')
     
     require('trouble').setup({
-      -- We enforce modern UI aesthetics that match our Catppuccin theme
+      -- We enforce modern UI aesthetics that match our color theme
       auto_close = true,       -- Auto close when an item is selected
       auto_preview = false,    -- Disable auto-preview to save CPU cycles
       focus = true,            -- Jump straight into the Trouble window

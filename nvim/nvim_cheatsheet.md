@@ -48,7 +48,7 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 
 | Key Chord | Mode | Action | Plugin |
 | :--- | :---: | :--- | :--- |
-| `<leader>cd` | N | Change directory (Zoxide) | `snacks.picker` |
+| `<leader>fd` | N | Find directory (Zoxide) | `snacks.picker` |
 | `<leader>ff` | N | Find files | `snacks.picker` |
 | `<leader>sg` | N | Live grep | `snacks.picker` |
 | `<leader>sw` | N | Grep word under cursor | `snacks.picker` |
@@ -100,9 +100,9 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 
 | Key Chord | Mode | Action | Plugin |
 | :--- | :---: | :--- | :--- |
-| `<leader>oq` | N | Quick switch | `obsidian.nvim` |
-| `<leader>on` | N | New note | `obsidian.nvim` |
-| `<leader>os` | N | Search notes | `obsidian.nvim` |
+| `<leader>nq` | N | Quick switch | `obsidian.nvim` |
+| `<leader>nn` | N | New note | `obsidian.nvim` |
+| `<leader>ns` | N | Search notes | `obsidian.nvim` |
 | `gf` | N | Follow link under cursor | `obsidian.nvim` |
 
 ---
@@ -165,7 +165,11 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 | `<leader>tp` | N | Process monitor (btm) |
 | `<leader>ts` | N | Spotify player |
 | `<leader>ti` | N | Container infrastructure (podman-tui) |
-| `<leader>vg` | N | Glow markdown preview |
+| `<leader>typ` | N | Typst: Start preview |
+| `<leader>tyc` | N | Typst: Close preview |
+| `<leader>tys` | N | Typst: Sync cursor |
+| `<leader>tl` | N | Toggle diagnostic virtual text |
+| `<leader>tu` | N | Toggle diagnostic underlines |
 
 ---
 

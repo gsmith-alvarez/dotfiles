@@ -20,13 +20,11 @@ local function check_plugins()
 	local core_plugins = {
 		{ 'mini.nvim',              'mini.nvim (icons, sessions, statusline, diff…)' },
 		{ 'snacks.nvim',            'snacks.nvim (picker, notifier, terminal)' },
-		{ 'catppuccin',             'catppuccin (colorscheme)' },
 		{ 'blink.cmp',              'blink.cmp (completion)' },
 		{ 'nvim-lspconfig',         'nvim-lspconfig (LSP registry)' },
 		{ 'nvim-treesitter',        'nvim-treesitter (parsing)' },
 		{ 'nvim-treesitter-textobjects', 'treesitter-textobjects' },
 		{ 'render-markdown.nvim',   'render-markdown.nvim' },
-		{ 'smart-splits.nvim',      'smart-splits.nvim' },
 		{ 'lazydev.nvim',           'lazydev.nvim (Lua intelligence)' },
 	}
 
@@ -49,6 +47,7 @@ local function check_plugins()
 		{ 'nvim-dap',             'nvim-dap',             '<leader>db' },
 		{ 'nvim-dap-virtual-text','nvim-dap-virtual-text','<leader>db' },
 		{ 'typst-preview.nvim',   'typst-preview.nvim',   'open a .typ file' },
+		{ 'smart-splits.nvim',    'smart-splits.nvim',    '<C-h/j/k/l>' },
 	}
 
 	for _, p in ipairs(jit_plugins) do
