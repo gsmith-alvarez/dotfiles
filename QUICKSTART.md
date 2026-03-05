@@ -11,7 +11,7 @@ Establish the foundation by updating the base system, adding external repositori
 ### 1. Repository Injection
 ```bash
 # Terra Repo (Ghostty/Zellij/fish/mise)
-sudo dnf config-manager addrepo --from-repofile="https://repos.fyralabs.com/terra$(rpm -E %fedora)/terra.repo"
+sudo dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
 ```
 
 ### 2. Base System Synchronization
