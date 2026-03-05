@@ -24,23 +24,20 @@ M.setup = function()
     }
 
     -- 2. Add and Compile Blink
+    -- Pinned to a tag so prebuilt binaries always match the exact version.
+    -- On machines without cargo, blink downloads the prebuilt automatically.
     MiniDeps.add {
       source = 'saghen/blink.cmp',
+      checkout = 'v1.9.1',
       hooks = {
         post_install = function(args)
           if utils.mise_shim('cargo') then
             vim.system({ 'cargo', 'build', '--release' }, { cwd = args.path }):wait()
-          else
-            utils.soft_notify('blink.cmp: cargo not found, skipping native build (prebuilt binary will be used).',
-              vim.log.levels.WARN)
           end
         end,
         post_checkout = function(args)
           if utils.mise_shim('cargo') then
             vim.system({ 'cargo', 'build', '--release' }, { cwd = args.path }):wait()
-          else
-            utils.soft_notify('blink.cmp: cargo not found, skipping native build (prebuilt binary will be used).',
-              vim.log.levels.WARN)
           end
         end,
       },
