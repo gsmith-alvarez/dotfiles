@@ -32,17 +32,16 @@ M.setup = function()
       hooks = {
         post_install = function(args)
           if utils.mise_shim('cargo') then
-            vim.system({ 'cargo', 'build', '--release' }, { cwd = args.path }):wait()
+            vim.system({ 'cargo', '+nightly', 'build', '--release' }, { cwd = args.path }):wait()
           end
         end,
         post_checkout = function(args)
           if utils.mise_shim('cargo') then
-            vim.system({ 'cargo', 'build', '--release' }, { cwd = args.path }):wait()
+            vim.system({ 'cargo', '+nightly', 'build', '--release' }, { cwd = args.path }):wait()
           end
         end,
       },
     }
-
     -- 3. Configure the Engine
     require('blink.cmp').setup {
       fuzzy = {
