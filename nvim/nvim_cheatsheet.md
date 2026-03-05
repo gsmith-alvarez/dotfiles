@@ -4,7 +4,7 @@ A quick reference for the keybindings and commands in this configuration.
 
 For the full keymap list use `<leader>sk` (search keymaps via snacks.picker).
 
-For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
+For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound globally).
 
 ---
 
@@ -21,7 +21,15 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 | `gg` / `G` | N | Top / Bottom of file | Native |
 | `*` / `#` | N | Search forward / backward for word under cursor | Native |
 | `C` / `D` | N | Change / Delete to end of line | Native |
-| `j` / `k` | N | Smart visual line movement (`gj`/`gk`) | Core |
+| `j` / `k` | N/X | Smart visual line movement (`gj`/`gk`) | Core |
+| `n` / `N` | N | Next/Prev result (always forward/backward) | Core |
+| `<` / `>` | X | Indent left/right (stay in visual) | Core |
+| `,` `.` `;` | I | Insert undo break-point | Core |
+| `<A-j>` / `<A-k>` | N/I | Move current line down / up | Core |
+| `[q` / `]q` | N | Prev / Next quickfix item | Core |
+| `<leader>K` | N | Keywordprg (man/help) | Core |
+| `<leader>ui` | N | Inspect highlight under cursor | Core |
+| `<leader>uI` | N | Inspect treesitter tree | Core |
 
 ---
 
@@ -29,15 +37,21 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 
 | Key Chord | Mode | Action | Plugin/Source |
 | :--- | :---: | :--- | :--- |
-| `<C-w>v` | N | Split window vertically | Native |
-| `<C-w>s` | N | Split window horizontally | Native |
-| `<C-w>q` / `<C-w>c` | N | Close current window/panel | Native |
-| `<C-w>o` | N | Close all other windows (maximize current) | Native |
-| `<C-w>=` | N | Equalize all window sizes | Native |
-| `<C-h/j/k/l>` | N/T | Move focus to Left/Down/Up/Right pane (Neovim ↔ Zellij) | `smart-splits` |
+| `<C-w>v` / `<leader>\|` | N | Split window vertically | Native / Core |
+| `<C-w>s` / `<leader>-` | N | Split window horizontally | Native / Core |
+| `<C-w>q` / `<leader>wq` | N | Close current window | Native / Core |
+| `<C-w>o` / `<leader>wo` | N | Close all other windows | Native / Core |
+| `<C-w>=` / `<leader>w=` | N | Equalize all window sizes | Native / Core |
+| `<C-h/j/k/l>` | N/T | Move focus to pane (Neovim ↔ Zellij) | `smart-splits` |
 | `<M-h/j/k/l>` | N/T | Resize pane | `smart-splits` |
 | `H` / `L` | N | Previous / Next buffer | Core |
-| `<leader>bd` | N | Buffer delete | Core |
+| `<leader>bb` / `` <leader>` `` | N | Switch to alternate buffer | Core |
+| `<leader>bd` | N | Delete buffer (preserves splits) | Core |
+| `<leader>bo` | N | Delete all other buffers | Core |
+| `<leader>bD` | N | Delete buffer + close window | Core |
+| `<C-s>` | N/I/X | Save file | Core |
+| `<leader>fn` | N | New empty file | Core |
+| `<leader>qq` | N | Quit all | Core |
 | `[b` / `]b` | N | Go to previous / next buffer | `mini.bracketed` |
 
 ---
@@ -50,7 +64,7 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 | :--- | :---: | :--- | :--- |
 | `<leader>fd` | N | Find directory (Zoxide) | `snacks.picker` |
 | `<leader>ff` | N | Find files | `snacks.picker` |
-| `<leader>sg` | N | Live grep | `snacks.picker` |
+| `<leader>sg` | N | Grep project | `snacks.picker` |
 | `<leader>sw` | N | Grep word under cursor | `snacks.picker` |
 | `<leader>sr` | N | Resume last search | `snacks.picker` |
 | `<leader>sd` | N | Search diagnostics | `snacks.picker` |
@@ -62,14 +76,16 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 | `<leader><leader>` | N | Active buffers | `snacks.picker` |
 | `<leader>fr` | N | Recent files | `snacks.picker` |
 | `<leader>fc` | N | Recent files (cwd) | `snacks.picker` |
-| `<leader>so` | N | Omni grep (Ripgrep) | `snacks.picker` |
 
 ### Tier 2: File Browser
 
 | Key Chord | Mode | Action | Plugin |
 | :--- | :---: | :--- | :--- |
 | `-` | N | Open current file's directory | `mini.files` |
-| `<leader>fe` | N | Open file explorer (root) | `mini.files` |
+| `<leader>fe` | N | Open file explorer (project root) | `mini.files` |
+| `g.` | N (mini.files) | Toggle hidden files | `mini.files` |
+| `<C-s>` | N (mini.files) | Open in horizontal split | `mini.files` |
+| `<C-v>` | N (mini.files) | Open in vertical split | `mini.files` |
 
 ### Tier 3: Symbol Navigation (Aerial — JIT)
 
@@ -81,6 +97,16 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 ---
 
 ## 4. Editing, Refactoring & Notetaking
+
+### Comments (mini.comment)
+
+| Key Chord | Mode | Action | Plugin |
+| :--- | :---: | :--- | :--- |
+| `gc` | N | Comment (motion, e.g. `gcip`) | `mini.comment` |
+| `gcc` | N | Comment current line | `mini.comment` |
+| `gc` | V | Comment selection | `mini.comment` |
+| `gco` | N | Add commented line below | `mini.comment` |
+| `gcO` | N | Add commented line above | `mini.comment` |
 
 ### Text Objects & Surround
 
@@ -103,6 +129,14 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 | `<leader>rF` | X | Extract function to file | `refactoring.nvim` |
 | `<leader>ri` | N/X | Inline variable | `refactoring.nvim` |
 
+### TODO Comments
+
+| Key Chord | Mode | Action | Plugin |
+| :--- | :---: | :--- | :--- |
+| `]t` / `[t` | N | Next / Prev TODO comment | `todo-comments` |
+| `<leader>xt` | N | TODOs in Trouble | `todo-comments` |
+| `<leader>xT` | N | TODOs in quickfix | `todo-comments` |
+
 ### Notes (Obsidian — JIT on markdown)
 
 | Key Chord | Mode | Action | Plugin |
@@ -122,6 +156,7 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 | :--- | :---: | :--- | :--- |
 | `gd` | N | Go to definition | `native-lsp` |
 | `gr` | N | References | `native-lsp` |
+| `K` | N | Hover documentation | `native-lsp` |
 | `<leader>ci` | N | Implementations | `native-lsp` |
 | `<leader>ct` | N | Type definitions | `native-lsp` |
 | `<leader>co` | N | Document symbols | `native-lsp` |
@@ -130,16 +165,26 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 | `<leader>ca` | N/X | Code actions | `native-lsp` |
 | `<leader>cc` | N | Go to declaration | `native-lsp` |
 | `<leader>cf` | N/V | Format buffer | `core.format` |
-| `<leader>ch` | N | Toggle inlay hints | `native-lsp` |
+| `<leader>ch` | N | Toggle inlay hints (auto-enabled) | `native-lsp` |
+| `<leader>ur` | N | Restart LSP | `native-lsp` |
 
-### Diagnostics & Trouble
+### Diagnostics
 
 | Key Chord | Mode | Action | Plugin |
 | :--- | :---: | :--- | :--- |
+| `<leader>cd` | N | Line diagnostics float | Core |
+| `]d` / `[d` | N | Next / Prev diagnostic | Core |
+| `]e` / `[e` | N | Next / Prev error | Core |
+| `]w` / `[w` | N | Next / Prev warning | Core |
 | `<leader>xx` | N | Workspace diagnostics | `trouble.nvim` |
 | `<leader>xd` | N | Document diagnostics | `trouble.nvim` |
 | `<leader>xq` | N | Quickfix list | `trouble.nvim` |
 | `<leader>xl` | N | Location list | `trouble.nvim` |
+| `<leader>xt` | N | TODO list | `todo-comments` |
+| `<leader>xT` | N | TODO quickfix | `todo-comments` |
+| `<leader>ul` | N | Toggle diagnostic virtual text | Core |
+| `<leader>uu` | N | Toggle diagnostic underlines | Core |
+| `<leader>q` | N | Diagnostic quickfix (Trouble or native) | Core |
 
 ### DAP (Debugger)
 
@@ -162,8 +207,11 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 | :--- | :---: | :--- | :--- |
 | `<leader>gg` | N | Open Lazygit TUI | `snacks.terminal` |
 | `<leader>gl` | N | Git log (commits) | `snacks.picker` |
+| `<leader>gf` | N | Current file history | `snacks.picker` |
 | `<leader>gS` | N | Git status (changed files) | `snacks.picker` |
 | `<leader>gb` | N | Git branches | `snacks.picker` |
+| `<leader>gB` | N/X | Git browse (open in browser) | `snacks` |
+| `<leader>gY` | N/X | Git browse (copy remote URL) | `snacks` |
 | `]c` / `[c` | N | Next / Prev git change | `mini.diff` |
 | `<leader>gs` | N | Stage hunk | `mini.diff` |
 | `<leader>gu` | N | Undo hunk | `mini.diff` |
@@ -172,7 +220,17 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 
 ---
 
-## 7. Terminal & TUI (snacks.terminal)
+## 7. Execute & Terminal/TUI
+
+### Execute (`<leader>e`)
+
+| Key Chord | Mode | Action |
+| :--- | :---: | :--- |
+| `<leader>er` | N | Run code (interactive Zellij split) |
+| `<leader>ec` | N | Continuous watch + run (watchexec) |
+| `<leader>ew` | N | Manual watchexec trigger |
+
+### Terminal / TUI (snacks.terminal)
 
 | Key Chord | Mode | Action |
 | :--- | :---: | :--- |
@@ -181,15 +239,30 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 | `<leader>tp` | N | Process monitor (btm) |
 | `<leader>ts` | N | Spotify player |
 | `<leader>ti` | N | Container infrastructure (podman-tui) |
-| `<leader>typ` | N | Typst: Start preview |
-| `<leader>tyc` | N | Typst: Close preview |
-| `<leader>tys` | N | Typst: Sync cursor |
-| `<leader>tl` | N | Toggle diagnostic virtual text |
-| `<leader>tu` | N | Toggle diagnostic underlines |
+| `<leader>typ` | N | Typst: Start preview (filetype=typst) |
+| `<leader>tyc` | N | Typst: Close preview (filetype=typst) |
+| `<leader>tys` | N | Typst: Sync cursor (filetype=typst) |
+| `<leader>pv` | N | Typst: Watch terminal (filetype=typst) |
 
 ---
 
-## 8. User Commands & CLI Integration
+## 8. Test Runner (Rust / Zig / Python / C / C++)
+
+| Key Chord | Mode | Action |
+| :--- | :---: | :--- |
+| `<leader>Tr` | N | Run all tests (project root) |
+| `<leader>Tf` | N | Run tests for current file |
+| `<leader>Tn` | N | Run nearest test under cursor |
+
+**Language dispatch:**
+- **Rust** → `cargo test` / `cargo test <fn>`
+- **Zig** → `zig build test` / `zig test <file>`
+- **Python** → `pytest` / `pytest <file>` / `pytest -k <fn>`
+- **C/C++** → `ctest` (CMake) or `make test`
+
+---
+
+## 9. User Commands & CLI Integration
 
 ### Commands
 
@@ -206,9 +279,34 @@ For benchmarking run `PROFILE=1 nvim`, then `<leader>zp`.
 
 | Key Chord | Mode | Action |
 | :--- | :---: | :--- |
-| `<leader>cr` | N | Run code (interactive Zellij split) |
-| `<leader>cx` | N | Continuous watch + run (watchexec) |
-| `<leader>vw` | N | Manual watchexec trigger |
+| `<leader>er` | N | Run code (interactive Zellij split) |
+| `<leader>ec` | N | Continuous watch + run (watchexec) |
+| `<leader>ew` | N | Manual watchexec trigger |
+
+### Utilities
+
+| Key Chord | Mode | Action |
+| :--- | :---: | :--- |
+| `<leader>vq` | N | JQ live scratchpad |
+| `<leader>vx` | N | XH HTTP client |
+| `<leader>vJ` | N | jless JSON viewer |
+| `<leader>sR` | N | Find & replace (sd) |
+| `<leader>ur` | N | Restart LSP |
+| `<leader>ut` | N | Tool check (mise audit) |
+| `<leader>uT` | N | Run Typos checker |
+| `<leader>ul` | N | Toggle diagnostic virtual text |
+| `<leader>uu` | N | Toggle diagnostic underlines |
+| `<leader>yp` | N | Yank absolute file path |
+| `<leader>yr` | N | Yank relative file path |
+
+### Zellij Multiplexer
+
+| Key Chord | Mode | Action |
+| :--- | :---: | :--- |
+| `<leader>zv` | N | Vertical split |
+| `<leader>zs` | N | Horizontal split |
+| `<leader>zf` | N | Floating pane |
+| `<leader>zq` | N | Close pane |
 
 ### PlatformIO
 

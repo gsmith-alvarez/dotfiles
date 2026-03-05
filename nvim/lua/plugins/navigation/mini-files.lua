@@ -44,12 +44,23 @@ M.setup = function()
 			end,
 		})
 
-		vim.keymap.set('n', '<leader>fe', function()
-			require('mini.files').open(vim.fn.getcwd())
-		end, { desc = 'Open [F]ile [E]xplorer (Root)' })
-		vim.keymap.set('n', '-', function()
-			require('mini.files').open(vim.api.nvim_buf_get_name(0))
-		end, { desc = 'Open Explorer (Current Dir)' })
+		local root_markers = { '.git', 'go.mod', 'Cargo.toml', 'package.json', 'pom.xml', 'pyproject.toml', 'build.zig' }
+
+		local function get_project_root()
+			local path = vim.api.nvim_buf_get_name(0)
+			path = path ~= '' and vim.fn.fnamemodify(path, ':p:h') or vim.fn.getcwd()
+			for dir in vim.fs.parents(path) do
+				for _, marker in ipairs(root_markers) do
+					if vim.uv.fs_stat(dir .. '/' .. marker) then
+						return dir
+					end
+				end
+			end
+			return vim.fn.getcwd()
+		end
+
+		-- <leader>fe and - keymaps moved to lua/core/plugin-keymaps.lua (File section).
+		-- project_root() logic is inlined there as a local helper.
 	end)
 end
 

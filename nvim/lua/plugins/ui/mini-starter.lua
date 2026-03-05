@@ -13,7 +13,7 @@ M.setup = function()
 	local paths = {
 		projects = vim.fn.expand '~/Documents/Projects',
 		obsidian = vim.fn.expand '~/Documents/Obsidian',
-		config = vim.fn.expand '~/.config/nvim',
+		dotfiles = vim.fn.expand '~/dotfiles',
 	}
 
 	local function snacks_action(cwd)
@@ -24,14 +24,14 @@ M.setup = function()
 
 	local my_items = {
 		vim.fn.isdirectory(paths.projects) == 1
-			and { name = 'Projects', action = snacks_action(paths.projects), section = 'Directories' }
-			or nil,
-		vim.fn.isdirectory(paths.config) == 1
-			and { name = 'Config', action = snacks_action(paths.config), section = 'Directories' }
-			or nil,
+		and { name = 'Projects', action = snacks_action(paths.projects), section = 'Directories' }
+		or nil,
+		vim.fn.isdirectory(paths.dotfiles) == 1
+		and { name = 'dotfiles', action = snacks_action(paths.dotfiles), section = 'Directories' }
+		or nil,
 		vim.fn.isdirectory(paths.obsidian) == 1
-			and { name = 'Obsidian', action = snacks_action(paths.obsidian), section = 'Directories' }
-			or nil,
+		and { name = 'Obsidian', action = snacks_action(paths.obsidian), section = 'Directories' }
+		or nil,
 		{ name = 'New file', action = 'ene | startinsert', section = 'Actions' },
 		{ name = 'Quit',     action = 'qall',              section = 'Actions' },
 		starter.sections.recent_files(5, false),
@@ -70,12 +70,12 @@ M.setup = function()
 		},
 	}
 
-	vim.api.nvim_set_hl(0, 'MiniStarterHeader',     { fg = '#89b4fa' })
-	vim.api.nvim_set_hl(0, 'MiniStarterSection',    { fg = '#f5c2e7', bold = true })
-	vim.api.nvim_set_hl(0, 'MiniStarterItem',       { fg = '#cdd6f4' })
+	vim.api.nvim_set_hl(0, 'MiniStarterHeader', { fg = '#89b4fa' })
+	vim.api.nvim_set_hl(0, 'MiniStarterSection', { fg = '#f5c2e7', bold = true })
+	vim.api.nvim_set_hl(0, 'MiniStarterItem', { fg = '#cdd6f4' })
 	vim.api.nvim_set_hl(0, 'MiniStarterItemBullet', { fg = '#94e2d5' })
 	vim.api.nvim_set_hl(0, 'MiniStarterItemPrefix', { fg = '#f38ba8' })
-	vim.api.nvim_set_hl(0, 'MiniStarterFooter',     { fg = '#585b70' })
+	vim.api.nvim_set_hl(0, 'MiniStarterFooter', { fg = '#585b70' })
 
 	local starter_group = vim.api.nvim_create_augroup('UI_Starter', { clear = true })
 	vim.api.nvim_create_autocmd('User', {

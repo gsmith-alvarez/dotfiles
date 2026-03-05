@@ -31,6 +31,10 @@ local modules = {
 	-- Basic leader and movement keys.
 	'core.keymaps',
 
+	-- 4b. Plugin Keymaps (single source of truth for all plugin bindings)
+	-- JIT closures only — no top-level requires. Buffer-local maps stay in plugin files.
+	'core.plugin-keymaps',
+
 	-- 5. The Logic (Automation Layers)
 	-- These often use autocmds that might trigger plugin logic.
 	'core.format',

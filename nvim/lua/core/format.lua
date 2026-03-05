@@ -164,8 +164,6 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 	desc = 'Synchronous buffer transformation prior to disk write',
 })
 
-vim.keymap.set({ 'n', 'v' }, '<leader>cf', function()
-	M.autoformat()
-end, { desc = 'Code: [F]ormat Buffer (Native)' })
+-- Format keymap moved to lua/core/plugin-keymaps.lua (<leader>cf under Code section).
 
 return M

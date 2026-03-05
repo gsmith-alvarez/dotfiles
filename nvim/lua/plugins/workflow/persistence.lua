@@ -17,29 +17,7 @@ M.setup = function()
       directory = vim.fn.stdpath('state') .. '/sessions',
       verbose   = { read = false, write = false, delete = false },
     })
-
-    local ms = require('mini.sessions')
-
-    -- Restore session for current working directory
-    vim.keymap.set('n', '<leader>qs', function()
-      ms.read()
-    end, { desc = 'Restore Session (Current Dir)' })
-
-    -- Interactive picker: select from all saved sessions
-    vim.keymap.set('n', '<leader>ql', function()
-      ms.select('read')
-    end, { desc = 'Select & Restore Session' })
-
-    -- Manually write the current session
-    vim.keymap.set('n', '<leader>qw', function()
-      ms.write(nil, { verbose = true })
-    end, { desc = 'Save Session' })
-
-    -- Disable autowrite for this session (close without saving)
-    vim.keymap.set('n', '<leader>qd', function()
-      ms.config.autowrite = false
-      utils.soft_notify('Session autosave disabled', vim.log.levels.DEBUG)
-    end, { desc = "Don't Save Current Session" })
+    -- Session keymaps in lua/core/plugin-keymaps.lua (<leader>q section).
   end)
 
   if not ok then

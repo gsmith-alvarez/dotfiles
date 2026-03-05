@@ -98,7 +98,8 @@ vim.api.nvim_create_user_command('ToolCheck', function()
 	vim.bo[buf].modifiable = false
 end, { desc = 'Audit required dependencies and suggest installation steps' })
 
-vim.keymap.set('n', '<leader>ut', '<cmd>ToolCheck<CR>', { desc = '[T]ool [C]heck (Mise)' })
+-- Keymaps moved to lua/core/plugin-keymaps.lua under Utilities (<leader>u) section.
+-- Keymaps moved to lua/core/plugin-keymaps.lua.
 
 -- [[ Output Capture Engine ]]
 -- Intercepts the output of any internal Neovim ex-command (like :messages or :hi)
@@ -164,8 +165,7 @@ vim.api.nvim_create_user_command('Typos', function()
 	end
 end, { desc = 'Populate Quickfix with project typos' })
 
-vim.keymap.set('n', '<leader>ct', '<cmd>Typos<CR>', { desc = '[C]ode [T]ypos Check' })
-
+-- Keymaps moved to lua/core/plugin-keymaps.lua.
 local utils = require('core.utils')
 
 -- [[ Typos-CLI Raw Terminal View ]]

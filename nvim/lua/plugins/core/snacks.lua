@@ -73,39 +73,8 @@ M.setup = function()
   end)
 
   -- [[ ON-DEMAND KEYMAPS ]]
-  -- These trigger the heavy code ONLY when you actually press the keys.
-  local map = vim.keymap.set
-
-  -- Profiler Keymaps (Only useful if PROFILE=1)
-  if vim.env.PROFILE then
-    map('n', '<leader>zp', function()
-      require('snacks').profiler.scratch()
-    end, { desc = 'Speedrun: Open Profiler', nowait = true })
-    map('n', '<leader>zh', function()
-      require('snacks').profiler.pick()
-    end, { desc = 'Speedrun: Profile History', nowait = true })
-  end
-
-  map('n', '<leader>zl', function()
-    require('snacks').toggle.profiler_highlights():toggle()
-  end, { desc = '[S]peedrun: Toggle Line Highlights', nowait = true })
-
-  -- Terminal & Search (Native Deferral)
-  map({ 'n', 't' }, [[<C-\>]], function()
-    require('snacks').terminal.toggle()
-  end, { desc = 'Toggle Terminal' })
-  map('n', '<leader><leader>', function()
-    require('snacks').picker.buffers()
-  end, { desc = 'Search: Active Buffers' })
-  map('n', '<leader>so', function()
-    require('snacks').picker.grep()
-  end, { desc = 'Search Omni (Ripgrep)' })
-  map('n', '<leader>fr', function()
-    require('snacks').picker.recent()
-  end, { desc = 'Find Recent Files' })
-  map('n', '<leader>fc', function()
-    require('snacks').picker.recent { filter = { cwd = true } }
-  end, { desc = 'Find Contextual (CWD)' })
+  -- All keymaps moved to lua/core/plugin-keymaps.lua.
+  -- Profiler keys removed (dev-only, polluted <leader>z Zellij prefix).
 end
 
 return M

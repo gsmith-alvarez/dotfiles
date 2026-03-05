@@ -15,11 +15,6 @@ M.setup = function()
     local MiniDeps = require('mini.deps')
 
     MiniDeps.later(function()
-      -- tree-sitter build uses CC from the environment. The global mise config
-      -- sets CC="zig cc" for Rust/C/Zig projects, but tree-sitter needs a
-      -- plain C compiler. Override for this process only.
-      vim.env.CC = "gcc"
-
       MiniDeps.add({
         source = 'nvim-treesitter/nvim-treesitter',
         hooks = {
@@ -50,6 +45,8 @@ M.setup = function()
           'c', 'cpp', 'go', 'lua', 'python', 'rust', 'zig',
           'html', 'javascript', 'typescript', 'markdown', 'markdown_inline',
           'query', 'regex', 'vim', 'vimdoc', 'typst',
+          -- Parsers for snacks.image
+          'css', 'scss', 'tsx', 'svelte', 'vue', 'norg',
         },
 
         auto_install = true,
@@ -83,9 +80,9 @@ M.setup = function()
       local ctx_ok, context = pcall(require, 'treesitter-context')
       if ctx_ok then
         context.setup {
-          max_lines = 3,        -- Cap at 3 lines to avoid eating too much screen space
+          max_lines = 3,          -- Cap at 3 lines to avoid eating too much screen space
           min_window_height = 20, -- Don't activate in tiny splits
-          trim_scope = 'outer', -- When context is multi-line, trim outermost scope first
+          trim_scope = 'outer',   -- When context is multi-line, trim outermost scope first
         }
       end
     end)
@@ -97,4 +94,3 @@ M.setup = function()
 end
 
 return M
-

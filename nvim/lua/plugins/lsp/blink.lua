@@ -64,8 +64,14 @@ M.setup = function()
       },
       appearance = {
         nerd_font_variant = 'mono',
+        kind_icons = require('core.icons').kinds,
       },
       completion = {
+        trigger = {
+          -- Show completions immediately after typing a trigger character
+          show_on_trigger_character = true,
+          show_on_insert_on_trigger_character = true,
+        },
         list = {
           selection = {
             preselect = true,    -- Auto-targets the first item for instant <C-l> acceptance
@@ -73,11 +79,17 @@ M.setup = function()
           },
         },
         documentation = {
-          auto_show = false,
-          auto_show_delay_ms = 500,
+          auto_show = true,         -- Show docs panel automatically when navigating items
+          auto_show_delay_ms = 200, -- Snappy feel — matches VS Code behaviour
+          window = { border = 'rounded' },
+        },
+        ghost_text = {
+          enabled = true, -- Inline suggestion à la VS Code / Copilot
         },
         menu = {
+          border = 'rounded',
           draw = {
+            treesitter = { 'lsp' }, -- Syntax-highlight the label inside the menu
             columns = { { 'label', 'label_description', gap = 1 }, { 'kind_icon', 'kind' } },
           },
         },
@@ -92,7 +104,10 @@ M.setup = function()
           },
         },
       },
-      signature = { enabled = true },
+      signature = {
+        enabled = true,
+        window = { border = 'rounded' },
+      },
     }
   end)
 

@@ -135,6 +135,11 @@ M.setup = function()
 
 	-- [[ GLOBAL ATTACH LOGIC ]]
 	-- This fires EVERY time a server attaches to a buffer.
+
+	-- Rounded borders on hover and signature help
+	vim.lsp.handlers['textDocument/hover']         = vim.lsp.with(vim.lsp.handlers.hover,           { border = 'rounded' })
+	vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help,  { border = 'rounded' })
+
 	vim.api.nvim_create_autocmd('LspAttach', {
 		group = vim.api.nvim_create_augroup('LSP_Attach_Common', { clear = true }),
 		callback = function(event)
@@ -182,21 +187,14 @@ M.setup = function()
 				})
 			end
 
-			-- Inlay Hints
+			-- Inlay Hints (auto-enabled, toggle available)
 			if client and client.server_capabilities.inlayHintProvider then
+				vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
 				map('<leader>ch', function()
-					vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+					vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }, { bufnr = event.buf })
 				end, 'Toggle Inlay [H]ints')
 			end
-
-			vim.api.nvim_create_autocmd('FileType', {
-				pattern = 'typst',
-				callback = function()
-					vim.keymap.set('n', '<leader>pv', function()
-						require('snacks').terminal.toggle('typst watch ' .. vim.fn.expand('%'))
-					end, { buffer = true, desc = 'Typst Watch' })
-				end,
-			})
+			-- Typst watch keymap moved to plugins/workflow/typst-preview.lua
 		end,
 	})
 end

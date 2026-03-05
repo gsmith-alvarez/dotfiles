@@ -55,20 +55,8 @@ local function bootstrap_aerial()
 	return true
 end
 
--- [[ THE KEYMAPS ]]
--- Toggle the sidebar
-vim.keymap.set('n', '<leader>va', function()
-	if bootstrap_aerial() then
-		vim.cmd('AerialToggle!')
-	end
-end, { desc = 'View: Toggle [A]erial Structure' })
+-- Keymaps moved to lua/core/plugin-keymaps.lua under View (<leader>v) section.
 
--- Quick Jump: Fuzzy search through symbols without opening the sidebar
-vim.keymap.set('n', '<leader>vj', function()
-	if bootstrap_aerial() then
-		vim.cmd('AerialNavToggle')
-	end
-end, { desc = 'View: [J]ump to Symbol (Aerial)' })
+M.bootstrap = bootstrap_aerial
 
 return M
-

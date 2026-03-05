@@ -20,7 +20,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
   callback = function()
-    vim.highlight.on_yank({
+    vim.hl.on_yank({
       -- HIGHLIGHT OPTIONS:
       -- 'IncSearch' is a high-contrast choice (usually yellow/orange)
       -- 'Visual' is more subtle (matches your selection color)

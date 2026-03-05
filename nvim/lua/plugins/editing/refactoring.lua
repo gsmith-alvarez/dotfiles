@@ -40,29 +40,8 @@ local function bootstrap_refactoring()
   return true
 end
 
--- [[ THE PROXY KEYMAPS ]]
--- The Lua API requires explicit arguments and `expr = true` for visual mode execution.
-local refactors = {
-  { keys = '<leader>rr', is_expr = false, action = function() require('refactoring').select_refactor() end,                           modes = { 'n', 'x' }, desc = 'Select Refactor (UI)' },
-  { keys = '<leader>re', is_expr = true,  action = function() return require('refactoring').refactor('Extract Variable') end,         modes = { 'x' },      desc = 'Extract Variable' },
-  { keys = '<leader>rf', is_expr = true,  action = function() return require('refactoring').refactor('Extract Function') end,         modes = { 'x' },      desc = 'Extract Function' },
-  { keys = '<leader>rF', is_expr = true,  action = function() return require('refactoring').refactor(
-    'Extract Function To File') end,                                                                                                  modes = { 'x' },      desc = 'Extract Function to File' },
-  { keys = '<leader>ri', is_expr = true,  action = function() return require('refactoring').refactor('Inline Variable') end,          modes = { 'n', 'x' }, desc = 'Inline Variable' },
-}
+-- Keymaps moved to lua/core/plugin-keymaps.lua under Refactor (<leader>r) section.
 
-for _, ref in ipairs(refactors) do
-  vim.keymap.set(ref.modes, ref.keys, function()
-    -- The JIT Execution
-    if bootstrap_refactoring() then
-      return ref.action()
-    end
+M.bootstrap = bootstrap_refactoring
 
-    -- If bootstrap fails (e.g., no AST parser), and Neovim is expecting an
-    -- expression return value, we return an empty string to prevent a Lua crash.
-    return ref.is_expr and "" or nil
-  end, { desc = 'AST: ' .. ref.desc .. ' (JIT)', expr = ref.is_expr })
-end
-
--- THE CONTRACT: Return the module to satisfy the Editing Orchestrator
 return M

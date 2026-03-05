@@ -14,6 +14,7 @@ local modules = {
   'workflow.persistence', -- Automatic Session Management
   'workflow.overseer', -- Task Runner & Background Jobs
   'workflow.typst-preview', -- What it sounds like
+  'workflow.test-runner', -- Language-aware test dispatch (Rust/Zig/Python/C/C++)
 }
 
 for _, mod in ipairs(modules) do

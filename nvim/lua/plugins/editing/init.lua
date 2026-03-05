@@ -19,6 +19,7 @@ local modules = {
 	'editing.indent', -- Plants the BufReadPre autocommand trap
 	'editing.inc-rename', -- Plants the LSP keymap trap
 	'editing.mini-editing', -- Deferred: ai, move, surround, indentscope, pairs, hipatterns
+	'editing.todo-comments', -- Highlighted TODO/FIXME/HACK annotations + Trouble integration
 }
 
 for _, mod in ipairs(modules) do

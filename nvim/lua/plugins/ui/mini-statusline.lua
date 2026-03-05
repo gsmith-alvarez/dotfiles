@@ -31,15 +31,15 @@ M.setup = function()
 					end
 					vim.b[buf]._mise_polling = true
 					vim.system({ 'mise', 'current', target_tool }, { text = true }, function(out)
+						local status = ''
 						if out.code == 0 and out.stdout and out.stdout ~= '' then
 							local version = out.stdout:gsub('\n', ''):gsub('%s+$', '')
 							version = version:match '([^@%s]+)$' or version
-							vim.b[buf].mise_status = '🛠 ' .. version
-						else
-							vim.b[buf].mise_status = ''
+							status = '🛠 ' .. version
 						end
 						vim.schedule(function()
 							if vim.api.nvim_buf_is_valid(buf) then
+								vim.b[buf].mise_status = status
 								vim.b[buf]._mise_polling = false
 								vim.cmd 'redrawstatus'
 							end

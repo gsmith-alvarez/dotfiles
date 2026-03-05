@@ -65,6 +65,11 @@ vim.api.nvim_create_autocmd("FileType", {
 		-- "Sync" map: Force the preview to jump to your current cursor position
 		vim.keymap.set("n", "<leader>tys", "<cmd>TypstPreviewSync<cr>",
 			{ buffer = event.buf, desc = "Typst: [S]ync Preview" })
+
+		-- Watch: compile with typst CLI (moved from native-lsp.lua)
+		vim.keymap.set('n', '<leader>pv', function()
+			require('snacks').terminal.toggle('typst watch ' .. vim.fn.expand('%'))
+		end, { buffer = event.buf, desc = 'Typst: [W]atch (terminal)' })
 	end,
 })
 

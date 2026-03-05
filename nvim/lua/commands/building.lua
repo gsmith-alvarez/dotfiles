@@ -1,6 +1,7 @@
 -- [[ BUILDING & EXECUTION DOMAIN ]]
 -- Modularized logic for offloading heavy compilation and execution tasks to Zellij.
 -- PRINCIPLE: Neovim handles the text; Zellij handles the process.
+-- KEYMAPS: All keymaps live in lua/core/plugin-keymaps.lua (<leader>e prefix).
 
 local M = {}
 
@@ -105,17 +106,10 @@ local function execute_smart_build(is_continuous)
   end
 end
 
--- [[ Keymaps: The Entry Points ]]
+-- [[ Keymaps: Entry Points ]]
+-- Moved to lua/core/plugin-keymaps.lua under the Execute (<leader>e) section.
 
--- Continuous "Dev Mode" (Leader-C-X for Execute)
-vim.keymap.set('n', '<leader>cx', function() execute_smart_build(true) end,
-  { desc = "[C]ode e[X]ecute (Continuous Watch)" })
-
--- Single "Production Run" (Leader-C-R for Run)
-vim.keymap.set('n', '<leader>cr', function() execute_smart_build(false) end,
-  { desc = "[C]ode [R]un (Single Interactive)" })
-
--- Manual Watch trigger
-vim.keymap.set('n', '<leader>vw', '<cmd>Watch ', { desc = '[V]iew [W]atchexec (Manual)' })
+M.run            = function() execute_smart_build(false) end
+M.run_continuous = function() execute_smart_build(true) end
 
 return M

@@ -47,19 +47,14 @@ local function bootstrap_increname()
 	return true
 end
 
--- [[ THE PROXY KEYMAP ]]
--- We replace the brittle `feedkeys` approach with Neovim's native `expr = true` evaluation.
--- This ensures the command line is populated synchronously and safely.
-vim.keymap.set('n', '<leader>rn', function()
-	if bootstrap_increname() then
-		-- Return the command string directly to the command line
-		return ":IncRename " .. vim.fn.expand('<cword>')
-	end
+-- Keymap moved to lua/core/plugin-keymaps.lua under Refactor (<leader>rn).
 
-	-- If the bootstrapper fails (e.g., no LSP attached), we return an empty
-	-- string to prevent a Lua crash, keeping the failure silent and graceful.
-	return ""
-end, { expr = true, desc = 'LSP: [R]e[n]ame Symbol (JIT)' })
+M.rename = function()
+	if bootstrap_increname() then
+		return ':IncRename ' .. vim.fn.expand('<cword>')
+	end
+	return ''
+end
 
 -- THE CONTRACT: Return the module to satisfy the Editing Orchestrator.
 return M

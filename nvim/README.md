@@ -31,6 +31,7 @@ nvim/
     ├── core/
     │   ├── deps.lua                  # mini.deps bootstrap + MiniDeps global
     │   ├── format.lua                # Native BufWritePre formatter (vim.system)
+    │   ├── icons.lua                 # Central icon registry (diagnostics, git, kinds, dap)
     │   ├── init.lua                  # Core orchestrator (options → keymaps → libs)
     │   ├── keymaps.lua               # Home-row navigation, buffer, window keymaps
     │   ├── libs.lua                  # Foundational library injection (lazydev)
@@ -51,8 +52,9 @@ nvim/
         │   ├── inc-rename.lua        # JIT LSP rename (<leader>rn)
         │   ├── indent.lua            # Auto indentation detection on BufRead
         │   ├── init.lua              # Editing domain orchestrator
-        │   ├── mini-editing.lua      # ai, move, surround, indentscope, pairs, hipatterns
-        │   └── refactoring.lua       # JIT AST refactoring (extract, inline)
+        │   ├── mini-editing.lua      # ai, move, surround, comment, indentscope, pairs, hipatterns
+        │   ├── refactoring.lua       # JIT AST refactoring (extract, inline)
+        │   └── todo-comments.lua     # TODO/FIXME/HACK highlights + Trouble/quickfix integration
         ├── lsp/
         │   ├── init.lua              # LSP domain orchestrator (strict order: blink → lsp)
         │   ├── blink.lua             # blink.cmp completion + capability broadcast
@@ -84,6 +86,7 @@ nvim/
             ├── init.lua              # Workflow domain orchestrator
             ├── overseer.lua          # JIT task runner (Makefile/cargo auto-detect)
             ├── persistence.lua       # Automatic session save/restore
+            ├── test-runner.lua       # Language-aware test dispatch (Rust/Zig/Python/C/C++)
             ├── toggleterm.lua        # snacks.terminal TUI factory (lazygit, aider…)
             ├── typst-preview.lua     # Typst live preview via tinymist
             └── vim-be-good.lua       # Ghost command motion trainer
@@ -144,6 +147,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | `ThePrimeagen/refactoring.nvim` | AST-based refactoring (JIT) |
 | `NMAC427/guess-indent.nvim` | Auto indentation detection |
 | `folke/lazydev.nvim` | Lua API intelligence |
+| `folke/todo-comments.nvim` | TODO/FIXME/HACK/NOTE highlights + Trouble/quickfix integration |
 | `ThePrimeagen/vim-be-good` | Motion training (ghost command) |
 
 ---
@@ -154,17 +158,31 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | Mode | Keybind | Description |
 |------|---------|-------------|
 | n | `<Esc>` | Clear search highlights |
+| n/i/x/s | `<C-s>` | Save file |
 | t | `<Esc><Esc>` | Exit terminal mode |
 | n | `H` / `L` | Previous / Next buffer |
-| n | `<leader>bd` | Buffer delete |
-| n | `<leader>wv` | Window: Vertical split |
-| n | `<leader>ws` | Window: Horizontal split |
+| n | `<leader>bb` / `` <leader>` `` | Switch to alternate buffer |
+| n | `<leader>bd` | Buffer delete (preserves splits) |
+| n | `<leader>bo` | Delete all other buffers |
+| n | `<leader>bD` | Delete buffer + close window |
+| n | `<leader>fn` | New empty file |
+| n | `<leader>qq` | Quit all |
+| n | `<leader>K` | Keywordprg (man/help) |
+| n | `<leader>wv` / `<leader>\|` | Window: Vertical split |
+| n | `<leader>ws` / `<leader>-` | Window: Horizontal split |
 | n | `<leader>wq` | Window: Quit current |
 | n | `<leader>wo` | Window: Only (close others) |
 | n | `<leader>w=` | Window: Equalize sizes |
 | n | `<leader>wx` | Window: Swap next |
 | n, t | `<C-h/j/k/l>` | Smart pane move (Neovim ↔ Zellij) |
 | n, t | `<M-h/j/k/l>` | Smart pane resize |
+| n/x | `n` / `N` | Next/Prev search result (direction-normalised) |
+| x | `<` / `>` | Indent (stay in visual) |
+| i | `,` `.` `;` | Undo break-points |
+| n/i | `<A-j>` / `<A-k>` | Move current line down / up |
+| n | `[q` / `]q` | Prev / Next quickfix item |
+| n | `<leader>ui` | Inspect highlight under cursor |
+| n | `<leader>uI` | Inspect treesitter tree |
 
 ### Search (snacks.picker)
 | Mode | Keybind | Description |
@@ -173,8 +191,8 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n | `<leader>fe` | File explorer (root dir) |
 | n | `<leader>fr` | Recent files |
 | n | `<leader>fc` | Recent files (cwd) |
-| n | `<leader>sg` | Live grep |
-| n | `<leader>so` | Omni grep (Ripgrep) |
+| n | `<leader>fd` | Find directory (Zoxide) |
+| n | `<leader>sg` | Grep project |
 | n | `<leader>sw` | Grep word under cursor |
 | n | `<leader>sd` | Search diagnostics |
 | n | `<leader>sr` | Resume last search |
@@ -183,7 +201,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n | `<leader>sn` | Search Neovim config files |
 | n | `<leader>su` | Search undo history |
 | n | `<leader>sN` | Search notification history |
-| n | `<leader>fd` | Find directory (Zoxide) |
+| n | `<leader>sR` | Find & replace (sd) |
 | n | `<leader><leader>` | Active buffers |
 
 ### LSP
@@ -191,6 +209,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 |------|---------|-------------|
 | n | `gd` | Go to definition |
 | n | `gr` | References |
+| n | `K` | Hover documentation (rounded border) |
 | n | `<leader>ci` | Implementations |
 | n | `<leader>ct` | Type definitions |
 | n | `<leader>co` | Document symbols |
@@ -199,15 +218,33 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n, x | `<leader>ca` | Code actions |
 | n | `<leader>cc` | Go to declaration |
 | n, v | `<leader>cf` | Format buffer |
-| n | `<leader>ch` | Toggle inlay hints |
+| n | `<leader>ch` | Toggle inlay hints (auto-enabled on attach) |
+
+### Diagnostics
+| Mode | Keybind | Description |
+|------|---------|-------------|
+| n | `<leader>cd` | Line diagnostics float |
+| n | `]d` / `[d` | Next / Prev diagnostic |
+| n | `]e` / `[e` | Next / Prev error |
+| n | `]w` / `[w` | Next / Prev warning |
+| n | `<leader>xx` | Workspace diagnostics (Trouble) |
+| n | `<leader>xd` | Document diagnostics (Trouble) |
+| n | `<leader>xq` | Quickfix list (Trouble) |
+| n | `<leader>xl` | Location list (Trouble) |
+| n | `<leader>ul` | Toggle diagnostic virtual text |
+| n | `<leader>uu` | Toggle diagnostic underlines |
+| n | `<leader>q` | Diagnostic quickfix (Trouble or native) |
 
 ### Git
 | Mode | Keybind | Description |
 |------|---------|-------------|
 | n | `<leader>gg` | Lazygit TUI |
 | n | `<leader>gl` | Git log (commits) |
+| n | `<leader>gf` | Current file history |
 | n | `<leader>gS` | Git status (changed files) |
 | n | `<leader>gb` | Git branches |
+| n, x | `<leader>gB` | Git browse (open in browser) |
+| n, x | `<leader>gY` | Git browse (copy remote URL) |
 | n | `]c` / `[c` | Next / Prev git change |
 | n | `<leader>gs` | Stage hunk |
 | n | `<leader>gu` | Undo hunk |
@@ -220,7 +257,10 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n | `<leader>va` | Toggle Aerial symbol sidebar |
 | n | `<leader>vj` | Jump to symbol (Aerial nav) |
 | n | `<leader>vJ` | jless JSON viewer |
-| n | `<leader>fe` | File explorer (root dir) |
+| n | `<leader>vq` | JQ live scratchpad |
+| n | `<leader>vx` | XH HTTP client |
+| n | `-` | Open file explorer (current file's dir) |
+| n | `<leader>fe` | Open file explorer (project root) |
 | n | `<leader>xx` | Workspace diagnostics (Trouble) |
 | n | `<leader>xd` | Document diagnostics (Trouble) |
 | n | `<leader>xq` | Quickfix list (Trouble) |
@@ -229,6 +269,11 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 ### Editing
 | Mode | Keybind | Description |
 |------|---------|-------------|
+| n | `gc` | Comment (motion) |
+| n | `gcc` | Comment current line |
+| v | `gc` | Comment selection |
+| n | `gco` | Add comment line below |
+| n | `gcO` | Add comment line above |
 | v, V | `<M-h/j/k/l>` | Move highlighted block |
 | n | `gz[a/d/r/f/h/n]` | Surround manipulation |
 | n, x | `<leader>rr` | Refactor: Select (UI) |
@@ -236,6 +281,20 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | x | `<leader>rf` | Refactor: Extract function |
 | x | `<leader>rF` | Refactor: Extract function to file |
 | n, x | `<leader>ri` | Refactor: Inline variable |
+
+### TODO Comments
+| Mode | Keybind | Description |
+|------|---------|-------------|
+| n | `]t` / `[t` | Next / Prev TODO comment |
+| n | `<leader>xt` | TODOs in Trouble |
+| n | `<leader>xT` | TODOs in quickfix |
+
+### Execute (`<leader>e`)
+| Mode | Keybind | Description |
+|------|---------|-------------|
+| n | `<leader>er` | Run code (interactive Zellij split) |
+| n | `<leader>ec` | Continuous watch + run (watchexec) |
+| n | `<leader>ew` | Manual watchexec trigger |
 
 ### Terminal / TUI (snacks.terminal)
 | Mode | Keybind | Description |
@@ -258,12 +317,20 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n | `<leader>qw` | Session: Save manually |
 | n | `<leader>qd` | Session: Don't save |
 
-### Typst
+### Test Runner (Rust / Zig / Python / C / C++)
+| Mode | Keybind | Description |
+|------|---------|-------------|
+| n | `<leader>Tr` | Run all tests (project root) |
+| n | `<leader>Tf` | Run tests for current file |
+| n | `<leader>Tn` | Run nearest test under cursor |
+
+### Typst (buffer-local, `filetype=typst`)
 | Mode | Keybind | Description |
 |------|---------|-------------|
 | n | `<leader>typ` | Typst: Start preview |
 | n | `<leader>tyc` | Typst: Close preview |
 | n | `<leader>tys` | Typst: Sync cursor |
+| n | `<leader>pv` | Typst: Watch (terminal) |
 
 ### DAP
 | Mode | Keybind | Description |
@@ -298,18 +365,15 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 ### Utilities
 | Mode | Keybind | Description |
 |------|---------|-------------|
-| n | `<leader>cx` | Code: Continuous watch (watchexec) |
-| n | `<leader>cr` | Code: Run interactive |
-| n | `<leader>vw` | Watchexec: Manual trigger |
-| n | `<leader>vq` | JQ live scratchpad |
-| n | `<leader>sR` | Search & replace (sd) |
-| n | `<leader>vx` | XH HTTP client |
 | n | `<leader>ur` | Restart LSP |
 | n | `<leader>ut` | Tool check (mise audit) |
-| n | `<leader>tl` | Toggle diagnostic virtual text |
-| n | `<leader>tu` | Toggle diagnostic underlines |
-| n | `<leader>q` | Diagnostic quickfix list |
-| n | `<leader>ct` | Run typos checker |
+| n | `<leader>uT` | Run Typos checker |
+| n | `<leader>ul` | Toggle diagnostic virtual text |
+| n | `<leader>uu` | Toggle diagnostic underlines |
+| n | `<leader>vq` | JQ live scratchpad |
+| n | `<leader>vx` | XH HTTP client |
+| n | `<leader>vJ` | jless JSON viewer |
+| n | `<leader>sR` | Find & replace (sd) |
 | n | `<leader>yp` | Yank absolute path |
 | n | `<leader>yr` | Yank relative path |
 | n | `<leader>zv` | Zellij: Vertical split |

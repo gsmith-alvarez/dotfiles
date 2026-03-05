@@ -1,41 +1,11 @@
 -- [[ UTILITIES & DATA PIPELINES ]]
 -- Modularized logic for buffer manipulation, system interop, and data processing.
 -- PRINCIPLE: Transform Neovim into a high-performance workbench for external CLI tools.
+-- KEYMAPS: All keymaps live in lua/core/plugin-keymaps.lua.
 
 local M = {}
 
--- [[ View & External Tool Keymaps ]]
--- High-level entry points for the commands defined below.
-vim.keymap.set('n', '<leader>vq', '<cmd>Jq<CR>', { desc = '[J]q Live Scratchpad' })
-vim.keymap.set('n', '<leader>sR', '<cmd>Sd<CR>', { desc = '[S]earch & [R]eplace (Sd)' })
-vim.keymap.set('n', '<leader>vx', '<cmd>Xh<CR>', { desc = '[X]h HTTP Client' })
-vim.keymap.set('n', '<leader>vJ', '<cmd>Jless<CR>', { desc = '[J]less JSON Viewer' })
-
--- [[ Eradicate Search Highlights ]]
--- Uses <Esc> to clear the 'hlsearch' state, removing the yellow glare
--- from previous searches once you are done with them.
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR><Esc>', { desc = 'Clear search highlights' })
-
--- [[ Context Exfiltration: Path Yanking ]]
--- Pulls the current file context into the system clipboard ('+').
-
-vim.keymap.set('n', '<leader>yp', function()
-  local path = vim.fn.expand('%:p')
-  vim.fn.setreg('+', path)
-  -- NOTIFICATION: We use \n for a clean, two-line layout in the popup UI.
-  vim.notify('Copied Absolute Path:\n' .. path, vim.log.levels.INFO)
-end, { desc = '[Y]ank Absolute [P]ath' })
-
-vim.keymap.set('n', '<leader>yr', function()
-  local path = vim.fn.expand('%:~:.')
-  vim.fn.setreg('+', path)
-  vim.notify('Copied Relative Path:\n' .. path, vim.log.levels.INFO)
-end, { desc = '[Y]ank [R]elative Path' })
-
--- [[ LSP Defibrillator ]]
--- A "hard reset" for code intelligence. Essential for clearing ghost diagnostics
--- or stuck RPC processes in large Go or C++ monorepos.
-vim.keymap.set('n', '<leader>ur', '<cmd>LspRestart<CR>', { desc = '[U]tils [R]estart LSP' })
+-- External tool commands (invoked via keymaps in plugin-keymaps.lua)
 
 -- [[ GoJQ: Native JSON Querying ]]
 -- Pipeline: Current Buffer -> String -> GoJQ -> Quickfix List.
@@ -140,16 +110,5 @@ vim.api.nvim_create_user_command('Xh', function(opts)
   end)
 end, { nargs = '*', desc = 'Execute HTTP request via xh' })
 
--- [[ BUFFER MANAGEMENT ARCHITECTURE ]]
--- Designed for "Zellij-style" navigation. 'H' and 'L' cycle through buffers
--- just like tab switching in a browser.
-
-vim.keymap.set('n', '<leader>bd', function()
-  -- NATIVE LEVERAGE: Use snacks.bufdelete to close the buffer without destroying window splits.
-  local ok, snacks = pcall(require, 'snacks')
-  if ok then
-    snacks.bufdelete()
-  else
-    vim.cmd('bdelete')
-  end
-end, { desc = '[B]uffer [D]elete' })
+-- [[ BUFFER MANAGEMENT ]]
+-- Buffer deletion keymaps live in lua/core/plugin-keymaps.lua (<leader>b prefix).

@@ -4,7 +4,7 @@
 local M = {}
 local utils = require('core.utils')
 
-M.bootstrap = function()
+local bootstrap_dap_core = function()
 	local ok, _ = pcall(require, 'dap')
 	if ok then return true end
 
@@ -14,6 +14,9 @@ M.bootstrap = function()
 
 	return pcall(require, 'dap')
 end
+
+-- Exported as M.setup for the DAP domain orchestrator (plugins/dap/init.lua).
+M.bootstrap = bootstrap_dap_core
 
 local loaded = false
 
@@ -67,7 +70,7 @@ end
 local function bootstrap_full_dap()
 	if loaded then return true end
 
-	if not M.bootstrap() then
+	if not bootstrap_dap_core() then
 		utils.soft_notify('Failed to bootstrap core DAP library.', vim.log.levels.ERROR)
 		return false
 	end
@@ -161,31 +164,8 @@ local function bootstrap_full_dap()
 	return true
 end
 
--- [[ THE PROXY KEYMAPS ]]
--- Simplified execution context
-local dap_actions = {
-	{ '<F5>',       function() require('dap').continue() end,                                     'Start/Continue Debugging' },
-	-- Route the toggle through the persistent-breakpoints API instead of core DAP
-	{ '<leader>db', function() require('persistent-breakpoints.api').toggle_breakpoint() end,     'Toggle Breakpoint' },
-	{ '<leader>dB', function() require('persistent-breakpoints.api').clear_all_breakpoints() end, 'Clear All Breakpoints' },
-	{ '<leader>dc', function() require('dap').continue() end,                                     'Start/Continue Debugging' },
-	{ '<leader>do', function() require('dap').step_over() end,                                    'Step Over' },
-	{ '<leader>di', function() require('dap').step_into() end,                                    'Step Into' },
-	{ '<leader>dr', function() require('dap').repl.toggle() end,                                  'Toggle REPL' },
-}
+-- Keymaps moved to lua/core/plugin-keymaps.lua under Debug (<leader>d / <F5>) section.
 
-for _, action in ipairs(dap_actions) do
-	vim.keymap.set('n', action[1], function()
-		if bootstrap_full_dap() then
-			action[2]()
-		end
-	end, { desc = 'Debug: ' .. action[3] })
-end
-
-vim.keymap.set('n', '<leader>du', function()
-	if bootstrap_full_dap() then
-		require('dapui').toggle()
-	end
-end, { desc = 'Debug: Toggle UI Layout' })
+M.bootstrap = bootstrap_full_dap
 
 return M

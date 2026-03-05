@@ -23,6 +23,15 @@ M.setup = function()
 			n_lines = 50,
 			search_method = 'cover_or_next',
 		}
+		require('mini.comment').setup {
+			mappings = {
+				comment = 'gc',
+				comment_line = 'gcc',
+				comment_visual = 'gc',
+				textobject = 'gc',
+			},
+		}
+		-- gco / gcO keymaps moved to lua/core/plugin-keymaps.lua (Code section)
 		require('mini.indentscope').setup { symbol = '│' }
 		require('mini.pairs').setup {
 			modes = { insert = true, command = false, terminal = false },

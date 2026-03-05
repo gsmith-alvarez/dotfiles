@@ -49,20 +49,9 @@ end
 -- These stubs act as tripwires. The first time you press one, it installs/loads
 -- Overseer, scans your directory for build files, and executes the command.
 
-local actions = {
-  { "<leader>ot", "OverseerToggle",     "[O]verseer [T]oggle" },
-  { "<leader>or", "OverseerRun",        "[O]verseer [R]un Template" },
-  { "<leader>oi", "OverseerInfo",       "[O]verseer [I]nfo" },
-  { "<leader>oa", "OverseerTaskAction", "[O]verseer [A]ction Menu" },
-}
-
-for _, action in ipairs(actions) do
-  vim.keymap.set("n", action[1], function()
-    if bootstrap_overseer() then
-      vim.cmd(action[2])
-    end
-  end, { desc = action[3] })
-end
+-- Keymaps moved to lua/core/plugin-keymaps.lua under Overseer (<leader>o) section.
 
 -- THE CONTRACT: Return the module to satisfy the Workflow Orchestrator
+M.bootstrap = bootstrap_overseer
+
 return M

@@ -48,6 +48,7 @@ make = "latest"       # Classic build automation (C)
 cmake = "latest"      # Cross-platform build generator (C++)
 hyperfine = "latest"  # CLI benchmarking tool (Rust)
 ninja = "latest"      # High-speed build executor (C++)
+mold = "latest"       # High-speed linker — Linux only (C++)
 podman = "latest"     # Daemonless container engine (Go)
 podman-tui = "latest" # Podman terminal user interface (Rust)
 direnv = "latest"     # Per-directory environment manager (Go)
@@ -89,7 +90,7 @@ tree-sitter = "latest"             # Parser generator & incremental parsing libr
 
 # --- Language Servers ---
 lua-language-server = "latest"                     # Lua LSP (Lua/C++)
-"github:Feel-ix-343/markdown-oxide" = "latest"    # Markdown LSP (Rust)
+"github:Feel-ix-343/markdown-oxide" = "latest"     # Markdown LSP (Rust)
 "npm:bash-language-server" = "latest"              # Bash LSP
 "npm:vscode-json-languageserver" = "latest"        # JSON LSP
 "npm:yaml-language-server" = "latest"              # YAML LSP
@@ -116,6 +117,14 @@ tokei = "latest"                                  # Code statistics across mixed
 "go:github.com/surge-downloader/surge" = "latest" # P2P/HTTP downloader (Go)
 "npm:@ast-grep/cli" = "latest"                    # Structural code search & rewrite (Rust/Node)
 
+# --- Embedded / MCU ---
+arduino-cli = "latest"              # Command-line Arduino toolchain (Go)
+"gcc-arm-none-eabi" = "latest"      # ARM Cortex-M cross-compiler (C)
+"cargo:cargo-binutils" = "latest"   # Binary management for MCUs (Rust)
+"cargo:cargo-bloat" = "latest"      # Analyze binary size overhead (Rust)
+"cargo:probe-rs-tools" = "latest"   # MCU flashing/debugging suite (Rust)
+"pipx:platformio" = "latest"        # Embedded framework & build system (Python)
+
 # --- AI ---
 "pipx:aider-chat" = { version = "latest", uvx_args = "--python 3.12" } # AI pair programmer
 
@@ -124,20 +133,13 @@ EDITOR = "nvim"
 VISUAL = "nvim"
 LANG = "en_US.UTF-8"
 
+# Aider / LM Studio
+OPENAI_API_BASE = "http://localhost:1234/v1"
+OPENAI_API_KEY = "lm-studio"
+
 # Path Setup
 GOPATH = "{{env.HOME}}/.local/share/go"
 PATH = "{{env.HOME}}/.local/share/go/bin:{{env.HOME}}/.cargo/bin:{{env.HOME}}/.local/bin:{{env.PATH}}"
-
-# Build Optimization (static, cross-platform safe)
-CC = "zig cc"
-CXX = "zig c++"
-AR = "zig ar"         # Useful for static library archiving
-RANLIB = "zig ranlib" # Often needed alongside AR
-
-# Conditional build flags (sccache, mold, OS-specific linker targets) are
-# evaluated at shell activation time via the script below so they only apply
-# when the relevant binaries are actually present on the current machine.
-_.source = ".mise-env.sh"
 
 [settings]
 env_shell_expand = true    # Support $HOME in paths

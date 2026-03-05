@@ -36,24 +36,8 @@ local function bootstrap_trouble()
 end
 
 -- [[ THE PROXY KEYMAPS ]]
--- We define a clean table of operations. The proxy evaluates a single 
--- boolean (loaded == true) on subsequent calls, which evaluates in microseconds.
-
-local trouble_keys = {
-  { keys = '<leader>xx', action = 'diagnostics toggle',             desc = 'Workspace Diagnostics' },
-  { keys = '<leader>xd', action = 'diagnostics toggle filter.buf=0', desc = 'Document Diagnostics' },
-  { keys = '<leader>xq', action = 'qflist toggle',                  desc = 'Quickfix List' },
-  { keys = '<leader>xl', action = 'loclist toggle',                 desc = 'Location List' },
-}
-
-for _, key in ipairs(trouble_keys) do
-  vim.keymap.set('n', key.keys, function()
-    if bootstrap_trouble() then
-      -- Pass the action string directly to the native Vim command interface
-      vim.cmd('Trouble ' .. key.action)
-    end
-  end, { desc = 'Trouble: ' .. key.desc .. ' (JIT)' })
-end
+-- Moved to lua/core/plugin-keymaps.lua under Trouble (<leader>x) section.
+-- bootstrap_trouble() is called via pcall(require, 'trouble') in the closures.
 
 -- THE CONTRACT: Return the module to satisfy the UI Orchestrator
 return M
