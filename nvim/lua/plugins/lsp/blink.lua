@@ -22,23 +22,25 @@ M.setup = function()
     require('lazydev').setup {
       library = { { path = '${3rd}/luv/library', words = { 'vim%.uv' } } },
     }
-
-    -- 2. Add and Compile Blink
+    -- 2. Add and Compile Blink (Tracking Main)
     MiniDeps.add {
       source = 'saghen/blink.cmp',
+      -- No checkout pin = Tracks the latest commit on 'main'
       hooks = {
         post_install = function(args)
-          if utils.mise_shim('cargo') then
-            vim.system({ 'cargo', 'build', '--release' }, { cwd = args.path }):wait()
+          -- Force the absolute path to the mise shim to bypass PATH inheritance issues
+          local cargo_bin = vim.fn.expand('~/.local/share/mise/shims/cargo')
+          if vim.fn.executable(cargo_bin) == 1 then
+            vim.system({ cargo_bin, 'build', '--release' }, { cwd = args.path }):wait()
           else
-            utils.soft_notify('blink.cmp: cargo not found, skipping native build (prebuilt binary will be used).', vim.log.levels.WARN)
+            require('core.utils').soft_notify('blink.cmp: Native build failed, cargo not found at ' .. cargo_bin,
+              vim.log.levels.ERROR)
           end
         end,
         post_checkout = function(args)
-          if utils.mise_shim('cargo') then
-            vim.system({ 'cargo', 'build', '--release' }, { cwd = args.path }):wait()
-          else
-            utils.soft_notify('blink.cmp: cargo not found, skipping native build (prebuilt binary will be used).', vim.log.levels.WARN)
+          local cargo_bin = vim.fn.expand('~/.local/share/mise/shims/cargo')
+          if vim.fn.executable(cargo_bin) == 1 then
+            vim.system({ cargo_bin, 'build', '--release' }, { cwd = args.path }):wait()
           end
         end,
       },
@@ -47,8 +49,8 @@ M.setup = function()
     -- 3. Configure the Engine
     require('blink.cmp').setup {
       fuzzy = {
-        -- Download a prebuilt binary if the native build is missing (new machine safety net)
-        prebuilt_binaries = { download = true },
+        -- Disable the prebuilt binary fallback entirely. We are strictly native now.
+        prebuilt_binaries = { download = false },
       },
       keymap = {
         -- Zero interference with native Neovim keys
