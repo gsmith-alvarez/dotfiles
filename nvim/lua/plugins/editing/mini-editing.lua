@@ -38,6 +38,8 @@ M.setup = function()
 			mappings = {},
 		}
 
+
+
 		-- TabOut: press <Tab> to jump past the next closing bracket/quote
 		local tabout_chars = { ')', ']', '}', "'", '"', '`', '>', ';', ',' }
 		vim.keymap.set('i', '<Tab>', function()
@@ -62,6 +64,25 @@ M.setup = function()
 				hex_color = hipatterns.gen_highlighter.hex_color(),
 			},
 		}
+
+		-- [[ MINI.JUMP2D: Two-keystroke anywhere-on-screen jumping ]]
+		-- `<CR>` → label all word starts → press label to jump
+		-- Works in operator-pending mode: `d<CR>{label}` deletes to that word
+		require('mini.jump2d').setup {
+			spotter = require('mini.jump2d').gen_spotter.pattern('%S+'),
+			labels = 'asdfjklghweryuiopzxcvbnmqt',
+			view = { dim = true, n_steps_ahead = 2 },
+			mappings = { start_jumping = '' }, -- managed manually below
+			allowed_lines = { blank = false, fold = false },
+		}
+		-- <CR> jumps in normal/visual/op-pending; quickfix buffers keep default <CR>
+		vim.keymap.set({ 'n', 'x', 'o' }, '<CR>', function()
+			if vim.bo.filetype == 'qf' or vim.bo.buftype == 'quickfix' then
+				vim.api.nvim_feedkeys(vim.keycode('<CR>'), 'n', false)
+				return
+			end
+			require('mini.jump2d').start(require('mini.jump2d').builtin_opts.word_start)
+		end, { desc = 'Jump2d: jump to word' })
 
 		-- [[ RAINBOW DELIMITERS ]]
 		-- Treesitter-based: each nesting level gets its own color, always visible.

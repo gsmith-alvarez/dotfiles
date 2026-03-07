@@ -53,6 +53,11 @@ if status is-interactive
             bind -M insert \ee _navi_smart_replace
             bind -M default \ee _navi_smart_replace
         end
+
+        # 3. Autosuggestion Keybinds
+        bind -M insert \cf accept-autosuggestion          # Ctrl+F: accept whole suggestion (overrides forward-char; use → instead)
+        bind -M insert \e\[1\;5C forward-word             # Ctrl+→: accept one word at a time
+        bind -M insert \cx accept-autosuggestion execute  # Ctrl+X: accept suggestion and execute
     end
 
     # [[ FZF MODAL CATPPUCCIN MOCHA CONFIGURATION ]]

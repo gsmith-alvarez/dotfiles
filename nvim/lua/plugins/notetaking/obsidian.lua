@@ -85,7 +85,6 @@ function M.setup()
         local map = vim.keymap.set
         local function buf(desc) return { buffer = true, desc = desc } end
 
-        -- 1. Navigation & MOC Workflow
         local function follow(strategy)
           local api = require "obsidian.api"
           vim.lsp.buf.definition {
@@ -100,22 +99,46 @@ function M.setup()
             end
           }
         end
-        map("n", "gf",         function() follow("current") end, buf("Obsidian: Follow Link"))
-        map("n", "<leader>nf", function() follow("tab")     end, buf("Obsidian: Follow Link (New Tab)"))
-        map("n", "<leader>nv", function() follow("vsplit")  end, buf("Obsidian: Follow Link (V-Split)"))
-        map("n", "<leader>nh", function() follow("hsplit")  end, buf("Obsidian: Follow Link (H-Split)"))
-        map("n", "<leader>nT", function() vim.cmd("Obsidian tags")               end, buf("Obsidian: Search [T]ags"))
-        map("n", "<leader>no", function() vim.cmd("Obsidian open")               end, buf("Obsidian: [O]pen in GUI"))
-        map("n", "<leader>nc", function() vim.cmd("Obsidian toc")                end, buf("Obsidian: [C]ontents (TOC)"))
+
+        vim.keymap.set("n", "<leader>na", function()
+          local obs = require("obsidian.api")
+          local link = obs.cursor_link()
+          local tag = obs.cursor_tag()
+          local check = obs.cursor_checkbox()
+          local head = obs.cursor_heading()
+          if link then
+            vim.cmd("Obsidian follow_link")
+          elseif tag then
+            vim.cmd("Obsidian tags")
+          elseif check then
+            vim.cmd("Obsidian toggle_checkbox")
+          elseif head then
+            vim.cmd("normal! za")
+          else
+            vim.notify("Not on a link, tag, checkbox, or heading", vim.log.levels.INFO)
+          end
+        end, { buffer = true, desc = "Obsidian: Smart Action" })
+        map("n", "<leader>nf", function() follow("tab") end, buf("Obsidian: Follow Link (New Tab)"))
+        map("n", "<leader>nv", function() follow("vsplit") end, buf("Obsidian: Follow Link (V-Split)"))
+        map("n", "<leader>nh", function() follow("hsplit") end, buf("Obsidian: Follow Link (H-Split)"))
+
+        -- Remove obsidian's default <CR> (smart_action) and give it to mini.jump2d
+        vim.keymap.del("n", "<CR>", { buffer = true })
+        map("n", "<CR>", function()
+          require('mini.jump2d').start(require('mini.jump2d').builtin_opts.word_start)
+        end, buf("Jump2d: jump to word"))
+        map("n", "<leader>nT", function() vim.cmd("Obsidian tags") end, buf("Obsidian: Search [T]ags"))
+        map("n", "<leader>no", function() vim.cmd("Obsidian open") end, buf("Obsidian: [O]pen in GUI"))
+        map("n", "<leader>nc", function() vim.cmd("Obsidian toc") end, buf("Obsidian: [C]ontents (TOC)"))
 
         -- 2. Note Creation & Templates
-        map("n", "<leader>nt", function() vim.cmd("Obsidian template")           end, buf("Obsidian: Insert [T]emplate"))
-        map("n", "<leader>ne", function() vim.cmd("Obsidian extract_note")       end, buf("Obsidian: [E]xtract to Note"))
-        map("n", "<leader>nl", function() vim.cmd("Obsidian link")               end, buf("Obsidian: [L]ink Existing Note"))
-        map("n", "<leader>nN", function() vim.cmd("Obsidian link_new")           end, buf("Obsidian: Link [N]ew Note"))
+        map("n", "<leader>nt", function() vim.cmd("Obsidian template") end, buf("Obsidian: Insert [T]emplate"))
+        map("n", "<leader>ne", function() vim.cmd("Obsidian extract_note") end, buf("Obsidian: [E]xtract to Note"))
+        map("n", "<leader>nl", function() vim.cmd("Obsidian link") end, buf("Obsidian: [L]ink Existing Note"))
+        map("n", "<leader>nN", function() vim.cmd("Obsidian link_new") end, buf("Obsidian: Link [N]ew Note"))
 
         -- 3. Media & Attachments
-        map("n", "<leader>np", function() vim.cmd("Obsidian paste_img")          end, buf("Obsidian: [P]aste Image"))
+        map("n", "<leader>np", function() vim.cmd("Obsidian paste_img") end, buf("Obsidian: [P]aste Image"))
       end,
     },
 

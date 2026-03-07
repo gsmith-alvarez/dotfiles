@@ -66,7 +66,7 @@ nvim/
         │   ├── mini-files.lua        # mini.files explorer + split navigation
         │   └── smart-splits.lua      # Neovim ↔ Zellij pane navigation/resize
         ├── notetaking/
-        │   └── obsidian.lua          # obsidian-nvim/obsidian.nvim, snacks.picker, LSP-based link follow (gf/<leader>nf/nv/nh)
+        │   └── obsidian.lua          # obsidian-nvim/obsidian.nvim, snacks.picker, smart-action (<leader>na), tab/split follow
         ├── searching/
         │   ├── aerial.lua            # JIT structural symbol navigation
         │   ├── init.lua              # Searching domain orchestrator
@@ -352,7 +352,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n | `<leader>nq` | Quick switch |
 | n | `<leader>ns` | Search notes |
 | n | `<leader>nn` | New note |
-| n | `gf` | Follow link under cursor (current window) |
+| n | `<leader>na` | Smart action (follow link / search tag / toggle checkbox / fold heading) |
 | n | `<leader>nf` | Follow link in new tab |
 | n | `<leader>nv` | Follow link vsplit |
 | n | `<leader>nh` | Follow link hsplit |

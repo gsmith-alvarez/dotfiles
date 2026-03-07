@@ -146,7 +146,7 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<leader>nq` | N | Quick switch | `obsidian.nvim` |
 | `<leader>nn` | N | New note | `obsidian.nvim` |
 | `<leader>ns` | N | Search notes | `obsidian.nvim` |
-| `gf` | N | Follow link (current window) | `obsidian.nvim` |
+| `<leader>na` | N | Smart action (follow link / tag / checkbox / heading fold) | `obsidian.nvim` |
 | `<leader>nf` | N | Follow link in new tab | `obsidian.nvim` |
 | `<leader>nv` | N | Follow link (vertical split) | `obsidian.nvim` |
 | `<leader>nh` | N | Follow link (horizontal split) | `obsidian.nvim` |
