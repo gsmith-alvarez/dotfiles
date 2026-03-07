@@ -17,6 +17,10 @@ watchexec = "latest"       # Re-run commands on file change (Rust)
 xh = "latest"              # Fast native HTTP client (Rust)
 usage = "latest"           # CLI specification tool (Rust)
 carapace = "latest"        # Multi-shell completion engine (Go)
+duf = "latest"             # a better alterative to df (Go)
+"cargo:broot" = "latest"   # A new alternative to tree (Rust)
+doggo = "latest"           # Command-line DNS client fo humans (Go)
+choose = "latest"          # Alternative to cut (Rust)
 
 # --- Monitoring ---
 btop = "latest" # Feature-rich resource monitor (C++)
@@ -116,6 +120,8 @@ tokei = "latest"                                  # Code statistics across mixed
 "cargo:miniserve" = "latest"                      # One-command HTTP file server (Rust)
 "go:github.com/surge-downloader/surge" = "latest" # P2P/HTTP downloader (Go)
 "npm:@ast-grep/cli" = "latest"                    # Structural code search & rewrite (Rust/Node)
+ffmpeg = "latest"                                 # Video Magic
+resvg = "latest"                                  # Rust based SVG renderer
 
 # --- Embedded / MCU ---
 arduino-cli = "latest"            # Command-line Arduino toolchain (Go)

@@ -27,6 +27,14 @@ end
 -- =============================================================================
 local MiniDeps = require 'mini.deps'
 
+-- Register `is-mise?` treesitter predicate immediately — before any buffer parsing.
+-- Used in after/queries/toml/injections.scm to limit shell injection to mise config files.
+vim.treesitter.query.add_predicate('is-mise?', function(match, pattern, source)
+  local bufname = vim.api.nvim_buf_get_name(source)
+  return bufname:match('[/\\]mise%.toml$') ~= nil
+    or bufname:match('[/\\]%.mise%.toml$') ~= nil
+end, { force = true })
+
 if vim.fn.argc() > 0 then
 	MiniDeps.now(function()
 		-- Ensure snacks is available for early notifications

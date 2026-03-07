@@ -29,6 +29,7 @@ fish/*
 !fish/conf.d/
 fish/fish_variables
 fish/fish_history
+fish/functions/br.fish
 
 # --- Mise ---
 # Mise usually tracks local tool versions in the project folder,
