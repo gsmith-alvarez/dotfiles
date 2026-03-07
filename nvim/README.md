@@ -54,7 +54,7 @@ nvim/
         │   ├── inc-rename.lua        # JIT LSP rename (<leader>rn)
         │   ├── indent.lua            # Auto indentation detection on BufRead
         │   ├── init.lua              # Editing domain orchestrator
-        │   ├── mini-editing.lua      # ai, move, surround, comment, indentscope, pairs, hipatterns
+        │   ├── mini-editing.lua      # ai, move, surround, comment, indentscope, pairs, hipatterns, TabOut, rainbow-delimiters
         │   ├── refactoring.lua       # JIT AST refactoring (extract, inline)
         │   └── todo-comments.lua     # TODO/FIXME/HACK highlights + Trouble/quickfix integration
         ├── lsp/
@@ -66,7 +66,7 @@ nvim/
         │   ├── mini-files.lua        # mini.files explorer + split navigation
         │   └── smart-splits.lua      # Neovim ↔ Zellij pane navigation/resize
         ├── notetaking/
-        │   └── obsidian.lua          # obsidian-nvim/obsidian.nvim fork, snacks.picker, callback-based keymaps
+        │   └── obsidian.lua          # obsidian-nvim/obsidian.nvim, snacks.picker, LSP-based link follow (gf/<leader>nf/nv/nh)
         ├── searching/
         │   ├── aerial.lua            # JIT structural symbol navigation
         │   ├── init.lua              # Searching domain orchestrator
@@ -76,14 +76,14 @@ nvim/
         │   ├── mini-clue.lua         # Key hint popup (VimEnter deferred)
         │   ├── mini-colors.lua       # mini.base16 with Catppuccin Mocha palette
         │   ├── mini-starter.lua      # Dashboard (argc==0 guard, snacks.picker actions)
-        │   ├── mini-statusline.lua   # Statusline + mise version telemetry
+        │   ├── mini-statusline.lua   # Statusline: mode, git branch+diff counts (+n ~n -n), showcmd, LSP, mise version
         │   ├── quotes.lua            # Async quote fetcher (curl → stdpath cache)
         │   ├── render-markdown.lua   # JIT markdown renderer (FileType sandbox)
         │   ├── treesitter.lua        # Treesitter + textobjects (MiniDeps.later)
         │   └── trouble.lua           # JIT diagnostic aggregator
         ├── version_control/
         │   ├── init.lua              # Git domain orchestrator
-        │   └── mini-diff.lua         # mini.diff sign column + mini.bracketed hunks
+        │   └── mini-diff.lua         # mini.git (branch/statusline) + mini.diff sign column + mini.bracketed hunks
         └── workflow/
             ├── init.lua              # Workflow domain orchestrator
             ├── overseer.lua          # JIT task runner (Makefile/cargo auto-detect)
@@ -124,23 +124,24 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 
 | Plugin | Purpose |
 |--------|---------|
-| `echasnovski/mini.nvim` | ai, bracketed, clue, comment, deps, diff, files, hipatterns, icons, indentscope, move, pairs, sessions, starter, statusline, surround, tabline, visits |
-| `folke/snacks.nvim` | Notifier, fuzzy picker (replaces telescope), floating terminal, ui_select, LSP progress spinner |
+| `echasnovski/mini.nvim` | ai, bracketed, clue, comment, deps, diff, files, git, hipatterns, icons, indentscope, move, pairs, sessions, starter, statusline, surround, tabline, visits |
+| `folke/snacks.nvim` | Notifier, fuzzy picker (replaces telescope), floating terminal, ui_select, LSP progress spinner, smooth scroll |
 | `echasnovski/mini.base16` (bundled) | Colorscheme (Catppuccin Mocha palette, part of mini.nvim) |
-| `saghen/blink.cmp` | Completion engine (LSP, path, snippets, lazydev) |
+| `saghen/blink.cmp` | Completion engine (LSP, path, snippets, lazydev) — pinned to v1.9.1 |
 | `rafamadriz/friendly-snippets` | Community VSCode-format snippet collection |
 | `neovim/nvim-lspconfig` | LSP server stub registry |
 | `nvim-lua/plenary.nvim` | Async utility library (required by obsidian.nvim) |
 | `nvim-treesitter/nvim-treesitter` | Parsing + syntax |
 | `nvim-treesitter/nvim-treesitter-textobjects` | Text objects (functions, classes, params) |
 | `nvim-treesitter/nvim-treesitter-context` | Pins current scope/function header at viewport top |
+| `HiPhish/rainbow-delimiters.nvim` | Bracket/delimiter colorization by nesting level (treesitter-based) |
 | `MeanderingProgrammer/render-markdown.nvim` | Markdown visual rendering |
 | `stevearc/aerial.nvim` | Symbol sidebar + jump (JIT) |
 | `stevearc/overseer.nvim` | Task runner (JIT) |
 | `folke/trouble.nvim` | Diagnostic aggregator (JIT) |
 | `folke/todo-comments.nvim` | TODO/FIXME/HACK/NOTE highlights + Trouble/quickfix integration |
 | `mrjones2014/smart-splits.nvim` | Neovim ↔ Zellij navigation |
-| `obsidian-nvim/obsidian.nvim` | Notetaking (JIT on markdown, snacks.picker) |
+| `obsidian-nvim/obsidian.nvim` | Notetaking (deferred, snacks.picker, LSP-based link following) |
 | `chomosuke/typst-preview.nvim` | Typst live preview |
 | `mfussenegger/nvim-dap` | Debugger |
 | `rcarriga/nvim-dap-ui` | DAP UI layout |
@@ -269,6 +270,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 ### Editing
 | Mode | Keybind | Description |
 |------|---------|-------------|
+| i | `<Tab>` | TabOut: jump past next closing bracket/quote (or insert tab) |
 | n | `gc` | Comment (motion) |
 | n | `gcc` | Comment current line |
 | v | `gc` | Comment selection |
@@ -350,10 +352,10 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n | `<leader>nq` | Quick switch |
 | n | `<leader>ns` | Search notes |
 | n | `<leader>nn` | New note |
-| n | `gf` | Follow link under cursor (buffer-local) |
-| n | `<leader>nf` | Follow link in tab (buffer-local) |
-| n | `<leader>nv` | Follow link vsplit (buffer-local) |
-| n | `<leader>nh` | Follow link hsplit (buffer-local) |
+| n | `gf` | Follow link under cursor (current window) |
+| n | `<leader>nf` | Follow link in new tab |
+| n | `<leader>nv` | Follow link vsplit |
+| n | `<leader>nh` | Follow link hsplit |
 | n | `<leader>nT` | Search tags (buffer-local) |
 | n | `<leader>no` | Open in Obsidian GUI (buffer-local) |
 | n | `<leader>nc` | Table of contents (buffer-local) |

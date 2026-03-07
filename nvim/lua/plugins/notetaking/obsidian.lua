@@ -80,16 +80,30 @@ function M.setup()
     -- ========================================================================
     -- CALLBACKS: Buffer-local keymaps (mappings option removed in 4.0)
     -- ========================================================================
-    callback = {
+    callbacks = {
       enter_note = function(_note)
         local map = vim.keymap.set
         local function buf(desc) return { buffer = true, desc = desc } end
 
         -- 1. Navigation & MOC Workflow
-        map("n", "gf",         function() return require("obsidian").util.gf_passthrough() end, { buffer = true, noremap = false, expr = true, desc = "Obsidian: Follow Link" })
-        map("n", "<leader>nf", function() vim.cmd("Obsidian follow_link tab")    end, buf("Obsidian: [F]ollow Link in Tab"))
-        map("n", "<leader>nv", function() vim.cmd("Obsidian follow_link vsplit") end, buf("Obsidian: Follow Link (V-Split)"))
-        map("n", "<leader>nh", function() vim.cmd("Obsidian follow_link hsplit") end, buf("Obsidian: Follow Link (H-Split)"))
+        local function follow(strategy)
+          local api = require "obsidian.api"
+          vim.lsp.buf.definition {
+            on_list = function(t)
+              if #t.items >= 1 then
+                if strategy == "tab" then
+                  vim.cmd("tabedit " .. vim.fn.fnameescape(t.items[1].filename))
+                else
+                  api.open_note(t.items[1], api.get_open_strategy(strategy))
+                end
+              end
+            end
+          }
+        end
+        map("n", "gf",         function() follow("current") end, buf("Obsidian: Follow Link"))
+        map("n", "<leader>nf", function() follow("tab")     end, buf("Obsidian: Follow Link (New Tab)"))
+        map("n", "<leader>nv", function() follow("vsplit")  end, buf("Obsidian: Follow Link (V-Split)"))
+        map("n", "<leader>nh", function() follow("hsplit")  end, buf("Obsidian: Follow Link (H-Split)"))
         map("n", "<leader>nT", function() vim.cmd("Obsidian tags")               end, buf("Obsidian: Search [T]ags"))
         map("n", "<leader>no", function() vim.cmd("Obsidian open")               end, buf("Obsidian: [O]pen in GUI"))
         map("n", "<leader>nc", function() vim.cmd("Obsidian toc")                end, buf("Obsidian: [C]ontents (TOC)"))

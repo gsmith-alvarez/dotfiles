@@ -118,6 +118,7 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `gza` / `gzd` | N | Add / Delete surround | `mini.surround` |
 | `gzr` / `gzh` | N | Replace / Highlight surround | `mini.surround` |
 | `<M-h/j/k/l>` | V | Move highlighted block | `mini.move` |
+| `<Tab>` | I | Jump past next closing bracket/quote (TabOut) | Core |
 
 ### Refactoring
 
@@ -138,14 +139,25 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<leader>xt` | N | TODOs in Trouble | `todo-comments` |
 | `<leader>xT` | N | TODOs in quickfix | `todo-comments` |
 
-### Notes (Obsidian — JIT on markdown)
+### Notes (Obsidian — buffer-local on markdown in vault)
 
 | Key Chord | Mode | Action | Plugin |
 | :--- | :---: | :--- | :--- |
 | `<leader>nq` | N | Quick switch | `obsidian.nvim` |
 | `<leader>nn` | N | New note | `obsidian.nvim` |
 | `<leader>ns` | N | Search notes | `obsidian.nvim` |
-| `gf` | N | Follow link under cursor | `obsidian.nvim` |
+| `gf` | N | Follow link (current window) | `obsidian.nvim` |
+| `<leader>nf` | N | Follow link in new tab | `obsidian.nvim` |
+| `<leader>nv` | N | Follow link (vertical split) | `obsidian.nvim` |
+| `<leader>nh` | N | Follow link (horizontal split) | `obsidian.nvim` |
+| `<leader>nT` | N | Search tags | `obsidian.nvim` |
+| `<leader>no` | N | Open in Obsidian GUI | `obsidian.nvim` |
+| `<leader>nc` | N | Table of contents | `obsidian.nvim` |
+| `<leader>nt` | N | Insert template | `obsidian.nvim` |
+| `<leader>ne` | N | Extract selection to note | `obsidian.nvim` |
+| `<leader>nl` | N | Link to existing note | `obsidian.nvim` |
+| `<leader>nN` | N | Link to new note | `obsidian.nvim` |
+| `<leader>np` | N | Paste image attachment | `obsidian.nvim` |
 
 ---
 

@@ -89,8 +89,9 @@ if #vim.api.nvim_list_uis() > 0 then
 		safe_load 'plugins.version_control'
 
 		local scheduled_domains = {
-			'plugins.editing', -- Text Manipulation (Surround, pairs, etc.)
-			'plugins.workflow', -- External TUI / Snacks
+			'plugins.editing',    -- Text Manipulation (Surround, pairs, etc.)
+			'plugins.workflow',   -- External TUI / Snacks
+			'plugins.notetaking.obsidian', -- Obsidian vault integration (JIT)
 		}
 		for _, domain in ipairs(scheduled_domains) do
 			safe_load(domain)
