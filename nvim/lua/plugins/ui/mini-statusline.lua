@@ -56,7 +56,6 @@ M.setup = function()
 			local diagnostics = statusline.section_diagnostics { trunc_width = 75 }
 			local filename = statusline.section_filename { trunc_width = 140 }
 			local location = statusline.section_location { trunc_width = 75 }
-			local showcmd = '%10S'
 			local lsp_status = ''
 			local active_clients = vim.lsp.get_clients { bufnr = 0 }
 			if #active_clients > 0 then
@@ -64,13 +63,24 @@ M.setup = function()
 			end
 			local mise_status = vim.b.mise_status or ''
 
+			-- Diff counts from mini.diff (vim.b.minidiff_summary)
+			local diff_status = ''
+			local summary = vim.b.minidiff_summary
+			if summary then
+				local parts = {}
+				if (summary.add    or 0) > 0 then table.insert(parts, '+' .. summary.add)    end
+				if (summary.change or 0) > 0 then table.insert(parts, '~' .. summary.change) end
+				if (summary.delete or 0) > 0 then table.insert(parts, '-' .. summary.delete) end
+				if #parts > 0 then diff_status = table.concat(parts, ' ') end
+			end
+
 			return statusline.combine_groups {
 				{ hl = mode_hl,                  strings = { mode } },
-				{ hl = 'MiniStatuslineDevinfo',  strings = { git, diagnostics } },
+				{ hl = 'MiniStatuslineDevinfo',  strings = { git, diff_status, diagnostics } },
 				'%<',
 				{ hl = 'MiniStatuslineFilename', strings = { filename } },
 				'%=',
-				{ hl = 'MiniStatuslineFilename', strings = { showcmd } },
+				'%S ',
 				{ hl = 'MiniStatuslineDevinfo',  strings = { lsp_status, mise_status } },
 				{ hl = mode_hl,                  strings = { location } },
 			}

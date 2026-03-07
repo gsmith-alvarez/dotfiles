@@ -142,7 +142,7 @@ vim.opt.conceallevel = 2
 
 -- [[ Command Line Hand over to statusline.lua ]]
 vim.opt.laststatus = 3
-vim.opt.showcmd = false
+vim.opt.showcmd    = true
 vim.opt.showcmdloc = 'statusline'
 
 return Mop

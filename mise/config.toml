@@ -1,22 +1,22 @@
 [tools]
 # --- Core CLI (Modern Unix Suite) ---
-ripgrep = "latest"     # Fast text search (Rust)
-ripgrep-all = "latest" # Search PDFs, Ebooks, Office docs (Rust)
-fd = "latest"          # User-friendly 'find' alternative (Rust)
-fzf = "latest"         # General purpose fuzzy finder (Go)
-bat = "latest"         # 'cat' clone with syntax highlighting (Rust)
-zoxide = "latest"      # Smart 'cd' replacement (Rust)
-starship = "latest"    # Fast, cross-shell prompt (Rust)
-atuin = "latest"       # SQLite-backed shell history (Rust)
-yazi = "latest"        # Terminal file manager with previews (Rust)
-eza = "latest"         # Modern 'ls' with icons/git integration (Rust)
-dust = "latest"        # Visual disk usage analyzer (Rust)
-gojq = "latest"        # Fast jq-compatible JSON processor (Go)
-sd = "latest"          # Intuitive sed/awk replacement (Rust)
-watchexec = "latest"   # Re-run commands on file change (Rust)
-xh = "latest"          # Fast native HTTP client (Rust)
-usage = "latest"       # CLI specification tool (Rust)
-carapace = "latest"    # Multi-shell completion engine (Go)
+ripgrep = "latest"         # Fast text search (Rust)
+ripgrep-all = "latest"     # Search PDFs, Ebooks, Office docs (Rust)
+"cargo:fd-find" = "latest" # User-friendly 'find' alternative (Rust)
+fzf = "latest"             # General purpose fuzzy finder (Go)
+bat = "latest"             # 'cat' clone with syntax highlighting (Rust)
+zoxide = "latest"          # Smart 'cd' replacement (Rust)
+starship = "latest"        # Fast, cross-shell prompt (Rust)
+atuin = "latest"           # SQLite-backed shell history (Rust)
+yazi = "latest"            # Terminal file manager with previews (Rust)
+eza = "latest"             # Modern 'ls' with icons/git integration (Rust)
+dust = "latest"            # Visual disk usage analyzer (Rust)
+gojq = "latest"            # Fast jq-compatible JSON processor (Go)
+sd = "latest"              # Intuitive sed/awk replacement (Rust)
+watchexec = "latest"       # Re-run commands on file change (Rust)
+xh = "latest"              # Fast native HTTP client (Rust)
+usage = "latest"           # CLI specification tool (Rust)
+carapace = "latest"        # Multi-shell completion engine (Go)
 
 # --- Monitoring ---
 btop = "latest" # Feature-rich resource monitor (C++)
@@ -118,12 +118,12 @@ tokei = "latest"                                  # Code statistics across mixed
 "npm:@ast-grep/cli" = "latest"                    # Structural code search & rewrite (Rust/Node)
 
 # --- Embedded / MCU ---
-arduino-cli = "latest"              # Command-line Arduino toolchain (Go)
-"gcc-arm-none-eabi" = "latest"      # ARM Cortex-M cross-compiler (C)
-"cargo:cargo-binutils" = "latest"   # Binary management for MCUs (Rust)
-"cargo:cargo-bloat" = "latest"      # Analyze binary size overhead (Rust)
-"cargo:probe-rs-tools" = "latest"   # MCU flashing/debugging suite (Rust)
-"pipx:platformio" = "latest"        # Embedded framework & build system (Python)
+arduino-cli = "latest"            # Command-line Arduino toolchain (Go)
+"gcc-arm-none-eabi" = "latest"    # ARM Cortex-M cross-compiler (C)
+"cargo:cargo-binutils" = "latest" # Binary management for MCUs (Rust)
+"cargo:cargo-bloat" = "latest"    # Analyze binary size overhead (Rust)
+"cargo:probe-rs-tools" = "latest" # MCU flashing/debugging suite (Rust)
+"pipx:platformio" = "latest"      # Embedded framework & build system (Python)
 
 # --- AI ---
 "pipx:aider-chat" = { version = "latest", uvx_args = "--python 3.12" } # AI pair programmer
