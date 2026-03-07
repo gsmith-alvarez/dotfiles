@@ -57,7 +57,7 @@ M.setup = function()
 					{ mode = 'n', keys = '<Leader>z', desc = '🧱 Zellij' },
 					{ mode = 'n', keys = '<Leader>b', desc = '󰓩 Buffers' },
 					{ mode = 'n', keys = '<Leader>f', desc = '🔭 Find' },
-					{ mode = 'n', keys = '<Leader>x', desc = '⚠️ Trouble' },
+					{ mode = 'n', keys = '<Leader>x', desc = ' Trouble' },
 					{ mode = 'n', keys = '<Leader>y', desc = '📋 Yank' },
 				},
 				window = { delay = 300, config = { width = 'auto', border = 'single' } },

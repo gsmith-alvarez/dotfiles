@@ -286,17 +286,28 @@ vim.keymap.set('n', '<leader>vJ', '<cmd>Jless<CR>', { desc = 'View: JSON Viewer 
 -- [[ TROUBLE: <leader>x ]]
 -- ─────────────────────────────────────────────────────────────────────────────
 
-local function trouble(action)
+local function trouble(mode)
 	return function()
-		local ok, t = pcall(require, 'trouble')
-		if ok then t.toggle(action) end
+		-- Bootstrap on first use: MiniDeps.add + setup
+		local ok, err = pcall(function()
+			require('mini.deps').add('folke/trouble.nvim')
+			local t = require('trouble')
+			if not t.is_open() then
+				t.open({ mode = mode, focus = true })
+			else
+				t.close()
+			end
+		end)
+		if not ok then
+			vim.notify('Trouble: ' .. tostring(err), vim.log.levels.ERROR)
+		end
 	end
 end
 
-vim.keymap.set('n', '<leader>xx', trouble('diagnostics toggle'), { desc = 'Trouble: Workspace Diagnostics' })
-vim.keymap.set('n', '<leader>xd', trouble('diagnostics toggle filter.buf=0'), { desc = 'Trouble: Document Diagnostics' })
-vim.keymap.set('n', '<leader>xq', trouble('qflist toggle'), { desc = 'Trouble: Quickfix' })
-vim.keymap.set('n', '<leader>xl', trouble('loclist toggle'), { desc = 'Trouble: Location List' })
+vim.keymap.set('n', '<leader>xx', trouble('diagnostics'),        { desc = 'Trouble: Workspace Diagnostics' })
+vim.keymap.set('n', '<leader>xd', trouble('diagnostics_buffer'), { desc = 'Trouble: Document Diagnostics' })
+vim.keymap.set('n', '<leader>xq', trouble('qflist'),             { desc = 'Trouble: Quickfix' })
+vim.keymap.set('n', '<leader>xl', trouble('loclist'),            { desc = 'Trouble: Location List' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ DIAGNOSTICS: ]d/[d/]e/[e/]w/[w, <leader>cd ]]
@@ -342,11 +353,13 @@ end, { desc = 'Utilities: Toggle Underlines' })
 vim.keymap.set('n', '<leader>yp', function()
 	local path = vim.fn.expand('%:p')
 	vim.fn.setreg('+', path)
+	vim.fn.setreg('"', path)
 	vim.notify('Copied: ' .. path, vim.log.levels.INFO)
 end, { desc = 'Yank: Absolute Path' })
 vim.keymap.set('n', '<leader>yr', function()
 	local path = vim.fn.expand('%:~:.')
 	vim.fn.setreg('+', path)
+	vim.fn.setreg('"', path)
 	vim.notify('Copied: ' .. path, vim.log.levels.INFO)
 end, { desc = 'Yank: Relative Path' })
 
@@ -429,7 +442,7 @@ vim.keymap.set('n', '[t', function()
 	require('todo-comments').jump_prev()
 end, { desc = 'TODO: Prev' })
 vim.keymap.set('n', '<leader>xt', function()
-	vim.cmd('Trouble todo toggle')
+	trouble('todo')()
 end, { desc = 'Trouble: TODO List' })
 vim.keymap.set('n', '<leader>xT', function()
 	vim.cmd('TodoQuickFix')
