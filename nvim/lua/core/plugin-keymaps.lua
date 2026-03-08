@@ -240,8 +240,16 @@ vim.keymap.set('n', '<leader>fe', function()
 	require('mini.files').open(project_root())
 end, { desc = 'File: Explorer (Root)' })
 vim.keymap.set('n', '-', function()
-	require('mini.files').open(vim.api.nvim_buf_get_name(0))
-end, { desc = 'File: Explorer (Current Dir)' })
+	local mf = require('mini.files')
+	if not mf.close() then
+		local path = vim.api.nvim_buf_get_name(0)
+		-- If current buffer is not a real file, fall back to cwd
+		if path == '' or path:match('^minifiles://') then
+			path = vim.fn.getcwd()
+		end
+		mf.open(path)
+	end
+end, { desc = 'File: Explorer (toggle)' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ SEARCH: <leader>s ]]

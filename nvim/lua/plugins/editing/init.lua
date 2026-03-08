@@ -20,6 +20,7 @@ local modules = {
 	'editing.inc-rename', -- Plants the LSP keymap trap
 	'editing.mini-editing', -- Deferred: ai, move, surround, indentscope, pairs, hipatterns
 	'editing.todo-comments', -- Highlighted TODO/FIXME/HACK annotations + Trouble integration
+	'editing.copilot', -- Copilot integration
 }
 
 for _, mod in ipairs(modules) do
