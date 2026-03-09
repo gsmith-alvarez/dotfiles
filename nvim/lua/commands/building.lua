@@ -90,10 +90,14 @@ local function execute_smart_build(is_continuous)
 		if root and vim.fn.filereadable(root .. "/Makefile") == 1 then
 			cmd = "make"
 		else
-			-- 'zig run' handles the temporary binary generation and execution cleanly.
-			-- '-lc' links the C standard library. C++ also requires '-lc++'.
+			--Compiler flags: Link against C++ standard library for C++ files, and set appropriate standards.
 			local link_flags = (ft == "cpp") and "-lc -lc++" or "-lc"
-			cmd = string.format("zig run %s %s", vim.fn.shellescape(file), link_flags)
+			local std_flag   = (ft == "cpp") and "-std=c++23" or "-std=c23"
+
+			cmd              = string.format("zig run -cflags %s -Wall -Wextra -O2 -Werror -- %s %s",
+				std_flag,
+				vim.fn.shellescape(file),
+				link_flags)
 		end
 		-- 5. LUA: Native Neovim runner.
 	elseif ft == "lua" then
