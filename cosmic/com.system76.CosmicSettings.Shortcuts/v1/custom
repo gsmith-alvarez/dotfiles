@@ -3,8 +3,9 @@
         modifiers: [
             Super,
             Ctrl,
+            Shift,
         ],
-        key: "Left",
+        key: "Down",
     ): Disable,
     (
         modifiers: [
@@ -18,76 +19,17 @@
         modifiers: [
             Super,
             Ctrl,
-        ],
-        key: "Right",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-            Ctrl,
-        ],
-        key: "h",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-        ],
-        key: "t",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-            Ctrl,
-        ],
-        key: "Down",
-    ): Disable,
-    (
-        modifiers: [
-            Alt,
-        ],
-        key: "equal",
-    ): PreviousWorkspace,
-    (
-        modifiers: [
-            Super,
             Shift,
         ],
-        key: "s",
-    ): System(Screenshot),
+        key: "k",
+    ): Disable,
     (
         modifiers: [
             Super,
             Ctrl,
             Shift,
         ],
-        key: "Down",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-        ],
-        key: "0",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-            Ctrl,
-        ],
-        key: "j",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-            Alt,
-        ],
-        key: "s",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-            Ctrl,
-        ],
-        key: "l",
+        key: "Up",
     ): Disable,
     (
         modifiers: [
@@ -95,19 +37,26 @@
             Ctrl,
         ],
         key: "k",
+    ): MoveToNextWorkspace,
+    (
+        modifiers: [
+            Super,
+            Alt,
+        ],
+        key: "s",
     ): Disable,
     (
         modifiers: [
-            Super,
+            Alt,
         ],
-        key: "Return",
-    ): System(Terminal),
+        key: "minus",
+    ): PreviousWorkspace,
     (
         modifiers: [
             Super,
-            Shift,
+            Ctrl,
         ],
-        key: "0",
+        key: "Down",
     ): Disable,
     (
         modifiers: [],
@@ -122,9 +71,91 @@
         key: "j",
     ): Disable,
     (
+        modifiers: [
+            Super,
+        ],
+        key: "t",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+        ],
+        key: "l",
+    ): Disable,
+    (
+        modifiers: [
+            Alt,
+        ],
+        key: "equal",
+    ): NextWorkspace,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+        ],
+        key: "h",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+            Shift,
+        ],
+        key: "h",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+            Shift,
+        ],
+        key: "Left",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+        ],
+        key: "Right",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+        ],
+        key: "Left",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+            Shift,
+        ],
+        key: "0",
+    ): Disable,
+    (
         modifiers: [],
         key: "XF86AudioStop",
     ): Spawn("wayscriber --active"),
+    (
+        modifiers: [
+            Super,
+            Shift,
+        ],
+        key: "s",
+    ): System(Screenshot),
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "n",
+    ): Minimize,
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "0",
+    ): Disable,
     (
         modifiers: [
             Super,
@@ -138,18 +169,19 @@
             Super,
             Ctrl,
         ],
+        key: "j",
+    ): MoveToPreviousWorkspace,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+        ],
         key: "Up",
     ): Disable,
     (
         modifiers: [
-            Alt,
-        ],
-        key: "minus",
-    ): NextWorkspace,
-    (
-        modifiers: [
             Super,
         ],
-        key: "n",
-    ): Minimize,
+        key: "Return",
+    ): System(Terminal),
 }
