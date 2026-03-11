@@ -1,0 +1,14 @@
+# Ignore everything in the cosmic config directory
+/*
+
+# Except for keybindings
+!com.system76.CosmicSettings.Shortcuts/
+!com.system76.CosmicSettings.Shortcuts/**
+
+# Except for themes and theme colors
+!com.system76.CosmicTheme.*/
+!com.system76.CosmicTheme.*/**
+
+# Always track these
+!.gitignore
+!sync-cosmic.sh
