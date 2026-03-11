@@ -1,60 +1,60 @@
 # --- CONFIGURATION ---
-set -g ZJ_TUI_APPS nvim spotify-player surge btop lazygit yazi
-set -g ZJ_FUN_ICONS "✨" "🌈" "🦄" "🎀" "🌸" "🍭"
+set -g ZJ_TUI_APPS nvim spotify_player spotify-player surge btop lazygit yazi podman-tui bmm wiki-tui bluetui jolt-tui mprocs
 
-# 1. THE ADORABLE NOTIFIER
-function __zj_notify -d "Renders a cute, colorful notification"
-    set -l msg $argv[1]
-    set -l color $argv[2]; or set color magenta
-
-    # Pick a random icon for extra sparkliness
-    set -l icon (random choice $ZJ_FUN_ICONS)
-
-    echo (set_color $color)"$icon [Shell-chan]: "(set_color normal)"$msg"
-end
-
-# 2. EVENT: Directory Change — only notify when a layout actually exists
-function __on_pwd_change --on-variable PWD
-    test "$PWD" = "$HOME" -o "$PWD" = /; and return
-
-    set -l folder (basename $PWD)
-    set -l layout "$HOME/.config/zellij/layouts/$folder.kdl"
-
-    if test -f "$layout"
-        __zj_notify "Ooh! I found a special layout for $folder! Use it? ฅ(^◕ᴥ◕^)" yellow
-    end
-end
-
-# 3. EVENT: Pre-execution (The Hype-Man)
+# 1. EVENT: Pre-execution
 function __zj_preexec_handler --on-event fish_preexec
     set -q ZELLIJ; or return
 
     set -l original_cmd $argv[1]
-    set -l bin (string replace -r '^(sudo|doas|command|builtin)\s+' '' $original_cmd | cut -d' ' -f1)
+    # Extract the base command, ignoring sudo/doas/command/builtin prefixes
+    set -l bin (string replace -r '^(sudo|doas|command|builtin)\s+' '' $original_cmd | string split " " | head -n 1)
 
+    # Rename tab to the running command if it's a TUI app
     if contains -- $bin $ZJ_TUI_APPS
-        set -l greetings \
-            "Good luck with $bin! You got this! 💪" \
-            "Time to get comfy in $bin... ☕" \
-            "Launching $bin. Make something cool! 🎨" \
-            "Entering the $bin dimension... 🌌"
-
-        __zj_notify (random choice $greetings) green
+        command nohup zellij action rename-tab "$bin" >/dev/null 2>&1
     end
 end
 
-# 4. EVENT: Post-execution (The Welcome Home)
+# 2. EVENT: Post-execution
 function __zj_postexec_handler --on-event fish_postexec
     set -q ZELLIJ; or return
 
-    set -l last_cmd (string split " " $argv[1])[1]
-    if contains -- $last_cmd $ZJ_TUI_APPS
-        set -l welcomes \
-            "Welcome back! How was it? 🧸" \
-            "Missed you! What's our next move? 🐾" \
-            "Back in the driver's seat. Let's go! 🏎️" \
-            "Told you you'd be back. 😉"
-
-        __zj_notify (random choice $welcomes) magenta
-    end
+    # Revert tab name to directory when idle
+    _zellij_update_tabname
 end
+
+# 3. ZELLIJ TAB NAME AUTO-UPDATE
+function _zellij_update_tabname
+    set -q ZELLIJ; or return
+
+    set -l current_dir $PWD
+    set -l tab_name
+    if test "$current_dir" = "$HOME"
+        set tab_name "~"
+    else
+        set tab_name (basename "$current_dir")
+    end
+
+    if command git rev-parse --is-inside-work-tree >/dev/null 2>&1
+        # we are in a git repo
+        set -l git_root (command git rev-parse --show-superproject-working-tree 2>/dev/null)
+        if test -z "$git_root"
+            set git_root (command git rev-parse --show-toplevel 2>/dev/null)
+        end
+
+        # if we are in a subdirectory of the git root, use the relative path
+        if test -n "$git_root"; and test (string lower "$git_root") != (string lower "$current_dir")
+            set tab_name (basename "$git_root")/(basename "$current_dir")
+        end
+    end
+
+    command nohup zellij action rename-tab "$tab_name" >/dev/null 2>&1
+end
+
+# auto update tab name on directory change
+function __auto_zellij_update_tabname --on-variable PWD --description "Update zellij tab name on directory change"
+    _zellij_update_tabname
+end
+
+# Update tab name on shell start
+_zellij_update_tabname

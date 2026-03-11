@@ -55,9 +55,9 @@ if status is-interactive
         end
 
         # 3. Autosuggestion Keybinds
-        bind -M insert \cf accept-autosuggestion          # Ctrl+F: accept whole suggestion (overrides forward-char; use → instead)
-        bind -M insert \e\[1\;5C forward-word             # Ctrl+→: accept one word at a time
-        bind -M insert \cx accept-autosuggestion execute  # Ctrl+X: accept suggestion and execute
+        bind -M insert \cf accept-autosuggestion # Ctrl+F: accept whole suggestion (overrides forward-char; use → instead)
+        bind -M insert \e\[1\;5C forward-word # Ctrl+→: accept one word at a time
+        bind -M insert \cx accept-autosuggestion execute # Ctrl+X: accept suggestion and execute
     end
 
     # [[ FZF MODAL CATPPUCCIN MOCHA CONFIGURATION ]]
@@ -116,12 +116,6 @@ if status is-interactive
     abbr -a ps procs # Modern ps
     abbr -a hx hexyl # Hex viewer for binaries/firmware
     abbr -a mp mprocs # Multi-process TUI runner
-
-    # Asus Laptop Controls
-    abbr -a pperf "asusctl profile set Performance"
-    abbr -a pbal "asusctl profile set Balanced"
-    abbr -a pquiet "asusctl profile set Quiet"
-    abbr -a bbstay "asusctl battery limit 60"
 
     # Modern LS (eza)
     if type -q eza
