@@ -151,15 +151,14 @@ com.discordapp.Discord com.github.flxzt.rnote com.github.reds.LogisimEvolution \
 com.github.tchx84.Flatseal com.github.wwmm.easyeffects com.jgraph.drawio.desktop \
 com.obsproject.Studio com.usebottles.bottles \
 eu.jumplink.Learn6502 io.github.alainm23.planify io.github.ra3xdh.qucs_s \
-md.obsidian.Obsidian net.ankiweb.Anki org.freecad.FreeCAD \
-org.gnome.NetworkDisplays org.kde.kdenlive org.kicad.KiCad org.qbittorrent.qBittorrent \
+md.obsidian.Obsidian net.ankiweb.Anki \ 
+org.gnome.NetworkDisplays org.kde.kdenlive org.qbittorrent.qBittorrent \
 org.freedesktop.LinuxAudio.Plugins.Calf org.freedesktop.LinuxAudio.Plugins.LSP \
 org.freedesktop.LinuxAudio.Plugins.MDA org.freedesktop.LinuxAudio.Plugins.TAP \
 org.freedesktop.LinuxAudio.Plugins.ZamPlugins org.freedesktop.LinuxAudio.Plugins.swh
 
 # Apply IPC/Device Overrides for Hardware Access
 flatpak override --user --device=all cc.arduino.IDE2
-flatpak override --user --device=all org.kicad.KiCad
 flatpak override --user --device=all com.bambulab.BambuStudio
 ```
 
