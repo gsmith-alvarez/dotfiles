@@ -37,6 +37,8 @@ M.setup = function()
 			modes = { insert = true, command = false, terminal = false },
 			mappings = {},
 		}
+		require('mini.jump').setup()
+		require('mini.splitjoin').setup()
 
 
 

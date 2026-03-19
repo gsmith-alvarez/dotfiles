@@ -51,6 +51,7 @@ nvim/
         │   ├── nvim-dap-virtual-text.lua
         │   └── persistent-breakpoint.lua
         ├── editing/
+        │   ├── copilot.lua           # GitHub Copilot inline suggestions
         │   ├── inc-rename.lua        # JIT LSP rename (<leader>rn)
         │   ├── indent.lua            # Auto indentation detection on BufRead
         │   ├── init.lua              # Editing domain orchestrator
@@ -80,7 +81,8 @@ nvim/
         │   ├── quotes.lua            # Async quote fetcher (curl → stdpath cache)
         │   ├── render-markdown.lua   # JIT markdown renderer (FileType sandbox)
         │   ├── treesitter.lua        # Treesitter + textobjects (MiniDeps.later)
-        │   └── trouble.lua           # JIT diagnostic aggregator
+        │   ├── trouble.lua           # JIT diagnostic aggregator
+        │   └── winbar.lua            # Native Treesitter context breadcrumbs
         ├── version_control/
         │   ├── init.lua              # Git domain orchestrator
         │   └── mini-diff.lua         # mini.git (branch/statusline) + mini.diff sign column + mini.bracketed hunks
@@ -153,6 +155,8 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | `NMAC427/guess-indent.nvim` | Auto indentation detection |
 | `folke/lazydev.nvim` | Lua API intelligence |
 | `ThePrimeagen/vim-be-good` | Motion training (ghost command) |
+| `zbirenbaum/copilot.lua` | GitHub Copilot inline suggestions |
+| `echasnovski/mini.splitjoin` | Toggle between single-line and multi-line code (part of mini.nvim) |
 
 ---
 
@@ -276,6 +280,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | v | `gc` | Comment selection |
 | n | `gco` | Add comment line below |
 | n | `gcO` | Add comment line above |
+| n | `gS` | Split/Join code (toggle) |
 | v, V | `<M-h/j/k/l>` | Move highlighted block |
 | n | `gz[a/d/r/f/h/n]` | Surround manipulation |
 | n, x | `<leader>rr` | Refactor: Select (UI) |
@@ -371,6 +376,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | n | `<leader>ur` | Restart LSP |
 | n | `<leader>ut` | Tool check (mise audit) |
 | n | `<leader>uT` | Run Typos checker |
+| n | `<leader>uc` | Toggle Copilot auto-trigger |
 | n | `<leader>ul` | Toggle diagnostic virtual text |
 | n | `<leader>uu` | Toggle diagnostic underlines |
 | n | `<leader>vq` | JQ live scratchpad |

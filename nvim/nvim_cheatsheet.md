@@ -109,12 +109,21 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `gco` | N | Add commented line below | `mini.comment` |
 | `gcO` | N | Add commented line above | `mini.comment` |
 
-### Text Objects & Surround
+### Text Objects (mini.ai) & Surround (mini.surround)
 
 | Key Chord | Mode | Action | Plugin |
 | :--- | :---: | :--- | :--- |
 | `v a )` | N | Select around parentheses | `mini.ai` |
-| `y i n q` | N | Yank inside next quote | `mini.ai` |
+| `y i n q` | N | Yank inside next quote (`n` = next, `l` = last) | `mini.ai` |
+| `i f` / `a f` | N | Inside / Around function call | `mini.ai` |
+| `i F` / `a F` | N | Inside / Around function definition | `mini.ai` |
+| `i c` / `a c` | N | Inside / Around class | `mini.ai` |
+| `i a` / `a a` | N | Inside / Around argument (parameter) | `mini.ai` |
+| `i b` / `a b` | N | Inside / Around balanced bracket | `mini.ai` |
+| `i q` / `a q` | N | Inside / Around quote | `mini.ai` |
+| `i i` / `a i` | N | Inside / Around indentation | `mini.ai` |
+| `i g` / `a g` | N | Inside / Around entire buffer | `mini.ai` |
+| `gS` | N | Split / Join code (toggle) | `mini.splitjoin` |
 | `gza` / `gzd` | N | Add / Delete surround | `mini.surround` |
 | `gzr` / `gzh` | N | Replace / Highlight surround | `mini.surround` |
 | `<M-h/j/k/l>` | V | Move highlighted block | `mini.move` |
@@ -307,6 +316,7 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<leader>ur` | N | Restart LSP |
 | `<leader>ut` | N | Tool check (mise audit) |
 | `<leader>uT` | N | Run Typos checker |
+| `<leader>uc` | N | Toggle Copilot auto-trigger |
 | `<leader>ul` | N | Toggle diagnostic virtual text |
 | `<leader>uu` | N | Toggle diagnostic underlines |
 | `<leader>yp` | N | Yank absolute file path |
