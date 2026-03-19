@@ -123,6 +123,7 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `i q` / `a q` | N | Inside / Around quote | `mini.ai` |
 | `i i` / `a i` | N | Inside / Around indentation | `mini.ai` |
 | `i g` / `a g` | N | Inside / Around entire buffer | `mini.ai` |
+| `ga` / `gA` | N/V | Align text / Align with preview | `mini.align` |
 | `gS` | N | Split / Join code (toggle) | `mini.splitjoin` |
 | `gza` / `gzd` | N | Add / Delete surround | `mini.surround` |
 | `gzr` / `gzh` | N | Replace / Highlight surround | `mini.surround` |
@@ -296,6 +297,10 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `:Jq` | Run jq on current buffer |
 | `:Typos` | Project-wide spell check |
 | `:Redir <cmd>` | Capture command output to buffer |
+| `:MiseTrust` | Trust current project's .mise.toml |
+| `:Scratch` | Open ephemeral notepad |
+| `:Logs` | View Neovim/LSP logs in new tab |
+| `:DiffOrig` | Audit unsaved changes against disk |
 
 ### Build / Run
 

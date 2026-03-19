@@ -157,6 +157,8 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | `ThePrimeagen/vim-be-good` | Motion training (ghost command) |
 | `zbirenbaum/copilot.lua` | GitHub Copilot inline suggestions |
 | `echasnovski/mini.splitjoin` | Toggle between single-line and multi-line code (part of mini.nvim) |
+| `echasnovski/mini.align` | Align text interactively (part of mini.nvim) |
+| `echasnovski/mini.jump` | Enhanced f/t/F/T motions with highlighting (part of mini.nvim) |
 
 ---
 
@@ -280,6 +282,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | v | `gc` | Comment selection |
 | n | `gco` | Add comment line below |
 | n | `gcO` | Add comment line above |
+| n, v | `ga` / `gA` | Align text / Align with preview |
 | n | `gS` | Split/Join code (toggle) |
 | v, V | `<M-h/j/k/l>` | Move highlighted block |
 | n | `gz[a/d/r/f/h/n]` | Surround manipulation |
@@ -402,9 +405,9 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 
 ## External Binaries (via `mise`)
 
-**Language Servers:** `pyright`, `ruff`, `rust-analyzer`, `gopls`, `zls`, `clangd`, `ts_ls`, `lua-language-server`, `tinymist`, `taplo`, `bash-language-server`, `vscode-json-languageserver`, `yaml-language-server`, `markdown-oxide`
+**Language Servers:** `pyright`, `ruff`, `rust-analyzer`, `gopls`, `zls`, `clangd`, `ts_ls`, `lua-language-server`, `tinymist`, `taplo`, `bash-language-server`, `vscode-json-languageserver`, `yaml-language-server`, `markdown-oxide`, `dockerfile-language-server-nodejs`
 
-**Formatters / Linters:** `stylua`, `oxfmt`, `ruff` (python), `fish_indent`, `markdownlint-cli2`, `shellcheck`
+**Formatters / Linters:** `stylua`, `oxfmt`, `ruff` (python), `fish_indent`, `shfmt`, `typstyle`, `oxlint`, `yamllint`, `markdownlint-cli2`, `shellcheck`
 
-**Utilities:** `rg`, `fd`, `make`, `gcc`, `lazygit`, `btm`, `dlv`, `watchexec`, `uv`, `go`, `zig`, `zellij`, `gojq`, `sd`, `xh`, `bat`, `zoxide`, `cargo`, `curl`, `spotify_player`, `podman-tui`, `aider`, `pio`, `typos`, `openocd`, `lldb-dap`
+**Utilities:** `rg`, `fd`, `make`, `gcc`, `lazygit`, `btm`, `dlv`, `watchexec`, `uv`, `go`, `zig`, `zellij`, `gojq`, `sd`, `xh`, `bat`, `zoxide`, `cargo`, `curl`, `spotify_player`, `podman-tui`, `aider`, `pio`, `typos`, `yazi`, `eza`, `dust`, `ouch`, `broot`, `doggo`, `choose`, `openocd`, `lldb-dap`
 

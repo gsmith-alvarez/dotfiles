@@ -39,6 +39,7 @@ M.setup = function()
 		}
 		require('mini.jump').setup()
 		require('mini.splitjoin').setup()
+		require('mini.align').setup()
 
 
 

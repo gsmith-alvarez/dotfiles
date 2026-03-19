@@ -9,7 +9,7 @@ local M = {}
 vim.api.nvim_create_user_command('ToolCheck', function()
 	local utils = require('core.utils')
 	local tools = {
-		-- LSPs (Updated to match lsp_engine.lua)
+		-- LSPs (Core intelligence)
 		'pyright-langserver',
 		'ruff',
 		'rust-analyzer',
@@ -23,23 +23,38 @@ vim.api.nvim_create_user_command('ToolCheck', function()
 		'zls',
 		'typescript-language-server',
 		'clangd',
+		'tinymist',
+		'dockerfile-language-server-nodejs',
 
-		-- Formatters
+		-- Formatters & Linters (Quality control)
 		'stylua',
 		'oxfmt',
-
-		-- Linters
+		'oxlint',
+		'shfmt',
+		'typstyle',
+		'yamllint',
 		'markdownlint-cli2',
 		'shellcheck',
+		'typos',
 
-		-- System / Core Dependencies
+		-- Performance & Search (Native core)
 		'rg',
 		'fd',
+		'sd',
+		'gojq',
+		'xh',
+		'btm',
+
+		-- System & Build (Foundational)
 		'make',
 		'gcc',
 		'lazygit',
-		'btm',
 		'dlv',
+		'watchexec',
+		'uv',
+		'zig',
+		'zellij',
+		'ouch',
 	}
 
 	local missing, found = {}, {}
@@ -58,6 +73,7 @@ vim.api.nvim_create_user_command('ToolCheck', function()
 	-- false = not listed in :ls (hidden), true = acts as a scratchpad.
 	local buf = vim.api.nvim_create_buf(false, true)
 	vim.bo[buf].filetype = 'markdown'
+	vim.bo[buf].bufhidden = 'wipe'
 
 	local lines = { '# Dependency Audit Results', '' }
 

@@ -18,7 +18,6 @@ local modules = {
   'commands.auditing',    -- ToolCheck, Redir, Typos
   'commands.building',    -- Zellij & Watchexec processing, single-run compiling
   'commands.diagnostics', -- Hover events, toggle maps, quickfix routing
-  'commands.mux',         -- Zellij pane split commands
   'commands.utilities',   -- Jq, Sd, Xh, paths, buffers, and general tools
 }
 

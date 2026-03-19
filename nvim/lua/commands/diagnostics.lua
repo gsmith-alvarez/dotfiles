@@ -33,30 +33,28 @@ vim.diagnostic.config {
 	float = { border = 'rounded', source = 'if_many' },
 }
 
--- [[ Diagnostic Navigation ]]
--- Jump between diagnostics by severity. `float = true` shows the message inline on jump.
-local function diag_jump(next, severity)
-	return function()
-		vim.diagnostic.jump({
-			count    = (next and 1 or -1) * vim.v.count1,
-			severity = severity and vim.diagnostic.severity[severity] or nil,
-			float    = true,
-		})
-	end
-end
-
--- [[ Diagnostic Navigation & Toggles ]]
--- Keymaps moved to lua/core/plugin-keymaps.lua under Diagnostics section.
-
 -- [[ Diagnostic Hover ]]
 -- Triggers a floating window containing the full error message when the cursor idles.
 local diag_group = vim.api.nvim_create_augroup("DiagnosticHover", { clear = true })
 
 vim.api.nvim_create_autocmd("CursorHold", {
-  group = diag_group,
-  callback = function()
-    vim.diagnostic.open_float(nil, { focusable = false, scope = "cursor" })
-  end,
+	group = diag_group,
+	callback = function()
+		-- 1. Performance Guard: Only attempt if no other floating windows are active
+		-- This prevents the diagnostic float from overwriting LSP hover or signature help.
+		for _, win in ipairs(vim.api.nvim_list_wins()) do
+			local config = vim.api.nvim_win_get_config(win)
+			if config.relative ~= "" then return end
+		end
+
+		-- 2. Scope Guard: Only open if the line actually has diagnostics
+		local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+		local bufnr = vim.api.nvim_get_current_buf()
+		local diagnostics = vim.diagnostic.get(bufnr, { lnum = line })
+		if #diagnostics > 0 then
+			vim.diagnostic.open_float(nil, { focusable = false, scope = "cursor" })
+		end
+	end,
 })
 
 -- CRITICAL PERFORMANCE TUNING: `updatetime`

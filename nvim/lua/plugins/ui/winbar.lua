@@ -65,7 +65,8 @@ function M.render()
 
 		-- If we found a node that we consider a "container" (class, function, etc.)
 		if kind then
-			local name_node = current:child_by_field_name("name")
+			local name_nodes = current:field("name")
+			local name_node = name_nodes and name_nodes[1]
 			if name_node then
 				local name = vim.treesitter.get_node_text(name_node, bufnr)
 				local icon = icons[kind] or ""
