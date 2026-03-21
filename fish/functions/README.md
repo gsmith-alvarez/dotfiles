@@ -13,7 +13,6 @@ configured in this Fish shell environment.
 | `fkill` | `fzf`, `ps` | Fuzzy find and kill processes. `TAB` to multi-select. |
 | `j [path]` | `zoxide`, `fzf`, `eza` | Smart `cd`. No args → fzf over zoxide history with tree preview. |
 | `list_all_apps` | `dnf`, `flatpak`, `cargo` | Generate full software inventory → `~/Downloads/MasterList.md`. |
-| `man` | `bat` | Man pages with `bat` syntax highlighting as pager. |
 | `nfzf` | `fd`, `fzf`, `bat` | Fuzzy find files (incl. hidden, excl. `.git`) and open in `$EDITOR`. |
 | `nvq <pattern>` | `rg`, `nvim` | Ripgrep results piped directly into Neovim quickfix list. |
 | `rga-fzf` | `rga`, `fzf` | Search inside PDFs/Office docs. Opens selected file via `xdg-open`. |
@@ -41,6 +40,10 @@ configured in this Fish shell environment.
 | Abbreviation | Expands To |
 | :--- | :--- |
 | `cat` | `bat` |
+| `man` | `batman` |
+| `rg` | `batgrep` |
+| `diff` | `batdiff` |
+| `watch` | `batwatch` |
 | `find` | `fd` |
 | `du` | `dust -r` |
 | `cp` | `rsync -ah --info=progress2` |

@@ -99,10 +99,16 @@ if status is-interactive
     abbr -a .. 'cd ..'
     abbr -a ... 'cd ../..'
     abbr -a cat bat
+    abbr -a man batman
     abbr -a find fd
     abbr -a yr yazi
     abbr -a du "dust -r"
     abbr -a cp "rsync -ah --info=progress2"
+
+    # bat-extras
+    abbr -a rg batgrep
+    abbr -a diff batdiff
+    abbr -a watch batwatch
 
     # Python (uv)
     abbr -a py "uv run"
