@@ -1,33 +1,31 @@
 [tools]
 # --- Core CLI (Modern Unix Suite) ---
-ripgrep = "latest"         # Fast text search (Rust)
-ripgrep-all = "latest"     # Search PDFs, Ebooks, Office docs (Rust)
-"cargo:fd-find" = "latest" # User-friendly 'find' alternative (Rust)
-fzf = "latest"             # General purpose fuzzy finder (Go)
-bat = "latest"             # 'cat' clone with syntax highlighting (Rust)
-zoxide = "latest"          # Smart 'cd' replacement (Rust)
-starship = "latest"        # Fast, cross-shell prompt (Rust)
-atuin = "latest"           # SQLite-backed shell history (Rust)
-yazi = "latest"            # Terminal file manager with previews (Rust)
-eza = "latest"             # Modern 'ls' with icons/git integration (Rust)
-dust = "latest"            # Visual disk usage analyzer (Rust)
-gojq = "latest"            # Fast jq-compatible JSON processor (Go)
-sd = "latest"              # Intuitive sed/awk replacement (Rust)
-watchexec = "latest"       # Re-run commands on file change (Rust)
-xh = "latest"              # Fast native HTTP client (Rust)
-usage = "latest"           # CLI specification tool (Rust)
-carapace = "latest"        # Multi-shell completion engine (Go)
-duf = "latest"             # a better alterative to df (Go)
-"cargo:broot" = "latest"   # A new alternative to tree (Rust)
-doggo = "latest"           # Command-line DNS client fo humans (Go)
-choose = "latest"          # Alternative to cut (Rust)
+ripgrep = "latest"     # Fast text search (Rust)
+ripgrep-all = "latest" # Search PDFs, Ebooks, Office docs (Rust)
+fd = "latest"          # User-friendly 'find' alternative (Rust)
+fzf = "latest"         # General purpose fuzzy finder (Go)
+bat = "latest"         # 'cat' clone with syntax highlighting (Rust)
+zoxide = "latest"      # Smart 'cd' replacement (Rust)
+starship = "latest"    # Fast, cross-shell prompt (Rust)
+atuin = "latest"       # SQLite-backed shell history (Rust)
+yazi = "latest"        # Terminal file manager with previews (Rust)
+eza = "latest"         # Modern 'ls' with icons/git integration (Rust)
+dust = "latest"        # Visual disk usage analyzer (Rust)
+gojq = "latest"        # Fast jq-compatible JSON processor (Go)
+sd = "latest"          # Intuitive sed/awk replacement (Rust)
+watchexec = "latest"   # Re-run commands on file change (Rust)
+xh = "latest"          # Fast native HTTP client (Rust)
+usage = "latest"       # CLI specification tool (Rust)
+carapace = "latest"    # Multi-shell completion engine (Go)
+duf = "latest"         # a better alterative to df (Go)
+doggo = "latest"       # Command-line DNS client fo humans (Go)
+choose = "latest"      # Alternative to cut (Rust)
 
 # --- Monitoring ---
 btop = "latest" # Feature-rich resource monitor (C++)
 
 # --- Cargo Utilities ---
 cargo-binstall = "latest"        # Install Rust binaries from releases
-"cargo:cargo-update" = "latest"  # Update all cargo-installed binaries
 "cargo:cargo-cache" = "latest"   # Manage/clean cargo cache
 "cargo:topgrade" = "latest"      # Universal system/tool updater
 "cargo:cargo-nextest" = "latest" #  3-5× faster Rust test runner with better output
@@ -46,17 +44,16 @@ shellcheck = "latest" # Shell script static analysis (Haskell)
 shfmt = "latest"      # Shell script formatter (Go)
 
 # --- Development & Build Tools ---
-neovim = "latest"     # Core text editor (C/Lua)
-zellij = "latest"     # Terminal multiplexer/workspace (Rust)
-make = "latest"       # Classic build automation (C)
-cmake = "latest"      # Cross-platform build generator (C++)
-hyperfine = "latest"  # CLI benchmarking tool (Rust)
-ninja = "latest"      # High-speed build executor (C++)
-mold = "latest"       # High-speed linker — Linux only (C++)
-podman = "latest"     # Daemonless container engine (Go)
-podman-tui = "latest" # Podman terminal user interface (Rust)
-direnv = "latest"     # Per-directory environment manager (Go)
-lnav = "latest"       # Log file navigator (C++)
+neovim = "latest"    # Core text editor (C/Lua)
+zellij = "latest"    # Terminal multiplexer/workspace (Rust)
+make = "latest"      # Classic build automation (C)
+cmake = "latest"     # Cross-platform build generator (C++)
+hyperfine = "latest" # CLI benchmarking tool (Rust)
+ninja = "latest"     # High-speed build executor (C++)
+mold = "latest"      # High-speed linker — Linux only (C++)
+podman = "latest"    # Daemonless container engine (Go)
+direnv = "latest"    # Per-directory environment manager (Go)
+lnav = "latest"      # Log file navigator (C++)
 
 # --- Debuggers ---
 "go:github.com/go-delve/delve/cmd/dlv" = "latest" # Go debugger (dlv)
@@ -133,6 +130,13 @@ arduino-cli = "latest"            # Command-line Arduino toolchain (Go)
 
 # --- AI ---
 "pipx:aider-chat" = { version = "latest", uvx_args = "--python 3.12" } # AI pair programmer
+
+# --- Additional Recommendations ---
+yq = "latest"                 # YAML processor (Go)
+"cargo:difftastic" = "latest" # Structural diff tool (Rust)
+gum = "latest"                # TUI tool for shell scripts (Go)
+"cargo:trippy" = "latest"     # Network diagnostic TUI (Rust)
+lazydocker = "latest"         # Terminal UI for Docker/Podman (Go)
 
 [env]
 EDITOR = "nvim"
