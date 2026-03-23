@@ -137,7 +137,7 @@ yq = "latest"                 # YAML processor (Go)
 "cargo:difftastic" = "latest" # Structural diff tool (Rust)
 gum = "latest"                # TUI tool for shell scripts (Go)
 "cargo:trippy" = "latest"     # Network diagnostic TUI (Rust)
-lazydocker = "latest"         # Terminal UI for Docker/Podman (Go)
+podman-tui = "latest"         # TUI for Podman
 
 [env]
 EDITOR = "nvim"

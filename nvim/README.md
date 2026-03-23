@@ -154,7 +154,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | `ThePrimeagen/refactoring.nvim` | AST-based refactoring (JIT) |
 | `NMAC427/guess-indent.nvim` | Auto indentation detection |
 | `folke/lazydev.nvim` | Lua API intelligence |
-| `ThePrimeagen/vim-be-good` | Motion training (ghost command) |
+| `gsmith-alvarez/vim-be-good` | Motion training (ghost command) |
 | `zbirenbaum/copilot.lua` | GitHub Copilot inline suggestions |
 | `echasnovski/mini.splitjoin` | Toggle between single-line and multi-line code (part of mini.nvim) |
 | `echasnovski/mini.align` | Align text interactively (part of mini.nvim) |
