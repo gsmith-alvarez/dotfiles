@@ -3,29 +3,10 @@
         modifiers: [
             Super,
             Ctrl,
+            Shift,
         ],
-        key: "k",
-    ): MoveToPreviousWorkspace,
-    (
-        modifiers: [
-            Super,
-            Ctrl,
-        ],
-        key: "h",
+        key: "Right",
     ): Disable,
-    (
-        modifiers: [
-            Super,
-        ],
-        key: "Tab",
-    ): NextWorkspace,
-    (
-        modifiers: [
-            Super,
-            Ctrl,
-        ],
-        key: "Up",
-    ): MoveToPreviousWorkspace,
     (
         modifiers: [
             Super,
@@ -38,10 +19,48 @@
         modifiers: [
             Super,
             Ctrl,
+        ],
+        key: "Down",
+    ): MoveToNextWorkspace,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+        ],
+        key: "j",
+    ): MoveToNextWorkspace,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+        ],
+        key: "Right",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "r",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
             Shift,
         ],
-        key: "h",
-    ): Resizing(Outwards),
+        key: "Tab",
+    ): PreviousWorkspace,
+    (
+        modifiers: [],
+        key: "Print",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+        ],
+        key: "v",
+        description: Some("Clipboard History"),
+    ): Spawn("fclip window"),
     (
         modifiers: [
             Super,
@@ -53,28 +72,85 @@
         modifiers: [
             Super,
             Ctrl,
+            Shift,
         ],
-        key: "l",
+        key: "Down",
     ): Disable,
     (
         modifiers: [
             Super,
-            Ctrl,
         ],
-        key: "Right",
-    ): Disable,
+        key: "n",
+    ): Minimize,
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "Tab",
+    ): NextWorkspace,
     (
         modifiers: [
             Super,
             Ctrl,
             Shift,
         ],
-        key: "Down",
+        key: "h",
+    ): Resizing(Outwards),
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+        ],
+        key: "k",
+    ): MoveToPreviousWorkspace,
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "Return",
+    ): System(Terminal),
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+            Shift,
+        ],
+        key: "j",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+        ],
+        key: "h",
     ): Disable,
     (
         modifiers: [],
         key: "XF86AudioStop",
     ): Spawn("wayscriber --active"),
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+            Shift,
+        ],
+        key: "l",
+    ): Resizing(Inwards),
+    (
+        modifiers: [
+            Super,
+            Ctrl,
+            Shift,
+        ],
+        key: "k",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+            Shift,
+        ],
+        key: "r",
+    ): Disable,
     (
         modifiers: [
             Super,
@@ -87,89 +163,21 @@
         modifiers: [
             Super,
             Ctrl,
-            Shift,
         ],
         key: "l",
-    ): Resizing(Inwards),
-    (
-        modifiers: [
-            Super,
-            Shift,
-        ],
-        key: "Tab",
-    ): PreviousWorkspace,
-    (
-        modifiers: [
-            Super,
-            Ctrl,
-            Shift,
-        ],
-        key: "j",
     ): Disable,
     (
         modifiers: [
             Super,
             Ctrl,
         ],
-        key: "j",
-    ): MoveToNextWorkspace,
-    (
-        modifiers: [
-            Super,
-        ],
-        key: "Return",
-    ): System(Terminal),
+        key: "Up",
+    ): MoveToPreviousWorkspace,
     (
         modifiers: [
             Super,
             Ctrl,
         ],
         key: "Left",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-        ],
-        key: "r",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-            Ctrl,
-        ],
-        key: "Down",
-    ): MoveToNextWorkspace,
-    (
-        modifiers: [
-            Super,
-            Ctrl,
-            Shift,
-        ],
-        key: "Right",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-        ],
-        key: "n",
-    ): Minimize,
-    (
-        modifiers: [
-            Super,
-            Ctrl,
-            Shift,
-        ],
-        key: "k",
-    ): Disable,
-    (
-        modifiers: [],
-        key: "Print",
-    ): Disable,
-    (
-        modifiers: [
-            Super,
-            Shift,
-        ],
-        key: "r",
     ): Disable,
 }

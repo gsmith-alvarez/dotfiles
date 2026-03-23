@@ -1,0 +1,164 @@
+#!/usr/bin/env bash
+#
+# fclip - a DIY Wayland clipboard manager for Cosmic DE + Ghostty
+
+set -aeo pipefail
+
+[[ -n "${DEBUG}" ]] && set -x
+
+DB_PATH="${HOME}/.clipboard_history.sqlite"
+
+USAGE="copy: <enter> | delete: <del> | preview: <ctrl+p> | wrap: <ctrl+/>
+select: <tab> | select all: <ctrl+a> | reload: <ctrl+r>"
+
+# Catppuccin Mocha theme to match your Fish config
+FZF_DEFAULT_OPTS="
+  --color=bg+:-1,gutter:-1,spinner:#f2cdcd,hl:#f9e2af
+  --color=fg:#cdd6f4,header:#f2cdcd,info:#b4befe,pointer:#b4befe
+  --color=marker:#b4befe,fg+:#cdd6f4,prompt:#b4befe,hl+:#f9e2af
+  --color=selected-bg:#313244
+  --color=separator:#45475a,scrollbar:#45475a,border:#45475a,gap-line:#45475a,label:#45475a,alt-gutter:#181825"
+
+# --- DB INITIALIZATION ---
+fclip.init_db() {
+  command sqlite3 "${DB_PATH}" << 'EOF'
+    CREATE TABLE IF NOT EXISTS clipboard (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        timestamp TEXT DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+        content TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS clipboard_timestamp_IDX ON clipboard (timestamp);
+EOF
+}
+
+# --- WAYLAND CLIPBOARD WATCHER ---
+fclip._on_paste() {
+  local mimes clipboard_new_data
+  mimes=$(command wl-paste -l 2>/dev/null) || exit 0
+  command grep -q -E "^(audio|video)/.+|^x-kde-passwordManagerHint" <<< "$mimes" && exit 0
+  command grep -q -E "^text/.+" <<< "$mimes" || exit 0
+  
+  clipboard_new_data=$(command wl-paste 2>/dev/null)
+  if [[ -n "$clipboard_new_data" ]]; then
+    # Insert, escaping single quotes for sqlite
+    command sqlite3 "${DB_PATH}" "INSERT INTO clipboard (content) VALUES ('${clipboard_new_data//\'/\'\'}')"
+  fi
+}
+export -f fclip._on_paste
+
+fclip.watch_clipboard() {
+  [[ -f "${DB_PATH}" ]] || fclip.init_db
+  export DB_PATH
+
+  # wl-paste --watch provides a native Wayland hook for clipboard changes.
+  # We spawn a new bash shell for each clip that executes the exported function.
+  command wl-paste --watch bash -c fclip._on_paste
+}
+
+# --- DB OPERATIONS ---
+fclip.get_all_items() {
+  command sqlite3 -json "${DB_PATH}" "SELECT id, content FROM clipboard ORDER BY timestamp DESC;" \
+    | command jq -cr '.[] | "\(.id) \(.content)"' | tr '\n' '\0'
+}
+
+fclip.delete_items() {
+  local ids ids_csv
+  ids="$*"
+  ids_csv="${ids// /,}"
+  command sqlite3 "${DB_PATH}" "DELETE FROM clipboard WHERE id IN (${ids_csv});"
+}
+
+fclip.cleanup() {
+  local item_id latest_item_id
+  item_id="$1"
+  
+  [[ -z "$item_id" ]] || return 0
+
+  latest_item_id=$(command sqlite3 "${DB_PATH}" "SELECT id FROM clipboard ORDER BY timestamp DESC LIMIT 1;")
+  if [[ "${item_id}" -ne "${latest_item_id}" ]]; then
+    fclip.delete_items "${item_id}"
+  fi
+}
+
+# --- FZF MENU UI ---
+fclip.menu() {
+  export FZF_DEFAULT_OPTS
+
+  local selection fclip_cmd
+  fclip_cmd="${HOME}/.local/bin/fclip"
+  
+  # Ensure the DB exists before trying to read it
+  [[ -f "${DB_PATH}" ]] || fclip.init_db
+
+  selection=$(
+    fclip.get_all_items | command fzf \
+      --read0 \
+      --accept-nth="2.." \
+      --bind='ctrl-a:toggle-all' \
+      --bind='ctrl-h:toggle-header' \
+      --bind='ctrl-p:toggle-preview' \
+      --bind='ctrl-r:reload('"${fclip_cmd}"' __get_all_items)' \
+      --bind='del:reload('"${fclip_cmd}"' __delete_items {+1}; '"${fclip_cmd}"' __get_all_items)' \
+      --bind='enter:execute('"${fclip_cmd}"' __cleanup {+1})+accept' \
+      --bind='start:toggle-header' \
+      --header="${USAGE}" \
+      --header-border \
+      --highlight-line \
+      --info="inline-right" \
+      --input-border \
+      --input-label=" help: <ctrl+h> " \
+      --input-label-pos="bottom" \
+      --layout="reverse" \
+      --multi \
+      --preview="echo {2..}" \
+      --preview-window="hidden,wrap,bottom,75%" \
+      --with-nth="2.." \
+      --with-shell="sh -c"
+  )
+  
+  [[ -n "${selection}" ]] && command wl-copy --trim-newline <<< "${selection}"
+}
+
+# --- MAIN ROUTING ---
+main() {
+  case "$1" in
+    watch)
+      # Run the Wayland background watcher
+      fclip.watch_clipboard
+      ;;
+    window)
+      # Launch a floating Ghostty window running the fzf menu
+      command ghostty --class="clipboard" \
+        --window-decoration=false \
+        --window-padding-x=10 \
+        --window-padding-y=5 \
+        --font-size=12 \
+        --title="Clipboard" \
+        -e "$HOME/.local/bin/fclip" menu
+      ;;
+    menu)
+      # The internal call executed by Ghostty
+      fclip.menu
+      ;;
+    __get_all_items)
+      # Internal call for fzf reload
+      fclip.get_all_items
+      ;;
+    __delete_items)
+      # Internal call for fzf delete
+      shift
+      fclip.delete_items "$@"
+      ;;
+    __cleanup)
+      # Internal call for fzf enter
+      shift
+      fclip.cleanup "$1"
+      ;;
+    *)
+      command echo "usage: $(basename "$0") {window|watch}" >&2
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"

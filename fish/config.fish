@@ -63,6 +63,10 @@ if status is-interactive
         bind -M insert \cf accept-autosuggestion # Ctrl+F: accept whole suggestion (overrides forward-char; use → instead)
         bind -M insert \e\[1\;5C forward-word # Ctrl+→: accept one word at a time
         bind -M insert \cx accept-autosuggestion execute # Ctrl+X: accept suggestion and execute
+
+        # 4. Fuzzy SSH (Ctrl+S)
+        bind -M insert \cs fssh
+        bind -M default \cs fssh
     end
 
     # [[ FZF MODAL CATPPUCCIN MOCHA CONFIGURATION ]]
@@ -76,6 +80,7 @@ if status is-interactive
     set -gx FZF_DEFAULT_OPTS "
       --layout=reverse
       --height=40%
+      --tmux=70%
       --border
       --info=inline
       --prompt='[I] 󰭎 '
@@ -102,6 +107,9 @@ if status is-interactive
     abbr -a man batman
     abbr -a find fd
     abbr -a yr yazi
+    abbr -a fcd fnav
+    abbr -a fup 'fnav u'
+    abbr -a j 'fnav z'
     abbr -a du "dust -r"
     abbr -a cp "rsync -ah --info=progress2"
     abbr -a rm "rm -i"
@@ -124,6 +132,8 @@ if status is-interactive
     abbr -a gc 'git commit -m'
     abbr -a gp 'git push'
     abbr -a gab 'git absorb' # Auto fixup into correct ancestor commit
+    abbr -a gl fgl
+    abbr -a gb fbr
 
     # New tools
     abbr -a ps procs # Modern ps

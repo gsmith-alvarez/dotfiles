@@ -1,0 +1,12 @@
+[Unit]
+Description=Fuzzy Clipboard Watcher (Wayland)
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/fclip watch
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
