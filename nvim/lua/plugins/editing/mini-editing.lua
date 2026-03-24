@@ -28,8 +28,8 @@ M.setup = function()
 		}
 		require('mini.surround').setup {
 			mappings = {
-				add = 'gza', delete = 'gzd', find = 'gzf', find_left = 'gzF',
-				highlight = 'gzh', replace = 'gzr', update_n_lines = 'gzn',
+				add = 'sa', delete = 'sd', find = 'sf', find_left = 'sF',
+				highlight = 'sh', replace = 'sr', update_n_lines = 'sn',
 				suffix_last = '', suffix_next = '',
 			},
 			n_lines = 50,

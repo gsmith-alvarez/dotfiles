@@ -47,6 +47,7 @@ M.setup = function()
 					{ mode = 'x', keys = 'z' },
 					{ mode = 'n', keys = '[' },
 					{ mode = 'n', keys = ']' },
+					{ mode = { 'n', 'x' }, keys = 's' },
 				},
 				clues = {
 					miniclue.gen_clues.builtin_completion(),
@@ -55,6 +56,7 @@ M.setup = function()
 					miniclue.gen_clues.registers(),
 					miniclue.gen_clues.windows(),
 					miniclue.gen_clues.z(),
+					{ mode = 'n', keys = 'gS' },
 					{ mode = 'n', keys = '<Leader>c', desc = '💻 Code' },
 					{ mode = 'n', keys = '<Leader>d', desc = '🐞 Debug' },
 					{ mode = 'n', keys = '<Leader>e', desc = '⚡ Execute' },

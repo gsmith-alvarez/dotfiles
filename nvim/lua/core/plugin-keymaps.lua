@@ -332,7 +332,14 @@ end, { desc = 'Diagnostics: Quickfix List' })
 -- [[ UTILITIES: <leader>u, <leader>y, <Esc> ]]
 -- ─────────────────────────────────────────────────────────────────────────────
 
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR><Esc>', { desc = 'Utilities: Clear Highlights' })
+vim.keymap.set({ 'n', 'x', 'o' }, '<Esc>', function()
+	local ok, jump = pcall(require, 'mini.jump')
+	if ok and jump.state and jump.state.jumping then
+		jump.stop_jumping()
+	end
+	vim.cmd.nohlsearch()
+	return '<Esc>'
+end, { expr = true, silent = true, desc = 'Utilities: Clear Highlights / Stop Jump' })
 
 vim.keymap.set('n', '<leader>ur', '<cmd>LspRestart<CR>', { desc = 'Utilities: Restart LSP' })
 
