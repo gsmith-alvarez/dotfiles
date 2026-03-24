@@ -49,9 +49,8 @@ M.setup = function()
       ts_configs.setup({
         ensure_installed = {
           'bash', 'json', 'toml', 'yaml',
-          'c', 'cpp', 'go', 'lua', 'python', 'rust', 'zig',
-          'html', 'javascript', 'typescript', 'markdown', 'markdown_inline',
-          'query', 'regex', 'vim', 'vimdoc', 'typst',
+          'c', 'cpp', 'go', 'lua', 'python', 'rust', 'zig', 'sql',
+          'html', 'javascript', 'typescript', 'markdown', 'markdown_inline',          'query', 'regex', 'vim', 'vimdoc', 'typst',
           -- Parsers for snacks.image
           'css', 'scss', 'tsx', 'svelte', 'vue', 'norg',
         },

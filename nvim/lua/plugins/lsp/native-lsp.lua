@@ -80,7 +80,8 @@ M.setup = function()
 			zls = { bin = 'zls', ft = { 'zig' }, root = { 'zls.json', 'build.zig', '.git' } },
 			pyright = { bin = 'pyright-langserver', args = { '--stdio' }, ft = { 'python' }, root = { 'pyproject.toml', '.git' } },
 			ruff = { bin = 'ruff', args = { 'server' }, ft = { 'python' }, root = { 'pyproject.toml', '.git' } },
-			ts_ls = { bin = 'typescript-language-server', args = { '--stdio' }, ft = { 'typescript', 'javascript' }, root = { 'package.json', '.git' } },
+			ts_ls = { bin = 'typescript-language-server', args = { '--stdio' }, ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' }, root = { 'bun.lockb', 'package.json', '.git' } },
+			sqls = { bin = 'sqls', ft = { 'sql' }, root = { '.git' } },
 			lua_ls = {
 				bin = 'lua-language-server',
 				ft = { 'lua' },
