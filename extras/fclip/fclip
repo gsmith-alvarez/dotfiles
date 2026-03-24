@@ -4,6 +4,9 @@
 
 set -aeo pipefail
 
+# Ensure mise shims are in PATH
+[[ -d "${HOME}/.local/share/mise/shims" ]] && export PATH="${HOME}/.local/share/mise/shims:${PATH}"
+
 [[ -n "${DEBUG}" ]] && set -x
 
 DB_PATH="${HOME}/.clipboard_history.sqlite"
@@ -69,15 +72,12 @@ fclip.delete_items() {
 }
 
 fclip.cleanup() {
-  local item_id latest_item_id
+  local item_id
   item_id="$1"
   
-  [[ -z "$item_id" ]] || return 0
+  [[ -n "$item_id" ]] || return 0
 
-  latest_item_id=$(command sqlite3 "${DB_PATH}" "SELECT id FROM clipboard ORDER BY timestamp DESC LIMIT 1;")
-  if [[ "${item_id}" -ne "${latest_item_id}" ]]; then
-    fclip.delete_items "${item_id}"
-  fi
+  fclip.delete_items "${item_id}"
 }
 
 # --- FZF MENU UI ---

@@ -53,7 +53,7 @@ Symlink the systemd service file to your user config, reload the daemon, and ena
 mkdir -p ~/.config/systemd/user
 ln -sf ~/dotfiles/extras/fclip/fclip.service ~/.config/systemd/user/fclip.service
 systemctl --user daemon-reload
-systemctl --user enable --now fclip.service
+systemctl --unit enable --now $PWD/fclip.service
 ```
 
 ### 3. Desktop Environment Configuration (Cosmic DE)

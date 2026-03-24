@@ -138,6 +138,7 @@ yq = "latest"                 # YAML processor (Go)
 gum = "latest"                # TUI tool for shell scripts (Go)
 "cargo:trippy" = "latest"     # Network diagnostic TUI (Rust)
 podman-tui = "latest"         # TUI for Podman
+sqlite = "latest"             # Command-line SQLite client (C)
 
 [env]
 EDITOR = "nvim"
