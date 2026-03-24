@@ -29,7 +29,7 @@ local function load_obsidian(args)
     local current_file = vim.api.nvim_buf_get_name(args.buf or 0)
 
     if current_file ~= "" and not current_file:find(vault_path, 1, true) then
-      utils.soft_notify("Not in Obsidian vault. Skipping plugin load.", vim.log.levels.INFO)
+      utils.soft_notify("Not in Obsidian vault. Skipping plugin load.", vim.log.levels.DEBUG)
       return false
     end
   end
