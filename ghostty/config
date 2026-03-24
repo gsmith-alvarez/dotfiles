@@ -4,8 +4,6 @@ theme = Catppuccin Mocha
 title = Hello
 command = ~/.local/share/mise/shims/zellij attach -c
 shell-integration = fish
-quick-terminal-position = center
-quick-terminal-key = alt+space
 
 # Clipboard Settings
 clipboard-read = allow
@@ -18,12 +16,10 @@ font-size = 13
 window-title-font-family = "GeistMono NF UltraBlack"
 mouse-hide-while-typing = true
 cursor-style = block
-cursor-blink = false
 
 # Window Effects
 background-opacity = 0.85
 background-blur = true
-refresh-rate = 0
 window-subtitle = working-directory
 window-padding-x = 12
 window-padding-y = 12

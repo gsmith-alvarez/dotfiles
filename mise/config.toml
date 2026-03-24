@@ -28,10 +28,11 @@ PATH = "{{env.HOME}}/.local/share/go/bin:{{env.HOME}}/.cargo/bin:{{env.HOME}}/.l
 rust = "latest"
 go = "latest"
 python = "latest"
-node = "lts"
+bun = "latest"
 zig = "latest"
-lua = "5.1"
+lua = "latest"
 typst = "latest"
+uv = "latest"
 
 # --- 2. DEVELOPMENT & BUILD SUITE ---
 neovim = "latest"
@@ -64,6 +65,8 @@ duf = "latest"
 gojq = "latest"
 sd = "latest"
 xh = "latest"
+oha = "latest"
+websocat = "latest"
 doggo = "latest"
 choose = "latest"
 "cargo:procs" = "latest"
@@ -135,9 +138,9 @@ ffmpeg = "latest"
 resvg = "latest"
 
 # --- 8. TUI APPS & SERVICES ---
-"cargo:bmm" = "latest"         # Bookmark manager
-"cargo:wiki-tui" = "latest"    # Wikipedia
-"cargo:bluetui" = "latest"     # Bluetooth
+"cargo:bmm" = "latest"                            # Bookmark manager
+"cargo:wiki-tui" = "latest"                       # Wikipedia
+"cargo:bluetui" = "latest"                        # Bluetooth
 "cargo:spotify_player" = "latest"
 "cargo:mprocs" = "latest"
 "go:github.com/surge-downloader/surge" = "latest"
@@ -152,7 +155,6 @@ arduino-cli = "latest"
 "pipx:platformio" = "latest"
 
 # --- 10. AI & EMERGING TECH ---
-"pipx:aider-chat" = { version = "latest", uvx_args = "--python 3.12" }
 "npm:@ast-grep/cli" = "latest"
 
 [tasks."dotfiles:deploy"]
