@@ -51,6 +51,7 @@ M.setup = function()
 		}
 		require('mini.jump').setup()
 		require('mini.splitjoin').setup()
+		vim.keymap.set({ 'n', 'x' }, 'gS', '<cmd>lua MiniSplitjoin.toggle()<CR>', { desc = 'Split/Join' })
 		require('mini.align').setup()
 
 
