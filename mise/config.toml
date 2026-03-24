@@ -125,7 +125,6 @@ cargo-binstall = "latest"
 # --- 7. SYSTEM MONITORING & UTILITIES ---
 btop = "latest"
 "cargo:trippy" = "latest"
-"cargo:jolt-tui" = "latest"
 "cargo:jless" = "latest"
 usage = "latest"
 carapace = "latest"
@@ -140,8 +139,6 @@ resvg = "latest"
 
 # --- 8. TUI APPS & SERVICES ---
 "cargo:bmm" = "latest"                            # Bookmark manager
-"cargo:wiki-tui" = "latest"                       # Wikipedia
-"cargo:bluetui" = "latest"                        # Bluetooth
 "cargo:spotify_player" = "latest"
 "cargo:mprocs" = "latest"
 "go:github.com/surge-downloader/surge" = "latest"
