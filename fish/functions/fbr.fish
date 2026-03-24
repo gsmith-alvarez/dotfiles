@@ -9,9 +9,11 @@
 #   fzf, git
 
 function fbr --description "Fuzzy checkout git branch"
+    _check_deps fzf git; or return 1
+    
     # Ensure we are in a git repository
     if not git rev-parse --git-dir >/dev/null 2>&1
-        echo "Not in a git repository."
+        echo "Error: Not in a git repository." >&2
         return 1
     end
 

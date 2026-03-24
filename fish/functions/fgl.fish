@@ -9,8 +9,10 @@
 #   fzf, git, delta, wl-copy
 
 function fgl --description "Fuzzy git log with delta diff previews"
+    _check_deps fzf git delta wl-copy; or return 1
+    
     if not git rev-parse --git-dir >/dev/null 2>&1
-        echo "Not in a git repository."
+        echo "Error: Not in a git repository." >&2
         return 1
     end
 

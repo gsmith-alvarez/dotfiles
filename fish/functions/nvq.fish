@@ -1,6 +1,8 @@
 function nvq --description "Ripgrep results directly into Neovim Quickfix list"
+    _check_deps rg nvim; or return 1
+    
     if test (count $argv) -eq 0
-        echo "Usage: nvq <search_pattern> [path]"
+        echo "Usage: nvq <search_pattern> [path]" >&2
         return 1
     end
 

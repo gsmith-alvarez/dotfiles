@@ -9,6 +9,8 @@
 #   fzf
 
 function fcmd --description "Search list of aliases and functions"
+    _check_deps fzf; or return 1
+    
     set -l cmds (
         functions -n
         abbr --show | awk '{print $4}'

@@ -9,8 +9,11 @@
 #   ripgrep, fzf, bat, nvim
 
 function sgrep -d "Interactive Ripgrep (dynamic reloading engine)"
-    # Delete temp files if they exist to start fresh
-    rm -f /tmp/rg-fzf-{r,f}
+    _check_deps rg fzf bat nvim; or return 1
+    
+    # Use $TMPDIR for temp files (XDG compliant)
+    set -l tmpdir (set -q TMPDIR; and echo $TMPDIR; or echo /tmp)
+    rm -f $tmpdir/rg-fzf-{r,f}
     
     set -l INITIAL_QUERY (test (count $argv) -gt 0; and echo $argv[1]; or echo "")
     set -l rg_cmd "rg --column --line-number --no-heading --color=always --smart-case"
@@ -20,8 +23,8 @@ function sgrep -d "Interactive Ripgrep (dynamic reloading engine)"
         --bind "start:reload:$rg_cmd {q}" \
         --bind "change:reload:sleep 0.1; $rg_cmd {q} || true" \
         --bind 'ctrl-f:transform:[[ ! $FZF_PROMPT =~ ripgrep ]] &&
-            echo "rebind(change)+change-prompt(rg> )+disable-search+transform-query:echo \\{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
-            echo "unbind(change)+change-prompt(fzf> )+enable-search+transform-query:echo \\{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
+            echo "rebind(change)+change-prompt(rg> )+disable-search+transform-query:echo \\{q} > '$tmpdir'/rg-fzf-f; cat '$tmpdir'/rg-fzf-r" ||
+            echo "unbind(change)+change-prompt(fzf> )+enable-search+transform-query:echo \\{q} > '$tmpdir'/rg-fzf-r; cat '$tmpdir'/rg-fzf-f"' \
         --prompt="rg> " \
         --header="CTRL-F: Toggle Ripgrep / FZF mode" \
         --delimiter : \

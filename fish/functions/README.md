@@ -17,11 +17,16 @@ configured in this Fish shell environment.
 | `nvq <pattern>` | `rg`, `nvim` | Ripgrep results piped directly into Neovim quickfix list. |
 | `rga-fzf` | `rga`, `fzf` | Search inside PDFs/Office docs. Opens selected file via `xdg-open`. |
 | `sg` | `rg`, `fzf`, `bat` | Fuzzy search file contents; opens Neovim at the exact match line. |
-| `wtf` | `atuin`, `aider` | Sends last 5 commands + exit codes to `aider` for failure diagnosis. |
+| `wtf` | `atuin`, `aider` | Sends last N commands + exit codes to `aider` for failure diagnosis. Set `$FISH_WTF_LIMIT` to customize. |
 | `y` | `yazi`, `zoxide`, `nvim` | Yazi wrapper: syncs CWD to zoxide on exit, opens selected file in nvim. |
 | `zk` | `zellij`, `fzf` | Fuzzy Zellij session manager — attach to existing or create new. |
 | 'fcd' | 'fd', 'fzf', 'Zoxide' | Fuzzy search the current directory and move with z |
 
+### Internal Helpers
+
+| Function | Description |
+| :--- | :--- |
+| `_check_deps` | Validates required commands exist before running functions. Returns error if dependencies missing. |
 
 ---
 

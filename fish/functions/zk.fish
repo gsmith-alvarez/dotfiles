@@ -8,6 +8,8 @@
 #   fzf, zellij
 
 function zk --description "Fuzzy manage Zellij sessions"
+    _check_deps fzf zellij; or return 1
+    
     # Get current directory name for the "New Session" prompt
     set -l current_dir (basename "$PWD")
     
