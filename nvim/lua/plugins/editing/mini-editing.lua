@@ -18,7 +18,30 @@ local M = {}
 
 M.setup = function()
 	require('mini.deps').later(function()
-		require('mini.ai').setup { n_lines = 500 }
+		local gen_spec = require('mini.ai').gen_spec
+		require('mini.ai').setup {
+			n_lines = 500,
+			custom_textobjects = {
+				f = gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }),
+				F = gen_spec.function_call(),
+				c = gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }),
+				o = gen_spec.treesitter({
+					a = { '@block.outer', '@conditional.outer', '@loop.outer' },
+					i = { '@block.inner', '@conditional.inner', '@loop.inner' },
+				}),
+				a = gen_spec.treesitter({ a = '@parameter.outer', i = '@parameter.inner' }),
+				i = require('mini.extra').gen_ai_spec.indent(),
+				u = gen_spec.treesitter({ a = '@comment.outer', i = '@comment.inner' }),
+				g = function()
+					local from = { line = 1, col = 1 }
+					local to = {
+						line = vim.fn.line('$'),
+						col = math.max(vim.fn.getline('$'):len(), 1)
+					}
+					return { from = from, to = to }
+				end,
+			},
+		}
 		require('mini.move').setup {
 			mappings = {
 				left = '<M-h>', right = '<M-l>', down = '<M-j>', up = '<M-k>',

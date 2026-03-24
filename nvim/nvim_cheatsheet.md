@@ -115,12 +115,14 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | :--- | :---: | :--- | :--- |
 | `v a )` | N | Select around parentheses | `mini.ai` |
 | `y i n q` | N | Yank inside next quote (`n` = next, `l` = last) | `mini.ai` |
-| `i f` / `a f` | N | Inside / Around function call | `mini.ai` |
-| `i F` / `a F` | N | Inside / Around function definition | `mini.ai` |
+| `i f` / `a f` | N | Inside / Around function definition | `mini.ai` |
+| `i F` / `a F` | N | Inside / Around function call | `mini.ai` |
 | `i c` / `a c` | N | Inside / Around class | `mini.ai` |
 | `i a` / `a a` | N | Inside / Around argument (parameter) | `mini.ai` |
+| `i o` / `a o` | N | Inside / Around loop or conditional | `mini.ai` |
 | `i b` / `a b` | N | Inside / Around balanced bracket | `mini.ai` |
 | `i q` / `a q` | N | Inside / Around quote | `mini.ai` |
+| `i u` / `a u` | N | Inside / Around comment block | `mini.ai` |
 | `i i` / `a i` | N | Inside / Around indentation | `mini.ai` |
 | `i g` / `a g` | N | Inside / Around entire buffer | `mini.ai` |
 | `ga` / `gA` | N/V | Align text / Align with preview | `mini.align` |
