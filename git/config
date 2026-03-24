@@ -1,0 +1,26 @@
+[user]
+    email = smith.alvarez.g@gmail.com
+    name = Giovanni
+[credential "https://github.com"]
+    helper = 
+    helper = !/home/gsmith-alvarez/.local/share/mise/installs/gh/2.88.1/gh_2.88.1_linux_amd64/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+    helper = 
+    helper = !/home/gsmith-alvarez/.local/share/mise/installs/gh/2.88.1/gh_2.88.1_linux_amd64/bin/gh auth git-credential
+[core]
+    # Keep delta as the standard pager for logs/blame
+    pager = delta
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true
+    dark = true
+    line-numbers = true
+    side-by-side = false
+[diff]
+    # Enable structural diffs via difftastic
+    # This is a game-changer for code reviews
+    external = difft
+    colorMoved = default
+[merge]
+    conflictstyle = diff3

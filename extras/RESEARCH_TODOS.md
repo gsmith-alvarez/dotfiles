@@ -31,6 +31,27 @@ This list contains high-potential "Modern Unix" tools already in my `mise` stack
     - [ ] Goal: Turn my `justfile` into a project-wide "App Gallery." Use it to orchestrate complex multi-language tasks (e.g., a Python data script that feeds into a Rust build).
     - [ ] [GitHub: casey/just](https://github.com/casey/just)
 
+- [x] **difftastic (Structural Git Diffs)**
+    - [x] Implementation: Added to global Git config as `diff.external` and configured in `lazygit/config.yml`.
+    - [x] [GitHub: Wilfred/difftastic](https://github.com/Wilfred/difftastic)
+
+---
+
+## 🏗️ Architecture & Core Neovim
+
+- [ ] **Native Package Management (`vimpack`)**
+    - [ ] Research: "Neovim vimpack release notes and migration guides."
+    - [ ] Goal: Refactor the plugin architecture to migrate away from `mini.deps` to the upcoming native `vimpack` system once it is officially released, adhering strictly to the "Native-First / Zero-Proxy" philosophy.
+
+---
+
+## 🗄️ Database & Intelligence
+
+- [ ] **vim-dadbod (Database Management in Neovim)**
+    - [ ] Research: "vim-dadbod + vim-dadbod-ui + vim-dadbod-completion setup."
+    - [ ] Goal: Transform Neovim into a lightweight, powerful database client. Execute queries against live SQLite/PostgreSQL databases directly from the editor with real-time autocompletion.
+    - [ ] [GitHub: tpope/vim-dadbod](https://github.com/tpope/vim-dadbod)
+
 ---
 
 ## 🔍 Inspiration Sources

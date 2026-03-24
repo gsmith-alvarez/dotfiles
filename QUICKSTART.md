@@ -55,6 +55,10 @@ gh auth login
 gh repo clone gsmith-alvarez/.dotfiles ~/dotfiles
 cd ~/dotfiles
 
+# CRITICAL: Back up legacy .gitconfig to allow XDG-compliant ~/.config/git/config to take precedence
+[ -f ~/.gitconfig ] && mv ~/.gitconfig ~/.gitconfig.bak
+
+# Deploy all configurations
 stow --target ~/.config .
 ```
 
