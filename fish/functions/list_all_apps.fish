@@ -117,10 +117,18 @@ function list_all_apps --description "Generate a markdown master inventory of in
 
     # 6. Execution - Local Filesystem
     if test -d ~/.local/bin
-        _fmt_table "Manual Binaries (~/.local/bin)" "eza -1 --icons=never ~/.local/bin" $output_file
+        set -l ls_cmd "ls -1"
+        if type -q eza
+            set ls_cmd "eza -1 --icons=never"
+        end
+        _fmt_table "Manual Binaries (~/.local/bin)" "$ls_cmd ~/.local/bin" $output_file
     end
     if test -d ~/scripts
-        _fmt_table "User Scripts (~/scripts)" "eza -1 --icons=never ~/scripts" $output_file
+        set -l ls_cmd "ls -1"
+        if type -q eza
+            set ls_cmd "eza -1 --icons=never"
+        end
+        _fmt_table "User Scripts (~/scripts)" "$ls_cmd ~/scripts" $output_file
     end
     
     # 7. Execution - Chronological Intent (APT History)

@@ -12,7 +12,7 @@ function fcopy --description "Fuzzy find a directory in HOME and copy its full p
     # 2. Increased max-depth to 4
     set -l selection (cd $HOME; and fd --type d --max-depth 4 --hidden --exclude .git | fzf --height=40% --layout=reverse \
         --prompt="copy path (~/)> " \
-        --preview="eza --tree --level=1 --icons --color=always {}" \
+        --preview="type -q eza; and eza --tree --level=1 --icons --color=always {}; or ls -d {}" \
         --preview-window="right:60%")
 
     if test -n "$selection"

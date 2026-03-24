@@ -1,0 +1,19 @@
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:compact-bar"
+        }
+        children
+    }
+
+    tab name="Development" focus=true {
+        pane split_direction="horizontal" {
+            pane name="Editor" focus=true command="nvim"
+            pane size="25%" name="Terminal"
+        }
+    }
+
+    tab name="Shell" {
+        pane
+    }
+}

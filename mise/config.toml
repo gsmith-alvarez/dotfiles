@@ -1,146 +1,16 @@
-[tools]
-# --- Core CLI (Modern Unix Suite) ---
-ripgrep = "latest"     # Fast text search (Rust)
-ripgrep-all = "latest" # Search PDFs, Ebooks, Office docs (Rust)
-fd = "latest"          # User-friendly 'find' alternative (Rust)
-fzf = "latest"         # General purpose fuzzy finder (Go)
-bat = "latest"         # 'cat' clone with syntax highlighting (Rust)
-bat-extras = "latest"  # Bash scripts that integrate bat with various command line tools
-zoxide = "latest"      # Smart 'cd' replacement (Rust)
-starship = "latest"    # Fast, cross-shell prompt (Rust)
-atuin = "latest"       # SQLite-backed shell history (Rust)
-yazi = "latest"        # Terminal file manager with previews (Rust)
-eza = "latest"         # Modern 'ls' with icons/git integration (Rust)
-dust = "latest"        # Visual disk usage analyzer (Rust)
-gojq = "latest"        # Fast jq-compatible JSON processor (Go)
-sd = "latest"          # Intuitive sed/awk replacement (Rust)
-watchexec = "latest"   # Re-run commands on file change (Rust)
-xh = "latest"          # Fast native HTTP client (Rust)
-usage = "latest"       # CLI specification tool (Rust)
-carapace = "latest"    # Multi-shell completion engine (Go)
-duf = "latest"         # a better alterative to df (Go)
-doggo = "latest"       # Command-line DNS client fo humans (Go)
-choose = "latest"      # Alternative to cut (Rust)
+[settings]
+# --- Mise Configuration ---
+experimental = true
+env_shell_expand = true
+all_compile = false
+activate_aggressive = true
+color_theme = "catppuccin"
 
-# --- Monitoring ---
-btop = "latest" # Feature-rich resource monitor (C++)
-
-# --- Cargo Utilities ---
-cargo-binstall = "latest"        # Install Rust binaries from releases
-"cargo:cargo-cache" = "latest"   # Manage/clean cargo cache
-"cargo:topgrade" = "latest"      # Universal system/tool updater
-"cargo:cargo-nextest" = "latest" #  3-5× faster Rust test runner with better output
-"cargo:cargo-expand" = "latest"  #  Show macro expansion output for debugging
-"cargo:cargo-machete" = "latest" # Find unused Cargo dependencies (binary size)
-"cargo:cargo-deny" = "latest"    # Audit dep tree for vulns + license violations
-
-# --- Config & Data Formats ---
-taplo = "latest"           # TOML LSP, linter, and formatter (Rust)
-"cargo:kdl-fmt" = "latest" # Formatter for KDL documents (Rust)
-yamllint = "latest"        # Strict YAML logic/syntax linter (Python)
-"cargo:jless" = "latest"   # Interactive JSON viewer/pager (Rust)
-
-# --- Shell Scripting ---
-shellcheck = "latest" # Shell script static analysis (Haskell)
-shfmt = "latest"      # Shell script formatter (Go)
-
-# --- Development & Build Tools ---
-neovim = "latest"    # Core text editor (C/Lua)
-zellij = "latest"    # Terminal multiplexer/workspace (Rust)
-make = "latest"      # Classic build automation (C)
-cmake = "latest"     # Cross-platform build generator (C++)
-hyperfine = "latest" # CLI benchmarking tool (Rust)
-ninja = "latest"     # High-speed build executor (C++)
-mold = "latest"      # High-speed linker — Linux only (C++)
-podman = "latest"    # Daemonless container engine (Go)
-direnv = "latest"    # Per-directory environment manager (Go)
-lnav = "latest"      # Log file navigator (C++)
-
-# --- Debuggers ---
-"go:github.com/go-delve/delve/cmd/dlv" = "latest" # Go debugger (dlv)
-
-# --- Languages & Toolchains ---
-rust = "latest"          # Systems programming language
-rust-analyzer = "latest" # Rust Language Server
-"cargo:bacon" = "latest" # Background Rust code checker
-go = "latest"            # Cloud/backend language
-zig = "latest"           # Low-level systems language
-zls = "latest"           # Zig Language Server
-python = "latest"        # Scripting and AI language
-uv = "latest"            # Fast Python project/package manager (Rust)
-node = "lts"             # JS/TS runtime
-lua = "5.1"              # Scripting language (Neovim config)
-typst = "latest"         # Typst compiler
-tinymist = "latest"      # Typst Language Server
-typstyle = "latest"      # Typst formatter
-
-# --- Git Tools ---
-lazygit = "latest"            # Terminal UI for Git
-gh = "latest"                 # GitHub CLI (Go)
-delta = "latest"              # Syntax-highlighting git diff pager (Rust)
-"cargo:git-absorb" = "latest" # Auto fixup commits into the right ancestor (Rust)
-hurl = "latest"               # Reproducible HTTP request sequences as text files
-
-# --- Linters & Formatters ---
-ruff = "latest"                    # Fast Python linter/formatter (Rust)
-stylua = "latest"                  # Opinionated Lua formatter (Rust)
-oxlint = "latest"                  # Ultra-fast JS/TS linter (Rust)
-"npm:oxfmt" = "latest"             # Fast JS/TS formatter (Rust-backed)
-"cargo:typos-cli" = "latest"       # Source code spell checker (Rust)
-tree-sitter = "latest"             # Parser generator & incremental parsing library
-"npm:markdownlint-cli2" = "latest" # Markdown linter (Node)
-
-# --- Language Servers ---
-lua-language-server = "latest"                     # Lua LSP (Lua/C++)
-"github:Feel-ix-343/markdown-oxide" = "latest"     # Markdown LSP (Rust)
-"npm:bash-language-server" = "latest"              # Bash LSP
-"npm:vscode-json-languageserver" = "latest"        # JSON LSP
-"npm:yaml-language-server" = "latest"              # YAML LSP
-"npm:dockerfile-language-server-nodejs" = "latest" # Dockerfile LSP
-"npm:typescript-language-server" = "latest"        # TypeScript/JavaScript LSP
-"go:golang.org/x/tools/gopls" = "latest"           # Go LSP
-"npm:pyright" = "latest"                           # Python LSP (static type checker)
-
-# --- Navigation & Utilities ---
-navi = "latest"                                   # Interactive cheatsheet (Rust)
-just = "latest"                                   # Ergonomic command runner / task file (Rust)
-tokei = "latest"                                  # Code statistics across mixed languages (Rust)
-"cargo:ouch" = "latest"                           # Unified compression tool (Rust)
-"cargo:bmm" = "latest"                            # TUI bookmark manager (Rust)
-"cargo:wiki-tui" = "latest"                       # Wikipedia TUI explorer (Rust)
-"cargo:bluetui" = "latest"                        # Bluetooth management TUI (Rust)
-"cargo:jolt-tui" = "latest"                       # Battery monitoring TUI (Rust)
-"cargo:spotify_player" = "latest"                 # Feature-rich Spotify TUI (Rust)
-"cargo:lemmeknow" = "latest"                      # String/hash identifier (Rust)
-"cargo:hexyl" = "latest"                          # Hex viewer for binary/firmware files (Rust)
-"cargo:mprocs" = "latest"                         # Multi-process TUI runner (Rust)
-"cargo:procs" = "latest"                          # Modern ps replacement (Rust)
-"cargo:miniserve" = "latest"                      # One-command HTTP file server (Rust)
-"go:github.com/surge-downloader/surge" = "latest" # P2P/HTTP downloader (Go)
-"npm:@ast-grep/cli" = "latest"                    # Structural code search & rewrite (Rust/Node)
-ffmpeg = "latest"                                 # Video Magic
-resvg = "latest"                                  # Rust based SVG renderer
-
-# --- Embedded / MCU ---
-arduino-cli = "latest"            # Command-line Arduino toolchain (Go)
-"gcc-arm-none-eabi" = "latest"    # ARM Cortex-M cross-compiler (C)
-"cargo:cargo-binutils" = "latest" # Binary management for MCUs (Rust)
-"cargo:cargo-bloat" = "latest"    # Analyze binary size overhead (Rust)
-"cargo:probe-rs-tools" = "latest" # MCU flashing/debugging suite (Rust)
-"pipx:platformio" = "latest"      # Embedded framework & build system (Python)
-
-# --- AI ---
-"pipx:aider-chat" = { version = "latest", uvx_args = "--python 3.12" } # AI pair programmer
-
-# --- Additional Recommendations ---
-yq = "latest"                 # YAML processor (Go)
-"cargo:difftastic" = "latest" # Structural diff tool (Rust)
-gum = "latest"                # TUI tool for shell scripts (Go)
-"cargo:trippy" = "latest"     # Network diagnostic TUI (Rust)
-podman-tui = "latest"         # TUI for Podman
-sqlite = "latest"             # Command-line SQLite client (C)
+[settings.pipx]
+uvx = true
 
 [env]
+# --- Global Environment ---
 EDITOR = "nvim"
 VISUAL = "nvim"
 LANG = "en_US.UTF-8"
@@ -149,16 +19,190 @@ LANG = "en_US.UTF-8"
 OPENAI_API_BASE = "http://localhost:1234/v1"
 OPENAI_API_KEY = "lm-studio"
 
-# Path Setup
+# Path Safety Net
 GOPATH = "{{env.HOME}}/.local/share/go"
 PATH = "{{env.HOME}}/.local/share/go/bin:{{env.HOME}}/.cargo/bin:{{env.HOME}}/.local/bin:{{env.PATH}}"
 
-[settings]
-env_shell_expand = true    # Support $HOME in paths
-experimental = true        # Enable mise experimental features
-all_compile = false        # Favor binaries over source builds
-activate_aggressive = true
-color_theme = "catppuccin"
+[tools]
+# --- 1. CORE RUNTIMES & LANGUAGES ---
+rust = "latest"
+go = "latest"
+python = "latest"
+node = "lts"
+zig = "latest"
+lua = "5.1"
+typst = "latest"
 
-[settings.pipx]
-uvx = true
+# --- 2. DEVELOPMENT & BUILD SUITE ---
+neovim = "latest"
+zellij = "latest"
+stow = "latest"
+make = "latest"
+cmake = "latest"
+ninja = "latest"
+mold = "latest"
+hyperfine = "latest"
+podman = "latest"
+podman-tui = "latest"
+direnv = "latest"
+lnav = "latest"
+"go:github.com/go-delve/delve/cmd/dlv" = "latest" # Debugger
+
+# --- 3. MODERN UNIX SUITE (CLI Replacements) ---
+ripgrep = "latest"
+ripgrep-all = "latest"
+fd = "latest"
+fzf = "latest"
+bat = "latest"
+bat-extras = "latest"
+zoxide = "latest"
+starship = "latest"
+atuin = "latest"
+yazi = "latest"
+eza = "latest"
+dust = "latest"
+duf = "latest"
+gojq = "latest"
+sd = "latest"
+xh = "latest"
+doggo = "latest"
+choose = "latest"
+procs = "latest"
+hexyl = "latest"
+tokei = "latest"
+ouch = "latest"
+difftastic = "latest"
+
+# --- 4. GIT TOOLING ---
+lazygit = "latest"
+gh = "latest"
+delta = "latest"
+"cargo:git-absorb" = "latest"
+hurl = "latest"
+
+# --- 5. CODE QUALITY & INTELLIGENCE (LSPs, Linters, Formatters) ---
+# Servers
+rust-analyzer = "latest"
+zls = "latest"
+tinymist = "latest"
+lua-language-server = "latest"
+"github:Feel-ix-343/markdown-oxide" = "latest"
+"npm:bash-language-server" = "latest"
+"npm:vscode-json-languageserver" = "latest"
+"npm:yaml-language-server" = "latest"
+"npm:dockerfile-language-server-nodejs" = "latest"
+"npm:typescript-language-server" = "latest"
+"go:golang.org/x/tools/gopls" = "latest"
+"npm:pyright" = "latest"
+
+# Quality Tools
+ruff = "latest"
+stylua = "latest"
+oxlint = "latest"
+"npm:oxfmt" = "latest"
+"cargo:typos-cli" = "latest"
+tree-sitter = "latest"
+shellcheck = "latest"
+shfmt = "latest"
+"npm:markdownlint-cli2" = "latest"
+taplo = "latest"
+yamllint = "latest"
+
+# --- 6. RUST ECOSYSTEM UTILITIES ---
+cargo-binstall = "latest"
+"cargo:cargo-cache" = "latest"
+"cargo:topgrade" = "latest"
+"cargo:cargo-nextest" = "latest"
+"cargo:cargo-expand" = "latest"
+"cargo:cargo-machete" = "latest"
+"cargo:cargo-deny" = "latest"
+"cargo:bacon" = "latest"
+"cargo:kdl-fmt" = "latest"
+
+# --- 7. SYSTEM MONITORING & UTILITIES ---
+btop = "latest"
+"cargo:trippy" = "latest"
+"cargo:jolt-tui" = "latest"
+"cargo:procs" = "latest"
+"cargo:jless" = "latest"
+usage = "latest"
+carapace = "latest"
+watchexec = "latest"
+just = "latest"
+navi = "latest"
+gum = "latest"
+sqlite = "latest"
+yq = "latest"
+ffmpeg = "latest"
+resvg = "latest"
+
+# --- 8. TUI APPS & SERVICES ---
+"cargo:bmm" = "latest"         # Bookmark manager
+"cargo:wiki-tui" = "latest"    # Wikipedia
+"cargo:bluetui" = "latest"     # Bluetooth
+"cargo:spotify_player" = "latest"
+"cargo:mprocs" = "latest"
+"go:github.com/surge-downloader/surge" = "latest"
+"cargo:lemmeknow" = "latest"
+
+# --- 9. EMBEDDED / MCU ENGINEERING ---
+arduino-cli = "latest"
+"gcc-arm-none-eabi" = "latest"
+"cargo:cargo-binutils" = "latest"
+"cargo:cargo-bloat" = "latest"
+"cargo:probe-rs-tools" = "latest"
+"pipx:platformio" = "latest"
+
+# --- 10. AI & EMERGING TECH ---
+"pipx:aider-chat" = { version = "latest", uvx_args = "--python 3.12" }
+"npm:@ast-grep/cli" = "latest"
+
+[tasks."dotfiles:deploy"]
+description = "Sync all configuration files using GNU Stow"
+run = "stow --target {{env.HOME}}/.config ."
+
+[tasks."cosmic:save"]
+description = "Export current COSMIC desktop registry to dotfiles"
+run = "dconf dump /org/cosmic/ > cosmic/cosmic_settings.dconf"
+
+[tasks."cosmic:load"]
+description = "Load COSMIC settings from dotfiles into the system"
+run = "dconf load /org/cosmic/ < cosmic/cosmic_settings.dconf"
+
+[tasks."nvim:test"]
+description = "Run headless Neovim integration tests"
+run = "cd nvim && ./run_tests.sh"
+
+[tasks."dotfiles:bootstrap"]
+description = "Complete one-command setup for a fresh install"
+depends = ["dotfiles:deploy"]
+run = "mise install && fish -c list_all_apps"
+
+[tasks.menu]
+description = "Interactive menu to select and run mise tasks"
+run = "mise tasks --columns name,description | tail -n +2 | fzf --header='Select task to run' | awk '{print $1}' | xargs mise run"
+
+[tasks.start]
+description = "Launch the primary development environment (Zellij + Nvim)"
+run = "zellij --layout dev"
+
+[tasks.audit]
+description = "Audit dependencies for vulnerabilities across all managed ecosystems"
+run = """
+echo "--- Cargo Audit ---"
+type -q cargo-deny; and cargo deny check; or echo "cargo-deny not installed"
+echo "--- NPM Audit ---"
+type -q npm; and npm audit; or echo "npm not installed"
+"""
+
+[tasks.doctor]
+description = "Verify system health for development"
+run = """
+# Check udev rules for serial probes
+ls /etc/udev/rules.d/60-serial-probes.rules >/dev/null 2>&1 && echo "✅ udev rules present" || echo "❌ MISSING: udev rules (/etc/udev/rules.d/60-serial-probes.rules)"
+# Check group memberships
+groups | grep -q dialout && echo "✅ dialout group membership" || echo "❌ MISSING: dialout group membership"
+# Verify core binaries
+mise which rustc >/dev/null 2>&1 && echo "✅ rust toolchain" || echo "❌ MISSING: rust toolchain"
+mise which nvim >/dev/null 2>&1 && echo "✅ neovim" || echo "❌ MISSING: neovim"
+"""

@@ -35,16 +35,14 @@ function _zellij_update_tabname
         set tab_name (basename "$current_dir")
     end
 
-    if command git rev-parse --is-inside-work-tree >/dev/null 2>&1
-        # we are in a git repo
-        set -l git_root (command git rev-parse --show-superproject-working-tree 2>/dev/null)
-        if test -z "$git_root"
-            set git_root (command git rev-parse --show-toplevel 2>/dev/null)
-        end
-
-        # if we are in a subdirectory of the git root, use the relative path
-        if test -n "$git_root"; and test (string lower "$git_root") != (string lower "$current_dir")
-            set tab_name (basename "$git_root")/(basename "$current_dir")
+    # Git optimization: only check if we are not in $HOME and look for the toplevel root
+    if test "$current_dir" != "$HOME"
+        set -l git_root (command git rev-parse --show-toplevel 2>/dev/null)
+        if test -n "$git_root"
+            # if we are in a subdirectory of the git root, use the relative path (root/subdir)
+            if test (string lower "$git_root") != (string lower "$current_dir")
+                set tab_name (basename "$git_root")/(basename "$current_dir")
+            end
         end
     end
 

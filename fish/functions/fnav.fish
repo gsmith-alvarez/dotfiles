@@ -51,13 +51,13 @@ function fnav --description "Fuzzy navigate directories (up/down/zoxide)"
 
         set target (printf "%s\n" $dirs | fzf --tac --height=40% --layout=reverse \
             --prompt="parent> " \
-            --preview="eza --tree --level=1 --icons --color=always {}" \
+            --preview="type -q eza; and eza --tree --level=1 --icons --color=always {}; or ls -R --color=always {}" \
             --preview-window="right:60%")
 
     else if test "$mode" = "down"
         set target (fd --type d --hidden --exclude .git . | fzf --height=40% --layout=reverse \
             --prompt="subdir> " \
-            --preview="eza --tree --level=1 --icons --color=always {}" \
+            --preview="type -q eza; and eza --tree --level=1 --icons --color=always {}; or ls -R --color=always {}" \
             --preview-window="right:60%")
 
     else if test "$mode" = "zoxide"
@@ -66,7 +66,7 @@ function fnav --description "Fuzzy navigate directories (up/down/zoxide)"
         set -l escaped_dir (string escape --style=regex "$current_dir")
         set target (zoxide query -l | string match -v -r "^$escaped_dir/?\$" | fzf --height=40% --layout=reverse \
             --prompt="zoxide> " \
-            --preview="eza --tree --level=1 --icons --color=always {}" \
+            --preview="type -q eza; and eza --tree --level=1 --icons --color=always {}; or ls -R --color=always {}" \
             --preview-window="right:60%")
     end
 

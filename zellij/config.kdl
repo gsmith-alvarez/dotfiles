@@ -24,6 +24,7 @@ keybinds clear-defaults=true {
         // Unified Alt-based keybinds for creating and closing panes/tabs.
         bind "Alt n" { NewPane; }        // Create new pane (auto-split)
         bind "Alt N" { NewTab; }        // Create new tab (Shift-N)
+        bind "Alt b" { BreakPane; }     // Break pane to new tab
         bind "Alt x" { CloseFocus; } // Close current pane
         bind "Alt X" { CloseTab; }       // Close current tab (Shift-X)
 
@@ -60,7 +61,7 @@ keybinds clear-defaults=true {
         bind "e" { TogglePaneEmbedOrFloating; SwitchToMode "normal"; } // Embed/float pane
         bind "p" { SwitchFocus; } // Switch to previous pane
         bind "c" { SwitchToMode "renamepane"; PaneNameInput 0; } // Rename pane
-        bind "Alt esc" { SwitchToMode "normal"; }
+        bind "esc" { SwitchToMode "normal"; }
     }
     // TAB MODE (manipulate tabs in the current session)
     // Simplified tab management.
@@ -82,7 +83,7 @@ keybinds clear-defaults=true {
         bind "7" { GoToTab 7; SwitchToMode "normal"; }
         bind "8" { GoToTab 8; SwitchToMode "normal"; }
         bind "9" { GoToTab 9; SwitchToMode "normal"; }
-        bind "Alt esc" { SwitchToMode "normal"; }
+        bind "esc" { SwitchToMode "normal"; }
     }
     // RESIZE MODE (change pane dimensions)
     // Intuitive h/j/k/l for resizing, with Shift-H/J/K/L for shrinking.
@@ -99,7 +100,7 @@ keybinds clear-defaults=true {
         bind "+" { Resize "Increase"; }     // Increase pane size
         bind "-" { Resize "Decrease"; }     // Decrease pane size
         bind "=" { Resize "Increase"; }     // Alias for Increase
-        bind "Alt esc" { SwitchToMode "normal"; }
+        bind "esc" { SwitchToMode "normal"; }
     }
     // MOVE MODE (move active pane to another split)
     move {
@@ -108,7 +109,7 @@ keybinds clear-defaults=true {
         bind "k" { MovePane "up"; }
         bind "l" { MovePane "right"; }
         bind "p" { MovePaneBackwards; } // Move to previous position
-        bind "Alt esc" { SwitchToMode "normal"; }
+        bind "esc" { SwitchToMode "normal"; }
     }
     // SCROLL MODE (navigate scrollback buffer)
     // Neovim-like scrolling with Ctrl-d/u for half-page, Ctrl-b/f for full page.
@@ -126,7 +127,7 @@ keybinds clear-defaults=true {
         bind "G" { ScrollToBottom; SwitchToMode "normal"; } // Go to bottom and exit scroll
         bind "e" { EditScrollback; SwitchToMode "normal"; } // Edit scrollback
         bind "s" { SwitchToMode "entersearch"; SearchInput 0; } // Enter search
-        bind "Alt esc" { SwitchToMode "normal"; }
+        bind "esc" { SwitchToMode "normal"; }
     }
     // SEARCH MODE (search within scrollback)
     search {
@@ -135,7 +136,7 @@ keybinds clear-defaults=true {
         bind "o" { SearchToggleOption "WholeWord"; }
         bind "p" { Search "up"; }
         bind "w" { SearchToggleOption "Wrap"; }
-        bind "Alt esc" { SwitchToMode "normal"; }
+        bind "esc" { SwitchToMode "normal"; }
     }
     // SESSION MODE (manage plugins and sessions)
     // SESSION MODE (manage plugins and sessions)
@@ -175,7 +176,7 @@ keybinds clear-defaults=true {
             }
             SwitchToMode "normal"
         }
-        bind "Alt esc" { SwitchToMode "normal"; }
+        bind "esc" { SwitchToMode "normal"; }
     }
 
 
@@ -261,7 +262,7 @@ default_shell "/usr/bin/fish"
 // The name of the default layout to load on startup
 // Default: "default"
 // 
-// default_layout "compact"
+default_layout "compact"
  
 // The folder in which Zellij will look for layouts
 // (Requires restart)
@@ -287,7 +288,7 @@ default_shell "/usr/bin/fish"
 //   - true (default, enabled)
 //   - false
 // 
-// pane_frames false
+pane_frames false
  
 // When attaching to an existing session with other users,
 // should the session be mirrored (true)
@@ -355,7 +356,7 @@ copy_command "wl-copy"                    // wayland
 // if it is already running or creates it otherwise.
 // Default: false
 // 
-// attach_to_session true
+attach_to_session true
  
 // Toggle between having Zellij lay out panes according to a predefined set of layouts whenever possible
 // Options:
@@ -376,13 +377,13 @@ session_serialization true
 //   - true
 //   - false (default)
 // 
-// serialize_pane_viewport false
+serialize_pane_viewport true
  
 // Scrollback lines to serialize along with the pane viewport when serializing sessions, 0
 // defaults to the scrollback size. If this number is higher than the scrollback size, it will
 // also default to the scrollback size. This does nothing if `serialize_pane_viewport` is not true.
 // 
-// scrollback_lines_to_serialize 10000
+scrollback_lines_to_serialize 1000
  
 // Enable or disable the rendering of styled and colored underlines (undercurl).
 // May need to be disabled for certain unsupported terminals
