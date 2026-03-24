@@ -1,6 +1,18 @@
--- [[ MINI.NVIM: Editing Enhancements ]]
--- Domain: Editing
--- Deferred via MiniDeps.later — runs after the initial render.
+-- [[ MINI.NVIM: Comprehensive Editing Enhancements ]]
+-- Purpose: Provide a unified suite of editing primitives (Surround, Move, Pairs).
+-- Domain:  Editing / Text Manipulation
+-- Architecture: Consolidated "Standard Library" (Phased Boot)
+--
+-- PHILOSOPHY: The Standard Library of Editing
+-- We leverage the modular `mini.nvim` ecosystem to provide industry-standard
+-- primitives with ZERO external dependencies. In our "Phased Boot" model, 
+-- we use `MiniDeps.later` to defer these modules. This ensures that opening 
+-- a file feels instantaneous, even with a dozen editing modules active.
+--
+-- MAINTENANCE TIPS:
+-- 1. Surround uses `gz` prefix to avoid conflicts with `s` (leap/flash).
+-- 2. Jump2d is mapped to `<CR>` for ultra-fast on-screen navigation.
+-- 3. Rainbow delimiters are configured here to use the Catppuccin palette.
 
 local M = {}
 

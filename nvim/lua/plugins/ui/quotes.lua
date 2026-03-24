@@ -1,10 +1,18 @@
 -- [[ CORE.QUOTES: Asynchronous Wisdom Engine ]]
--- Domain: Background Tasks & UI Enrichment
+-- Purpose: Provide dynamic, inspiring content to the dashboard without blocking boot.
+-- Domain:  Background Tasks & UI Enrichment
+-- Architecture: Async-First (Job-Proxy + File-Cache)
 --
 -- PHILOSOPHY: The "Async-First" Principle
--- Network calls must never block the UI thread. We fetch quotes in a 
--- background system job and cache them to a local file for O(1) 
--- instantaneous access on the next boot.
+-- Network calls must NEVER block the UI thread. We fetch quotes in a 
+-- background system job and cache them to a local file. This is 
+-- "Anti-Fragile": if the network is down, the UI remains snappy by 
+-- reading the last successful cache.
+--
+-- MAINTENANCE TIPS:
+-- 1. If quotes never update, check if `curl` is installed on your system.
+-- 2. The cache is stored in `stdpath("state") .. "/fast_quotes.tmp"`.
+-- 3. If the quote engine crashes, it defaults to a safe "Net Multiplier" mantra.
 
 local M = {}
 -- We store the cache in Neovim's standard state directory to keep the 

@@ -1,9 +1,18 @@
 -- [[ MINI.BASE16: Catppuccin Mocha ]]
--- Domain: UI & Aesthetics
+-- Purpose: Provide a consistent, high-contrast theme across the entire UI.
+-- Domain:  UI & Aesthetics
+-- Architecture: Synchronous Foundation Layer
 --
--- Uses mini.base16 (already in mini.nvim) instead of the catppuccin/nvim plugin.
--- No external dependency, no compile step, no cache management.
--- Palette sourced from the official Catppuccin Mocha spec.
+-- PHILOSOPHY: Zero-Dependency Theming
+-- This is a core "Anti-Fragile" pillar. By using `mini.base16` (part of the
+-- existing `mini.nvim` core) instead of a standalone theme plugin, we 
+-- eliminate an external dependency, avoid complex compile/cache steps, 
+-- and ensure the theme is available even in "safe mode."
+--
+-- MAINTENANCE TIPS:
+-- 1. If colors look "off," verify your terminal supports 24-bit (TrueColor).
+-- 2. To change the theme, update the HEX codes in the `palette` table.
+-- 3. If this fails, the system falls back to `habamax` as an Anti-Fragile safety net.
 
 local M = {}
 local utils = require 'core.utils'

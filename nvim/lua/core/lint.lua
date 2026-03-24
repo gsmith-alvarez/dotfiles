@@ -1,16 +1,28 @@
---- [[ Native Diagnostic Bridge ]]
---- This module implements a Native-First diagnostic architecture using
---- vim.system (async) and vim.diagnostic.set.
+--- [[ NATIVE DIAGNOSTIC BRIDGE ]]
+--- Purpose: Non-Blocking Code Quality Auditing
+--- Domain: Static Analysis
+--- Architecture: Async CLI Pipeline (Native-First)
+--- Location: lua/core/lint.lua
 ---
---- It bypasses nvim-lint entirely by executing linters in the background
---- and parsing their output into standard Neovim diagnostics. No blocking,
---- no middleman.
+--- PHILOSOPHY: Anti-Fragile Performance
+--- This module implements an asynchronous linting architecture. By 
+--- communicating directly with CLI tools and parsing their output into 
+--- Neovim's diagnostic API, we achieve lower overhead than any third-party 
+--- plugin. This ensures a fluid UI even when running heavy analysis.
+---
+--- MAINTENANCE TIPS:
+--- 1. To add a linter, add an entry to the `linters` table below.
+--- 2. Ensure the binary (e.g., `shellcheck`) is installed via `mise`.
+--- 3. Check the `parser` logic if diagnostics aren't appearing correctly.
+--- 4. Linting happens on `BufWritePost` (when you save the file).
 
 local utils = require('core.utils')
 
 local M = {}
 
 --- Namespace for our native linter bridge.
+-- Why: Namespaces allow us to clear or update ONLY our diagnostics without 
+-- affecting those from LSP or other plugins.
 local ns = vim.api.nvim_create_namespace('native-lint')
 
 --- Map filetypes to their respective CLI linters and their parsing logic.
@@ -40,13 +52,12 @@ local linters = {
   },
   markdown = {
     bin = 'markdownlint-cli2',
-    -- Note: markdownlint-cli2 doesn't always support JSON output natively without
-    -- external tools. We'll use its default output format and parse it via regex.
+    -- Note: markdownlint-cli2 doesn't always support JSON output natively 
+    -- without external tools. We parse its default format via regex.
     args = { '$FILENAME' },
     parser = function(output)
       local diagnostics = {}
-      -- CORRECTION: Safely iterate over lines using Neovim's native split API
-      -- instead of a brittle/broken gmatch string.
+      -- Safely iterate over lines using Neovim's native split API.
       for _, line in ipairs(vim.split(output, '\n', { trimempty = true })) do
         -- Format: filename:line:column MDXXX/message
         local lnum, col, msg = line:match(':(%d+):(%d+)%s+(.*)')
@@ -72,6 +83,7 @@ function M.lint(bufnr)
   local config = linters[ft]
   if not config then return end
 
+  -- Resolve binary path via mise shim.
   local bin_path = utils.mise_shim(config.bin)
   if not bin_path then return end
 
@@ -86,14 +98,18 @@ function M.lint(bufnr)
   end
 
   -- EXECUTION: Run the linter asynchronously.
-  -- This ensures that the UI remains completely fluid while we wait for results.
+  -- Why: Running it asynchronously ensures that the UI remains completely 
+  -- fluid while the linter runs in the background. Even slow linters 
+  -- won't cause "micro-stuttering" during editing.
   vim.system({ bin_path, unpack(args) }, { text = true }, function(obj)
     local stdout = obj.stdout or ''
     local stderr = obj.stderr or ''
     local output = stdout ~= '' and stdout or stderr
 
     -- Inject diagnostics back into the Neovim event loop.
-    -- This is essential because vim.diagnostic.set must be called on the main thread.
+    -- Why: vim.diagnostic.set must be called on the main thread. If we called 
+    -- it from inside this async callback directly, Neovim might crash or 
+    -- behave unpredictably.
     vim.schedule(function()
       if not vim.api.nvim_buf_is_valid(bufnr) then return end
       local diagnostics = config.parser(output)

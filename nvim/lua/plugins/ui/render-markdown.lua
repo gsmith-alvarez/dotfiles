@@ -1,10 +1,18 @@
 -- [[ RENDER-MARKDOWN: Typographic Visual Augmentation ]]
--- Domain: UI & Aesthetics
+-- Purpose: Enhance Markdown documents with stylized headers, lists, and tables.
+-- Domain:  UI & Aesthetics
+-- Architecture: FileType-Aware Sandbox (Phased Boot)
 --
 -- PHILOSOPHY: Context-Aware Activation
--- Markdown rendering is computationally expensive. It is completely useless 
--- if you are editing Rust or Lua. We strictly sandbox this plugin to only 
--- initialize when a Markdown file is actively loaded into a buffer.
+-- Markdown rendering is computationally expensive. To remain "Anti-Fragile,"
+-- we strictly sandbox this plugin to only initialize when a Markdown file 
+-- is actually opened. This prevents Treesitter overhead from affecting 
+-- Lua or Rust editing sessions.
+--
+-- MAINTENANCE TIPS:
+-- 1. If rendering is slow, check if the file is massive (Treesitter bottleneck).
+-- 2. This plugin only activates on specific FileTypes (markdown, org, etc.).
+-- 3. Heading icons can be customized in the `heading.icons` table.
 
 local M = {}
 local utils = require('core.utils')

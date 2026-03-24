@@ -1,9 +1,19 @@
 -- [[ REFACTORING.NVIM: Codebase Transformation ]]
--- Domain: Text Manipulation & Refactoring
+-- Purpose: Provide structural, AST-aware code refactorings (Extract, Inline).
+-- Domain:  Text Manipulation & Refactoring
+-- Architecture: Action-Driven JIT Execution (Treesitter-Guarded)
 --
--- PHILOSOPHY: Action-Driven JIT Execution
--- Refactoring is a heavy, AST-dependent operation.
--- The engine only spins up the exact moment you attempt a refactor.
+-- PHILOSOPHY: Computational Economy
+-- Refactoring is a heavy, AST-dependent operation. To remain "Anti-Fragile,"
+-- the engine only spins up the exact moment you attempt a refactor via 
+-- `<leader>r`. We also perform an "AST Validation" check before loading, 
+-- ensuring we don't wake the engine in files without Treesitter parsers.
+--
+-- MAINTENANCE TIPS:
+-- 1. If refactoring fails, ensure Treesitter has a parser installed 
+--    for the current filetype (`:TSInstall <lang>`).
+-- 2. Keybinds are under `<leader>r`.
+-- 3. This module uses a JIT bootstrap to keep startup clean.
 
 local M = {}
 local utils = require('core.utils')

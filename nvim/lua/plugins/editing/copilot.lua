@@ -1,7 +1,21 @@
-local M = {}
-local MiniDeps = require('mini.deps')
+-- [[ COPILOT: AI Pair Programmer ]]
+-- Purpose: Provide context-aware AI code completion in the background.
+-- Domain:  Editing / AI
+-- Architecture: Deferred Background Worker (Phased Boot)
+--
+-- PHILOSOPHY: Non-Intrusive Assistance
+-- Copilot is configured as an "Anti-Fragile" assistant: it uses ghost text 
+-- (inline suggestions) rather than a disruptive popup. This respects the 
+-- "Home-Row" navigation protocol and ensures that AI never blocks the 
+-- primary UI thread.
+--
+-- MAINTENANCE TIPS:
+-- 1. If Copilot stops working, run `:Copilot auth` to re-authenticate.
+-- 2. Keybinds are mapped to <C-l> (accept) and <C-j>/<C-k> (cycle).
+-- 3. You can toggle auto-trigger via `<leader>uc` (Utilities).
 
-function M.setup()
+local M = {}
+M.setup = function()
 	MiniDeps.add({
 		source = 'zbirenbaum/copilot.lua',
 		-- Note: We do not need standard lazy-loading keys like `event = "InsertEnter"`

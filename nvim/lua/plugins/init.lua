@@ -1,13 +1,20 @@
--- [[ PLUGIN DOMAIN ORCHESTRATOR ]]
--- Location: lua/plugins/init.lua
--- Architecture: Asymmetric Event-Driven Loader
---
--- STRATEGY: Domain-Isolated Execution with Non-Blocking Deferral
+-- [[ PLUGIN DOMAIN ORCHESTRATOR: lua/plugins/init.lua ]]
+-- =============================================================================
+-- This is the "Engine Room" of your plugin ecosystem.
+-- 
+-- Architecture: "Asymmetric Event-Driven Loader"
+-- -----------------------------------------------------------------------------
+-- This config uses `mini.deps` to load plugins in three distinct waves:
+-- 1. NOW: Critical UI elements (colors) and notifications.
+-- 2. DASHBOARD: If you open Neovim with no file, we load the dashboard FIRST.
+-- 3. LATER: Non-essential features (editing, LSP, workflow, etc.) are deferred
+--    to the background "idle loop" to keep the editor responsive.
+-- =============================================================================
 
 local M = {}
 local utils = require 'core.utils'
 
--- Helper to safely load and route errors
+-- [[ THE SAFE LOAD WRAPPER ]]
 local function safe_load(domain)
 	local ok, mod_or_err = pcall(require, domain)
 	if ok and type(mod_or_err) == 'table' and type(mod_or_err.setup) == 'function' then
@@ -23,82 +30,73 @@ local function safe_load(domain)
 end
 
 -- =============================================================================
--- PHASE 1: CONTEXT-AWARE BOOT
+-- PHASE 1: THE "HOT PATH" (Critical Foundation)
 -- =============================================================================
 local MiniDeps = require 'mini.deps'
 
--- Register `is-mise?` treesitter predicate immediately — before any buffer parsing.
--- Used in after/queries/toml/injections.scm to limit shell injection to mise config files.
+-- Register custom treesitter rules for mise config files.
 vim.treesitter.query.add_predicate('is-mise?', function(match, pattern, source)
 	local bufname = vim.api.nvim_buf_get_name(source)
 	return bufname:match('[/\\]mise%.toml$') ~= nil
 	    or bufname:match('[/\\]%.mise%.toml$') ~= nil
 end, { force = true })
 
+-- HOT PATH: These are needed for EVERY session immediately.
+MiniDeps.now(function()
+	MiniDeps.add 'folke/snacks.nvim'
+	safe_load 'plugins.core.snacks' -- Notifications and utilities.
+	safe_load 'plugins.core.mini'   -- Basic UI framework (icons/tabline).
+	
+	-- We ONLY load colors synchronously to prevent the "Flash of Unstyled Content".
+	local ok, ui = pcall(require, 'plugins.ui')
+	if ok and ui.setup_foundation then
+		ui.setup_foundation()
+	end
+end)
+
+-- SCENARIO-BASED DEFERRAL
 if vim.fn.argc() > 0 then
-	MiniDeps.now(function()
-		-- Ensure snacks is available for early notifications
-		MiniDeps.add 'folke/snacks.nvim'
-		safe_load 'plugins.core.snacks'
-
-		-- Load core UI/mini modules synchronously to prevent FOUC
-		safe_load 'plugins.core.mini'
-		safe_load 'plugins.ui'
-
-		-- Sub-Domain Bypass: Searching
-		safe_load 'plugins.searching'
-
-		-- Sub-Domain Bypass: LSP (Strict Order: Blink -> Native)
-		safe_load 'plugins.lsp'
-
-		safe_load 'plugins.dap'
+	-- You opened a file: Load the rest after a slight delay
+	MiniDeps.later(function()
+		safe_load 'plugins.ui'          -- Rest of the UI (statusline, etc).
+		safe_load 'plugins.searching'   -- Fuzzy finders.
+		safe_load 'plugins.lsp'         -- Language Servers.
+		safe_load 'plugins.dap'         -- Debugger.
 	end)
 elseif #vim.api.nvim_list_uis() > 0 then
-	-- Dashboard: load UI immediately, defer LSP
+	-- You opened the dashboard: Load UI elements needed for starter
 	MiniDeps.now(function()
-		MiniDeps.add 'folke/snacks.nvim'
-		safe_load 'plugins.core.snacks'
-		safe_load 'plugins.core.mini'
-		-- Sessions must be set up before starter renders
-		safe_load 'plugins.workflow.persistence'
+		safe_load 'plugins.workflow.persistence' -- Session management.
+		-- We load the rest of UI (which includes starter)
 		safe_load 'plugins.ui'
-
-		-- Sub-Domain: Searching
-		safe_load 'plugins.searching'
 	end)
+	
+	-- Defer heavy stuff even more
 	MiniDeps.later(function()
-		-- Sub-Domain Bypass: LSP (Strict Order: Blink -> Native)
+		safe_load 'plugins.searching'
 		safe_load 'plugins.lsp'
-
 		safe_load 'plugins.dap'
-		-- Re-trigger FileType to ensure LSP and Treesitter attach retroactively
 		vim.api.nvim_exec_autocmds('FileType', { buffer = 0, modeline = false })
-	end)
-else
-	-- Headless (e.g., nvim --headless +q)
-	MiniDeps.now(function()
-		MiniDeps.add 'neovim/nvim-lspconfig'
 	end)
 end
 
 -- =============================================================================
 -- PHASE 2: BACKGROUND DEFERRAL (The Idle Queue)
 -- =============================================================================
--- Pushed to the background event loop. These evaluate immediately AFTER Neovim
--- finishes its startup sequence and draws the UI.
 if #vim.api.nvim_list_uis() > 0 then
 	MiniDeps.later(function()
-		-- Sub-Domain Bypass: Navigation
+		-- Navigation tools
 		safe_load 'plugins.navigation.history'
 		safe_load 'plugins.navigation.smart-splits'
 		safe_load 'plugins.navigation.mini-files'
 
-		-- Sub-Domain Bypass: version_control
+		-- Git integration
 		safe_load 'plugins.version_control'
 
+		-- General editing and workflow enhancements
 		local scheduled_domains = {
-			'plugins.editing', -- Text Manipulation (Surround, pairs, etc.)
-			'plugins.workflow', -- External TUI / Snacks
+			'plugins.editing',
+			'plugins.workflow',
 		}
 		for _, domain in ipairs(scheduled_domains) do
 			safe_load(domain)

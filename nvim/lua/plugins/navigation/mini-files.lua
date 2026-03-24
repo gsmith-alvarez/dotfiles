@@ -1,6 +1,20 @@
--- [[ MINI.FILES: File Explorer ]]
--- Domain: Navigation
--- Deferred via MiniDeps.later — runs after the initial render.
+-- [[ MINI.FILES: Interactive File Explorer ]]
+-- Domain: Navigation / File Management
+-- Location: lua/plugins/navigation/mini-files.lua
+--
+-- PHILOSOPHY: Buffer-Centric Exploration
+-- Mini.files treats the file system as a text buffer. You navigate by 
+-- moving the cursor and "edit" the file system by editing the buffer text.
+--
+-- WHY: We use `MiniDeps.later` to defer the explorer until after boot.
+-- This ensures that Neovim opens instantly, even if you are in a massive
+-- mono-repo with thousands of files.
+--
+-- MAINTENANCE TIPS:
+-- 1. Use `-` to toggle the explorer in the current directory.
+-- 2. Use `g.` to toggle hidden (dot) files.
+-- 3. To perform bulk renames, simply edit the filenames in the buffer 
+--    and save with `:w`.
 
 local M = {}
 

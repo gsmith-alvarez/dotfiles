@@ -1,6 +1,21 @@
--- [[ MINI.STARTER: Dashboard ]]
--- Domain: UI
--- Only runs when Neovim is opened with no file arguments.
+-- [[ MINI.STARTER: Interactive Dashboard ]]
+-- Purpose: Provide a high-speed, project-aware landing page for Neovim.
+-- Domain:  UI / Onboarding
+-- Architecture: Conditional Phased Boot (argc-dependent)
+--
+-- PHILOSOPHY: Minimalist Gateway
+-- The starter provides a high-speed entry point for common tasks. In our
+-- "Phased Boot" strategy, it only initializes if Neovim is opened without 
+-- file arguments. This keeps CLI-pipe usage (`cat file | nvim -`) lean.
+--
+-- WHY: By using `MiniDeps.add` inside the `setup` function, we ensure that
+-- headless or server-side instances of Neovim never even download the 
+-- dashboard code.
+--
+-- MAINTENANCE TIPS:
+-- 1. To add a new project shortcut, update the `paths` table.
+-- 2. If the dashboard doesn't appear, check if you passed an argument to `nvim`.
+-- 3. Header quotes are managed by the asynchronous `quotes.lua` engine.
 
 local M = {}
 

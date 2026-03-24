@@ -1,11 +1,18 @@
 -- [[ TREESITTER: Advanced Syntax Parsing ]]
--- Domain: UI & Core Mechanics
+-- Purpose: Provide high-fidelity syntax highlighting and structural code awareness.
+-- Domain:  UI & Core Mechanics
+-- Architecture: Self-Healing Background Boot (Phased Boot)
 --
--- PHILOSOPHY: Self-Healing Background Boot
--- We use 'later' to defer loading. Crucially, we account for the
--- async nature of package managers: if the plugin is currently
--- downloading on a fresh install, we fail gracefully and silently
--- rather than throwing a red stack trace.
+-- PHILOSOPHY: The Incremental Highlighter
+-- We use `later` to defer Treesitter loading. This prioritizes buffer 
+-- visibility over highlighting. In an "Anti-Fragile" system, we fail 
+-- gracefully: if parsers are missing, we use standard regex highlighting 
+-- until the background `:TSUpdate` completes.
+--
+-- MAINTENANCE TIPS:
+-- 1. If syntax highlighting is broken, run `:TSUpdate`.
+-- 2. To add a new language, append it to the `ensure_installed` table.
+-- 3. Use `:EditQuery` to debug custom treesitter queries or highlights.
 
 local M = {}
 local utils = require('core.utils')

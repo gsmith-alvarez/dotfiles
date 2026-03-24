@@ -1,10 +1,19 @@
 -- [[ INC-RENAME: Incremental LSP Renaming ]]
--- Domain: Text Manipulation & Refactoring
+-- Purpose: Provide live, real-time feedback during LSP symbol renaming.
+-- Domain:  Text Manipulation & Refactoring
+-- Architecture: Precision JIT Loading (LSP-Guarded)
 --
--- PHILOSOPHY: Precision JIT Loading
--- We abandon the broad 'CmdLineEnter' autocmd. The plugin's initialization
--- is tied directly to the LSP rename keybind and loads only if the buffer
--- can actually support the operation.
+-- PHILOSOPHY: The "Just-in-Time" Specialist
+-- We abandon global loading for a highly targeted "Anti-Fragile" approach. 
+-- The plugin only wakes up when `<leader>rn` is pressed, AND it first 
+-- verifies that an LSP is attached that actually supports renaming. This 
+-- prevents useless plugin overhead in plain text or unsupported files.
+--
+-- MAINTENANCE TIPS:
+-- 1. If renaming doesn't start, verify that an LSP is attached and 
+--    supports the `renameProvider` capability.
+-- 2. This module uses a "bootstrap" pattern to avoid loading until 
+--    `<leader>rn` is pressed.
 
 local M = {}
 local utils = require('core.utils')

@@ -1,7 +1,17 @@
 -- [[ PERSISTENT-BREAKPOINTS: Debug State Serialization ]]
 -- Domain: Debugging & Project Continuity
+-- Location: lua/plugins/dap/persistent-breakpoint.lua
 --
--- ARCHITECTURE: Passive configuration. Placed in the UI layer.
+-- PHILOSOPHY: State Preservation
+-- Breakpoints should survive between Neovim sessions. This module 
+-- serializes breakpoint state to disk so you don't have to re-set 
+-- traps every time you restart the editor.
+--
+-- MAINTENANCE TIPS:
+-- 1. Breakpoints are saved in `stdpath("state") .. "/breakpoints/"`.
+-- 2. This module triggers a lightweight DAP bootstrap to ensure 
+--    signs (gutter icons) are rendered on buffer load.
+-- 3. Keymap `<leader>db` toggles breakpoints.
 
 local M = {}
 local utils = require('core.utils')

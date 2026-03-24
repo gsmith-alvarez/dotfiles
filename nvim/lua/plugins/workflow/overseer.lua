@@ -1,10 +1,17 @@
 -- [[ OVERSEER: Background Task Orchestration ]]
 -- Domain: Workflow & Project Automation
+-- Location: lua/plugins/workflow/overseer.lua
 --
 -- PHILOSOPHY: Asynchronous Industrialization (JIT)
 -- Don't wait for compilers or uploaders to finish. Overseer runs tasks
 -- in the background. We defer its massive filesystem scanning until the
 -- exact moment you request a task operation.
+--
+-- MAINTENANCE TIPS:
+-- 1. Use `<leader>or` to run a task template (Make, Cargo, etc.).
+-- 2. Use `<leader>ot` to toggle the task list sidebar.
+-- 3. If tasks aren't being detected, check if the required build file 
+--    (e.g., Makefile) is in the project root.
 
 local M = {}
 local utils = require('core.utils')

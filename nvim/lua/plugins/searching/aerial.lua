@@ -1,8 +1,15 @@
 -- [[ AERIAL: Structural Code Navigation ]]
 -- Domain: Search, Discovery, and Navigation
+-- Location: lua/plugins/searching/aerial.lua
 --
 -- PHILOSOPHY: Spatial Awareness
--- Provides a persistent, hierarchical view of code symbols.
+-- Provides a persistent, hierarchical view of code symbols. It allows you 
+-- to "see" the functions, classes, and variables in a file at a glance.
+--
+-- MAINTENANCE TIPS:
+-- 1. Use `<leader>va` to toggle the symbol outline sidebar.
+-- 2. Use `<leader>vj` to open the jump menu (fuzzy find symbols in file).
+-- 3. If symbols are missing, check if Treesitter is installed for the filetype.
 
 local M = {}
 local utils = require('core.utils')

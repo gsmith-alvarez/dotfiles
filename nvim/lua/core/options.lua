@@ -1,148 +1,97 @@
--- [[ Setting options ]]
--- See `:help vim.o`
---
--- This file contains the general configuration settings for Neovim.
--- These settings define the behavior and appearance of the editor.
---
--- Unlike standard Kickstart which places everything in `init.lua`,
--- this modular configuration isolates core Neovim options into this
--- dedicated file (`lua/core/options.lua`), keeping things organized.
---
--- NOTE: You can change these options as you wish!
--- For more options, you can see `:help option-list`
-
--- [[ Environment Setup ]]
--- Prepend mise shims to the path so Neovim finds mise-managed binaries first.
--- This ensures that when Neovim or any plugin tries to run an external command,
--- it hits the mise shims before any system-wide or Mason-installed versions.
+-- [[ THE EDITOR OPTIONS: lua/core/options.lua ]]
+-- =============================================================================
+-- This file contains all your general Neovim configuration settings.
+-- Think of this as the "Global Settings" menu in a typical app.
+-- 
+-- See `:help vim.o` for a full list of all available options.
+-- =============================================================================
 
 local M = {}
 
+-- =============================================================================
+-- [[ ENVIRONMENT SETUP: MISE & EXTERNAL BINARIES ]]
+-- -----------------------------------------------------------------------------
+-- This configuration is optimized for `mise` (modern ASDF alternative).
+-- We ensure that Neovim and its plugins look for language servers, linters, 
+-- and formatters in your mise-managed directories first.
+-- =============================================================================
+
 local mise_shim_path = vim.fn.expand '~/.local/share/mise/shims'
 if vim.fn.isdirectory(mise_shim_path) == 1 then
-  vim.env.PATH = mise_shim_path .. ':' .. vim.env.PATH
+	-- Prepend to the PATH so mise shims are found before system binaries.
+	vim.env.PATH = mise_shim_path .. ':' .. vim.env.PATH
 end
 
--- Use mise-managed interpreters for Neovim's internal Node and Python providers.
--- This prevents Neovim from searching for system-wide versions that might not
--- have the necessary dependencies for Neovim plugins.
+-- Force Neovim to use mise-managed Python and Node interpreters.
+-- This prevents issues where Neovim might not find the right version of python/node.
 vim.g.python3_host_prog = vim.fn.expand '~/.local/share/mise/shims/python'
 vim.g.node_host_prog = vim.fn.expand '~/.local/share/mise/shims/node'
 
--- [[ Leader Key configuration ]]
--- Set <space> as the leader key
--- See `:help mapleader`
--- NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
--- The "leader" key is a special prefix key used for custom keybindings.
-vim.g.mapleader = ' '
+-- =============================================================================
+-- [[ LEADER KEY CONFIGURATION ]]
+-- -----------------------------------------------------------------------------
+-- The "Leader Key" is a special prefix key (like a hotkey) used to trigger 
+-- custom actions (e.g. <leader>ff to find files). 
+-- This MUST be set before plugins load.
+-- =============================================================================
+vim.g.mapleader = ' ' -- Set <Space> as the leader key.
 vim.g.maplocalleader = ' '
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
--- Nerd Fonts contain special icons used by many plugins to make Neovim look better!
+-- [[ FONT CONFIGURATION ]]
+-- Set to true if you have a "Nerd Font" (like JetBrainsMono Nerd Font) installed.
+-- Nerd Fonts contain icons (icons like 󰓩, , 🛠️) used by many plugins.
 vim.g.have_nerd_font = true
 
--- [[ Editor Behavior and UI ]]
+-- =============================================================================
+-- [[ EDITOR BEHAVIOR & UI SETTINGS ]]
+-- =============================================================================
 
--- Disable mouse support entirely to enforce keyboard-only navigation.
--- Using the mouse in Neovim slows down your workflow by forcing you to move
--- your hand away from the home row. Disabling it is the first step toward
--- true keyboard mastery.
+-- DISABLE MOUSE: To master Neovim, we force keyboard navigation.
 vim.opt.mouse = ""
 
--- Make line numbers default and shown on the left side
+-- LINE NUMBERS: Hybrid setup (Absolute current, Relative everything else).
+-- This makes jumping to lines (e.g. typing "15k" to jump 15 lines up) very easy.
 vim.o.number = true
--- Enable relative line numbers, to help with jumping.
--- This creates a hybrid line number setup where the current line is absolute,
--- and all other lines are relative to the current line!
 vim.o.relativenumber = true
 
--- Don't show the mode (e.g., "-- INSERT --") on the last line,
--- since it's already shown in the status line plugin (like lualine or mini.statusline).
+-- MODE: Hide standard "-- INSERT --" text (the status line handles this).
 vim.o.showmode = false
 
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
--- This makes it so copying in Neovim copies to your computer's clipboard,
--- and pasting from your computer pastes into Neovim.
+-- CLIPBOARD: Sync Neovim and OS clipboard.
+-- Note: Copying/Pasting will use your system-wide clipboard!
 vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
+	vim.o.clipboard = 'unnamedplus'
 end)
 
--- Enable break indent
--- When a line is wrapped, this ensures the wrapped line has the same indentation.
-vim.o.breakindent = true
+-- WRAPPING: Enable soft-wrapping (long lines wrap visually but stay on one line).
+vim.opt.wrap = true
+vim.opt.linebreak = true -- Wrap at words, not in the middle of a word.
+vim.opt.showbreak = '↪ ' -- Visual marker for wrapped lines.
 
--- Save undo history
--- This lets you undo changes even after you close and reopen a file!
-vim.o.undofile = true
+-- HISTORY & PERFORMANCE:
+vim.o.undofile = true -- Persistent undo! Even after closing/reopening a file.
+vim.o.ignorecase = true -- Case-insensitive search.
+vim.o.smartcase = true -- ...unless you search for a capital letter.
+vim.o.signcolumn = 'yes' -- Keep space for git/errors icons on the left.
+vim.o.timeoutlen = 300 -- Wait 300ms for keymaps to complete.
+vim.o.scrolloff = 10 -- Always keep at least 10 lines visible above/below the cursor.
 
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
--- e.g., searching for "hello" matches "Hello", but searching for "Hello" only matches "Hello"
-vim.o.ignorecase = true
-vim.o.smartcase = true
+-- WINDOWS: 
+vim.o.splitright = true -- New vertical splits open on the right.
+vim.o.splitbelow = true -- New horizontal splits open on the bottom.
 
--- Keep signcolumn on by default
--- The signcolumn is the space to the left of the line numbers where git signs
--- and error icons are displayed. Keeping it always on prevents text from shifting.
-vim.o.signcolumn = 'yes'
+-- UI FEEDBACK:
+vim.o.cursorline = true -- Subtly highlight the current line.
+vim.o.inccommand = 'split' -- Show live results of find/replace as you type.
+vim.o.confirm = true -- Show a dialog asking to save changes before quitting.
 
--- Decrease update time
--- Time in milliseconds before saving swap files or triggering `CursorHold` events.
--- vim.o.updatetime = 250 ## Defined in /commands/diagnostics.lua
-
--- Decrease mapped sequence wait time
--- Time in milliseconds to wait for a mapped key sequence to complete.
--- e.g., if you press the leader key, this is how long it waits for the next key.
-vim.o.timeoutlen = 300
-
--- Configure how new splits should be opened
--- When opening horizontal/vertical splits, where should they go?
-vim.o.splitright = true
-vim.o.splitbelow = true
-
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
---
---  Notice listchars is set using `vim.opt` instead of `vim.o`.
---  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
---   See `:help lua-options`
---   and `:help lua-options-guide`
-vim.o.list = true
+-- WHITESPACE:
+vim.o.list = true -- Show hidden characters.
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
--- Preview substitutions live, as you type!
--- When you type `:%s/foo/bar/g`, this shows you the changes before you hit enter!
-vim.o.inccommand = 'split'
+-- COMMAND LINE:
+vim.opt.laststatus = 3 -- Use a single, shared statusline across all windows.
+vim.opt.showcmd = true
+vim.opt.showcmdloc = 'statusline' -- Show current command in the statusline.
 
--- Show which line your cursor is on (adds a subtle background highlight)
-vim.o.cursorline = true
-
--- Minimal number of screen lines to keep above and below the cursor.
--- This prevents the cursor from hitting the very top or bottom of the screen.
-vim.o.scrolloff = 10
-
--- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
--- instead raise a dialog asking if you wish to save the current file(s)
--- See `:help 'confirm'`
-vim.o.confirm = true
-
--- [[ Soft Wrap Settings ]]
--- These settings control how long lines are displayed (wrapped) without actually
--- inserting newlines into your file.
-vim.opt.wrap = true -- Enable soft wrapping
-vim.opt.linebreak = true -- Wrap at words, not characters, so words aren't split
-vim.opt.showbreak = '↪ ' -- Visual marker for wrapped lines
-
--- [[ Concealing Latex/Mathjax Rendering ]]
--- Hides certain markup syntax elements for a cleaner look when viewing files like Markdown.
-vim.opt.conceallevel = 2
-
--- [[ Command Line Hand over to statusline.lua ]]
-vim.opt.laststatus = 3
-vim.opt.showcmd    = true
-vim.opt.showcmdloc = 'statusline'
-
-return Mop
+return M

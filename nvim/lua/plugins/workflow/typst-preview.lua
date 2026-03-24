@@ -1,8 +1,15 @@
 -- [[ TYPST-PREVIEW: Instant Visual Feedback ]]
--- Using chomosuke/typst-preview.nvim
+-- Domain: Workflow / Document Engineering
+-- Location: lua/plugins/workflow/typst-preview.lua
 --
--- Logic: This plugin communicates directly with the Tinymist binary
+-- PHILOSOPHY: Real-Time Rendering
+-- This plugin communicates directly with the Tinymist binary
 -- to provide incremental rendering (milliseconds-fast updates).
+--
+-- MAINTENANCE TIPS:
+-- 1. Ensure `tinymist` is installed via `mise`.
+-- 2. Use `<leader>typ` to open the preview in your default browser.
+-- 3. The preview scrolls automatically as you move your Neovim cursor.
 
 local M = {}
 local utils = require('core.utils')

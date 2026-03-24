@@ -1,10 +1,19 @@
 -- [[ NATIVE WINBAR: Code Context Breadcrumbs ]]
--- Domain: UI / Aesthetics
+-- Purpose: Provide structural context (Class > Method) at the top of the window.
+-- Domain:  UI / Aesthetics
+-- Architecture: Direct-to-Metal (Zero-Proxy)
 --
--- PHILOSOPHY: Direct-to-Metal Contextual Awareness
+-- PHILOSOPHY: The Native Advantage
 -- By leveraging Neovim 0.10's native Treesitter and Winbar APIs, we provide
--- high-performance breadcrumbs with zero external dependencies. This
--- avoids the latency and "plugin-creep" of dropbar.nvim or barbecue.nvim.
+-- high-performance breadcrumbs with ZERO external dependencies. This 
+-- is "Anti-Fragile": it cannot break during plugin updates and adds 
+-- negligible overhead to the rendering loop.
+--
+-- MAINTENANCE TIPS:
+-- 1. If breadcrumbs are missing, ensure Treesitter is working for that filetype.
+-- 2. To add icons for new node types, update the `type_to_kind` table.
+-- 3. Performance: The winbar redrawing is tied to `redrawstatus` to avoid
+--    excessive computation during high-speed scrolling.
 
 local M = {}
 local icons = require('core.icons').kinds

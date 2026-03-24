@@ -1,11 +1,20 @@
 -- [[ NATIVE FORMATTING BRIDGE ]]
--- Domain: Buffer Transformation & Standardization
+-- Purpose: Low-Latency Buffer Transformation
+-- Domain: Buffer Standardization
+-- Architecture: Sync CLI Filter (Native-First)
+-- Location: lua/core/format.lua
 --
--- PHILOSOPHY: Direct-to-Metal Execution
--- This module implements a zero-dependency formatting architecture. By
--- bypassing intermediate abstraction layers (conform, null-ls), we reduce
--- latency and eliminate "plugin-creep." It leverages the Neovim 0.10+
--- vim.system API for high-performance, synchronous CLI filtering.
+-- PHILOSOPHY: Anti-Fragile / Zero-Dependency
+-- This module implements a direct-to-metal formatting pipeline. By 
+-- bypassing complex plugin layers, we eliminate technical debt and 
+-- "plugin-creep." It leverages Neovim's native `vim.system` for 
+-- high-performance, synchronous formatting during save operations.
+--
+-- MAINTENANCE TIPS:
+-- 1. If a formatter stops working, check if the binary (e.g., `stylua`, `ruff`) 
+--    is installed via `mise ls`.
+-- 2. Verify the formatter works on CLI: `cat file.lua | stylua -`.
+-- 3. If formatting fails on save, check `:messages` for errors from the CLI.
 
 local utils = require 'core.utils'
 
@@ -42,6 +51,7 @@ local formatters = {
 		args = { 'format', '-', '--stdin-filename', '$FILENAME' },
 		is_filter = true,
 	},
+	-- fish_indent is native to fish and great for scripting.
 	fish = {
 		bin = 'fish_indent',
 		args = {},
@@ -78,6 +88,8 @@ local function format_with_cli(ft)
 	end
 
 	-- TEMPORAL GUARDRAIL: We cannot format files on-disk during a pre-save hook.
+	-- Why: If we edit the file on disk, and then Neovim writes the *old* buffer 
+	-- memory to disk, we get a conflict or data loss.
 	if not config.is_filter then
 		utils.soft_notify(
 		string.format("Format Error: '%s' is an in-place editor. BufWritePre formatters must be stdin filters.",
@@ -85,6 +97,7 @@ local function format_with_cli(ft)
 		return
 	end
 
+	-- Resolve the binary path via mise shim. This is faster than standard PATH lookup.
 	local bin_path = utils.mise_shim(config.bin)
 	if not bin_path then
 		-- Graceful degradation: Log but don't disrupt the save loop.
@@ -97,11 +110,14 @@ local function format_with_cli(ft)
 		table.insert(args, (arg:gsub('$FILENAME', filename)))
 	end
 
-	-- Pull the raw memory buffer to send to the CLI tool
+	-- Pull the raw memory buffer to send to the CLI tool.
+	-- Why: This allows us to format even unsaved changes in memory.
 	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 	local input = table.concat(lines, '\n')
 
 	-- Execute synchronously to ensure the write happens AFTER the format.
+	-- Why: If we used async here, Neovim would save the file *before* the 
+	-- formatter finished its work.
 	local result = vim.system({ bin_path, unpack(args) }, { stdin = input, text = true }):wait()
 
 	if result.code == 0 then
@@ -128,6 +144,7 @@ function M.autoformat()
 
 	-- 1. LSP Formatting (Highest Priority)
 	-- If a language server (like gopls or rust-analyzer) provides formatting, we use it natively.
+	-- This is usually faster and more context-aware than CLI tools.
 	local lsp_clients = vim.lsp.get_clients { bufnr = 0, method = 'textDocument/formatting' }
 	if #lsp_clients > 0 then
 		vim.lsp.buf.format { async = false, timeout_ms = 1000 }
@@ -142,6 +159,7 @@ function M.autoformat()
 	local excluded_hygiene = { 'markdown', 'markdown.mdx', 'diff', 'mail' }
 	if not vim.tbl_contains(excluded_hygiene, ft) then
 		local cursor_view = get_view_state()
+		-- Why: We use :keepjumps to prevent this cleanup from polluting the jumplist.
 		vim.cmd [[keepjumps keeppatterns silent! %s/\s\+$//e]]
 		restore_view_state(cursor_view)
 	end
@@ -163,7 +181,5 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 	end,
 	desc = 'Synchronous buffer transformation prior to disk write',
 })
-
--- Format keymap moved to lua/core/plugin-keymaps.lua (<leader>cf under Code section).
 
 return M

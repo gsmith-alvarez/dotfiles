@@ -1,9 +1,16 @@
 -- [[ DAP-VIRTUAL-TEXT: Inline State Inspection ]]
 -- Domain: Debugging & UI
+-- Location: lua/plugins/dap/nvim-dap-virtual-text.lua
 --
 -- PHILOSOPHY: Zero-Latency State Mapping
 -- State is rendered directly in the buffer's virtual space.
 -- ARCHITECTURE: Completely dormant until explicitly invoked by the DAP JIT engine.
+--
+-- MAINTENANCE TIPS:
+-- 1. This module is automatically initialized by `debug.lua` during 
+--    the DAP bootstrap.
+-- 2. If virtual text is too noisy, adjust the `filter` function.
+-- 3. Variable values are displayed at the end of the line (EOL).
 
 local M = {}
 local utils = require('core.utils')

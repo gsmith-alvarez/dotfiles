@@ -1,41 +1,56 @@
 -- [[ COMMANDS ORCHESTRATOR ]]
--- Architecture: Fault-Tolerant Module Loading
--- This file serves as the central dispatcher for all custom user commands.
+-- =============================================================================
+-- Purpose: Central Dispatcher for Custom User Commands
+-- Domain:  Automation / Ex-Commands
+-- Architecture: Fault-Tolerant Auto-Registration
 --
--- STRATEGY: Sandboxed Requirements
--- Neovim's default 'require' is blocking and fragile. If 'building.lua' has
--- a syntax error, a standard require would halt the entire 'init.lua' execution,
--- leaving you with a broken editor. We wrap each module in a protected call (pcall)
--- to ensure that one failure does not cascade into a total system crash.
+-- PHILOSOPHY: Action-Driven Extendability
+-- This file allows you to add complex logic (Zellij integration, auditing, 
+-- etc.) without cluttering your init.lua. It automatically scans the 
+-- modules in this directory and registers both the Ex command AND the 
+-- corresponding keymap if defined.
+-- =============================================================================
 
 local M = {}
-
 local utils = require('core.utils')
 
--- Define the domain-specific modules to be loaded.
--- This keeps the 'init.lua' clean and the configuration modular.
+-- [[ THE COMMAND MODULES ]]
+-- List of files in lua/commands/ to be scanned.
 local modules = {
-  'commands.auditing',    -- ToolCheck, Redir, Typos
-  'commands.building',    -- Zellij & Watchexec processing, single-run compiling
-  'commands.diagnostics', -- Hover events, toggle maps, quickfix routing
-  'commands.utilities',   -- Jq, Sd, Xh, paths, buffers, and general tools
+	'commands.auditing',    -- ToolCheck, Redir, Typos
+	'commands.building',    -- Zellij & Watchexec smart runners
+	'commands.diagnostics', -- Quickfix and LSP hover routing
+	'commands.utilities',   -- Jq, Sd, Xh, and buffer helpers
+	'commands.mux',         -- Zellij pane management
 }
 
+-- [[ THE AUTO-REGISTRATION ENGINE ]]
+-- Why: Instead of manually calling nvim_create_user_command for 50+ tools, 
+-- we loop through structured tables. This ensures consistency.
 for _, module in ipairs(modules) do
-  -- EXECUTION STRATEGY: The Protected Call (pcall)
-  -- pcall executes a function in a "protected" mode.
-  -- 1. 'ok': Boolean. True if the module loaded without errors.
-  -- 2. 'err': String. Contains the stack trace or syntax error message if 'ok' is false.
-  local ok, err = pcall(require, module)
+	local ok, mod = pcall(require, module)
 
-  if not ok then
-    -- ERROR CORRECTION:
-    -- If a module fails (e.g., you're halfway through editing 'building.lua'
-    -- and leave a syntax error), we route the failure to our persistent
-    -- audit log (~/.local/state/nvim/config_diagnostics.log) and notify the UI.
-    -- This allows you to fix the bug without losing your entire workflow.
-    utils.soft_notify(string.format("CRITICAL: Failed to load %s\nError: %s", module, err), vim.log.levels.ERROR)
-  end
+	if not ok then
+		-- Route failures to the audit trail (~/.local/state/nvim/config_diagnostics.log)
+		utils.soft_notify(string.format('CRITICAL: Failed to load %s\nError: %s', module, mod), vim.log.levels.ERROR)
+	elseif type(mod) == 'table' and mod.commands then
+		for cmd_name, cmd_def in pairs(mod.commands) do
+			-- 1. Register the Ex Command (e.g., :Jq)
+			vim.api.nvim_create_user_command(cmd_name, cmd_def.impl, {
+				nargs = cmd_def.nargs,
+				desc = cmd_def.desc,
+				complete = cmd_def.complete,
+			})
+
+			-- 2. Register the Keymap (e.g., <leader>uj)
+			-- These are automatically discovered by mini.clue thanks to the 'desc' field.
+			if cmd_def.keymap then
+				vim.keymap.set('n', cmd_def.keymap, '<cmd>' .. cmd_name .. '<CR>', {
+					desc = cmd_name .. ': ' .. cmd_def.desc,
+				})
+			end
+		end
+	end
 end
 
 return M

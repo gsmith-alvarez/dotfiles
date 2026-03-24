@@ -1,9 +1,20 @@
 -- [[ GUESS-INDENT: Automatic Indentation Detection ]]
--- Domain: Text Manipulation & Formatting
+-- Purpose: Automatically detect and apply indentation settings (tab/space, width).
+-- Domain:  Text Manipulation & Formatting
+-- Architecture: Self-Destructing Event Trap (Phased Boot)
 --
--- PHILOSOPHY: Defer to Buffer Read
--- Indentation detection is critical but useless during the initial
--- boot phase. We use a self-destructing event listener to load it.
+-- PHILOSOPHY: The Disposable Bootloader
+-- Indentation detection is critical but useless during the initial boot frame. 
+-- In our "Phased Boot" model, we use a self-destructing `BufReadPre` listener. 
+-- This is "Anti-Fragile": it ensures the correct indent is set when you open 
+-- a file, but the detection engine itself is deleted from memory once its 
+-- job is done.
+--
+-- MAINTENANCE TIPS:
+-- 1. If indentation is wrong, check `:verbose set shiftwidth?` to see
+--    what set it.
+-- 2. This plugin runs once per session per filetype via the 
+--    `return true` self-destruct mechanism in the autocmd.
 
 local M = {}
 local utils = require('core.utils')

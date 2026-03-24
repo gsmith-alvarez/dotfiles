@@ -1,5 +1,16 @@
 -- [[ DAP: Debug Adapter Protocol + PlatformIO ]]
 -- Domain: Hardware Debugging & Execution Control
+-- Location: lua/plugins/dap/debug.lua
+--
+-- PHILOSOPHY: Direct Hardware Interaction
+-- This module manages the lifecycle of the debug server (OpenOCD) and 
+-- the LLDB adapter. It is optimized for embedded development (STM32, ESP32).
+--
+-- MAINTENANCE TIPS:
+-- 1. If hardware debugging fails, ensure `openocd` is installed via `mise` 
+--    and an `openocd.cfg` exists in the project root.
+-- 2. LLDB adapter requires `lldb-dap` to be present in the system PATH.
+-- 3. Debug UI (dap-ui) opens automatically when a session starts.
 
 local M = {}
 local utils = require('core.utils')

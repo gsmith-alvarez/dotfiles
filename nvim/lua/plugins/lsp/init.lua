@@ -1,10 +1,18 @@
 -- [[ LSP DOMAIN ORCHESTRATOR ]]
--- Location: lua/plugins/lsp/init.lua
--- Domain: Code Intelligence
+-- Purpose: Orchestrate the "Code Intelligence" stack with a focus on startup speed.
+-- Domain:  LSP & Intelligence
+-- Architecture: Phased Boot / Ordered Injection
 --
--- PHILOSOPHY: Strict Order
--- Blink must load before native-lsp so capability broadcasting
--- happens before any server attaches.
+-- PHILOSOPHY: The "Strict Order" Protocol
+-- In an Anti-Fragile system, dependencies must be deterministic. We load
+-- 'blink.cmp' BEFORE 'native-lsp' to ensure that when LSP servers attach, 
+-- they immediately receive the enhanced completion capabilities (snippets, 
+-- documentation, fuzzy matching) broadcast by the completion engine.
+--
+-- MAINTENANCE TIPS:
+-- 1. If completions are missing, check `blink.lua`.
+-- 2. If servers fail to attach, check `native-lsp.lua` for binary paths.
+-- 3. Use `:LspInfo` to debug active server connections.
 
 local M = {}
 local utils = require 'core.utils'

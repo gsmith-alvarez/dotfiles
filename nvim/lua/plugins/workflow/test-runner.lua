@@ -1,7 +1,19 @@
 -- [[ TEST RUNNER: Language-Aware Test Dispatch ]]
--- Domain: Workflow
--- Covers: Rust, Zig, Python, C/C++
--- No neotest dependency — uses snacks.terminal for output.
+-- Domain: Workflow / Testing
+-- Location: lua/plugins/workflow/test-runner.lua
+--
+-- PHILOSOPHY: Native-First Verification
+-- This module implements a zero-dependency test runner (no neotest). It 
+-- uses simple regex to find the nearest test and dispatches the execution 
+-- to a snacks.terminal. This ensures maximum speed and zero "plugin-creep."
+--
+-- MAINTENANCE TIPS:
+-- 1. To add support for a new language, update the `nearest_patterns` and 
+--    `runners` tables.
+-- 2. Use `<leader>Tr` for project tests, `<leader>Tf` for file, 
+--    and `<leader>Tn` for the nearest test.
+-- 3. If a test is not found, verify the `nearest_patterns` regex matches 
+--    your code style.
 
 local M = {}
 

@@ -6,6 +6,12 @@
 -- The editor should not just show text; it should understand
 -- intent and state. These modules provide the deep-tissue
 -- inspection required for professional hardware/systems engineering.
+--
+-- MAINTENANCE TIPS:
+-- 1. If debugging fails to start, check `debug.lua` for hardware 
+--    server (OpenOCD) logic.
+-- 2. Debugging keymaps are central to `core/plugin-keymaps.lua`.
+-- 3. Use `:DapInfo` to see active debug sessions and adapters.
 
 local M = {}
 local utils = require 'core.utils'

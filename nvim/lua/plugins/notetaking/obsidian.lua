@@ -1,7 +1,21 @@
--- ============================================================================
--- MODULE: Obsidian.nvim Integration
--- CONTEXT: JIT loaded. Only executes when called by an autocmd or global stub.
--- ============================================================================
+-- [[ OBSIDIAN: Knowledge Graph & Zettelkasten ]]
+-- Domain: Notetaking / Personal Knowledge Management
+-- Location: lua/plugins/notetaking/obsidian.lua
+--
+-- PHILOSOPHY: The Second Brain (JIT)
+-- We treat notes as a high-latency domain. You don't need Obsidian features
+-- while coding Rust. This module is completely dormant until you enter your
+-- vault or explicitly invoke a note command. This "Phased Boot" approach
+-- ensures the editor stays lean during technical work.
+--
+-- MAINTENANCE TIPS:
+-- 1. If searching fails, ensure `ripgrep` (rg) is in your PATH (managed by Mise).
+-- 2. Vault path is hardcoded to `~/Documents/Obsidian`.
+-- 3. Templates are located in `500-Resources/Templates` within the vault.
+--
+-- ARCHITECTURE: Protected JIT Initialization
+-- This module is required by `lua/autocmd/jit.lua`. It provides a `setup()` 
+-- function that performs dependency checks before loading the heavy plugin.
 
 local M = {}
 

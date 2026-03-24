@@ -1,16 +1,24 @@
--- [[ SHARED LIBRARIES ]]
--- Location: lua/core/libs.lua
+-- [[ SHARED CORE LIBRARIES ]]
+-- Purpose: Global Dependency Injection
 -- Domain: Core Infrastructure
+-- Architecture: Pre-emptive Injection (Phased Boot)
+-- Location: lua/core/libs.lua
 --
--- PHILOSOPHY: Pre-emptive Injection
--- Plenary is a dependency for almost every high-level plugin. By adding
--- it here, we ensure its modules (like 'plenary.async') are available
--- globally before any other plugin tries to require them.
+-- PHILOSOPHY: Stability Through Pre-emption
+-- To prevent "Module not found" errors during the phased boot process, 
+-- we inject critical libraries (like Plenary) early. This ensures that 
+-- regardless of plugin load order, the foundational APIs are always 
+-- available when needed, preventing race conditions.
+--
+-- MAINTENANCE TIPS:
+-- 1. If a plugin complains about missing `plenary`, verify it is listed here.
+-- 2. This file is loaded early in `core/init.lua`. Do not add heavy logic here.
 
 local M = {}
 local utils = require('core.utils')
 
 -- We use a protected block to ensure a git failure doesn't halt the boot.
+-- Why: If GitHub is down, we want Neovim to still open, even if plugins fail.
 local ok, err = pcall(function()
   -- 1. nvim-lua/plenary.nvim: The Neovim Standard Library
   -- MiniDeps.add handles the runtimepath injection automatically.

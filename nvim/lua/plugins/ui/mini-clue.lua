@@ -1,6 +1,22 @@
 -- [[ MINI.CLUE: Key Hint Popup ]]
--- Domain: UI
--- Loaded on VimEnter to stay out of the startup hot path.
+-- Purpose: Provide context-aware keybinding discovery for complex prefixes.
+-- Domain:  UI / Discovery
+-- Architecture: Deferred Event-Based (VimEnter)
+--
+-- PHILOSOPHY: Discoverable Efficiency
+-- Mini.clue provides a visual hint popup for multi-key sequences (like <leader>).
+-- It is "Anti-Fragile" by using native Neovim menus instead of heavy floating 
+-- windows where possible. 
+--
+-- WHY: We load on VimEnter because the user doesn't need key hints during 
+-- the first 100ms of startup. Delaying this ensures the editor "feels" 
+-- instantaneous.
+--
+-- MAINTENANCE TIPS:
+-- 1. To add a new prefix category (e.g., <leader>x), add it to the `clues` table.
+-- 2. If hints aren't appearing, verify the `triggers` table includes the 
+--    prefix key (e.g., 'g' or '<Leader>').
+-- 3. The `delay` in `window` config controls how long to wait before showing.
 
 local M = {}
 
@@ -51,7 +67,7 @@ M.setup = function()
 					{ mode = 'n', keys = '<Leader>s', desc = '🔍 Search' },
 					{ mode = 'n', keys = '<Leader>t', desc = '🖥️ Terminal/TUI' },
 					{ mode = 'n', keys = '<Leader>T', desc = '🧪 Test' },
-					{ mode = 'n', keys = '<Leader>u', desc = '🎨 UI Utils' },
+					{ mode = 'n', keys = '<Leader>u', desc = '🛠️ Utils / Commands' },
 					{ mode = 'n', keys = '<Leader>v', desc = '👁️ View' },
 					{ mode = 'n', keys = '<Leader>w', desc = '🪟 Window' },
 					{ mode = 'n', keys = '<Leader>z', desc = '🧱 Zellij' },

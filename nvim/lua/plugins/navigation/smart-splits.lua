@@ -1,8 +1,18 @@
 -- [[ SMART-SPLITS: Multiplexer Integration ]]
 -- Domain: Inter-Pane Movement (Neovim <-> Zellij)
+-- Location: lua/plugins/navigation/smart-splits.lua
 --
 -- PHILOSOPHY: Anti-Fragile Proxy Execution
 -- Bridges Neovim splits and Zellij panes with zero startup overhead.
+-- It ensures that `<C-h/j/k/l>` moves seamlessly between Neovim windows
+-- and terminal panes.
+--
+-- MAINTENANCE TIPS:
+-- 1. If movement between Neovim and Zellij fails, check if `zellij` is 
+--    in your system PATH (managed by Mise).
+-- 2. Resize is mapped to `<M-h/j/k/l>`.
+-- 3. This module uses a JIT bootstrap to replace the core keymaps only
+--    when you first attempt to move windows.
 
 local M = {}
 local utils = require('core.utils')

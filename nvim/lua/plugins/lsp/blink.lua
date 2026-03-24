@@ -1,10 +1,21 @@
 -- [[ BLINK.CMP: High-Performance Autocompletion ]]
--- Domain: LSP & Intelligence
+-- Purpose: Provide a lightning-fast, fuzzy completion engine written in Rust.
+-- Domain:  LSP & Intelligence
+-- Architecture: Pre-emptive Capability Injection (Phased Boot)
 --
--- PHILOSOPHY: Pre-Emptive Capability Injection
+-- PHILOSOPHY: The Pre-Emptive Strike
 -- Autocompletion is not a standalone UI; it is an integrated client of the LSP.
--- It must load exactly when a file is read so its capabilities can be broadcast
--- to the Language Servers the millisecond they attach.
+-- In our "Phased Boot" strategy, Blink must load exactly when a file is read 
+-- so its capabilities can be broadcast to the Language Servers the millisecond 
+-- they attach. This prevents the "no completions on first attach" bug.
+--
+-- MAINTENANCE TIPS:
+-- 1. If the completion menu is slow or broken, check if a new version requires 
+--    a `cargo build` (handled automatically by MiniDeps hooks).
+-- 2. Keybinds for completion are isolated here to avoid global conflicts.
+-- 3. Symbols/Icons are pulled from `lua/core/icons.lua`.
+-- 4. If the binary is missing on a new machine, `prebuilt_binaries.download = true`
+--    acts as an Anti-Fragile safety net.
 
 local M = {}
 local utils = require 'core.utils'

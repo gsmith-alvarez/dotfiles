@@ -1,6 +1,18 @@
 -- [[ TODO-COMMENTS: Highlighted Annotations ]]
--- Domain: Editing
--- JIT-loaded on first use; highlights are registered immediately via autocmd.
+-- Purpose: Highlight and aggregate annotations like TODO, FIXME, and HACK.
+-- Domain:  Editing / Visibility
+-- Architecture: Passive JIT Highlight
+--
+-- PHILOSOPHY: Explicit Metadata
+-- This plugin provides an "Anti-Fragile" audit trail of technical debt. 
+-- Highlighting is "Passive" (low overhead), so we bootstrap it immediately 
+-- to ensure annotations are visible from the first frame. It integrates 
+-- with the Trouble domain for project-wide auditing.
+--
+-- MAINTENANCE TIPS:
+-- 1. Use `]t` and `[t` to jump between annotations.
+-- 2. Project-wide view is available via `<leader>xt`.
+-- 3. If highlights are missing, ensure the filetype is supported by Treesitter.
 
 local M = {}
 local utils = require 'core.utils'

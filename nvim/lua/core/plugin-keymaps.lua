@@ -1,13 +1,8 @@
--- [[ PLUGIN KEYMAPS ]]
--- Single source of truth for all global plugin-owned keymaps.
--- Mirrors lua/core/keymaps.lua which owns editor-fundamental bindings.
---
--- RULES:
---   • All descs follow "Category: Action" format — no brackets, no parentheticals
---   • Keymaps use JIT closures: require() inside function body, never at top-level
---   • Buffer-local keymaps (LspAttach, FileType autocmds) stay in their plugin files
---   • One prefix = one domain (see plan.md for the full prefix map)
---   • This file is loaded immediately from core/init.lua at startup
+-- [[ PLUGIN KEYMAPS REGISTRY ]]
+-- Purpose: Centralized Global Plugin Integration
+-- Domain: Plugin Mapping Surface
+-- Architecture: Deferred/Lazy-First (Phased Boot)
+-- Location: lua/core/plugin-keymaps.lua
 
 local M = {}
 
@@ -17,6 +12,20 @@ local M = {}
 
 local utils = require('core.utils')
 
+--- JIT Snacks wrapper: ensures Snacks is configured before calling its API.
+local function snacks_call(func_name, ...)
+	local args = { ... }
+	return function()
+		require('plugins.core.snacks').bootstrap()
+		local parts = vim.split(func_name, '.', { plain = true })
+		local target = require('snacks')
+		for i = 1, #parts do
+			target = target[parts[i]]
+		end
+		target(unpack(args))
+	end
+end
+
 --- TUI factory: validates the mise shim then opens a snacks floating terminal.
 local function tui(bin, label, cmd_override)
 	return function()
@@ -25,6 +34,7 @@ local function tui(bin, label, cmd_override)
 			utils.soft_notify(label .. ' missing. Install via: mise install ' .. bin, vim.log.levels.WARN)
 			return
 		end
+		require('plugins.core.snacks').bootstrap()
 		require('snacks').terminal.toggle(cmd_override or path)
 	end
 end
@@ -32,11 +42,12 @@ end
 --- Wrapper for PIO commands: runs in terminal, waits for Enter before closing.
 local function pio(cmd)
 	return function()
+		require('plugins.core.snacks').bootstrap()
 		require('snacks').terminal.toggle(cmd .. "; read -p 'Press Enter to close...'")
 	end
 end
 
---- Jump helper for vim.diagnostic.jump — forward or backward, optional severity.
+--- Jump helper for vim.diagnostic.jump
 local function diag_jump(next, severity)
 	return function()
 		vim.diagnostic.jump({
@@ -63,9 +74,7 @@ end
 -- [[ TERMINAL / TUI: <C-\>, <leader>t ]]
 -- ─────────────────────────────────────────────────────────────────────────────
 
-vim.keymap.set({ 'n', 't' }, [[<C-\>]], function()
-	require('snacks').terminal.toggle()
-end, { desc = 'Terminal: Toggle' })
+vim.keymap.set({ 'n', 't' }, [[<C-\>]], snacks_call('terminal.toggle'), { desc = 'Terminal: Toggle' })
 
 vim.keymap.set('n', '<leader>tp', tui('btm', 'btm'), { desc = 'Terminal: Process Monitor' })
 vim.keymap.set('n', '<leader>ts', tui('spotify_player', 'spotify_player'), { desc = 'Terminal: Spotify' })
@@ -94,32 +103,21 @@ vim.keymap.set('n', '<leader>gg', function()
 		utils.soft_notify('lazygit missing. Install via: mise install lazygit', vim.log.levels.WARN)
 		return
 	end
+	require('plugins.core.snacks').bootstrap()
 	require('snacks').lazygit.open()
 end, { desc = 'Git: Lazygit' })
 
-vim.keymap.set('n', '<leader>gl', function()
-	require('snacks').picker.git_log()
-end, { desc = 'Git: Log' })
-vim.keymap.set('n', '<leader>gf', function()
-	require('snacks').picker.git_log_file()
-end, { desc = 'Git: File History' })
-vim.keymap.set('n', '<leader>gS', function()
-	require('snacks').picker.git_status()
-end, { desc = 'Git: Status' })
-vim.keymap.set('n', '<leader>gb', function()
-	require('snacks').picker.git_branches()
-end, { desc = 'Git: Branches' })
-vim.keymap.set({ 'n', 'x' }, '<leader>gB', function()
-	require('snacks').gitbrowse()
-end, { desc = 'Git: Browse (open)' })
-vim.keymap.set({ 'n', 'x' }, '<leader>gY', function()
-	require('snacks').gitbrowse({
-		open = function(url) vim.fn.setreg('+', url) end,
-		notify = false,
-	})
-end, { desc = 'Git: Browse (copy URL)' })
+vim.keymap.set('n', '<leader>gl', snacks_call('picker.git_log'), { desc = 'Git: Log' })
+vim.keymap.set('n', '<leader>gf', snacks_call('picker.git_log_file'), { desc = 'Git: File History' })
+vim.keymap.set('n', '<leader>gS', snacks_call('picker.git_status'), { desc = 'Git: Status' })
+vim.keymap.set('n', '<leader>gb', snacks_call('picker.git_branches'), { desc = 'Git: Branches' })
+vim.keymap.set({ 'n', 'x' }, '<leader>gB', snacks_call('gitbrowse'), { desc = 'Git: Browse (open)' })
+vim.keymap.set({ 'n', 'x' }, '<leader>gY', snacks_call('gitbrowse', {
+	open = function(url) vim.fn.setreg('+', url) end,
+	notify = false,
+}), { desc = 'Git: Browse (copy URL)' })
 
--- mini.diff hunk operations — guarded with pcall since mini.diff loads deferred
+-- mini.diff hunk operations
 vim.keymap.set('n', ']c', function()
 	local ok, diff = pcall(require, 'mini.diff')
 	if ok then diff.goto_hunk('next') end
@@ -129,21 +127,24 @@ vim.keymap.set('n', '[c', function()
 	if ok then diff.goto_hunk('prev') end
 end, { desc = 'Git: Prev Hunk' })
 vim.keymap.set('n', '<leader>gs', function()
-	require('mini.diff').do_hunks(0, 'apply')
+	local ok, diff = pcall(require, 'mini.diff')
+	if ok then diff.do_hunks(0, 'apply') end
 end, { desc = 'Git: Stage Hunk' })
 vim.keymap.set('n', '<leader>gu', function()
-	require('mini.diff').do_hunks(0, 'reset')
+	local ok, diff = pcall(require, 'mini.diff')
+	if ok then diff.do_hunks(0, 'reset') end
 end, { desc = 'Git: Undo Hunk' })
 vim.keymap.set('n', '<leader>gD', function()
-	require('mini.diff').toggle_overlay(0)
+	local ok, diff = pcall(require, 'mini.diff')
+	if ok then diff.toggle_overlay(0) end
 end, { desc = 'Git: Toggle Diff Overlay' })
 vim.keymap.set('n', '<leader>gq', function()
-	require('mini.diff').export('qf', { scope = 'current' })
+	local ok, diff = pcall(require, 'mini.diff')
+	if ok then diff.export('qf', { scope = 'current' }) end
 end, { desc = 'Git: Export Hunks to Quickfix' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ CODE / LSP (non-buffer-local): <leader>c ]]
--- Buffer-local keymaps (gd, gr, <leader>ca, etc.) live in native-lsp.lua
 -- ─────────────────────────────────────────────────────────────────────────────
 
 vim.keymap.set({ 'n', 'v' }, '<leader>cf', function()
@@ -154,16 +155,12 @@ vim.keymap.set('n', 'gco', 'o<Esc>Vcx<Esc><cmd>normal gcc<CR>fxa<BS>', { desc = 
 vim.keymap.set('n', 'gcO', 'O<Esc>Vcx<Esc><cmd>normal gcc<CR>fxa<BS>', { desc = 'Code: Comment Above' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- [[ EXECUTE: <leader>e ]] (build / run / watch — moved from <leader>c)
+-- [[ EXECUTE: <leader>e ]] (build / run / watch)
 -- ─────────────────────────────────────────────────────────────────────────────
 
-vim.keymap.set('n', '<leader>er', function()
-	require('commands.building').run()
-end, { desc = 'Execute: Run' })
-vim.keymap.set('n', '<leader>ec', function()
-	require('commands.building').run_continuous()
-end, { desc = 'Execute: Continuous (watch)' })
-vim.keymap.set('n', '<leader>ew', '<cmd>Watch ', { desc = 'Execute: Watch (manual)' })
+vim.keymap.set('n', '<leader>er', function() require('commands.building').run() end, { desc = 'Execute: Run' })
+vim.keymap.set('n', '<leader>ew', function() require('commands.building').run_continuous() end, { desc = 'Execute: Watch' })
+vim.keymap.set('n', '<leader>ec', '<cmd>Watch ', { desc = 'Execute: Watch (manual command)' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ DEBUG: <leader>d, <F5> ]]
@@ -235,10 +232,10 @@ end, { expr = true, desc = 'Refactor: Inline Variable' })
 -- [[ FIND: <leader>f ]]
 -- ─────────────────────────────────────────────────────────────────────────────
 
-vim.keymap.set('n', '<leader>ff', function() require('snacks').picker.files() end, { desc = 'Find: Files' })
-vim.keymap.set('n', '<leader>fd', function() require('snacks').picker.zoxide() end, { desc = 'Find: Directory (Zoxide)' })
-vim.keymap.set('n', '<leader>fr', function() require('snacks').picker.recent() end, { desc = 'Find: Recent Files' })
-vim.keymap.set('n', '<leader>fc', function() require('snacks').picker.recent({ filter = { cwd = true } }) end,
+vim.keymap.set('n', '<leader>ff', snacks_call('picker.files'), { desc = 'Find: Files' })
+vim.keymap.set('n', '<leader>fd', snacks_call('picker.zoxide'), { desc = 'Find: Directory (Zoxide)' })
+vim.keymap.set('n', '<leader>fr', snacks_call('picker.recent'), { desc = 'Find: Recent Files' })
+vim.keymap.set('n', '<leader>fc', snacks_call('picker.recent', { filter = { cwd = true } }),
 	{ desc = 'Find: Recent (CWD)' })
 vim.keymap.set('n', '<leader>fs', function() require('mini.starter').open() end, { desc = 'Find: Starter' })
 
@@ -249,7 +246,6 @@ vim.keymap.set('n', '-', function()
 	local mf = require('mini.files')
 	if not mf.close() then
 		local path = vim.api.nvim_buf_get_name(0)
-		-- If current buffer is not a real file, fall back to cwd
 		if path == '' or path:match('^minifiles://') then
 			path = vim.fn.getcwd()
 		end
@@ -261,23 +257,18 @@ end, { desc = 'File: Explorer (toggle)' })
 -- [[ SEARCH: <leader>s ]]
 -- ─────────────────────────────────────────────────────────────────────────────
 
-vim.keymap.set('n', '<leader>sg', function() require('snacks').picker.grep() end, { desc = 'Search: Grep Project' })
-vim.keymap.set('n', '<leader>sw', function() require('snacks').picker.grep_word() end, { desc = 'Search: Grep Word' })
-vim.keymap.set('n', '<leader>sd', function() require('snacks').picker.diagnostics() end, { desc = 'Search: Diagnostics' })
-vim.keymap.set('n', '<leader>sr', function() require('snacks').picker.resume() end, { desc = 'Search: Resume' })
-vim.keymap.set('n', '<leader>sh', function() require('snacks').picker.help() end, { desc = 'Search: Help' })
-vim.keymap.set('n', '<leader>sk', function() require('snacks').picker.keymaps() end, { desc = 'Search: Keymaps' })
-vim.keymap.set('n', '<leader>su', function() require('snacks').picker.undo() end, { desc = 'Search: Undo History' })
-vim.keymap.set('n', '<leader>sN', function() require('snacks').picker.notifications() end,
-	{ desc = 'Search: Notifications' })
-vim.keymap.set('n', '<leader>sn', function()
-	require('snacks').picker.files({ cwd = vim.fn.stdpath('config') })
-end, { desc = 'Search: Neovim Config' })
-vim.keymap.set('n', '<leader>sR', '<cmd>Sd<CR>', { desc = 'Search: Find & Replace (sd)' })
+vim.keymap.set('n', '<leader>sg', snacks_call('picker.grep'), { desc = 'Search: Grep Project' })
+vim.keymap.set('n', '<leader>sw', snacks_call('picker.grep_word'), { desc = 'Search: Grep Word' })
+vim.keymap.set('n', '<leader>sd', snacks_call('picker.diagnostics'), { desc = 'Search: Diagnostics' })
+vim.keymap.set('n', '<leader>sr', snacks_call('picker.resume'), { desc = 'Search: Resume' })
+vim.keymap.set('n', '<leader>sh', snacks_call('picker.help'), { desc = 'Search: Help' })
+vim.keymap.set('n', '<leader>sk', snacks_call('picker.keymaps'), { desc = 'Search: Keymaps' })
+vim.keymap.set('n', '<leader>su', snacks_call('picker.undo'), { desc = 'Search: Undo History' })
+vim.keymap.set('n', '<leader>sN', snacks_call('picker.notifications'), { desc = 'Search: Notifications' })
+vim.keymap.set('n', '<leader>sn', snacks_call('picker.files', { cwd = vim.fn.stdpath('config') }),
+	{ desc = 'Search: Neovim Config' })
 
-vim.keymap.set('n', '<leader><leader>', function()
-	require('snacks').picker.buffers()
-end, { desc = 'Search: Active Buffers' })
+vim.keymap.set('n', '<leader><leader>', snacks_call('picker.buffers'), { desc = 'Search: Active Buffers' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ VIEW: <leader>v ]]
@@ -292,8 +283,6 @@ vim.keymap.set('n', '<leader>vj', function()
 	vim.cmd('AerialNavToggle')
 end, { desc = 'View: Jump to Symbol' })
 
-vim.keymap.set('n', '<leader>vq', '<cmd>Jq<CR>', { desc = 'View: jq Scratchpad' })
-vim.keymap.set('n', '<leader>vx', '<cmd>Xh<CR>', { desc = 'View: HTTP Client (xh)' })
 vim.keymap.set('n', '<leader>vJ', '<cmd>Jless<CR>', { desc = 'View: JSON Viewer (jless)' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -302,7 +291,6 @@ vim.keymap.set('n', '<leader>vJ', '<cmd>Jless<CR>', { desc = 'View: JSON Viewer 
 
 local function trouble(mode)
 	return function()
-		-- Bootstrap on first use: MiniDeps.add + setup
 		local ok, err = pcall(function()
 			require('mini.deps').add('folke/trouble.nvim')
 			local t = require('trouble')
@@ -336,20 +324,17 @@ vim.keymap.set('n', ']w', diag_jump(true, 'WARN'), { desc = 'Diagnostics: Next W
 vim.keymap.set('n', '[w', diag_jump(false, 'WARN'), { desc = 'Diagnostics: Prev Warning' })
 
 vim.keymap.set('n', '<leader>q', function()
-	local ok = pcall(function() require('trouble').toggle('qflist') end)
-	if not ok then vim.cmd('copen') end
+	local ok, _ = pcall(require, 'trouble')
+	if ok then vim.cmd('Trouble qflist toggle') else vim.cmd('copen') end
 end, { desc = 'Diagnostics: Quickfix List' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ UTILITIES: <leader>u, <leader>y, <Esc> ]]
--- These were previously scattered in diagnostics.lua, auditing.lua, utilities.lua
 -- ─────────────────────────────────────────────────────────────────────────────
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR><Esc>', { desc = 'Utilities: Clear Highlights' })
 
 vim.keymap.set('n', '<leader>ur', '<cmd>LspRestart<CR>', { desc = 'Utilities: Restart LSP' })
-vim.keymap.set('n', '<leader>ut', '<cmd>ToolCheck<CR>', { desc = 'Utilities: Tool Check' })
-vim.keymap.set('n', '<leader>uT', '<cmd>Typos<CR>', { desc = 'Utilities: Typos Check' })
 
 vim.keymap.set('n', '<leader>ul', function()
 	local cfg = vim.diagnostic.config()
@@ -385,14 +370,8 @@ end, { desc = 'Yank: Relative Path' })
 -- [[ BUFFER: <leader>b ]]
 -- ─────────────────────────────────────────────────────────────────────────────
 
-vim.keymap.set('n', '<leader>bd', function()
-	local ok, snacks = pcall(require, 'snacks')
-	if ok then snacks.bufdelete() else vim.cmd('bdelete') end
-end, { desc = 'Buffer: Delete' })
-vim.keymap.set('n', '<leader>bo', function()
-	local ok, snacks = pcall(require, 'snacks')
-	if ok then snacks.bufdelete.other() else vim.cmd('%bd|e#|bd#') end
-end, { desc = 'Buffer: Delete Others' })
+vim.keymap.set('n', '<leader>bd', snacks_call('bufdelete'), { desc = 'Buffer: Delete' })
+vim.keymap.set('n', '<leader>bo', snacks_call('bufdelete.other'), { desc = 'Buffer: Delete Others' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ SESSION: <leader>q ]]

@@ -1,19 +1,27 @@
 -- [[ SYSTEM AUTOCOMMANDS ]]
 -- Domain: Event-Driven Logic & UI Management
+-- Location: lua/autocmd/basic.lua
 --
 -- ARCHITECTURE: Protected Event Loops
 -- This module registers "hooks" into Neovim's lifecycle. We prioritize
 -- non-blocking callbacks to ensure the editor remains responsive during
 -- heavy I/O or buffer transitions.
+--
+-- MAINTENANCE TIPS:
+-- 1. If an autocommand is causing lag, check if it's doing heavy I/O synchronously.
+-- 2. Use `:autocmd <group_name>` to see all active hooks in a group.
+-- 3. All basic editor behaviors (yank, resize, cursor) should live here.
 
 local M = {}
 
 -- [[ Group Definition ]]
--- We use a single group to allow for clean reloading.
+-- Why: We use a single group to allow for clean reloading. Without a group 
+-- (or with `{ clear = true }`), re-sourcing this file would create 
+-- duplicate autocommands every time.
 local basic_group = vim.api.nvim_create_augroup('BasicAutocmds', { clear = true })
 
 -- [[ 1. UX: Visual Feedback on Yank/Delete ]]
--- Provides immediate confirmation of a successful operation.
+-- Why: Provides immediate visual confirmation of what text was copied.
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -22,17 +30,17 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
     vim.hl.on_yank({
       -- HIGHLIGHT OPTIONS:
-      -- 'IncSearch' is a high-contrast choice (usually yellow/orange)
-      -- 'Visual' is more subtle (matches your selection color)
+      -- 'IncSearch' is a high-contrast choice (usually yellow/orange).
+      -- 'Visual' is more subtle (matches your selection color).
       higroup = 'IncSearch',
-      timeout = 150, -- Duration of the flash in milliseconds
+      timeout = 150, -- Duration of the flash in milliseconds.
     })
   end,
 })
 
 -- [[ 2. UI: Auto-Resize Layout ]]
--- Ensures your window splits maintain proportional balance when the
--- terminal emulator window is resized.
+-- Why: Ensures your window splits maintain proportional balance when the
+-- terminal emulator window is resized (e.g., dragging the window edge).
 vim.api.nvim_create_autocmd('VimResized', {
   desc = 'Keep splits balanced on resize',
   group = basic_group,
@@ -45,8 +53,8 @@ vim.api.nvim_create_autocmd('VimResized', {
 })
 
 -- [[ 3. I/O: Auto-Create Directories ]]
--- RADICAL INNOVATION: Before writing a file, we check if the directory
--- exists. If not, we create the full path recursively.
+-- Why: This allows you to save a file to a path that doesn't exist yet
+-- (e.g., `:w new_folder/file.txt`) without Neovim throwing an error.
 vim.api.nvim_create_autocmd('BufWritePre', {
   desc = 'Create missing parent directories on save',
   group = basic_group,
@@ -65,25 +73,28 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 })
 
 -- [[ 4. NAVIGATION: Cursor Persistence ]]
--- Returns the cursor to the exact line and column where you last left the file.
+-- Why: Returns the cursor to the exact line and column where you last left 
+-- the file. This makes switching between tasks much more seamless.
 vim.api.nvim_create_autocmd('BufReadPost', {
   desc = 'Restore cursor position on file entry',
   group = basic_group,
   callback = function(args)
-    -- Ignore ephemeral buffers like commit messages or rebase logs
+    -- Ignore ephemeral buffers like commit messages or rebase logs.
     if vim.bo[args.buf].filetype == 'gitcommit' then return end
 
     local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
     local line_count = vim.api.nvim_buf_line_count(args.buf)
     if mark[1] > 0 and mark[1] <= line_count then
       -- 'zz' centers the screen on the restored position.
+      -- We use pcall to prevent errors in edge cases (like empty files).
       pcall(vim.cmd, 'normal! g`"zz')
     end
   end,
 })
 
 -- [[ 5. UI: Ephemeral Buffer Management ]]
--- Sets 'q' to close read-only or diagnostic windows instantly.
+-- Why: Sets 'q' to close read-only or diagnostic windows instantly.
+-- This makes the editor feel more like a modern IDE.
 vim.api.nvim_create_autocmd('FileType', {
   desc = 'Quick-close specific tool windows',
   group = basic_group,
@@ -95,8 +106,8 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- [[ 6. SYNC: External Modification Check ]]
--- Triggers Neovim to check if the file on disk has changed (e.g., via a git pull
--- in another terminal) whenever the window regains focus.
+-- Why: Triggers Neovim to check if the file on disk has changed (e.g., via a 
+-- `git pull` in another terminal) whenever the window regains focus.
 vim.api.nvim_create_autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
   desc = 'Sync buffer with disk changes',
   group = basic_group,
@@ -108,5 +119,4 @@ vim.api.nvim_create_autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
   end,
 })
 
--- THE CONTRACT: Return an empty table to satisfy the Sandboxed Orchestrator.
 return M

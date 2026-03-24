@@ -1,5 +1,21 @@
--- [[ SEARCH KEYMAPS: Powered by snacks.picker ]]
+-- [[ SNACKS-PICKER: High-Performance Finding Engine ]]
 -- Domain: Search & Discovery
--- All keymaps moved to lua/core/plugin-keymaps.lua under Search (<leader>s) and Find (<leader>f) sections.
+-- Location: lua/plugins/searching/snacks-picker.lua
+--
+-- PHILOSOPHY: Unified Discovery Interface (JIT)
+-- Snacks.picker replaces the need for Telescope or Fzf-Lua. It provides
+-- a native-feeling, high-performance finding experience with minimal
+-- overhead. 
+--
+-- WHY: We use Snacks for project-wide discovery because it integrates
+-- perfectly with our "Anti-Fragile" goal: if one picker fails (e.g. 
+-- git not found), the rest of the editor stays functional.
+--
+-- MAINTENANCE TIPS:
+-- 1. All search/find keymaps live in `lua/core/plugin-keymaps.lua` 
+--    under the `<leader>s` (Search) and `<leader>f` (Find) sections.
+-- 2. This keeps the picker configuration lazy and out of the critical 
+--    boot path until first use.
+-- 3. If a search is slow, check if `fd` or `ripgrep` are in your PATH.
 
 return {}

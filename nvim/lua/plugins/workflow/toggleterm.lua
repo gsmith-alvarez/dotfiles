@@ -1,14 +1,16 @@
 -- [[ SNACKS TERMINAL: The Terminal Command Center ]]
 -- Domain: Workflow & External TUI Integration
+-- Location: lua/plugins/workflow/toggleterm.lua
 --
 -- PHILOSOPHY: Action-Driven JIT Infrastructure
 -- We treat the terminal not as a background process, but as a modular tool.
 -- Every external binary (Lazygit, Spotify, Aider) is lazy-loaded and
 -- validated against mise shims before execution.
 --
--- REFACTOR: Dropped akinsho/toggleterm.nvim in favor of snacks.terminal.
--- Snacks provides a lighter, native Neovim 0.10+ floating terminal
--- without the need for complex persistent proxy classes.
+-- MAINTENANCE TIPS:
+-- 1. Keymaps are proxied via `core/plugin-keymaps.lua`.
+-- 2. If a TUI fails to open, check if the binary is in `mise ls`.
+-- 3. This module uses snacks.terminal for high-performance floating windows.
 
 local M = {}
 local utils = require 'core.utils'

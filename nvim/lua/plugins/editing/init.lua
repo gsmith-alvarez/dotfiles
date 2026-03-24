@@ -1,11 +1,21 @@
 -- [[ EDITING DOMAIN ORCHESTRATOR ]]
--- Location: lua/plugins/editing/init.lua
--- Domain: Text Manipulation, Formatting, & Refactoring
+-- Purpose: Coordinate text manipulation, formatting, and structural refactoring.
+-- Domain:  Editing & Productivity
+-- Architecture: Eager Proxy Registration (Phased Boot)
 --
--- ARCHITECTURE: Eager Proxy Registration
--- This orchestrator runs at startup. It does NOT load the heavy plugins.
--- It only executes the root-level keymaps and autocommands inside these
--- files, planting the JIT traps for later execution.
+-- PHILOSOPHY: The "Trap" Architecture
+-- This orchestrator runs at startup but DOES NOT load heavy plugins. 
+-- Instead, it plants "JIT Traps" (keymaps and autocommands) that only 
+-- trigger the full plugin load when the user actually attempts an edit.
+-- This is a core "Anti-Fragile" strategy: Neovim stays fast, while the 
+-- editing features remain globally available.
+--
+-- MAINTENANCE TIPS:
+-- 1. If an editing feature (refactor, rename) fails, check the specific 
+--    module in this directory.
+-- 2. New editing-related plugins should be added to the `modules` table.
+-- 3. JIT (Just-In-Time) loading is used extensively here to keep startup 
+--    under 50ms.
 
 local M = {}
 local utils = require 'core.utils'

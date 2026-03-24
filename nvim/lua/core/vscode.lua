@@ -1,16 +1,23 @@
 -- [[ VSCODE-NEOVIM INTEGRATION LAYER ]]
+-- Purpose: Muscle-Memory Parity across Editors
+-- Domain: Cross-Environment Interop
+-- Architecture: Proxy Mapping / Transparent Bridge
 -- Location: lua/core/vscode.lua
 --
--- PHILOSOPHY: Transparent Parity
--- This module is loaded ONLY when Neovim runs embedded inside VSCodium/VSCode
--- via vscode-neovim. It overrides the snacks.picker, mini.diff, aerial, DAP,
--- and other nvim-only leader maps with equivalent vscode.call() commands so
--- the muscle-memory keymap surface is identical in both environments.
+-- PHILOSOPHY: Muscle-Memory Anti-Fragility
+-- This module ensures that your core workflow (Search, LSP, Git) remains 
+-- identical even when running Neovim embedded in VSCode. By proxying 
+-- leader-maps to native VSCode commands, we achieve high-performance 
+-- interop with zero cognitive load when switching environments.
 --
--- GUARD: Returns a no-op module immediately when not in VSCode context.
--- This means including it in core/init.lua's module list has zero cost
--- in a normal Neovim session.
+-- MAINTENANCE TIPS:
+-- 1. If a keymap is missing in VSCode, add it here via `vcmd()`.
+-- 2. Use `vs.call()` for complex VSCode actions (like Aider tasks).
+-- 3. This module no-ops when not in VSCode, so it's safe to load early.
 
+-- GUARD: Returns a no-op module immediately when not in VSCode context.
+-- Why: This means including it in core/init.lua has zero performance cost 
+-- in a normal Neovim session.
 if not vim.g.vscode then
 	return {}
 end
@@ -40,7 +47,7 @@ vcmd('n', '<leader>sg', 'workbench.action.findInFiles',       { desc = 'Search: 
 vcmd('n', '<leader>sd', 'workbench.actions.view.problems',    { desc = 'Search: Diagnostics' })
 vcmd('n', '<leader>sh', 'workbench.action.showCommands',      { desc = 'Search: Help' })
 vcmd('n', '<leader>sk', 'workbench.action.openGlobalKeybindings', { desc = 'Search: Keymaps' })
-vcmd('n', '<leader>sr', 'workbench.action.openRecent',        { desc = 'Search: Resume' })
+vcmd('n', '<leader>sr', 'workbench.action.openRecent',        { desc = 'Search: Recent Files' })
 vcmd('n', '<leader><leader>', 'workbench.action.showAllEditors', { desc = 'Search: Active Buffers' })
 
 -- Grep word under cursor
@@ -56,6 +63,8 @@ end, { silent = true, desc = 'Search: Neovim Config' })
 -- =============================================================================
 -- LSP  (replaces native-lsp.lua on-attach keymaps)
 -- =============================================================================
+-- Why: We map these to VSCode's built-in LSP features so we don't have to 
+-- configure LSPs twice (once in nvim, once in VSCode).
 vcmd('n', 'gd',           'editor.action.revealDefinition',      { desc = 'Code: Go to Definition' })
 vcmd('n', 'gr',           'editor.action.goToReferences',        { desc = 'Code: References' })
 vcmd('n', 'K',            'editor.action.showHover',             { desc = 'Code: Hover' })
@@ -147,8 +156,5 @@ vcmd('n', '<leader>pc', 'workbench.action.tasks.runTask', { args = { 'PIO: Gener
 -- =============================================================================
 -- Yank path (replaces utilities.lua yank commands)
 vcmd('n', '<leader>yp', 'workbench.action.files.copyFilePath', { desc = 'Yank: Absolute Path' })
-
--- Clear search highlights: leave to core/keymaps.lua (<leader><space> → :nohlsearch)
--- Session management: VSCode handles this natively via workspace restore
 
 return M

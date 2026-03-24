@@ -1,6 +1,20 @@
 -- [[ HEALTH CHECK: nvim_config ]]
--- Invoked via :checkhealth nvim_config  or  :NvimHealth
--- Validates the plugin layer, LSP binaries, and active servers.
+-- Domain: System Integrity / Diagnostics
+-- Location: lua/nvim_config/health.lua
+--
+-- PHILOSOPHY: Empirical Validation
+-- We don't guess if the system is broken; we audit it. This health check
+-- validates the entire configuration layer, from plugin installation
+-- to LSP binary presence.
+--
+-- WHY: We use this instead of standard `:checkhealth` to verify
+-- the "Phased Boot" status of JIT plugins and our Mise-managed binaries.
+--
+-- MAINTENANCE TIPS:
+-- 1. Invoked via `:checkhealth nvim_config` or `:NvimHealth`.
+-- 2. To add new dependencies to the audit, update the tables in 
+--    `check_plugins`, `check_lsp`, or `check_tools`.
+-- 3. If a tool is marked as "not found," check your `mise install` status.
 
 local M = {}
 

@@ -1,10 +1,19 @@
 -- [[ LSP: The Code Intelligence Engine ]]
--- Domain: LSP & Intelligence
+-- Purpose: Direct, low-overhead LSP configuration using Neovim's native registry.
+-- Domain:  LSP & Intelligence
+-- Architecture: Native-First / Zero-Proxy
 --
 -- PHILOSOPHY: Native Capability Injection
 -- We bypass the 'lspconfig' abstraction layer in favor of Neovim 0.10's
--- native 'vim.lsp.config' registry. This ensures the lightest possible
--- memory footprint and direct interaction with the C-core LSP client.
+-- native 'vim.lsp.config' registry. This is a core "Anti-Fragile" decision:
+-- by removing an entire plugin layer, we reduce memory footprint and 
+-- eliminate an entire category of "plugin update" bugs.
+--
+-- MAINTENANCE TIPS:
+-- 1. If a server isn't starting, verify its binary is in `mise ls`.
+-- 2. Check `:messages` for "LSP server bin missing" warnings.
+-- 3. Configuration for specific servers (like clangd) happens in the `servers` table.
+-- 4. If a server behaves weirdly, check its specific `settings` or `args` below.
 
 local M = {}
 local utils = require 'core.utils'

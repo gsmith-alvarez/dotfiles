@@ -1,9 +1,16 @@
 -- [[ WORKFLOW ORCHESTRATOR ]]
+-- Location: lua/plugins/workflow/init.lua
 -- Domain: External Tools, Sessions, & Environment
 --
 -- PHILOSOPHY: The "Mise-en-Place" Principle
 -- Everything required for the job must be present, validated, and
 -- ready for use without manual intervention.
+--
+-- MAINTENANCE TIPS:
+-- 1. If an external tool (terminal, test runner) fails, check the specific 
+--    module in this directory.
+-- 2. New workflow-related plugins should be added to the `modules` table.
+-- 3. Most tools here are JIT-loaded to maintain high performance.
 
 local M = {}
 local utils = require 'core.utils'

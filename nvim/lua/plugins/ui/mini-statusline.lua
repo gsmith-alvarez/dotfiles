@@ -1,6 +1,18 @@
--- [[ MINI.STATUSLINE: Telemetry Bar ]]
--- Domain: UI
--- Deferred via MiniDeps.later — runs after the initial render.
+-- [[ MINI.STATUSLINE: Global Telemetry Bar ]]
+-- Purpose: Provide real-time context (Git, LSP, Mode) with zero input lag.
+-- Domain:  UI / Information Density
+-- Architecture: "Just-in-Time" Telemetry (Phased Boot)
+--
+-- PHILOSOPHY: Non-Blocking Observability
+-- The statusline must never block the UI thread. In an "Anti-Fragile" system,
+-- expensive operations (like Mise version polling) are handled via throttled 
+-- async loops. We use `MiniDeps.later` to ensure the statusline doesn't 
+-- even attempt to draw until the buffer is interactive.
+--
+-- MAINTENANCE TIPS:
+-- 1. If the statusline is missing information, check the `render_telemetry` function.
+-- 2. LSP icons and Copilot status are integrated directly into the `strings` table.
+-- 3. If Mise versions aren't updating, check if `mise` is in your system PATH.
 
 local M = {}
 

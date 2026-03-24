@@ -1,87 +1,87 @@
 -- [[ CORE SYSTEM ORCHESTRATOR ]]
--- Architecture: Fault-Tolerant System Boot
--- This file serves as the central dispatcher for Neovim's foundational settings.
---
--- STRATEGY: Sandboxed Requirements
--- We treat each core module (options, keymaps, etc.) as an isolated unit.
--- If you are mid-refactor in 'keymaps.lua' and leave a syntax error,
--- Neovim will still load your 'options.lua', ensuring your theme and
--- basic editor behavior remain intact while you debug.
+-- =============================================================================
+-- This file acts as the "Traffic Controller" for the core of your editor.
+-- 
+-- Architecture: "Vital Organs" loading.
+-- The core of your Neovim config is split into domain-specific files
+-- (options, keymaps, etc.). This orchestrator loads them one by one.
+-- =============================================================================
 
 local M = {}
-
 local utils = require('core.utils')
 
--- Define the foundational modules to be loaded.
--- These represent the "Vital Organs" of your configuration.
-local modules = {
-	-- 1. The Installer (Infrastructure)
-	-- Must be first so _G.MiniDeps exists for everyone else.
+-- [[ THE SYNC BLOCK: Critical Vital Organs ]]
+-- These MUST load immediately for leader keys and options to work.
+local sync_modules = {
+	-- 1. Infrastructure: Must load first to manage all external plugins.
 	'core.deps',
 
-	-- 2. The Libraries (Shared Dependencies)
-	-- Injects Plenary.nvim so your logic layers can use async/path functions.
-	'core.libs',
-
-	-- 3. The Rules (Standard Editor Behavior)
-	-- Global settings that don't depend on plugins.
+	-- 2. Standard Editor Behavior: Global Neovim settings (no plugins).
 	'core.options',
 
-	-- 4. The Interaction (Non-Plugin Mappings)
-	-- Basic leader and movement keys.
+	-- 3. Interaction Layer: Base keybindings (no plugins).
 	'core.keymaps',
 
-	-- 4b. Plugin Keymaps (single source of truth for all plugin bindings)
-	-- JIT closures only — no top-level requires. Buffer-local maps stay in plugin files.
+	-- 4. Plugin Keymaps: The "Control Room" for all your plugin-related bindings.
 	'core.plugin-keymaps',
-
-	-- 5. The Logic (Automation Layers)
-	-- These often use autocmds that might trigger plugin logic.
-	'core.format',
-	'core.lint',
-
-	-- 6. VSCode Integration (no-op unless vim.g.vscode is set)
-	-- Overrides leader maps with vscode.call() equivalents when running
-	-- inside vscode-neovim. Zero cost in a normal Neovim session.
-	'core.vscode',
 }
 
-for _, module in ipairs(modules) do
-	-- EXECUTION STRATEGY: The Protected Call (pcall)
-	-- 1. 'ok': Boolean indicating success.
-	-- 2. 'err': The specific Lua error if the module failed to load.
+for _, module in ipairs(sync_modules) do
 	local ok, err = pcall(require, module)
-
 	if not ok then
-		-- ERROR ROUTING:
-		-- We use our custom soft_notify to pipe the error to our persistent
-		-- log (~/.local/state/nvim/config_diagnostics.log) and the UI.
-		utils.soft_notify(string.format("CORE FAILURE: Failed to load %s\nError: %s", module, err),
+		-- Logs failure to your persistent log (~/.local/state/nvim/config_diagnostics.log)
+		utils.soft_notify(string.format("CORE SYNC FAILURE: Failed to load %s\nError: %s", module, err),
 			vim.log.levels.ERROR)
 	end
 end
 
+-- [[ THE JIT BLOCK: Deferrable Foundation ]]
+-- These load after the UI is ready to save precious milliseconds.
+local function load_jit_core()
+	local jit_modules = {
+		-- 5. Shared Libraries: Injects Plenary.nvim (async/path helper).
+		'core.libs',
+
+		-- 6. Formatting & Linting logic.
+		'core.format',
+		'core.lint',
+
+		-- 7. VSCode Integration: Only activates if you use vscode-neovim.
+		'core.vscode',
+	}
+	for _, module in ipairs(jit_modules) do
+		local ok, err = pcall(require, module)
+		if not ok then
+			utils.soft_notify(string.format("CORE JIT FAILURE: Failed to load %s\nError: %s", module, err),
+				vim.log.levels.ERROR)
+		end
+	end
+end
+
+-- Defer loading non-critical core logic to the first available idle cycle.
+vim.defer_fn(load_jit_core, 0)
+
+-- =============================================================================
 -- [[ SELF-CORRECTING HOT RELOAD ]]
--- This autocmd ensures that saving any core file re-triggers its logic
--- immediately without requiring a full Neovim restart.
+-- -----------------------------------------------------------------------------
+-- This is a superpower for developers. 
+-- When you save any file in lua/core/ (like keymaps.lua), this configuration
+-- automatically re-loads it. No need to restart Neovim!
+-- =============================================================================
 vim.api.nvim_create_autocmd('BufWritePost', {
 	pattern = '*/lua/core/*.lua',
 	desc = 'Auto-reload core system modules on save',
 	callback = function(event)
-		-- 1. Exclude this init.lua from self-reloading to avoid recursion loops
+		-- Skip init.lua to avoid loops
 		if event.file:match('init%.lua$') then return end
 
-		-- 2. Safely extract the path
 		local target_path = event.file or event.match
 		local match = target_path:match('lua/(core/.*)%.lua$')
-
-		-- 3. The Barrier: If the regex fails, silently abort instead of crashing
 		if not match then return end
 
-		-- 4. Mutate
 		local module_name = match:gsub('/', '.')
 
-		-- 5. Purge cache and reload
+		-- Purge Lua's internal cache and re-run the file.
 		package.loaded[module_name] = nil
 		local ok, err = pcall(require, module_name)
 		if ok then

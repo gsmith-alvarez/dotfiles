@@ -1,10 +1,19 @@
 -- [[ TROUBLE: Diagnostic & Quickfix Aggregation ]]
--- Domain: UI & Code Auditing
+-- Purpose: Aggregate errors, warnings, and hints into a navigable list.
+-- Domain:  UI & Code Auditing
+-- Architecture: Action-Driven JIT Execution (Lazy Load)
 --
--- PHILOSOPHY: Action-Driven JIT Execution
--- Trouble is a heavy diagnostic aggregator. It should never load when a buffer 
--- opens. It should only consume memory the exact millisecond you ask to view 
--- your workspace errors.
+-- PHILOSOPHY: Memory-on-Demand
+-- Trouble is a heavy diagnostic aggregator. In our "Phased Boot" model, 
+-- it should never load when a buffer opens. It is "Anti-Fragile" by 
+-- only consuming memory the exact millisecond you ask to view workspace 
+-- errors, keeping the editor lean during normal typing.
+--
+-- MAINTENANCE TIPS:
+-- 1. If Trouble is missing features, check if `folke/trouble.nvim` is correctly 
+--    added via MiniDeps.
+-- 2. Keymaps are proxied via `core/plugin-keymaps.lua` to maintain lazy loading.
+-- 3. Use `:Trouble help` to see all available modes.
 
 local M = {}
 local utils = require('core.utils')
