@@ -10,7 +10,7 @@ It operates without a heavy GUI or bloated background daemons. Instead, it glues
 
 The system is split into two distinct parts:
 
-1. **The Watcher (`fclip watch`)**: A lightweight background process (managed by `systemd`) that listens for Wayland clipboard events using `wl-paste --watch`. Every time you copy text, this watcher securely intercepts it, ignores images and password managers, and saves the text into a local SQLite database (`~/.clipboard_history.sqlite`).
+1. **The Watcher (`fclip watch`)**: A lightweight background process (managed by `systemd`) that listens for Wayland clipboard events using `wl-paste --watch`. Every time you copy text, this watcher securely intercepts it, ignores images and password managers, and saves the text into a local SQLite database (`~/.local/share/fclip/history.sqlite`).
 2. **The Interface (`fclip window`)**: When triggered via a keyboard shortcut, it launches a dedicated, borderless **Ghostty** terminal window. Inside this terminal, it runs `fclip menu`, which pulls your history from the SQLite database and presents it in a beautiful, interactive `fzf` menu.
 
 ## ✨ Functionality & Keybindings
@@ -36,6 +36,20 @@ To run `fclip`, the following modern Unix tools must be installed:
 - **jq**: To parse the JSON output from SQLite safely.
 - **ghostty**: The terminal emulator used to display the UI.
 
+## 🐛 Troubleshooting
+
+If you encounter issues, you can enable debug mode to see what's happening:
+
+```bash
+# Enable debug output for the watcher
+DEBUG=1 fclip watch
+
+# Or for debugging the menu
+DEBUG=1 fclip menu
+```
+
+This will print detailed execution traces to help diagnose problems.
+
 ## ⚙️ How to Implement on a New Machine
 
 If you are setting this up on a fresh machine or dotfiles clone, follow these steps:
@@ -53,7 +67,7 @@ Symlink the systemd service file to your user config, reload the daemon, and ena
 mkdir -p ~/.config/systemd/user
 ln -sf ~/dotfiles/extras/fclip/fclip.service ~/.config/systemd/user/fclip.service
 systemctl --user daemon-reload
-systemctl --unit enable --now $PWD/fclip.service
+systemctl --user enable --now fclip.service
 ```
 
 ### 3. Desktop Environment Configuration (Cosmic DE)

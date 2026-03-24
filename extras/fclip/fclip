@@ -9,7 +9,13 @@ set -aeo pipefail
 
 [[ -n "${DEBUG}" ]] && set -x
 
-DB_PATH="${HOME}/.clipboard_history.sqlite"
+# XDG Base Directory compliance
+XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+DB_DIR="${XDG_DATA_HOME}/fclip"
+DB_PATH="${DB_DIR}/history.sqlite"
+
+# Create data directory if it doesn't exist
+[[ -d "${DB_DIR}" ]] || mkdir -p "${DB_DIR}"
 
 USAGE="copy: <enter> | delete: <del> | preview: <ctrl+p> | wrap: <ctrl+/>
 select: <tab> | select all: <ctrl+a> | reload: <ctrl+r>"
@@ -24,7 +30,7 @@ FZF_DEFAULT_OPTS="
 
 # --- DB INITIALIZATION ---
 fclip.init_db() {
-  command sqlite3 "${DB_PATH}" << 'EOF'
+  command sqlite3 -cmd ".timeout 5000" "${DB_PATH}" << 'EOF'
     CREATE TABLE IF NOT EXISTS clipboard (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         timestamp TEXT DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
@@ -36,15 +42,24 @@ EOF
 
 # --- WAYLAND CLIPBOARD WATCHER ---
 fclip._on_paste() {
-  local mimes clipboard_new_data
+  local mimes clipboard_new_data last_content
   mimes=$(command wl-paste -l 2>/dev/null) || exit 0
-  command grep -q -E "^(audio|video)/.+|^x-kde-passwordManagerHint" <<< "$mimes" && exit 0
+  command grep -q -E "^(audio|video|image)/.+|^x-kde-passwordManagerHint" <<< "$mimes" && exit 0
   command grep -q -E "^text/.+" <<< "$mimes" || exit 0
   
   clipboard_new_data=$(command wl-paste 2>/dev/null)
   if [[ -n "$clipboard_new_data" ]]; then
-    # Insert, escaping single quotes for sqlite
-    command sqlite3 "${DB_PATH}" "INSERT INTO clipboard (content) VALUES ('${clipboard_new_data//\'/\'\'}')"
+    # Check if this is a duplicate of the most recent entry
+    last_content=$(command sqlite3 -cmd ".timeout 5000" "${DB_PATH}" \
+      "SELECT content FROM clipboard ORDER BY timestamp DESC LIMIT 1;" 2>/dev/null)
+    
+    # Only insert if different from last entry
+    if [[ "$clipboard_new_data" != "$last_content" ]]; then
+      # Use here-document with proper SQL to prevent injection
+      command sqlite3 -cmd ".timeout 5000" "${DB_PATH}" << EOF
+INSERT INTO clipboard (content) VALUES ($(printf '%q' "$clipboard_new_data"));
+EOF
+    fi
   fi
 }
 export -f fclip._on_paste
@@ -60,24 +75,36 @@ fclip.watch_clipboard() {
 
 # --- DB OPERATIONS ---
 fclip.get_all_items() {
-  command sqlite3 -json "${DB_PATH}" "SELECT id, content FROM clipboard ORDER BY timestamp DESC;" \
-    | command jq -cr '.[] | "\(.id) \(.content)"' | tr '\n' '\0'
+  command sqlite3 -cmd ".timeout 5000" -json "${DB_PATH}" \
+    "SELECT id, content, 
+     CASE 
+       WHEN (julianday('now') - julianday(timestamp)) * 24 * 60 < 1 THEN 'just now'
+       WHEN (julianday('now') - julianday(timestamp)) * 24 * 60 < 60 THEN printf('%dm ago', CAST((julianday('now') - julianday(timestamp)) * 24 * 60 AS INT))
+       WHEN (julianday('now') - julianday(timestamp)) * 24 < 24 THEN printf('%dh ago', CAST((julianday('now') - julianday(timestamp)) * 24 AS INT))
+       WHEN (julianday('now') - julianday(timestamp)) < 7 THEN printf('%dd ago', CAST(julianday('now') - julianday(timestamp) AS INT))
+       ELSE strftime('%Y-%m-%d', timestamp)
+     END as time_ago
+     FROM clipboard ORDER BY timestamp DESC LIMIT 1000;" 2>/dev/null \
+    | command jq -cr '.[] | "\(.id) [\(.time_ago)] \(.content)"' 2>/dev/null | tr '\n' '\0'
 }
 
 fclip.delete_items() {
   local ids ids_csv
   ids="$*"
   ids_csv="${ids// /,}"
-  command sqlite3 "${DB_PATH}" "DELETE FROM clipboard WHERE id IN (${ids_csv});"
+  command sqlite3 -cmd ".timeout 5000" "${DB_PATH}" "DELETE FROM clipboard WHERE id IN (${ids_csv});" 2>/dev/null || {
+    [[ -n "${DEBUG}" ]] && echo "Error deleting items: ${ids_csv}" >&2
+    return 1
+  }
 }
 
 fclip.cleanup() {
-  local item_id
-  item_id="$1"
+  local ids
+  ids="$*"
   
-  [[ -n "$item_id" ]] || return 0
+  [[ -n "$ids" ]] || return 0
 
-  fclip.delete_items "${item_id}"
+  fclip.delete_items ${ids}
 }
 
 # --- FZF MENU UI ---
@@ -128,6 +155,10 @@ main() {
       ;;
     window)
       # Launch a floating Ghostty window running the fzf menu
+      if ! command -v ghostty &>/dev/null; then
+        echo "Error: ghostty is not installed or not in PATH" >&2
+        exit 1
+      fi
       command ghostty --class="clipboard" \
         --window-decoration=false \
         --window-padding-x=10 \
