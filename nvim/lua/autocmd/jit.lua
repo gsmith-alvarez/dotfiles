@@ -133,13 +133,12 @@ vim.api.nvim_create_autocmd("User", {
 			{ buffer = 0, desc = "Obsidian: Insert [T]emplate" })
 		
 		-- Visual mode commands - these only work in visual mode
-		-- We map them using standard colon commands to automatically pick up the visual range ('<,'>)
-		vim.keymap.set("v", "<leader>ne", ":Obsidian extract_note<CR>", 
-			{ buffer = 0, desc = "Obsidian: [E]xtract to Note" })
-		vim.keymap.set("v", "<leader>nl", ":Obsidian link<CR>", 
-			{ buffer = 0, desc = "Obsidian: [L]ink Existing Note" })
-		vim.keymap.set("v", "<leader>nN", ":Obsidian link_new<CR>", 
-			{ buffer = 0, desc = "Obsidian: Link [N]ew Note" })
+		vim.keymap.set("v", "<leader>ne", "<cmd>Obsidian extract_note<CR>", 
+			{ buffer = 0, desc = "Obsidian: Extract Selection to New Note" })
+		vim.keymap.set("v", "<leader>nl", "<cmd>Obsidian link<CR>", 
+			{ buffer = 0, desc = "Obsidian: Link Selection to Existing Note" })
+		vim.keymap.set("v", "<leader>nN", "<cmd>Obsidian link_new<CR>", 
+			{ buffer = 0, desc = "Obsidian: Link Selection to New Note" })
 
 		-- Media & Attachments
 		vim.keymap.set("n", "<leader>np", "<cmd>Obsidian paste_img<CR>", 

@@ -161,7 +161,7 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<leader>nq` | N | Quick switch | `obsidian.nvim` |
 | `<leader>nn` | N | New note | `obsidian.nvim` |
 | `<leader>ns` | N | Search notes | `obsidian.nvim` |
-| `<leader>na` | N | Smart action (follow link / tag / checkbox / heading fold) | `obsidian.nvim` |
+| `<leader>na` | N | Smart action (follow link / toggle checkbox) | `obsidian.nvim` |
 | `<leader>nf` | N | Follow link in new tab | `obsidian.nvim` |
 | `<leader>nv` | N | Follow link (vertical split) | `obsidian.nvim` |
 | `<leader>nh` | N | Follow link (horizontal split) | `obsidian.nvim` |
@@ -169,9 +169,9 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<leader>no` | N | Open in Obsidian GUI | `obsidian.nvim` |
 | `<leader>nc` | N | Table of contents | `obsidian.nvim` |
 | `<leader>nt` | N | Insert template | `obsidian.nvim` |
-| `<leader>ne` | N | Extract selection to note | `obsidian.nvim` |
-| `<leader>nl` | N | Link to existing note | `obsidian.nvim` |
-| `<leader>nN` | N | Link to new note | `obsidian.nvim` |
+| `<leader>ne` | V | Extract selection to new note | `obsidian.nvim` |
+| `<leader>nl` | V | Link selection to existing note | `obsidian.nvim` |
+| `<leader>nN` | V | Link selection to new note | `obsidian.nvim` |
 | `<leader>np` | N | Paste image attachment | `obsidian.nvim` |
 
 ---
@@ -283,6 +283,7 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<leader>Tn` | N | Run nearest test under cursor |
 
 **Language dispatch:**
+
 - **Rust** → `cargo test` / `cargo test <fn>`
 - **Zig** → `zig build test` / `zig test <file>`
 - **Python** → `pytest` / `pytest <file>` / `pytest -k <fn>`
@@ -358,4 +359,3 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<leader>ql` | N | Picker: select & restore session |
 | `<leader>qw` | N | Save session manually |
 | `<leader>qd` | N | Don't save current session |
-
