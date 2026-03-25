@@ -38,12 +38,6 @@ return {
 		f(function() return os.date '%Y-%m-%dT%H:%M:%S%z' end),
 	}),
 
-	-- sign: standard email-style signature
-	s('sign', fmt('Regards,\n{}\n{}', {
-		i(1, 'Name'),
-		i(2, 'email@example.com'),
-	})),
-
 	-- uuid: generate a random UUIDv4 via Lua
 	s('uuid', {
 		f(function()

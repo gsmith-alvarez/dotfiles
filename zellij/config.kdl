@@ -254,6 +254,10 @@ default_mode "normal"
 // Choose the path to the default shell that zellij will use for opening new panes
 // Default: $SHELL
 default_shell "/usr/bin/fish"
+
+// Set the TERM variable for panes
+// Default: "screen" or "xterm-256color" depending on terminal capabilities
+term "xterm-256color"
  
 // Choose the path to override cwd that zellij will use for opening new panes
 // 

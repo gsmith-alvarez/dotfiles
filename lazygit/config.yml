@@ -1,5 +1,5 @@
 git:
   pagers:
     - colorArg: always
-      pager: delta --dark --line-numbers --pager "less -R"
+      pager: delta --dark --line-numbers --pager "less -RF"
       externalDiffCommand: difft --color always --background dark --display side-by-side
