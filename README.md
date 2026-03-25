@@ -30,7 +30,6 @@ For full provisioning details — packages, hardware, kernel tuning, Flatpaks, f
 | Directory / File | Tool |
 |---|---|
 | `nvim/` | Neovim — mini.nvim + snacks.nvim, no Mason, mise-managed LSPs |
-| `VSCodium/` | VSCodium — vscode-neovim bridge, Catppuccin Mocha, clangd, PIO |
 | `fish/` | Fish shell — functions, abbreviations, `zs` session manager |
 | `zellij/` | Zellij — multiplexer layouts (health, dashboard) |
 | `ghostty/` | Ghostty terminal emulator |
@@ -66,14 +65,15 @@ Lightweight, portable config built on three pillars — see [`nvim/README.md`](n
 
 ---
 
-## VSCodium
+## VS Code
 
-Config in `VSCodium/User/`. Mirrors the Neovim experience via `vscode-neovim`:
-- Same `<leader>` key surface — `vscode.lua` remaps snacks/LSP/DAP/PIO maps to native VSCode commands
-- Catppuccin Mocha theme, relative line numbers, no minimap, format on save
-- `tasks.json` includes terminal tasks for `lazygit`, `aider`, `btm`, `spotify_player`
+Config in `Code/User/`. Installed natively via `dnf` to ensure un-sandboxed access to embedded toolchains (`gcc-arm-none-eabi`, hardware debuggers) and `mise` runtimes. Mirrors the Neovim experience via `vscode-neovim`:
 
-**Recommended extensions (Open VSX):**
+- Same `<leader>` key surface — `vscode.lua` remaps snacks/LSP/DAP/PIO maps to native VS Code commands.
+- Catppuccin Mocha theme, relative line numbers, no minimap, format on save.
+- `tasks.json` includes terminal tasks for `lazygit`, `aider`, `btm`, and `spotify_player`.
+
+**Core Extension Toolchain (VS Marketplace):**
 `asvetliakov.vscode-neovim` · `catppuccin.catppuccin-vsc` · `PKief.material-icon-theme` ·
 `usernamehw.errorlens` · `llvm-vs-code-extensions.vscode-clangd` · `platformio.platformio-ide` ·
 `ziglang.vscode-zig` · `rust-lang.rust-analyzer` · `golang.go` · `charliermarsh.ruff` ·

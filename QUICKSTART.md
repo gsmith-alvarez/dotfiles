@@ -12,6 +12,9 @@ Establish the foundation by updating the base system, adding external repositori
 ```bash
 # Terra Repo (Ghostty/Zellij/fish/mise)
 sudo dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+# Microsoft Repo (Visual Studio Code Native)
+sudo rpm --import [https://packages.microsoft.com/keys/microsoft.asc](https://packages.microsoft.com/keys/microsoft.asc)
+echo -e "[code]\nname=Visual Studio Code\nbaseurl=[https://packages.microsoft.com/yumrepos/vscode](https://packages.microsoft.com/yumrepos/vscode)\nenabled=1\ngpgcheck=1\ngpgkey=[https://packages.microsoft.com/keys/microsoft.asc](https://packages.microsoft.com/keys/microsoft.asc)" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
 ```
 
 ### 2. Base System Synchronization
@@ -23,7 +26,7 @@ sudo dnf upgrade --refresh -y
 ### 3. Package Deployment
 Deploy the primary toolset including compilers, debuggers, and virtualization layers.
 ```bash
-sudo dnf install -y fish git ghostty \
+sudo dnf install -y fish git ghostty code\
 valgrind gdb flatpak podman toolbox virt-manager mise \
 thunderbird keepassxc syncthing texlive-scheme-medium libusb1-devel \
 distrobox openssl-devel alsa-lib-devel dbus-devel readline-devel \
