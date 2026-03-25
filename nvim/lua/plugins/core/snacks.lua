@@ -60,11 +60,11 @@ M.bootstrap = function()
 
 			-- 5. EXPLICIT OPT-OUT
 			dashboard = { enabled = false },
-			indent = { enabled = false },
+			indent = { enabled = true },
 			input = { enabled = false },
 			scope = { enabled = false },
 			scroll = { enabled = true },
-			words = { enabled = false },
+			words = { enabled = true },
 			statuscolumn = { enabled = false },
 			lazygit = { enabled = true },
 		}

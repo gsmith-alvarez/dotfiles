@@ -67,7 +67,6 @@ M.setup = function()
 			},
 		}
 		-- gco / gcO keymaps moved to lua/core/plugin-keymaps.lua (Code section)
-		require('mini.indentscope').setup { symbol = '│' }
 		require('mini.pairs').setup {
 			modes = { insert = true, command = false, terminal = false },
 			mappings = {},
