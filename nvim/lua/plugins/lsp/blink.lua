@@ -59,6 +59,11 @@ M.setup = function()
         -- Download a prebuilt binary if the native build is missing (new machine safety net)
         prebuilt_binaries = { download = true },
       },
+      -- Use LuaSnip as the snippet engine.
+      -- preset='luasnip' makes blink query LuaSnip's registry for completions
+      -- (so custom Lua snippets appear in the menu) AND routes expansion through
+      -- LuaSnip (full node-jumping support). Official blink.cmp integration.
+      snippets = { preset = 'luasnip' },
       keymap = {
         -- Zero interference with native Neovim keys
         preset = 'none',
@@ -71,6 +76,9 @@ M.setup = function()
         ['<C-k>'] = { 'select_prev', 'fallback' },
         ['<C-l>'] = { 'accept', 'snippet_forward', 'fallback' },
         ['<C-h>'] = { 'hide', 'snippet_backward', 'fallback' },
+
+        -- Tab: accept selected item / jump snippet node / fallback to TabOut
+        ['<Tab>'] = { 'accept', 'snippet_forward', 'fallback' },
 
         ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
         ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
