@@ -98,6 +98,8 @@ if status is-interactive
         bind -M default \cs fssh
     end
 
+    set -gx TERM xterm-ghostty
+
     # [[ FZF MODAL CATPPUCCIN MOCHA CONFIGURATION ]]
     # Advanced State Machine: Full Vi-Movement Matrix
     set -l peach f9e2af

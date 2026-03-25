@@ -79,19 +79,34 @@ M.setup = function()
 
 
 
-		-- TabOut: press <Tab> to jump past the next closing bracket/quote
+		-- Tab priority: 1) expand snippet  2) jump node  3) tabout  4) literal <Tab>
 		local tabout_chars = { ')', ']', '}', "'", '"', '`', '>', ';', ',' }
 		vim.keymap.set('i', '<Tab>', function()
+			local ok, luasnip = pcall(require, 'luasnip')
+			if ok then
+				-- 1. Expand: text before cursor matches a snippet trigger (e.g. \int, dm)
+				if luasnip.expandable() then
+					vim.schedule(function() luasnip.expand() end)
+					return ''
+				end
+				-- 2. Jump: inside an active snippet, move to next node
+				if luasnip.locally_jumpable(1) then
+					vim.schedule(function() luasnip.jump(1) end)
+					return ''
+				end
+			end
+			-- 3. TabOut: jump past the next closing bracket/quote
 			local line = vim.api.nvim_get_current_line()
-			local col  = vim.api.nvim_win_get_cursor(0)[2] -- 0-indexed
-			local after = line:sub(col + 1)                -- char directly under cursor
+			local col  = vim.api.nvim_win_get_cursor(0)[2]
+			local after = line:sub(col + 1)
 			for _, ch in ipairs(tabout_chars) do
 				if after:sub(1, 1) == ch then
 					return '<Right>'
 				end
 			end
+			-- 4. Insert a regular tab
 			return '<Tab>'
-		end, { expr = true, silent = true, desc = 'TabOut: jump past closing char or insert tab' })
+		end, { expr = true, silent = true, desc = 'LuaSnip expand/jump / TabOut / insert tab' })
 
 		local hipatterns = require 'mini.hipatterns'
 		hipatterns.setup {
