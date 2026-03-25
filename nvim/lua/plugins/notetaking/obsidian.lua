@@ -46,7 +46,7 @@ function M.setup()
 			},
 		},
 
-		picker = { name = "snacks" },
+		picker = { name = "snacks.pick" },
 
 		-- Matches your descriptive filename preference (No Zettelkasten IDs)
 		note_id_func = function(_, title)

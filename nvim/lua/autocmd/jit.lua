@@ -97,37 +97,53 @@ vim.api.nvim_create_autocmd("User", {
 		local ok, actions = pcall(require, "obsidian.actions")
 		if not ok then return end
 		
-		-- Use 0 (current buffer) instead of ev.buf to ensure we're in the right context
-		local function set_keymap(mode, lhs, rhs, desc)
-			vim.keymap.set(mode, lhs, rhs, { buffer = 0, desc = desc })
-		end
-		
 		-- Smart action (follow link, tag picker, toggle checkbox, fold cycle)
-		set_keymap("n", "<leader>na", actions.smart_action, "Obsidian: Smart Action")
+		-- Provide standard behavior without relying on internal `actions` object
+		vim.keymap.set("n", "<leader>na", function()
+			if require("obsidian.api").cursor_link() then
+				return "<cmd>Obsidian follow_link<CR>"
+			else
+				return "<cmd>Obsidian toggle_checkbox<CR>"
+			end
+		end, { buffer = 0, expr = true, desc = "Obsidian: Smart Action" })
 
 		-- Follow link variants
-		set_keymap("n", "<leader>nf", function() vim.cmd("Obsidian follow_link tab") end, "Obsidian: Follow Link (New Tab)")
-		set_keymap("n", "<leader>nv", function() vim.cmd("Obsidian follow_link vsplit") end, "Obsidian: Follow Link (V-Split)")
-		set_keymap("n", "<leader>nh", function() vim.cmd("Obsidian follow_link hsplit") end, "Obsidian: Follow Link (H-Split)")
+		vim.keymap.set("n", "<leader>nf", "<cmd>Obsidian follow_link tab<CR>", 
+			{ buffer = 0, desc = "Obsidian: Follow Link (New Tab)" })
+		vim.keymap.set("n", "<leader>nv", "<cmd>Obsidian follow_link vsplit<CR>", 
+			{ buffer = 0, desc = "Obsidian: Follow Link (V-Split)" })
+		vim.keymap.set("n", "<leader>nh", "<cmd>Obsidian follow_link hsplit<CR>", 
+			{ buffer = 0, desc = "Obsidian: Follow Link (H-Split)" })
 
 		-- Remove obsidian's default <CR> (smart_action) and give it to mini.jump2d
 		pcall(vim.keymap.del, "n", "<CR>", { buffer = 0 })
-		set_keymap("n", "<CR>", function()
+		vim.keymap.set("n", "<CR>", function()
 			require('mini.jump2d').start(require('mini.jump2d').builtin_opts.word_start)
-		end, "Jump2d: jump to word")
+		end, { buffer = 0, desc = "Jump2d: jump to word" })
 
-		set_keymap("n", "<leader>nT", function() vim.cmd("Obsidian tags") end, "Obsidian: Search [T]ags")
-		set_keymap("n", "<leader>no", function() vim.cmd("Obsidian open") end, "Obsidian: [O]pen in GUI")
-		set_keymap("n", "<leader>nc", function() vim.cmd("Obsidian toc") end, "Obsidian: [C]ontents (TOC)")
+		vim.keymap.set("n", "<leader>nT", "<cmd>Obsidian tags<CR>", 
+			{ buffer = 0, desc = "Obsidian: Search [T]ags" })
+		vim.keymap.set("n", "<leader>no", "<cmd>Obsidian open<CR>", 
+			{ buffer = 0, desc = "Obsidian: [O]pen in GUI" })
+		vim.keymap.set("n", "<leader>nc", "<cmd>Obsidian toc<CR>", 
+			{ buffer = 0, desc = "Obsidian: [C]ontents (TOC)" })
 
 		-- Note Creation & Templates
-		set_keymap("n", "<leader>nt", function() vim.cmd("Obsidian template") end, "Obsidian: Insert [T]emplate")
-		set_keymap("n", "<leader>ne", function() vim.cmd("Obsidian extract_note") end, "Obsidian: [E]xtract to Note")
-		set_keymap("n", "<leader>nl", function() vim.cmd("Obsidian link") end, "Obsidian: [L]ink Existing Note")
-		set_keymap("n", "<leader>nN", function() vim.cmd("Obsidian link_new") end, "Obsidian: Link [N]ew Note")
+		vim.keymap.set("n", "<leader>nt", "<cmd>Obsidian template<CR>", 
+			{ buffer = 0, desc = "Obsidian: Insert [T]emplate" })
+		
+		-- Visual mode commands - these only work in visual mode
+		-- We map them using standard colon commands to automatically pick up the visual range ('<,'>)
+		vim.keymap.set("v", "<leader>ne", ":Obsidian extract_note<CR>", 
+			{ buffer = 0, desc = "Obsidian: [E]xtract to Note" })
+		vim.keymap.set("v", "<leader>nl", ":Obsidian link<CR>", 
+			{ buffer = 0, desc = "Obsidian: [L]ink Existing Note" })
+		vim.keymap.set("v", "<leader>nN", ":Obsidian link_new<CR>", 
+			{ buffer = 0, desc = "Obsidian: Link [N]ew Note" })
 
 		-- Media & Attachments
-		set_keymap("n", "<leader>np", function() vim.cmd("Obsidian paste_img") end, "Obsidian: [P]aste Image")
+		vim.keymap.set("n", "<leader>np", "<cmd>Obsidian paste_img<CR>", 
+			{ buffer = 0, desc = "Obsidian: [P]aste Image" })
 	end,
 })
 
