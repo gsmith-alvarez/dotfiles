@@ -22,28 +22,50 @@ local rep = require('luasnip.extras').rep
 -- Scans all text up to the cursor counting unescaped $ / $$ delimiters.
 -- =============================================================================
 local function in_mathzone()
-  local pos      = vim.api.nvim_win_get_cursor(0)
-  local row, col = pos[1], pos[2]
-  local lines    = vim.api.nvim_buf_get_lines(0, 0, row, false)
-  local cur      = vim.api.nvim_get_current_line():sub(1, col)
-  table.insert(lines, cur)
-  local text  = table.concat(lines, '\n')
-  text        = text:gsub('\\%$', '  ')
-  text        = text:gsub('`[^`\n]*`', function(m) return string.rep(' ', #m) end)
-  local depth = 0
-  local idx   = 1
-  while idx <= #text do
-    if text:sub(idx, idx + 1) == '$$' then
-      depth = (depth == 0) and 2 or 0
-      idx   = idx + 2
-    elseif text:sub(idx, idx) == '$' then
-      depth = (depth == 0) and 1 or (depth == 1 and 0 or depth)
-      idx   = idx + 1
-    else
-      idx = idx + 1
+  local pos = vim.api.nvim_win_get_cursor(0)
+  local row, col = pos[1] - 1, pos[2]
+  local lines = vim.api.nvim_buf_get_lines(0, 0, row + 1, false)
+  lines[#lines] = lines[#lines]:sub(1, col)
+  
+  -- Treesitter fallback if available
+  local has_ts, ts = pcall(require, 'vim.treesitter')
+  if has_ts then
+    local node = ts.get_node({ bufnr = 0, pos = {row, col} })
+    while node do
+      if node:type() == 'math_environment' or node:type() == 'latex_block' or node:type() == 'inline_formula' or node:type() == 'math' then
+        return true
+      end
+      node = node:parent()
     end
   end
-  return depth > 0
+
+  local display_math = false
+  local inline_math = false
+
+  for _, line in ipairs(lines) do
+    inline_math = false
+    line = line:gsub('\\%$', '  ')
+    line = line:gsub('`[^`]*`', function(m) return string.rep(' ', #m) end)
+    
+    local idx = 1
+    while idx <= #line do
+      if line:sub(idx, idx + 1) == '$$' then
+        if not inline_math then
+          display_math = not display_math
+        end
+        idx = idx + 2
+      elseif line:sub(idx, idx) == '$' then
+        if not display_math then
+          inline_math = not inline_math
+        end
+        idx = idx + 1
+      else
+        idx = idx + 1
+      end
+    end
+  end
+  
+  return display_math or inline_math
 end
 
 local function not_in_mathzone() return not in_mathzone() end
