@@ -41,7 +41,9 @@ This list contains high-potential "Modern Unix" tools already in my `mise` stack
 
 - [ ] **Native Package Management (`vimpack`)**
     - [ ] Research: "Neovim vimpack release notes and migration guides."
-    - [ ] Goal: Refactor the plugin architecture to migrate away from `mini.deps` to the upcoming native `vimpack` system once it is officially released, adhering strictly to the "Native-First / Zero-Proxy" philosophy.
+    - [ ] Goal: Refactor the plugin architecture to migrate away from `mini.deps` to the upcoming native `vimpack` system once it is officially released, adhering strictly to the "Native-First / Zero-Proxy" philosophy
+- [ ] Implement autolist.nvim
+
 
 ---
 
