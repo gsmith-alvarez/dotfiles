@@ -289,13 +289,15 @@ vim.keymap.set('n', '<leader>vJ', '<cmd>Jless<CR>', { desc = 'View: JSON Viewer 
 -- [[ TROUBLE: <leader>x ]]
 -- ─────────────────────────────────────────────────────────────────────────────
 
-local function trouble(mode)
+local function trouble(mode, extra_opts)
 	return function()
 		local ok, err = pcall(function()
 			require('mini.deps').add('folke/trouble.nvim')
 			local t = require('trouble')
 			if not t.is_open() then
-				t.open({ mode = mode, focus = true })
+				local opts = { mode = mode, focus = true }
+				if extra_opts then opts = vim.tbl_extend('force', opts, extra_opts) end
+				t.open(opts)
 			else
 				t.close()
 			end
@@ -306,10 +308,10 @@ local function trouble(mode)
 	end
 end
 
-vim.keymap.set('n', '<leader>xx', trouble('diagnostics'),        { desc = 'Trouble: Workspace Diagnostics' })
-vim.keymap.set('n', '<leader>xd', trouble('diagnostics_buffer'), { desc = 'Trouble: Document Diagnostics' })
-vim.keymap.set('n', '<leader>xq', trouble('qflist'),             { desc = 'Trouble: Quickfix' })
-vim.keymap.set('n', '<leader>xl', trouble('loclist'),            { desc = 'Trouble: Location List' })
+vim.keymap.set('n', '<leader>xx', trouble('diagnostics'), { desc = 'Trouble: Workspace Diagnostics' })
+vim.keymap.set('n', '<leader>xd', trouble('diagnostics', { filter = { buf = 0 } }), { desc = 'Trouble: Document Diagnostics' })
+vim.keymap.set('n', '<leader>xq', trouble('qflist'), { desc = 'Trouble: Quickfix' })
+vim.keymap.set('n', '<leader>xl', trouble('loclist'), { desc = 'Trouble: Location List' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ DIAGNOSTICS: ]d/[d/]e/[e/]w/[w, <leader>cd ]]
@@ -446,8 +448,9 @@ vim.keymap.set('n', '[t', function()
 	require('todo-comments').jump_prev()
 end, { desc = 'TODO: Prev' })
 vim.keymap.set('n', '<leader>xt', function()
-	trouble('todo')()
-end, { desc = 'Trouble: TODO List' })
+	require('mini.deps').add('folke/trouble.nvim')
+	vim.cmd('TodoTrouble cwd=' .. vim.fn.fnameescape(project_root()))
+end, { desc = 'Trouble: TODO List (Project)' })
 vim.keymap.set('n', '<leader>xT', function()
 	vim.cmd('TodoQuickFix')
 end, { desc = 'TODO: Quickfix' })

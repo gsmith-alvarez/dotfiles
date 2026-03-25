@@ -1,7 +1,7 @@
 # Adding Snippets to markdown.lua
 
 All custom markdown snippets live in:
-[markdown.lua](file:///home/gsmith-alvarez/dotfiles/nvim/lua/snippets/markdown.lua)
+[markdown.lua](./markdown.lua)
 
 The file returns two tables — `regular` and `auto` — which LuaSnip loads:
 ```lua
@@ -180,4 +180,4 @@ s({ trig = '([a-zA-Z])myop', regTrig = true, wordTrig = false,
 2. **Auto or Tab?** auto-fire → `auto` table; explicit Tab → `regular` table
 3. **Word boundary?** callouts/code = `wordTrig = true`; math operators = `wordTrig = false`
 4. **Newlines?** use `'\\\\begin...\n...'` quoted string, not `[[\n]]`
-5. **Test:** reload with `:source %` on [markdown.lua](file:///home/gsmith-alvarez/dotfiles/nvim/lua/snippets/markdown.lua) or restart Neovim
+5. **Test:** reload with `:source %` on [markdown.lua](./markdown.lua) or restart Neovim
