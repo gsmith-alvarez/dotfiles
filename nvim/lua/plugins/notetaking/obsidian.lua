@@ -49,8 +49,18 @@ function M.setup()
 		picker = { name = "snacks.pick" },
 
 		-- Matches your descriptive filename preference (No Zettelkasten IDs)
-		note_id_func = function(_, title)
-		  if title ~= nil then return title end
+		note_id_func = function(title)
+			local note_title
+			if type(title) == "table" and title.title ~= nil then
+				note_title = title.title
+			elseif title ~= nil then
+				note_title = title
+			end
+
+			if note_title ~= nil then
+				return note_title
+			end
+
 			return tostring(os.time())
 		end,
 
@@ -60,8 +70,16 @@ function M.setup()
 		-- AUTOMATED FRONTMATTER (MOC-Oriented)
 		-- ========================================================================
 		frontmatter = {
-		  func = function(_, note)
-		    local out = {
+			func = function(note)
+				-- Guard against nil note (can happen with templates)
+				if not note then
+					return {
+						tags = {},
+						created = os.date("%Y-%m-%d %H:%M"),
+					}
+				end
+
+				local out = {
 					id = note.id,
 					aliases = note.aliases,
 					tags = note.tags,
