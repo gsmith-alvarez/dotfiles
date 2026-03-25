@@ -5,11 +5,11 @@
 --
 -- PHILOSOPHY: Minimalist Gateway
 -- The starter provides a high-speed entry point for common tasks. In our
--- "Phased Boot" strategy, it only initializes if Neovim is opened without 
+-- "Phased Boot" strategy, it only initializes if Neovim is opened without
 -- file arguments. This keeps CLI-pipe usage (`cat file | nvim -`) lean.
 --
 -- WHY: By using `MiniDeps.add` inside the `setup` function, we ensure that
--- headless or server-side instances of Neovim never even download the 
+-- headless or server-side instances of Neovim never even download the
 -- dashboard code.
 --
 -- MAINTENANCE TIPS:
@@ -29,6 +29,7 @@ M.setup = function()
 		projects = vim.fn.expand '~/Documents/Projects',
 		obsidian = vim.fn.expand '~/Documents/Obsidian',
 		dotfiles = vim.fn.expand '~/dotfiles',
+		code = vim.fn.expand '~/code',
 	}
 
 	local function snacks_action(cwd)
@@ -110,6 +111,9 @@ M.setup = function()
 	local my_items = {
 		vim.fn.isdirectory(paths.projects) == 1
 		and { name = 'Projects 󰉖 ', action = snacks_action(paths.projects), section = '  Workspaces' }
+		or nil,
+		vim.fn.isdirectory(paths.code) == 1
+		and { name = 'Code  ', action = snacks_action(paths.code), section = '  Workspaces' }
 		or nil,
 		vim.fn.isdirectory(paths.dotfiles) == 1
 		and { name = 'dotfiles 󰄻 ', action = snacks_action(paths.dotfiles), section = '  Workspaces' }
