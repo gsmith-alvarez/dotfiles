@@ -130,7 +130,10 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `gza` / `gzd` | N | Add / Delete surround | `mini.surround` |
 | `gzr` / `gzh` | N | Replace / Highlight surround | `mini.surround` |
 | `<M-h/j/k/l>` | V | Move highlighted block | `mini.move` |
-| `<Tab>` | I | Jump past next closing bracket/quote (TabOut) | Core |
+| `<Tab>` | I | LuaSnip Expand / Jump Node / TabOut / Literal | Core/LuaSnip |
+| `<C-l>` | I/S | LuaSnip: Jump next node (or accept blink) | `LuaSnip` |
+| `<C-h>` | I/S | LuaSnip: Jump prev node (or close blink) | `LuaSnip` |
+| `<C-e>` | I/S | LuaSnip: Cycle choice (or exit snippet) | `LuaSnip` |
 
 ### Refactoring
 

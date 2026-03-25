@@ -130,6 +130,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | `folke/snacks.nvim` | Notifier, fuzzy picker (replaces telescope), floating terminal, ui_select, LSP progress spinner, smooth scroll |
 | `echasnovski/mini.base16` (bundled) | Colorscheme (Catppuccin Mocha palette, part of mini.nvim) |
 | `saghen/blink.cmp` | Completion engine (LSP, path, snippets, lazydev) — pinned to v1.9.1 |
+| `L3MON4D3/LuaSnip` | Snippet engine (Native Lua formatting, dynamic nodes, regex triggers) |
 | `rafamadriz/friendly-snippets` | Community VSCode-format snippet collection |
 | `neovim/nvim-lspconfig` | LSP server stub registry |
 | `nvim-lua/plenary.nvim` | Async utility library (required by obsidian.nvim) |
@@ -276,7 +277,10 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 ### Editing
 | Mode | Keybind | Description |
 |------|---------|-------------|
-| i | `<Tab>` | TabOut: jump past next closing bracket/quote (or insert tab) |
+| i | `<Tab>` | LuaSnip Expand / Jump Node (if active) / TabOut (jump past bracket) / Literal Tab |
+| i/s | `<C-l>` | LuaSnip: Jump to next node (or accept blink menu item) |
+| i/s | `<C-h>` | LuaSnip: Jump to previous node (or close blink menu) |
+| i/s | `<C-e>` | LuaSnip: Cycle choice node (or exit active snippet) |
 | n | `gc` | Comment (motion) |
 | n | `gcc` | Comment current line |
 | v | `gc` | Comment selection |

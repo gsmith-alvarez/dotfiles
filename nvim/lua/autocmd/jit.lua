@@ -37,9 +37,10 @@ local function load_obsidian(args)
   -- If triggered by opening a markdown file, only load if in an Obsidian vault.
   -- Why: We don't want the full Obsidian plugin features active when 
   -- editing a random README.md in a git repository.
+  local buf = args and args.buf or 0
   if type(args) == "table" and args.event == "FileType" then
     local vault_path = vim.fn.expand("~/Documents/Obsidian")
-    local current_file = vim.api.nvim_buf_get_name(args.buf or 0)
+    local current_file = vim.api.nvim_buf_get_name(buf)
 
     if current_file ~= "" and not current_file:find(vault_path, 1, true) then
       utils.soft_notify("Not in Obsidian vault. Skipping plugin load.", vim.log.levels.DEBUG)
@@ -53,12 +54,82 @@ local function load_obsidian(args)
     -- ASYMMETRIC LEVERAGE: Only call setup once to avoid duplicate hooks.
     pcall(plugin.setup)
     loaded.obsidian = true
+    
+    -- CRITICAL FIX: The plugin registers its FileType autocmd during setup(),
+    -- but if we're loading JIT (triggered BY FileType), that event already fired.
+    -- We must manually re-trigger the FileType event for the current buffer
+    -- to ensure obsidian's autocmds run and keymaps get registered.
+    if type(args) == "table" and args.event == "FileType" and vim.bo[buf].filetype == "markdown" then
+      -- Re-trigger FileType to let obsidian's autocmds register their BufEnter hooks
+      vim.api.nvim_exec_autocmds("FileType", { 
+        buffer = buf, 
+        group = "obsidian_setup",
+        modeline = false 
+      })
+      -- Then trigger BufEnter to actually set up the buffer
+      vim.api.nvim_exec_autocmds("BufEnter", { 
+        buffer = buf, 
+        group = "obsidian_setup",
+        modeline = false 
+      })
+    end
+    
     return true
   else
     utils.soft_notify("Failed to JIT load Obsidian: " .. (plugin or "Unknown Error"), vim.log.levels.ERROR)
     return false
   end
 end
+
+-- ========================================================================
+-- OBSIDIAN BUFFER-LOCAL KEYMAPS
+-- ========================================================================
+-- Register this BEFORE the FileType autocmd so it's ready when ObsidianNoteEnter fires.
+-- Must be at module level (not inside load_obsidian) to avoid duplicate registrations.
+vim.api.nvim_create_autocmd("User", {
+	desc = "Setup Obsidian buffer-local keymaps",
+	pattern = "ObsidianNoteEnter",
+	group = vim.api.nvim_create_augroup("ObsidianKeymaps", { clear = true }),
+	callback = function(ev)
+		-- Ensure obsidian is loaded before requiring actions
+		if not loaded.obsidian then return end
+		
+		local ok, actions = pcall(require, "obsidian.actions")
+		if not ok then return end
+		
+		-- Use 0 (current buffer) instead of ev.buf to ensure we're in the right context
+		local function set_keymap(mode, lhs, rhs, desc)
+			vim.keymap.set(mode, lhs, rhs, { buffer = 0, desc = desc })
+		end
+		
+		-- Smart action (follow link, tag picker, toggle checkbox, fold cycle)
+		set_keymap("n", "<leader>na", actions.smart_action, "Obsidian: Smart Action")
+
+		-- Follow link variants
+		set_keymap("n", "<leader>nf", function() vim.cmd("Obsidian follow_link tab") end, "Obsidian: Follow Link (New Tab)")
+		set_keymap("n", "<leader>nv", function() vim.cmd("Obsidian follow_link vsplit") end, "Obsidian: Follow Link (V-Split)")
+		set_keymap("n", "<leader>nh", function() vim.cmd("Obsidian follow_link hsplit") end, "Obsidian: Follow Link (H-Split)")
+
+		-- Remove obsidian's default <CR> (smart_action) and give it to mini.jump2d
+		pcall(vim.keymap.del, "n", "<CR>", { buffer = 0 })
+		set_keymap("n", "<CR>", function()
+			require('mini.jump2d').start(require('mini.jump2d').builtin_opts.word_start)
+		end, "Jump2d: jump to word")
+
+		set_keymap("n", "<leader>nT", function() vim.cmd("Obsidian tags") end, "Obsidian: Search [T]ags")
+		set_keymap("n", "<leader>no", function() vim.cmd("Obsidian open") end, "Obsidian: [O]pen in GUI")
+		set_keymap("n", "<leader>nc", function() vim.cmd("Obsidian toc") end, "Obsidian: [C]ontents (TOC)")
+
+		-- Note Creation & Templates
+		set_keymap("n", "<leader>nt", function() vim.cmd("Obsidian template") end, "Obsidian: Insert [T]emplate")
+		set_keymap("n", "<leader>ne", function() vim.cmd("Obsidian extract_note") end, "Obsidian: [E]xtract to Note")
+		set_keymap("n", "<leader>nl", function() vim.cmd("Obsidian link") end, "Obsidian: [L]ink Existing Note")
+		set_keymap("n", "<leader>nN", function() vim.cmd("Obsidian link_new") end, "Obsidian: Link [N]ew Note")
+
+		-- Media & Attachments
+		set_keymap("n", "<leader>np", function() vim.cmd("Obsidian paste_img") end, "Obsidian: [P]aste Image")
+	end,
+})
 
 -- [[ 1. AUTO-TRIGGER: FileType Interceptors ]]
 -- These autocmds detect when you enter a specific domain (like Markdown) 
