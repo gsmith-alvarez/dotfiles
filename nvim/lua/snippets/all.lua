@@ -28,12 +28,39 @@ return {
 	-- fixme: mark a known issue
 	s('fixme', fmt('-- FIXME({}): {}', { i(1, 'author'), i(2, 'issue') })),
 
-	-- date: insert today's date (ISO 8601)
+	-- date: insert today's date (YYYY-MM-DD)
 	s('date', {
-		t(os.date '%Y-%m-%d'),
+		f(function() return os.date '%Y-%m-%d' end),
 	}),
 
-	-- sep: section separator comment
+	-- time: insert current timestamp (ISO 8601)
+	s('time', {
+		f(function() return os.date '%Y-%m-%dT%H:%M:%S%z' end),
+	}),
+
+	-- sign: standard email-style signature
+	s('sign', fmt('Regards,\n{}\n{}', {
+		i(1, 'Name'),
+		i(2, 'email@example.com'),
+	})),
+
+	-- uuid: generate a random UUIDv4 via Lua
+	s('uuid', {
+		f(function()
+			local template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+			return string.gsub(template, '[xy]', function(c)
+				local v = (c == 'x') and math.random(0, 0xf) or math.random(8, 0xb)
+				return string.format('%x', v)
+			end)
+		end),
+	}),
+
+	-- lorem: quick placeholder text
+	s('lorem', {
+		t 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+	}),
+
+	-- sep: section separator comment (80 chars)
 	s('sep', {
 		t '-- =============================================================================',
 	}),

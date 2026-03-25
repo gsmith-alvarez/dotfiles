@@ -10,11 +10,10 @@
 -- Custom snippets live in lua/snippets/ and are hot-reloadable.
 --
 -- KEYMAPS:
+--   <Tab>  Expand snippet / jump NEXT node / TabOut / insert tab (priority chain)
 --   <C-l>  Jump to the NEXT node       (insert + select mode)
 --   <C-h>  Jump to the PREVIOUS node   (insert + select mode)
 --   <C-e>  Cycle choice / exit snippet  (insert + select mode)
---   These intentionally share keys with blink.cmp's accept/backward bindings;
---   LuaSnip only activates them when INSIDE an active snippet.
 --
 -- MAINTENANCE TIPS:
 -- 1. Add custom snippets in lua/snippets/<filetype>.lua (or all.lua for global).

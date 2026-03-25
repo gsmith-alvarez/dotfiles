@@ -399,7 +399,7 @@ local auto = {
 
   -- ── CUSTOM ( mA ) ────────────────────────────────────────────────────────────
   s({ trig = 'seq', wordTrig = false, condition = in_mathzone },
-    fmt([[\\{{{}_{{{} = {}}}\\}}^{{\\infty}} {}]],
+    fmt([[\{{{}_{{{} = {}}}\}}^{{\infty}} {}]],
       { i(1,'a_n'), i(2,'n'), i(3,'1'), i(4) })),
   s({ trig = '?fa', wordTrig = false, condition = in_mathzone },
     fmt([[\forall {}]], { i(1) })),

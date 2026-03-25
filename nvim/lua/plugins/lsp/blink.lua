@@ -74,9 +74,9 @@ M.setup = function()
         -- The Home-Row Navigation Protocol
         ['<C-j>'] = { 'select_next', 'fallback' },
         ['<C-k>'] = { 'select_prev', 'fallback' },
-        -- C-l/C-h: accept from menu, then fallback to luasnip.lua's locally_jumpable keymaps
+        -- C-l/C-h: accept/hide from menu, then fallback to luasnip.lua's locally_jumpable keymaps
         ['<C-l>'] = { 'accept', 'fallback' },
-        ['<C-h>'] = { 'hide', 'snippet_backward', 'fallback' },
+        ['<C-h>'] = { 'hide',   'fallback' },
 
         -- Tab: accept selected item, fallback to luasnip node jump or TabOut
         ['<Tab>'] = { 'accept', 'fallback' },
