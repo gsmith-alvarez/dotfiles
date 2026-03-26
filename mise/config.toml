@@ -34,6 +34,7 @@ zig = "latest"
 lua = "latest"
 typst = "latest"
 uv = "latest"
+"npm:typescript" = "latest"
 
 # --- 2. DEVELOPMENT & BUILD SUITE ---
 neovim = "latest"
