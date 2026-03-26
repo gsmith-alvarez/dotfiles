@@ -79,7 +79,6 @@ end
 local function check_lsp()
 	vim.health.start('LSP Binaries')
 
-	local utils = require('core.utils')
 	local servers = {
 		{ 'pyright-langserver',           'Python (pyright)' },
 		{ 'ruff',                         'Python linter (ruff)' },
@@ -98,7 +97,7 @@ local function check_lsp()
 	}
 
 	for _, s in ipairs(servers) do
-		local path = utils.mise_shim(s[1])
+		local path = vim.fn.executable(s[1]) == 1 and s[1] or nil
 		if path then
 			vim.health.ok(s[2] .. ' (' .. s[1] .. ')')
 		else
@@ -129,7 +128,6 @@ end
 local function check_tools()
 	vim.health.start('External Tools (mise)')
 
-	local utils = require('core.utils')
 	local tools = {
 		{ 'rg',        'ripgrep (required for grep picker)' },
 		{ 'fd',        'fd (required for file picker)' },
@@ -140,7 +138,7 @@ local function check_tools()
 	}
 
 	for _, t in ipairs(tools) do
-		if utils.mise_shim(t[1]) then
+		if vim.fn.executable(t[1]) == 1 then
 			vim.health.ok(t[2])
 		else
 			vim.health.warn(t[2] .. ' — not found')

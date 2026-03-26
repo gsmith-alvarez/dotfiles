@@ -98,7 +98,7 @@ local function format_with_cli(ft)
 	end
 
 	-- Resolve the binary path via mise shim. This is faster than standard PATH lookup.
-	local bin_path = utils.mise_shim(config.bin)
+	local bin_path = vim.fn.executable(config.bin) == 1 and config.bin or nil
 	if not bin_path then
 		-- Graceful degradation: Log but don't disrupt the save loop.
 		return

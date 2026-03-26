@@ -26,7 +26,7 @@ end
 local has_typst, typst_preview = pcall(require, 'typst-preview')
 if not has_typst then return M end
 
-local tinymist_bin = utils.mise_shim('tinymist') or "tinymist"
+local tinymist_bin = "tinymist"
 
 typst_preview.setup({
 	-- THE ENGINE: Explicitly define the binaries since you aren't using Mason

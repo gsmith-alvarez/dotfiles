@@ -27,7 +27,7 @@ local function bootstrap_smart_splits()
     local MiniDeps = require('mini.deps')
     MiniDeps.add("mrjones2014/smart-splits.nvim")
 
-    local zellij_path = utils.mise_shim('zellij')
+    local zellij_path = vim.fn.executable('zellij') == 1 and 'zellij' or nil
 
     require("smart-splits").setup({
       -- 1. Multiplexer Core

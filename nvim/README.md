@@ -3,7 +3,7 @@
 A lightweight, portable, and stable Neovim configuration built on three pillars:
 
 1. **Lightweight** — Fast startup via deferred loading and no Mason/lazy.nvim. Tooling managed by `mise`.
-2. **Portable** — The entire config can be dropped onto a new machine and work immediately. Binaries resolved via `mise` shims.
+2. **Portable** — The entire config can be dropped onto a new machine and work immediately. Environment synchronized via `mise.nvim`.
 3. **Stable** — Circuit-breaker pattern throughout. Every plugin load is wrapped in `pcall`. Failures notify without crashing.
 
 ---
@@ -37,8 +37,8 @@ nvim/
     │   ├── plugin-keymaps.lua        # Central registry for all global plugin keymaps
     │   ├── libs.lua                  # Foundational library injection (lazydev)
     │   ├── lint.lua                  # Async CLI linter → vim.diagnostic bridge
-    │   ├── options.lua               # Editor options, mise PATH injection
-    │   ├── utils.lua                 # soft_notify, mise_shim, log-to-file
+    │   ├── options.lua               # Editor options
+    │   ├── utils.lua                 # soft_notify, log-to-file
     │   └── vscode.lua                # VSCode-Neovim integration layer (loaded only in VSCode)
     └── plugins/
         ├── init.lua                  # Master boot orchestrator (context-aware phases)
@@ -119,7 +119,7 @@ Every domain orchestrator wraps each module load in `pcall`. A failure in one pl
 - **Headless** — minimal lspconfig install only
 
 ### mise Integration
-No Mason. All language servers, formatters, and tools are managed by `mise`. `core.utils.mise_shim(bin)` resolves binaries from `~/.local/share/mise/shims/` with `vim.fn.exepath` fallback.
+No Mason. All language servers, formatters, and tools are managed by `mise`. The config uses `ejrichards/mise.nvim` to automatically synchronize Neovim's environment (`$PATH`, etc.) with your project's `mise.toml`. This ensures that `vim.fn.executable()` and native command strings resolve to the correct project-specific binaries.
 
 ---
 

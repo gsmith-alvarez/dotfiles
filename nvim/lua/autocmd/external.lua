@@ -41,7 +41,7 @@ vim.api.nvim_create_autocmd('BufReadCmd', {
   pattern = { '*.zip', '*.tar.gz', '*.tgz', '*.tar.bz2', '*.rar', '*.7z' },
   callback = function(args)
     local utils = require('core.utils')
-    local ouch = utils.mise_shim('ouch')
+    local ouch = vim.fn.executable('ouch') == 1 and 'ouch' or nil
 
     if not ouch then
       utils.soft_notify('ouch-cli missing! Install via: mise install ouch', vim.log.levels.WARN)

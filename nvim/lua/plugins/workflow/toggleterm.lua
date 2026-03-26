@@ -21,7 +21,7 @@ M.setup = function()
   -- Replaces toggleterm's persistent class instantiation.
   local function create_tui(bin_name, desc, cmd_override)
     return function()
-      local path = utils.mise_shim(bin_name)
+      local path = vim.fn.executable(bin_name) == 1 and bin_name or nil
       if not path then
         utils.soft_notify(desc .. ' missing. Install via: mise install ' .. bin_name, vim.log.levels.WARN)
         return

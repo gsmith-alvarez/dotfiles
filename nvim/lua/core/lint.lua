@@ -16,8 +16,6 @@
 --- 3. Check the `parser` logic if diagnostics aren't appearing correctly.
 --- 4. Linting happens on `BufWritePost` (when you save the file).
 
-local utils = require('core.utils')
-
 local M = {}
 
 --- Namespace for our native linter bridge.
@@ -84,7 +82,7 @@ function M.lint(bufnr)
   if not config then return end
 
   -- Resolve binary path via mise shim.
-  local bin_path = utils.mise_shim(config.bin)
+  local bin_path = vim.fn.executable(config.bin) == 1 and config.bin or nil
   if not bin_path then return end
 
   local filename = vim.api.nvim_buf_get_name(bufnr)

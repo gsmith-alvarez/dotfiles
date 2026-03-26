@@ -92,7 +92,7 @@ M.commands = {
 		nargs = '+',
 		impl = function(opts)
 			local utils = require 'core.utils'
-			local watchexec = utils.mise_shim 'watchexec'
+			local watchexec = vim.fn.executable('watchexec') == 1 and 'watchexec' or nil
 			if not watchexec then
 				utils.soft_notify('watchexec not found. Install via: mise install watchexec', vim.log.levels.ERROR)
 				return

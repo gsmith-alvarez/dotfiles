@@ -24,12 +24,7 @@ local M = {}
 -- for debugging intermittent boot or plugin issues.
 local log_path = vim.fn.stdpath('state') .. '/config_diagnostics.log'
 
--- [[ CACHED PATHS ]]
--- PERFORMANCE: We cache the absolute path to the mise shims once at startup.
--- Why: This prevents the need to call vim.fn.expand() (which crosses the 
--- slow Vimscript bridge) every time a formatter, linter, or LSP 
--- asks for a binary.
-local mise_shim_dir = vim.env.HOME .. '/.local/share/mise/shims/'
+-- [[ THE AUDIT TRAIL ]]
 
 --- Resolves Neovim log levels to human-readable strings for the log file.
 local log_level_to_string = {
@@ -57,27 +52,7 @@ local function log_to_file(msg, level)
   end
 end
 
---- Checks if a binary is executable, prioritizing mise shims.
---- This is the core of our "Anti-Fragility" pillar.
---- @param binary string The name of the binary to find (e.g., 'rg', 'stylua').
---- @return string|nil path The absolute path to the binary if found, or nil if missing.
-M.mise_shim = function(binary)
-  -- 1. Direct string concatenation (Zero Vimscript overhead)
-  local path = mise_shim_dir .. binary
-  if vim.fn.executable(path) == 1 then
-    return path
-  end
 
-  -- 2. Fall back to the standard system PATH.
-  -- Why: If the user hasn't installed the tool via mise, we still want to 
-  -- find it if it's available globally on the system.
-  if vim.fn.executable(binary) == 1 then
-    return binary
-  end
-
-  -- 3. If neither exist, return nil.
-  return nil
-end
 
 --- Retrieves the TSDK (TypeScript SDK) path from mise.
 --- Why: typescript-language-server (ts_ls) requires a valid 'typescript' 

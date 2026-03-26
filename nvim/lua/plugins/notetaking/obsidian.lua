@@ -21,7 +21,7 @@ local M = {}
 
 function M.setup()
 	-- 1. Anti-Fragility & Graceful Degradation Check
-	local has_rg = require('core.utils').mise_shim('rg')
+	local has_rg = vim.fn.executable('rg') == 1
 	if not has_rg then
 		vim.notify("Obsidian.nvim: 'rg' binary missing. Check mise configuration.", vim.log.levels.WARN)
 		return

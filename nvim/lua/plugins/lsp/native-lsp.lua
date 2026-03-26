@@ -124,7 +124,7 @@ M.setup = function()
                 local configured_servers = {}
 
                 for name, cfg in pairs(servers) do
-                        local bin_path = utils.mise_shim(cfg.bin)
+                        local bin_path = vim.fn.executable(cfg.bin) == 1 and cfg.bin or nil
 
                         if bin_path then
                                 -- Merge server-specific capabilities if they exist

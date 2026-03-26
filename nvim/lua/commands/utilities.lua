@@ -28,7 +28,7 @@ M.commands = {
 		keymap = '<leader>uj', -- Moved to 'u' (UI Utils) to avoid leader conflicts, or keep 'c'
 		impl = function(opts)
 			local utils = require('core.utils')
-			local gojq = utils.mise_shim('gojq')
+			local gojq = vim.fn.executable('gojq') == 1 and 'gojq' or nil
 
 			if not gojq then
 				utils.soft_notify('gojq is missing! Install via mise.', vim.log.levels.WARN)
@@ -73,7 +73,7 @@ M.commands = {
 		keymap = '<leader>us',
 		impl = function(opts)
 			local utils = require('core.utils')
-			local sd = utils.mise_shim('sd')
+			local sd = vim.fn.executable('sd') == 1 and 'sd' or nil
 			if not sd then
 				return
 			end
@@ -106,7 +106,7 @@ M.commands = {
 		keymap = '<leader>ux',
 		impl = function(opts)
 			local utils = require('core.utils')
-			local xh = utils.mise_shim('xh')
+			local xh = vim.fn.executable('xh') == 1 and 'xh' or nil
 			if not xh then
 				return
 			end
@@ -169,7 +169,7 @@ M.commands = {
 		keymap = '<leader>um',
 		impl = function()
 			local utils = require('core.utils')
-			local mise = utils.mise_shim('mise')
+			local mise = vim.fn.executable('mise') == 1 and 'mise' or nil
 			if not mise then
 				utils.soft_notify('mise binary not found.', vim.log.levels.WARN)
 				return

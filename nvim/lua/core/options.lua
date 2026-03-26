@@ -16,11 +16,6 @@ local M = {}
 -- and formatters in your mise-managed directories first.
 -- =============================================================================
 
-local mise_shim_path = vim.fn.expand '~/.local/share/mise/shims'
-if vim.fn.isdirectory(mise_shim_path) == 1 then
-	-- Prepend to the PATH so mise shims are found before system binaries.
-	vim.env.PATH = mise_shim_path .. ':' .. vim.env.PATH
-end
 
 -- Force Neovim to use mise-managed Python and Node interpreters.
 -- This prevents issues where Neovim might not find the right version of python/node.

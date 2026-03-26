@@ -38,7 +38,7 @@ local function start_openocd()
 	if openocd_job_id then return true end -- Already running
 
 	-- Guard: openocd is EE-specific; skip silently if not installed
-	if not utils.mise_shim('openocd') then
+	if vim.fn.executable('openocd') == 0 then
 		utils.soft_notify('openocd not found — install it via mise.local.toml to enable hardware debugging.', vim.log.levels.WARN)
 		return false
 	end
@@ -119,7 +119,7 @@ local function bootstrap_full_dap()
 		-- Hardware Adapter Configuration (LLDB)
 		dap.adapters.lldb = {
 			type = 'executable',
-			command = utils.mise_shim('lldb-dap') or 'lldb-dap',
+			command = 'lldb-dap',
 			name = 'lldb',
 		}
 

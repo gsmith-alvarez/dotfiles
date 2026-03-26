@@ -15,7 +15,7 @@ To achieve near-instant startup while maintaining a rich feature set, the config
 ### PHASE 1: Core Foundation
 *   **Purpose:** Establish the "Safe Execution Environment."
 *   **Actions:**
-    1.  Loads `core.utils` (Audit Trail, Mise Shims, Soft Notify).
+    1.  Loads `core.utils` (Audit Trail, Soft Notify).
     2.  Loads `core` (Options, Keymaps, Library functions).
     3.  Loads `autocmd` and `commands` (User-defined automation).
 
@@ -49,10 +49,8 @@ The configuration uses a custom `safe_require` function in `init.lua` to prevent
 All significant events, warnings, and errors are logged to a persistent file. This complies with XDG specifications and allows for debugging "silent" failures.
 *   **Log Path:** `~/.local/state/nvim/config_diagnostics.log`
 
-### 2. Mise Shims (`M.mise_shim`)
-This utility ensures that external binaries (LSPs, formatters, linters) are resolved correctly without polluting the global `PATH`.
-*   **Priority:** It first checks `~/.local/share/mise/shims/` (performance-optimized via direct string concatenation).
-*   **Fallback:** If not found in Mise, it falls back to the system `PATH`.
+### 2. Mise Integration (`mise.nvim`)
+Instead of manual path resolution, we use `ejrichards/mise.nvim` to synchronize Neovim's process environment with the local `mise` configuration. This ensures that standard Neovim discovery tools like `vim.fn.executable()` and `vim.fn.exepath()` are always accurate without custom wrappers.
 
 ### 3. Soft Notify (`M.soft_notify`)
 A wrapper for `vim.notify` that simultaneously:
@@ -77,6 +75,5 @@ nvim --headless -u tests/run_tests.lua -c "lua MiniTest.run()"
 ```
 
 ### Test Strategy
-*   **Utility Validation:** Verify that `mise_shim` correctly resolves binaries.
 *   **Logging Integrity:** Ensure `soft_notify` writes correctly to the audit trail.
 *   **Boot Sequence Smoke Tests:** Verify that all core phases load without errors.

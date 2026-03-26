@@ -55,4 +55,13 @@ else
 	utils.soft_notify('Failed to load mini.deps!', vim.log.levels.ERROR)
 end
 
+-- 5. Core Environment Synchronization
+-- Initialize mise.nvim immediately so that Neovim's process environment 
+-- ($PATH, etc.) reflects the project's mise.toml before language servers boot.
+MiniDeps.add('ejrichards/mise.nvim')
+local ok_mise, mise = pcall(require, 'mise')
+if ok_mise then
+	mise.setup {}
+end
+
 return M

@@ -29,7 +29,7 @@ end
 --- TUI factory: validates the mise shim then opens a snacks floating terminal.
 local function tui(bin, label, cmd_override)
 	return function()
-		local path = utils.mise_shim(bin)
+		local path = vim.fn.executable(bin) == 1 and bin or nil
 		if not path then
 			utils.soft_notify(label .. ' missing. Install via: mise install ' .. bin, vim.log.levels.WARN)
 			return
@@ -99,7 +99,7 @@ vim.keymap.set('n', '<leader>pc', pio('pio project init --ide=vscode'), { desc =
 -- ─────────────────────────────────────────────────────────────────────────────
 
 vim.keymap.set('n', '<leader>gg', function()
-	if not utils.mise_shim('lazygit') then
+	if vim.fn.executable('lazygit') == 0 then
 		utils.soft_notify('lazygit missing. Install via: mise install lazygit', vim.log.levels.WARN)
 		return
 	end

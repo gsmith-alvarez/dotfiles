@@ -69,7 +69,7 @@ M.commands = {
 
 			local missing, found = {}, {}
 			for _, tool in ipairs(tools) do
-				local path = utils.mise_shim(tool)
+				local path = vim.fn.executable(tool) == 1 and tool or nil
 				if path then
 					table.insert(found, tool)
 				else
@@ -124,7 +124,7 @@ M.commands = {
 		keymap = '<leader>ut',
 		impl = function()
 			local utils = require 'core.utils'
-			local typos = utils.mise_shim 'typos'
+			local typos = vim.fn.executable('typos') == 1 and 'typos' or nil
 			if not typos then
 				utils.soft_notify('typos is missing. Install via cargo/mise.', vim.log.levels.WARN)
 				return
@@ -171,7 +171,7 @@ M.commands = {
 		desc = 'Run typos-cli raw output on the current project',
 		impl = function()
 			local utils = require 'core.utils'
-			local typos_bin = utils.mise_shim 'typos'
+			local typos_bin = vim.fn.executable('typos') == 1 and 'typos' or nil
 			if not typos_bin then
 				utils.soft_notify('Typos binary not found. Please run: mise install typos', vim.log.levels.WARN)
 				return

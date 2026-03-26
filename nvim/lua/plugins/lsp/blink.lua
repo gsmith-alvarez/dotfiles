@@ -42,12 +42,12 @@ M.setup = function()
       checkout = 'v1.9.1',
       hooks = {
         post_install = function(args)
-          if utils.mise_shim('cargo') then
+          if vim.fn.executable('cargo') == 1 then
             vim.system({ 'cargo', '+nightly', 'build', '--release' }, { cwd = args.path }):wait()
           end
         end,
         post_checkout = function(args)
-          if utils.mise_shim('cargo') then
+          if vim.fn.executable('cargo') == 1 then
             vim.system({ 'cargo', '+nightly', 'build', '--release' }, { cwd = args.path }):wait()
           end
         end,
