@@ -140,10 +140,9 @@ ffmpeg = "latest"
 resvg = "latest"
 
 # --- 8. TUI APPS & SERVICES ---
-"cargo:bmm" = "latest"                            # Bookmark manager
+"cargo:bmm" = "latest"            # Bookmark manager
 "cargo:spotify_player" = "latest"
 "cargo:mprocs" = "latest"
-"go:github.com/surge-downloader/surge" = "latest"
 "cargo:lemmeknow" = "latest"
 
 # --- 9. EMBEDDED / MCU ENGINEERING ---
