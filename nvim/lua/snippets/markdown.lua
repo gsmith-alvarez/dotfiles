@@ -176,6 +176,47 @@ local auto = {
 	s({ trig = 'clog', wordTrig = true, condition = not_in_mathzone },
 		fmt('```c\n{}\n```', { i(1) })),
 
+	-- ── AUTO MATH CONVERSION ( Text to Math ) ──────────────────────────────────
+	-- Standalone letters (except a, A, I)
+	s({ trig = "([%s%c])([B-HJ-Zb-z])([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+		f(function(_, snip)
+			return snip.captures[1] .. "$" .. snip.captures[2] .. "$" .. snip.captures[3]
+		end)),
+	s({ trig = "^([B-HJ-Zb-z])([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+		f(function(_, snip)
+			return "$" .. snip.captures[1] .. "$" .. snip.captures[2]
+		end)),
+
+	-- Coefficients: 2x -> $2x$
+	s({ trig = "([%s%c])(%d+)([a-zA-Z])([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+		f(function(_, snip)
+			return snip.captures[1] .. "$" .. snip.captures[2] .. snip.captures[3] .. "$" .. snip.captures[4]
+		end)),
+	s({ trig = "^(%d+)([a-zA-Z])([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+		f(function(_, snip)
+			return "$" .. snip.captures[1] .. snip.captures[2] .. "$" .. snip.captures[3]
+		end)),
+
+	-- Subscripts: x2 -> $x_{2}$
+	s({ trig = "([%s%c])([a-zA-Z])(%d+)([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+		f(function(_, snip)
+			return snip.captures[1] .. "$" .. snip.captures[2] .. "_{" .. snip.captures[3] .. "}$" .. snip.captures[4]
+		end)),
+	s({ trig = "^([a-zA-Z])(%d+)([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+		f(function(_, snip)
+			return "$" .. snip.captures[1] .. "_{" .. snip.captures[2] .. "}$" .. snip.captures[3]
+		end)),
+
+	-- Simple equations: x=2, x=n+1
+	s({ trig = "([A-Za-z]=%d+)([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+		f(function(_, snip)
+			return "$" .. snip.captures[1] .. "$" .. snip.captures[2]
+		end)),
+	s({ trig = "([A-Za-z]=[A-Za-z][+%-]%d+)([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+		f(function(_, snip)
+			return "$" .. snip.captures[1] .. "$" .. snip.captures[2]
+		end)),
+
 	-- ── GREEK LETTERS ( mA, no word boundary ) ──────────────────────────────────
 	s({ trig = '@a', wordTrig = false, condition = in_mathzone }, t [[\alpha]]),
 	s({ trig = '@b', wordTrig = false, condition = in_mathzone }, t [[\beta]]),
@@ -213,6 +254,29 @@ local auto = {
 	s({ trig = '@O', wordTrig = false, condition = in_mathzone }, t [[\Omega]]),
 	s({ trig = 'ome', wordTrig = false, condition = in_mathzone }, t [[\omega]]),
 	s({ trig = 'Ome', wordTrig = false, condition = in_mathzone }, t [[\Omega]]),
+
+	-- Greek letters in text (alpha -> $\alpha$)
+	-- This programmatically adds snippets for common Greek letters in text mode
+	unpack((function()
+		local greek_names = {
+			"alpha", "beta", "gamma", "Gamma", "delta", "Delta", "epsilon", "varepsilon",
+			"zeta", "eta", "theta", "Theta", "vartheta", "iota", "kappa", "lambda",
+			"Lambda", "mu", "nu", "xi", "Xi", "pi", "rho", "sigma", "Sigma",
+			"upsilon", "Upsilon", "phi", "varphi", "Phi", "psi", "Psi", "omega", "Omega"
+		}
+		local snips = {}
+		for _, name in ipairs(greek_names) do
+			table.insert(snips, s({
+				trig = name .. "([%s%c.,?!:'])",
+				regTrig = true,
+				wordTrig = true,
+				condition = not_in_mathzone
+			}, f(function(_, snip)
+				return "$\\" .. name .. "$" .. snip.captures[1]
+			end)))
+		end
+		return snips
+	end)()),
 
 	-- ── TEXT ENVIRONMENT ( mA ) ──────────────────────────────────────────────────
 	s({ trig = 'text', wordTrig = false, condition = in_mathzone },
