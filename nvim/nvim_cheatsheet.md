@@ -338,7 +338,6 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<leader>ur` | N | Restart LSP |
 | `<leader>ut` | N | Tool check (mise audit) |
 | `<leader>uT` | N | Run Typos checker |
-| `<leader>uc` | N | Toggle Copilot auto-trigger |
 | `<leader>ul` | N | Toggle diagnostic virtual text |
 | `<leader>uu` | N | Toggle diagnostic underlines |
 | `<leader>yp` | N | Yank absolute file path |

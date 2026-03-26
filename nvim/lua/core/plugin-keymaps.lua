@@ -353,10 +353,6 @@ vim.keymap.set('n', '<leader>uu', function()
 	local cfg = vim.diagnostic.config()
 	vim.diagnostic.config({ underline = not cfg.underline })
 end, { desc = 'Utilities: Toggle Underlines' })
-vim.keymap.set('n', '<leader>uc', function()
-	require('copilot.suggestion').toggle_auto_trigger()
-	vim.cmd('redrawstatus')
-end, { desc = 'Utilities: Toggle Copilot' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ YANK: <leader>y ]]

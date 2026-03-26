@@ -27,7 +27,7 @@ local function in_mathzone()
 	local lines = vim.api.nvim_buf_get_lines(0, 0, row + 1, false)
 	local current_line = lines[#lines]
 	lines[#lines] = lines[#lines]:sub(1, col)
-	
+
 	if current_line then
 		local sub_line = current_line:sub(1, col)
 		local i = #sub_line
@@ -46,7 +46,7 @@ local function in_mathzone()
 					end
 					local cmd = before:match('\\text(%a+)%s*$')
 					if cmd then
-						local text_cmds = { bf=true, it=true, rm=true, sf=true, tt=true, sc=true, sl=true, up=true, md=true, normal=true }
+						local text_cmds = { bf = true, it = true, rm = true, sf = true, tt = true, sc = true, sl = true, up = true, md = true, normal = true }
 						if text_cmds[cmd] then
 							return false
 						end
@@ -162,13 +162,6 @@ local regular = {
 -- AUTOSNIPPETS  (fire immediately when trigger is typed)
 -- =============================================================================
 local auto = {
-	-- ── TEXT ENVIRONMENT ( mA ) ──────────────────────────────────────────────────
-	s({ trig = 'text', wordTrig = false, condition = in_mathzone },
-		{ t [[\text{]], i(1), t [[}]], i(2) }),
-	-- " → \text{} (obsidian shorthand)
-	s({ trig = '""', wordTrig = false, condition = in_mathzone },
-		{ t [[\text{]], i(1), t [[}]], i(2) }),
-
 	-- ── MATH ENTRY ──────────────────────────────────────────────────────────────
 	-- mk: tA (text, auto, no word boundary)
 	s({ trig = 'mk', wordTrig = false, condition = not_in_mathzone },

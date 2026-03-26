@@ -30,7 +30,6 @@ local modules = {
 	'editing.inc-rename', -- Plants the LSP keymap trap
 	'editing.mini-editing', -- Deferred: ai, move, surround, indentscope, pairs, hipatterns
 	'editing.todo-comments', -- Highlighted TODO/FIXME/HACK annotations + Trouble integration
-	'editing.copilot', -- Copilot integration
 	'editing.luasnip', -- Snippet engine: custom Lua + VSCode snippets with node navigation
 	'editing.autolist', -- Automatic list continuation and formatting
 }

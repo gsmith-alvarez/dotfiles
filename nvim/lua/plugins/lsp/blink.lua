@@ -106,7 +106,7 @@ M.setup = function()
           window = { border = 'rounded' },
         },
         ghost_text = {
-          enabled = true, -- Inline suggestion à la VS Code / Copilot
+          enabled = true, -- Inline suggestion à la VS Code
         },
         menu = {
           border = 'rounded',

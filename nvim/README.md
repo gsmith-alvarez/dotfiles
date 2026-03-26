@@ -52,7 +52,6 @@ nvim/
         │   └── persistent-breakpoint.lua
         ├── editing/
         │   ├── autolist.lua          # Automatic list continuation and formatting
-        │   ├── copilot.lua           # GitHub Copilot inline suggestions
         │   ├── inc-rename.lua        # JIT LSP rename (<leader>rn)
         │   ├── indent.lua            # Auto indentation detection on BufRead
         │   ├── init.lua              # Editing domain orchestrator
@@ -158,7 +157,6 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. The
 | `NMAC427/guess-indent.nvim` | Auto indentation detection |
 | `folke/lazydev.nvim` | Lua API intelligence |
 | `gsmith-alvarez/vim-be-good` | Motion training (ghost command) |
-| `zbirenbaum/copilot.lua` | GitHub Copilot inline suggestions |
 | `echasnovski/mini.splitjoin` | Toggle between single-line and multi-line code (part of mini.nvim) |
 | `echasnovski/mini.align` | Align text interactively (part of mini.nvim) |
 | `echasnovski/mini.jump` | Enhanced f/t/F/T motions with highlighting (part of mini.nvim) |
@@ -389,7 +387,6 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. The
 | n | `<leader>ur` | Restart LSP |
 | n | `<leader>ut` | Tool check (mise audit) |
 | n | `<leader>uT` | Run Typos checker |
-| n | `<leader>uc` | Toggle Copilot auto-trigger |
 | n | `<leader>ul` | Toggle diagnostic virtual text |
 | n | `<leader>uu` | Toggle diagnostic underlines |
 | n | `<leader>vq` | JQ live scratchpad |
@@ -420,4 +417,6 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. The
 **Formatters / Linters:** `stylua`, `oxfmt`, `ruff` (python), `fish_indent`, `shfmt`, `typstyle`, `oxlint`, `yamllint`, `markdownlint-cli2`, `shellcheck`
 
 **Utilities:** `rg`, `fd`, `make`, `gcc`, `lazygit`, `btm`, `dlv`, `watchexec`, `uv`, `go`, `zig`, `zellij`, `gojq`, `sd`, `xh`, `bat`, `zoxide`, `cargo`, `curl`, `spotify_player`, `podman-tui`, `aider`, `pio`, `typos`, `yazi`, `eza`, `dust`, `ouch`, `broot`, `doggo`, `choose`, `openocd`, `lldb-dap`
+
+, `lldb-dap`
 
