@@ -350,7 +350,7 @@ local auto = {
 	s({ trig = 'text', wordTrig = false, condition = in_mathzone },
 		fmt([[\text{<>}<>]], { i(1), i(2) }, { delimiters = '<>' })),
 	-- " → \text{} (obsidian shorthand)
-	s({ trig = '""', wordTrig = false, condition = in_mathzone },
+	s({ trig = '\'', wordTrig = false, condition = in_mathzone },
 		fmt([[\text{<>}<>]], { i(1), i(2) }, { delimiters = '<>' })),
 
 	-- ── BASIC OPERATIONS ( mA, no word boundary ) ──────────────────────────────
