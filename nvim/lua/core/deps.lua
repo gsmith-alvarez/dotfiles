@@ -2,7 +2,7 @@
 -- Location: lua/core/deps.lua
 --
 -- STRATEGY: Imperative Package Management
--- 
+--
 -- PHILOSOPHY: The Zero-Lag Installer
 -- Unlike declarative managers (like Lazy.nvim), mini.deps uses an imperative
 -- approach. This gives us full control over the load order and ensures that
@@ -56,9 +56,9 @@ else
 end
 
 -- 5. Core Environment Synchronization
--- Initialize mise.nvim immediately so that Neovim's process environment 
+-- Initialize mise.nvim immediately so that Neovim's process environment
 -- ($PATH, etc.) reflects the project's mise.toml before language servers boot.
-MiniDeps.add('ejrichards/mise.nvim')
+MiniDeps.add({ source = 'https://plugins.ejri.dev/mise.nvim' })
 local ok_mise, mise = pcall(require, 'mise')
 if ok_mise then
 	mise.setup {}
