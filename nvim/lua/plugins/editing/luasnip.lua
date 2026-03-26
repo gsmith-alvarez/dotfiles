@@ -31,6 +31,8 @@ M.setup = function()
 		MiniDeps.add 'L3MON4D3/LuaSnip'
 
 		local luasnip = require 'luasnip'
+		local picker_active = false
+
 
 		-- 2. Configure the engine
 		luasnip.config.set_config {
@@ -40,7 +42,34 @@ M.setup = function()
 			updateevents = 'TextChanged,TextChangedI',
 			-- Enable autosnippets (trigger without completion menu)
 			enable_autosnippets = true,
+			-- VISUAL: highlight active snippets
+			ext_opts = {
+				[require('luasnip.util.types').choiceNode] = {
+					active = {
+						virt_text = { { ' ● Choice (Ctrl-E)', 'DiagnosticInfo' } },
+					},
+				},
+				[require('luasnip.util.types').insertNode] = {
+					active = {
+						virt_text = { { ' ● Insert', 'DiagnosticHint' } },
+					},
+				},
+			},
 		}
+
+		-- 3. Cleanup: Automatically unlink snippets when leaving insert mode
+		-- to prevent "stuck" virtual text and Tab hijacked behavior.
+		vim.api.nvim_create_autocmd('InsertLeave', {
+			callback = function()
+				if not picker_active
+				    and luasnip.session.current_nodes[vim.api.nvim_get_current_buf()]
+				    and not luasnip.session.jump_active
+				then
+					luasnip.unlink_current()
+				end
+			end,
+		})
+
 
 		-- 3. Load snippet sources
 		-- VSCode-format snippets from friendly-snippets (managed by blink.cmp's add call)
@@ -67,11 +96,34 @@ M.setup = function()
 		-- Cycle through choice nodes, or exit the current snippet
 		vim.keymap.set({ 'i', 's' }, '<C-e>', function()
 			if luasnip.choice_active() then
-				luasnip.change_choice(1)
+				-- If multiple choices exist, open a UI picker
+				local choices = luasnip.get_current_choices()
+				if #choices > 1 then
+					picker_active = true
+					vim.ui.select(choices, {
+						prompt = 'Snippet Choices:',
+						format_item = function(item)
+							return tostring(item)
+						end,
+					}, function(choice, index)
+						picker_active = false
+						if choice then
+							luasnip.change_choice(index)
+						end
+					end)
+				else
+					luasnip.change_choice(1)
+				end
 			else
 				luasnip.unlink_current()
 			end
-		end, { silent = true, desc = 'LuaSnip: cycle choice / exit snippet' })
+		end, { silent = true, desc = 'LuaSnip: choice popup / exit snippet' })
+
+
+		-- NOTE: ModeChange handles cross-buffer jumps and other edge cases.
+		-- InsertLeave is the primary cleanup trigger for user experience.
+
+
 	end)
 
 	if not ok then

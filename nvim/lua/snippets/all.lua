@@ -22,11 +22,16 @@ local fmt = require('luasnip.extras.fmt').fmt
 local rep = require('luasnip.extras').rep
 
 return {
-	-- todo: annotate something for later
-	s('todo', fmt('-- TODO({}): {}', { i(1, 'author'), i(2, 'description') })),
+	-- todo: annotate something for later (with severity picker)
+	s('todo', fmt('-- {}({}): {}', { 
+		ls.choice_node(1, { t 'TODO', t 'FIXME', t 'BUG', t 'HACK', t 'NOTE' }),
+		i(2, 'author'), 
+		i(3, 'description') 
+	})),
 
-	-- fixme: mark a known issue
-	s('fixme', fmt('-- FIXME({}): {}', { i(1, 'author'), i(2, 'issue') })),
+	-- bool: toggle between true and false
+	s('bool', ls.choice_node(1, { t 'true', t 'false' })),
+
 
 	-- date: insert today's date (YYYY-MM-DD)
 	s('date', {
@@ -59,3 +64,4 @@ return {
 		t '-- =============================================================================',
 	}),
 }
+

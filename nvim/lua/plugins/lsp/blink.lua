@@ -69,7 +69,7 @@ M.setup = function()
         preset = 'none',
 
         ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
-        ['<C-e>'] = { 'hide' },
+        ['<C-e>'] = { 'hide', 'fallback' },
 
         -- The Home-Row Navigation Protocol
         ['<C-j>'] = { 'select_next', 'fallback' },

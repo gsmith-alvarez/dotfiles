@@ -70,6 +70,14 @@ end
 
 local function not_in_mathzone() return not in_mathzone() end
 
+-- Check if a trigger is preceded by a backslash or a letter (to avoid double-prefixing)
+local function no_prefix(_, _, captures)
+  local c1 = captures[1]
+  if not c1 or c1 == "" then return true end
+  return not c1:match("[\\%a]$")
+end
+
+
 -- =============================================================================
 -- REGULAR SNIPPETS  (Tab required to expand)
 -- =============================================================================
@@ -81,6 +89,8 @@ local regular = {
     fmt([[\prod_{{{} = {}}}^{{{}}} {}]], { i(1, 'i'), i(2, '1'), i(3, 'N'), i(4) })),
   s({ trig = [[\int]], wordTrig = false, condition = in_mathzone },
     fmt([[\int {} \, d{} {}]], { i(1), i(2, 'x'), i(3) })),
+  s({ trig = 'lim', wordTrig = false, condition = in_mathzone },
+    fmt([[\lim_{{ {} \to {} }} {}]], { i(1, 'n'), i(2, [[\infty]]), i(3) })),
 
   -- Partial derivatives (non-auto: you choose when to expand)
   s({ trig = 'par', wordTrig = false, condition = in_mathzone },
@@ -141,6 +151,18 @@ local auto = {
     fmt('> [!{}] {}\n> {}', { i(1, 'info'), i(2, 'Title'), i(3) })),
   s({ trig = 'cabs', wordTrig = true, condition = not_in_mathzone },
     fmt('> [!abstract] {}\n> {}', { i(1, 'Abstract'), i(2) })),
+
+  -- Universal Callout Picker
+  s({ trig = 'call', wordTrig = true, condition = not_in_mathzone },
+    fmt('> [!{}] {}\n> {}', {
+      ls.choice_node(1, {
+        t 'info', t 'todo', t 'tip', t 'abstract', t 'success',
+        t 'question', t 'warning', t 'failure', t 'danger', t 'bug', t 'quote'
+      }),
+      i(2, 'Title'),
+      i(3, 'Content')
+    })),
+
 
   -- ── MARKDOWN / OBSIDIAN TOOLS ───────────────────────────────────────────────
   s({ trig = 'cweb', wordTrig = true, condition = not_in_mathzone },
@@ -233,48 +255,10 @@ local auto = {
     fmt([[\mathrm{{{}}}{}]], { i(1), i(2) })),
   s({ trig = 'trace', wordTrig = false, condition = in_mathzone }, t [[\mathrm{Tr}]]),
 
-  -- ── TRIG FUNCTIONS ( rmA: auto-add \ before them ) ──────────────────────────
-  -- Pattern: char-before + trig-name; captures the char before to restore it.
-  -- Matches the obsidian regex: /([^\\])(sin|cos|...)/ → [[0]]\[[1]]
-  s({ trig = '(.-)(arcsin)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\arcsin]] end)),
-  s({ trig = '(.-)(arccos)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\arccos]] end)),
-  s({ trig = '(.-)(arctan)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\arctan]] end)),
-  s({ trig = '(.-)(sin)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\sin]] end)),
-  s({ trig = '(.-)(cos)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\cos]] end)),
-  s({ trig = '(.-)(tan)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\tan]] end)),
-  s({ trig = '(.-)(csc)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\csc]] end)),
-  s({ trig = '(.-)(sec)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\sec]] end)),
-  s({ trig = '(.-)(cot)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\cot]] end)),
-  s({ trig = '(.-)(sinh)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\sinh]] end)),
-  s({ trig = '(.-)(cosh)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\cosh]] end)),
-  s({ trig = '(.-)(tanh)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\tanh]] end)),
-  s({ trig = '(.-)(exp)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\exp]] end)),
-  s({ trig = '(.-)(log)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\log]] end)),
-  s({ trig = '(.-)(ln)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\ln]] end)),
-  s({ trig = '(.-)(det)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\det]] end)),
-
   -- ── SYMBOLS ( mA ) ──────────────────────────────────────────────────────────
   s({ trig = 'ooo', wordTrig = false, condition = in_mathzone }, t [[\infty]]),
   s({ trig = 'sum', wordTrig = false, condition = in_mathzone }, t [[\sum]]),
   s({ trig = 'prod', wordTrig = false, condition = in_mathzone }, t [[\prod]]),
-  s({ trig = 'lim', wordTrig = false, condition = in_mathzone },
-    fmt([[\lim_{{ {} \to {} }} {}]], { i(1, 'n'), i(2, [[\infty]]), i(3) })),
   s({ trig = '+-', wordTrig = false, condition = in_mathzone }, t [[\pm]]),
   s({ trig = '-+', wordTrig = false, condition = in_mathzone }, t [[\mp]]),
   s({ trig = '...', wordTrig = false, condition = in_mathzone }, t [[\dots]]),
@@ -321,6 +305,24 @@ local auto = {
   s({ trig = 'NN', wordTrig = false, condition = in_mathzone }, t [[\mathbb{N}]]),
   s({ trig = 'QQ', wordTrig = false, condition = in_mathzone }, t [[\mathbb{Q}]]),
 
+  -- ── LOGICAL ARGUMENTS ( mA ) ──────────────────────────────────────────────────
+  s({ trig = '?fa', wordTrig = false, condition = in_mathzone },
+    fmt([[\forall {}]], { i(1) })),
+  s({ trig = '?ex', wordTrig = false, condition = in_mathzone },
+    fmt([[\exists {}]], { i(1) })),
+  s({ trig = '?t4', wordTrig = false, condition = in_mathzone },
+    fmt([[\therefore {}]], { i(1) })),
+  s({ trig = '?be', wordTrig = false, condition = in_mathzone },
+    fmt([[\because {}]], { i(1) })),
+  s({ trig = 'neg', wordTrig = false, condition = in_mathzone }, t [[\neg]]),
+  s({ trig = '?qed', wordTrig = false, condition = in_mathzone }, t [[\square]]),
+  s({ trig = '?st', wordTrig = false, condition = in_mathzone }, t [[\text{ s.t. }]]),
+  s({ trig = '?ue', wordTrig = false, condition = in_mathzone },
+    fmt([[\exists! {}]], { i(1) })),
+  s({ trig = 'iff', wordTrig = false, condition = in_mathzone }, t [[\iff]]),
+
+
+
   -- ── DECORATORS ( mA, no word boundary ) ──────────────────────────────────────
   s({ trig = 'hat', wordTrig = false, condition = in_mathzone },
     fmt([[\hat{{{}}}{}]], { i(1), i(2) })),
@@ -346,17 +348,17 @@ local auto = {
   s({ trig = 'yii', wordTrig = false, condition = in_mathzone }, t 'y_{i}'),
   s({ trig = 'yjj', wordTrig = false, condition = in_mathzone }, t 'y_{j}'),
 
+  s({ trig = 'infi', wordTrig = false, condition = in_mathzone },
+    fmt([[\int_{{-\infty}}^{{\infty}} {} \, d{} {}]], { i(1), i(2, 'x'), i(3) })),
+
   -- ── INTEGRALS / DERIVATIVES ( mA ) ───────────────────────────────────────────
-  -- Auto-insert \ before `int` (mirrors obsidian regex: /([^\\])int/ → [[0]]\int)
-  s({ trig = '(.-)(int)', regTrig = true, wordTrig = false, condition = in_mathzone },
-    f(function(_, snip) return snip.captures[1] .. [[\int]] end)),
   s({ trig = 'ddt', wordTrig = false, condition = in_mathzone }, t [[\frac{d}{dt} ]]),
   s({ trig = 'dint', wordTrig = false, condition = in_mathzone },
     fmt([[\int_{{{}}}^{{{}}} {} \, d{} {}]],
       { i(1, '0'), i(2, '1'), i(3), i(4, 'x'), i(5) })),
-  s({ trig = 'oint', wordTrig = false, condition = in_mathzone }, t [[\oint]]),
-  s({ trig = 'iint', wordTrig = false, condition = in_mathzone }, t [[\iint]]),
   s({ trig = 'iiint', wordTrig = false, condition = in_mathzone }, t [[\iiint]]),
+  s({ trig = 'iint', wordTrig = false, condition = in_mathzone }, t [[\iint]]),
+  s({ trig = 'oint', wordTrig = false, condition = in_mathzone }, t [[\oint]]),
   s({ trig = 'oinf', wordTrig = false, condition = in_mathzone },
     fmt([[\int_{{0}}^{{\infty}} {} \, d{} {}]], { i(1), i(2, 'x'), i(3) })),
   s({ trig = 'infi', wordTrig = false, condition = in_mathzone },
@@ -431,14 +433,26 @@ local auto = {
   s({ trig = 'lra', wordTrig = false, condition = in_mathzone },
     fmt([[\left< {} \right> {}]], { i(1), i(2) })),
 
-  -- ── CUSTOM ( mA ) ────────────────────────────────────────────────────────────
+  -- ── SEQUENCES & SERIES ( mA ) ────────────────────────────────────────────────
   s({ trig = 'seq', wordTrig = false, condition = in_mathzone },
     fmt([[\{{{}_{{{} = {}}}\}}^{{\infty}} {}]],
       { i(1, 'a_n'), i(2, 'n'), i(3, '1'), i(4) })),
-  s({ trig = '?fa', wordTrig = false, condition = in_mathzone },
-    fmt([[\forall {}]], { i(1) })),
-  s({ trig = '?t4', wordTrig = false, condition = in_mathzone },
-    fmt([[\therefore {}]], { i(1) })),
+  s({ trig = 'sumn', wordTrig = false, condition = in_mathzone },
+    fmt([[sum_{{{} = {}}}^{{\infty}} {}]], { i(1, 'n'), i(2, '1'), i(3) })),
+  s({ trig = 'sumk', wordTrig = false, condition = in_mathzone },
+    fmt([[sum_{{{} = {}}}^{{{}}} {}]], { i(1, 'k'), i(2, '1'), i(3, 'n'), i(4) })),
+  s({ trig = 'limn', wordTrig = false, condition = in_mathzone },
+    fmt([[\lim_{{{} \to \infty}} {}]], { i(1, 'n'), i(2) })),
+  s({ trig = 'limsup', wordTrig = false, condition = in_mathzone },
+    fmt([[\limsup_{{{} \to \infty}} {}]], { i(1, 'n'), i(2) })),
+  s({ trig = 'liminf', wordTrig = false, condition = in_mathzone },
+    fmt([[\liminf_{{{} \to \infty}} {}]], { i(1, 'n'), i(2) })),
+  s({ trig = 'geom', wordTrig = false, condition = in_mathzone },
+    fmt([[{} \cdot {}^{{{}-1}} {}]], { i(1, 'a'), i(2, 'r'), i(3, 'n'), i(4) })),
+  s({ trig = 'arith', wordTrig = false, condition = in_mathzone },
+    fmt([[{} + ({} - 1){} {}]], { i(1, 'a'), i(2, 'n'), i(3, 'd'), i(4) })),
+
+  -- ── CUSTOM / MISC ( mA ) ─────────────────────────────────────────────────────
   s({ trig = 'tayl', wordTrig = false, condition = in_mathzone },
     fmt([[{}({} + {}) = {}({}) + {}'({}){}  + {}''({}) \frac{{{}^{{2}}}}{{2!}} + \dots{}]],
       { i(1, 'f'), i(2, 'x'), i(3, 'h'),
@@ -446,6 +460,27 @@ local auto = {
         rep(1), rep(2), rep(3),
         rep(1), rep(2), rep(3),
         i(4) })),
+
+  -- ── TRIG FUNCTIONS ( moved to end to prevent shadowing specific snippets like 'dint' ) ──
+  s({ trig = '(.-)(arcsin)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\arcsin]] end)),
+  s({ trig = '(.-)(arccos)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\arccos]] end)),
+  s({ trig = '(.-)(arctan)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\arctan]] end)),
+  s({ trig = '(.-)(sin)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\sin]] end)),
+  s({ trig = '(.-)(cos)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\cos]] end)),
+  s({ trig = '(.-)(tan)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\tan]] end)),
+  s({ trig = '(.-)(csc)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\csc]] end)),
+  s({ trig = '(.-)(sec)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\sec]] end)),
+  s({ trig = '(.-)(cot)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\cot]] end)),
+  -- s({ trig = '(.-)(sinh)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\sinh]] end)),
+  -- s({ trig = '(.-)(cosh)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\cosh]] end)),
+  -- s({ trig = '(.-)(tanh)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\tanh]] end)),
+  s({ trig = '(.-)(exp)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\exp]] end)),
+  s({ trig = '(.-)(log)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\log]] end)),
+  s({ trig = '(.-)(ln)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\ln]] end)),
+  s({ trig = '(.-)(det)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\det]] end)),
+  s({ trig = '(.-)(int)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\int]] end)),
+
+
 
   -- ── REGEX AUTOSNIPPETS ( mA, no word boundary ) ───────────────────────────────
   -- Auto letter subscript: x2 → x_{2}
