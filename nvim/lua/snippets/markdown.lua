@@ -25,13 +25,52 @@ local function in_mathzone()
 	local pos = vim.api.nvim_win_get_cursor(0)
 	local row, col = pos[1] - 1, pos[2]
 	local lines = vim.api.nvim_buf_get_lines(0, 0, row + 1, false)
+	local current_line = lines[#lines]
 	lines[#lines] = lines[#lines]:sub(1, col)
+	
+	if current_line then
+		local sub_line = current_line:sub(1, col)
+		local i = #sub_line
+		local brace_count = 0
+		while i > 0 do
+			local c = sub_line:sub(i, i)
+			if c == '}' then
+				brace_count = brace_count + 1
+			elseif c == '{' then
+				if brace_count > 0 then
+					brace_count = brace_count - 1
+				else
+					local before = sub_line:sub(1, i - 1)
+					if before:match('\\text%s*$') or before:match('\\intertext%s*$') then
+						return false
+					end
+					local cmd = before:match('\\text(%a+)%s*$')
+					if cmd then
+						local text_cmds = { bf=true, it=true, rm=true, sf=true, tt=true, sc=true, sl=true, up=true, md=true, normal=true }
+						if text_cmds[cmd] then
+							return false
+						end
+					end
+				end
+			end
+			i = i - 1
+		end
+	end
 
 	-- Treesitter fallback if available
 	local has_ts, ts = pcall(require, 'vim.treesitter')
 	if has_ts then
 		local node = ts.get_node({ bufnr = 0, pos = { row, col } })
 		while node do
+			if node:type() == 'text_mode' then
+				return false
+			end
+			if node:type() == 'generic_command' or node:type() == 'command' then
+				local text = vim.treesitter.get_node_text(node, 0)
+				if text:match('^\\text') or text:match('^\\intertext') then
+					return false
+				end
+			end
 			if node:type() == 'math_environment' or node:type() == 'latex_block' or node:type() == 'inline_formula' or node:type() == 'math' then
 				return true
 			end
@@ -123,6 +162,12 @@ local regular = {
 -- AUTOSNIPPETS  (fire immediately when trigger is typed)
 -- =============================================================================
 local auto = {
+	-- ── TEXT ENVIRONMENT ( mA ) ──────────────────────────────────────────────────
+	s({ trig = 'text', wordTrig = false, condition = in_mathzone },
+		{ t [[\text{]], i(1), t [[}]], i(2) }),
+	-- " → \text{} (obsidian shorthand)
+	s({ trig = '""', wordTrig = false, condition = in_mathzone },
+		{ t [[\text{]], i(1), t [[}]], i(2) }),
 
 	-- ── MATH ENTRY ──────────────────────────────────────────────────────────────
 	-- mk: tA (text, auto, no word boundary)
@@ -178,7 +223,14 @@ local auto = {
 
 	-- ── AUTO MATH CONVERSION ( Text to Math ) ──────────────────────────────────
 	-- Standalone letters (except a, A, I)
-	s({ trig = "([%s%c])([B-HJ-Zb-z])([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+	s(
+		{
+			trig = "([%s%c])([B-HJ-Zb-z])([%s%c.,?!:'])",
+			regTrig = true,
+			wordTrig = false,
+			condition =
+			    not_in_mathzone
+		},
 		f(function(_, snip)
 			return snip.captures[1] .. "$" .. snip.captures[2] .. "$" .. snip.captures[3]
 		end)),
@@ -188,9 +240,17 @@ local auto = {
 		end)),
 
 	-- Coefficients: 2x -> $2x$
-	s({ trig = "([%s%c])(%d+)([a-zA-Z])([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+	s(
+		{
+			trig = "([%s%c])(%d+)([a-zA-Z])([%s%c.,?!:'])",
+			regTrig = true,
+			wordTrig = false,
+			condition =
+			    not_in_mathzone
+		},
 		f(function(_, snip)
-			return snip.captures[1] .. "$" .. snip.captures[2] .. snip.captures[3] .. "$" .. snip.captures[4]
+			return snip.captures[1] .. "$" .. snip.captures[2] .. snip.captures[3] .. "$" .. snip.captures
+			    [4]
 		end)),
 	s({ trig = "^(%d+)([a-zA-Z])([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
 		f(function(_, snip)
@@ -198,9 +258,17 @@ local auto = {
 		end)),
 
 	-- Subscripts: x2 -> $x_{2}$
-	s({ trig = "([%s%c])([a-zA-Z])(%d+)([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+	s(
+		{
+			trig = "([%s%c])([a-zA-Z])(%d+)([%s%c.,?!:'])",
+			regTrig = true,
+			wordTrig = false,
+			condition =
+			    not_in_mathzone
+		},
 		f(function(_, snip)
-			return snip.captures[1] .. "$" .. snip.captures[2] .. "_{" .. snip.captures[3] .. "}$" .. snip.captures[4]
+			return snip.captures[1] ..
+			    "$" .. snip.captures[2] .. "_{" .. snip.captures[3] .. "}$" .. snip.captures[4]
 		end)),
 	s({ trig = "^([a-zA-Z])(%d+)([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
 		f(function(_, snip)
@@ -212,7 +280,14 @@ local auto = {
 		f(function(_, snip)
 			return "$" .. snip.captures[1] .. "$" .. snip.captures[2]
 		end)),
-	s({ trig = "([A-Za-z]=[A-Za-z][+%-]%d+)([%s%c.,?!:'])", regTrig = true, wordTrig = false, condition = not_in_mathzone },
+	s(
+		{
+			trig = "([A-Za-z]=[A-Za-z][+%-]%d+)([%s%c.,?!:'])",
+			regTrig = true,
+			wordTrig = false,
+			condition =
+			    not_in_mathzone
+		},
 		f(function(_, snip)
 			return "$" .. snip.captures[1] .. "$" .. snip.captures[2]
 		end)),
@@ -280,10 +355,10 @@ local auto = {
 
 	-- ── TEXT ENVIRONMENT ( mA ) ──────────────────────────────────────────────────
 	s({ trig = 'text', wordTrig = false, condition = in_mathzone },
-		fmt([[\text{{{}}}{}]], { i(1), i(2) })),
+		fmt([[\text{<>}<>]], { i(1), i(2) }, { delimiters = '<>' })),
 	-- " → \text{} (obsidian shorthand)
-	s({ trig = '"', wordTrig = false, condition = in_mathzone },
-		fmt([[\text{{{}}}{}]], { i(1), i(2) })),
+	s({ trig = '""', wordTrig = false, condition = in_mathzone },
+		fmt([[\text{<>}<>]], { i(1), i(2) }, { delimiters = '<>' })),
 
 	-- ── BASIC OPERATIONS ( mA, no word boundary ) ──────────────────────────────
 	s({ trig = 'sr', wordTrig = false, condition = in_mathzone }, t '^{2}'),
@@ -610,4 +685,3 @@ local auto = {
 }
 
 return regular, auto
-

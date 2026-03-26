@@ -153,8 +153,8 @@ Deploy GUI applications via Flatpak and manage hardware passthrough.
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 flatpak install flathub \
-cc.arduino.IDE2 com.bambulab.BambuStudio com.calibre_ebook.calibre \
-com.discordapp.Discord com.github.flxzt.rnote com.github.reds.LogisimEvolution \
+cc.arduino.IDE2 com.bambulab.BambuStudio \
+com.discordapp.Discord com.github.reds.LogisimEvolution \
 com.github.tchx84.Flatseal com.github.wwmm.easyeffects com.jgraph.drawio.desktop \
 com.obsproject.Studio com.usebottles.bottles \
 eu.jumplink.Learn6502 io.github.alainm23.planify io.github.ra3xdh.qucs_s \
