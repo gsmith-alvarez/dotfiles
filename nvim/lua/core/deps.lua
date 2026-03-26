@@ -56,12 +56,15 @@ else
 end
 
 -- 5. Core Environment Synchronization
--- Initialize mise.nvim immediately so that Neovim's process environment
+-- Initialize mise.nvim so that Neovim's process environment
 -- ($PATH, etc.) reflects the project's mise.toml before language servers boot.
+-- We use MiniDeps.later to avoid blocking the critical startup path (saving ~40ms).
 MiniDeps.add({ source = 'https://plugins.ejri.dev/mise.nvim' })
-local ok_mise, mise = pcall(require, 'mise')
-if ok_mise then
-	mise.setup {}
-end
+MiniDeps.later(function()
+	local ok_mise, mise = pcall(require, 'mise')
+	if ok_mise then
+		mise.setup {}
+	end
+end)
 
 return M

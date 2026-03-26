@@ -54,11 +54,15 @@ end
 
 
 
+local tsdk_cache = nil
+
 --- Retrieves the TSDK (TypeScript SDK) path from mise.
 --- Why: typescript-language-server (ts_ls) requires a valid 'typescript' 
 --- installation to function. This allows us to find it dynamically.
 --- @return string|nil path The absolute path to the typescript/lib directory.
 M.get_tsdk_path = function()
+  if tsdk_cache then return tsdk_cache end
+
   -- Use mise to find the installation root for npm:typescript
   local handle = io.popen("mise where npm:typescript 2>/dev/null")
   if not handle then return nil end
@@ -68,7 +72,8 @@ M.get_tsdk_path = function()
 
   if result and result ~= "" then
     -- Clean any whitespace/newlines and append the standard TSDK path
-    return result:gsub("%s+", "") .. "/lib/node_modules/typescript/lib"
+    tsdk_cache = result:gsub("%s+", "") .. "/lib/node_modules/typescript/lib"
+    return tsdk_cache
   end
 
   return nil
