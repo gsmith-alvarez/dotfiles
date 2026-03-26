@@ -63,7 +63,8 @@ Lightweight, portable config built on three pillars — see [`nvim/README.md`](n
 - Circuit-breaker pattern: every plugin load is wrapped in `pcall`
 - `lua/core/vscode.lua` bridges leader maps to VSCode commands when running inside vscode-neovim
 
----
+
+--
 
 ## VS Code
 

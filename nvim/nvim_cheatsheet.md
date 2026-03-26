@@ -146,6 +146,17 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<leader>rF` | X | Extract function to file | `refactoring.nvim` |
 | `<leader>ri` | N/X | Inline variable | `refactoring.nvim` |
 
+### Lists & Markdown (autolist.nvim)
+
+| Key Chord | Mode | Action | Plugin |
+| :--- | :---: | :--- | :--- |
+| `<CR>` | I | Continue list / blockquote on next line | `autolist.nvim` |
+| `o` / `O` | N | Add list bullet below / above | `autolist.nvim` |
+| `<CR>` | N | Toggle checkbox (`[ ]` ↔ `[x]`) | `autolist.nvim` |
+| `<Tab>` / `<S-Tab>` | I | Indent / Dedent list (recalculates numbering) | `autolist.nvim` |
+| `<leader>cn` / `<leader>cp` | N | Cycle list type (e.g. `-` → `*` → `1.`) | `autolist.nvim` |
+| `>>` / `<<` | N | Indent / Dedent list (Normal mode) | `autolist.nvim` |
+
 ### TODO Comments
 
 | Key Chord | Mode | Action | Plugin |

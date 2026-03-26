@@ -27,6 +27,10 @@ To achieve near-instant startup while maintaining a rich feature set, the config
 *   **Purpose:** Load non-essential UI elements and background tools.
 *   **Actions:** Everything that doesn't affect the initial buffer render is loaded during the Neovim idle loop.
 
+### PHASE 4: FileType & Proxy Traps (JIT)
+*   **Purpose:** Only load heavy file-specific plugins when necessary.
+*   **Actions:** Plugins like `autolist.nvim` or `render-markdown` register `FileType` autocommands and wait dormant until a relevant file (e.g. `markdown`) is actually opened.
+
 ---
 
 ## 🛡️ The Anti-Fragile Engine: `safe_require`

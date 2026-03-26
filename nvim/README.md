@@ -51,6 +51,7 @@ nvim/
         │   ├── nvim-dap-virtual-text.lua
         │   └── persistent-breakpoint.lua
         ├── editing/
+        │   ├── autolist.lua          # Automatic list continuation and formatting
         │   ├── copilot.lua           # GitHub Copilot inline suggestions
         │   ├── inc-rename.lua        # JIT LSP rename (<leader>rn)
         │   ├── indent.lua            # Auto indentation detection on BufRead
@@ -139,6 +140,7 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 | `nvim-treesitter/nvim-treesitter-context` | Pins current scope/function header at viewport top |
 | `HiPhish/rainbow-delimiters.nvim` | Bracket/delimiter colorization by nesting level (treesitter-based) |
 | `MeanderingProgrammer/render-markdown.nvim` | Markdown visual rendering |
+| `gaoDean/autolist.nvim` | Automatic list continuation, checkboxes, and blockquotes |
 | `stevearc/aerial.nvim` | Symbol sidebar + jump (JIT) |
 | `stevearc/overseer.nvim` | Task runner (JIT) |
 | `folke/trouble.nvim` | Diagnostic aggregator (JIT) |
@@ -277,7 +279,11 @@ No Mason. All language servers, formatters, and tools are managed by `mise`. `co
 ### Editing
 | Mode | Keybind | Description |
 |------|---------|-------------|
-| i | `<Tab>` | LuaSnip Expand / Jump Node (if active) / TabOut (jump past bracket) / Literal Tab |
+| i | `<CR>` | Autolist: Continue list/blockquote (markdown/text) |
+| n | `o` / `O` | Autolist: Add list bullet below/above |
+| n | `<CR>` | Autolist: Toggle checkbox (`[ ]` ↔ `[x]`) |
+| i | `<Tab>` | LuaSnip Expand / Autolist Indent / TabOut / Literal |
+| i | `<S-Tab>` | Autolist: Dedent list |
 | i/s | `<C-l>` | LuaSnip: Jump to next node (or accept blink menu item) |
 | i/s | `<C-h>` | LuaSnip: Jump to previous node (or close blink menu) |
 | i/s | `<C-e>` | LuaSnip: Cycle choice node (or exit active snippet) |
