@@ -1,0 +1,46 @@
+<h2>Architectural Review Scopes</h2>
+<p class="subtitle">Select the depth of analysis for your Neovim configuration</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Structural Integrity Audit</h3>
+      <p>Deep dive into the <b>Phased Boot</b> and <b>Circuit Breaker</b> patterns. Focus on <code>init.lua</code> and the domain orchestrators.
+      </p>
+      <ul>
+        <li>Verification of "Trap" (JIT) race conditions</li>
+        <li>Audit of <code>safe_require</code> error persistence</li>
+        <li>Refinement of <code>plugins/init.lua</code> deferral logic</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Ecosystem Synergist</h3>
+      <p>Focus on the <b>Native-First</b> integration with external tools (Mise, Zellij). Focus on <code>core.format</code> and <code>core.lint</code>.
+      </p>
+      <ul>
+        <li>Audit of <code>vim.system</code> async/sync implementation</li>
+        <li>Validation of <code>mise.nvim</code> environment sync</li>
+        <li>Review of <code>snacks.nvim</code> vs. <code>mini.nvim</code> synergy</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Performance & JIT Profiler</h3>
+      <p>Focus on the <b>Hot Path</b> and startup path (15ms goal). Focus on deferred loading and idle loop impacts.
+      </p>
+      <ul>
+        <li>Review of <code>MiniDeps.later</code> usage in <code>core/init.lua</code></li>
+        <li>Audit of background telemetry polling in <code>mini-statusline</code></li>
+        <li>Verification of FileType vs. CmdUndefined triggers</li>
+      </ul>
+    </div>
+  </div>
+</div>

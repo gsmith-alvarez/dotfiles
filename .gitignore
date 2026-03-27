@@ -67,3 +67,7 @@ cosmic/com.system76.CosmicPortal/v1/
 cosmic/com.system76.CosmicSettings.Wallpaper/v1/
 cosmic/com.system76.CosmicBackground/v1/
 cosmic/com.system76.CosmicPanel.Panel/v1/
+
+.gemini/
+gha-creds-*.json
+.github
