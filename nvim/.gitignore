@@ -22,6 +22,7 @@ spell/*.add.spl
 
 # 4. Agent & Tool Artifacts
 .aider*
+.superpowers/
 test.sh
 
 # 5. mini.deps State (CRITICAL)
