@@ -1,4 +1,0 @@
-name: test-bridge
-description: A test tool for usage
-flags:
-  --success: it worked
