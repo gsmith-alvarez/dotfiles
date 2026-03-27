@@ -5,9 +5,9 @@
 -- Architecture: Fault-Tolerant Auto-Registration
 --
 -- PHILOSOPHY: Action-Driven Extendability
--- This file allows you to add complex logic (Zellij integration, auditing, 
--- etc.) without cluttering your init.lua. It automatically scans the 
--- modules in this directory and registers both the Ex command AND the 
+-- This file allows you to add complex logic (Zellij integration, auditing,
+-- etc.) without cluttering your init.lua. It automatically scans the
+-- modules in this directory and registers both the Ex command AND the
 -- corresponding keymap if defined.
 -- =============================================================================
 
@@ -17,22 +17,24 @@ local utils = require('core.utils')
 -- [[ THE COMMAND MODULES ]]
 -- List of files in lua/commands/ to be scanned.
 local modules = {
-	'commands.auditing',    -- ToolCheck, Redir, Typos
-	'commands.building',    -- Zellij & Watchexec smart runners
+	'commands.auditing', -- ToolCheck, Redir, Typos
+	'commands.building', -- Zellij & Watchexec smart runners
 	'commands.diagnostics', -- Quickfix and LSP hover routing
-	'commands.utilities',   -- Jq, Sd, Xh, and buffer helpers
-	'commands.mux',         -- Zellij pane management
+	'commands.utilities', -- Jq, Sd, Xh, and buffer helpers
+	'commands.mux',  -- Zellij pane management
+	'commands.hot-reload', -- Hot Reloading for my config
 }
 
 -- [[ THE AUTO-REGISTRATION ENGINE ]]
--- Why: Instead of manually calling nvim_create_user_command for 50+ tools, 
+-- Why: Instead of manually calling nvim_create_user_command for 50+ tools,
 -- we loop through structured tables. This ensures consistency.
 for _, module in ipairs(modules) do
 	local ok, mod = pcall(require, module)
 
 	if not ok then
 		-- Route failures to the audit trail (~/.local/state/nvim/config_diagnostics.log)
-		utils.soft_notify(string.format('CRITICAL: Failed to load %s\nError: %s', module, mod), vim.log.levels.ERROR)
+		utils.soft_notify(string.format('CRITICAL: Failed to load %s\nError: %s', module, mod),
+			vim.log.levels.ERROR)
 	elseif type(mod) == 'table' and mod.commands then
 		for cmd_name, cmd_def in pairs(mod.commands) do
 			-- 1. Register the Ex Command (e.g., :Jq)

@@ -159,8 +159,19 @@ vim.keymap.set('n', 'gcO', 'O<Esc>Vcx<Esc><cmd>normal gcc<CR>fxa<BS>', { desc = 
 -- ─────────────────────────────────────────────────────────────────────────────
 
 vim.keymap.set('n', '<leader>er', function() require('commands.building').run() end, { desc = 'Execute: Run' })
-vim.keymap.set('n', '<leader>ew', function() require('commands.building').run_continuous() end, { desc = 'Execute: Watch' })
-vim.keymap.set('n', '<leader>ec', '<cmd>Watch ', { desc = 'Execute: Watch (manual command)' })
+vim.keymap.set('n', '<leader>ew', function() require('commands.building').run_continuous() end,
+	{ desc = 'Execute: Watch' })
+vim.keymap.set('n', '<leader>ec', function()
+	vim.ui.input({ prompt = 'Command to Watch: ' }, function(input)
+		-- If the user typed something and pressed Enter, run it
+		if input and input ~= '' then
+			vim.cmd('Watch ' .. input)
+			-- If they pressed ESC or left it blank, fail gracefully
+		else
+			vim.notify('Watch aborted: No command provided.', vim.log.levels.WARN)
+		end
+	end)
+end, { desc = 'Execute: Watch (manual command)' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ DEBUG: <leader>d, <F5> ]]
@@ -242,17 +253,33 @@ vim.keymap.set('n', '<leader>fs', function() require('mini.starter').open() end,
 vim.keymap.set('n', '<leader>fe', function()
 	require('mini.files').open(project_root())
 end, { desc = 'File: Explorer (Root)' })
+
 vim.keymap.set('n', '-', function()
 	local mf = require('mini.files')
+
+	-- Try to close the explorer. If it wasn't open, proceed to open it.
 	if not mf.close() then
 		local path = vim.api.nvim_buf_get_name(0)
+
+		-- Case 1: Empty buffer or already inside a minifiles buffer
 		if path == '' or path:match('^minifiles://') then
 			path = vim.fn.getcwd()
+
+			-- Case 2: Buffer has a name, but the file is NOT saved to disk yet
+		elseif vim.fn.filereadable(path) == 0 and vim.fn.isdirectory(path) == 0 then
+			-- Strip the filename and grab the parent directory instead
+			path = vim.fn.fnamemodify(path, ":p:h")
+
+			-- Safety net: If even the parent folder doesn't exist, fallback to CWD
+			if vim.fn.isdirectory(path) == 0 then
+				path = vim.fn.getcwd()
+			end
 		end
+
+		-- Safely open at the resolved path
 		mf.open(path)
 	end
 end, { desc = 'File: Explorer (toggle)' })
-
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ SEARCH: <leader>s ]]
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -309,7 +336,8 @@ local function trouble(mode, extra_opts)
 end
 
 vim.keymap.set('n', '<leader>xx', trouble('diagnostics'), { desc = 'Trouble: Workspace Diagnostics' })
-vim.keymap.set('n', '<leader>xd', trouble('diagnostics', { filter = { buf = 0 } }), { desc = 'Trouble: Document Diagnostics' })
+vim.keymap.set('n', '<leader>xd', trouble('diagnostics', { filter = { buf = 0 } }),
+	{ desc = 'Trouble: Document Diagnostics' })
 vim.keymap.set('n', '<leader>xq', trouble('qflist'), { desc = 'Trouble: Quickfix' })
 vim.keymap.set('n', '<leader>xl', trouble('loclist'), { desc = 'Trouble: Location List' })
 

@@ -3,9 +3,9 @@
 -- Location: lua/commands/diagnostics.lua
 --
 -- PHILOSOPHY: Non-Intrusive Guidance
--- This module manages how Neovim communicates code intelligence errors 
--- (from LSP or linters) to the user. It prioritizes clarity over clutter 
--- by using custom icons, sorting by severity, and using a smart hover 
+-- This module manages how Neovim communicates code intelligence errors
+-- (from LSP or linters) to the user. It prioritizes clarity over clutter
+-- by using custom icons, sorting by severity, and using a smart hover
 -- mechanism that only shows errors when your cursor is idle.
 --
 -- MAINTENANCE TIPS:
@@ -50,14 +50,14 @@ vim.diagnostic.config {
 }
 
 -- [[ Diagnostic Hover ]]
--- Why: Instead of manually pressing a key to see an error message, this 
--- autocmd automatically opens a floating window with the error description 
+-- Why: Instead of manually pressing a key to see an error message, this
+-- autocmd automatically opens a floating window with the error description
 -- whenever you pause your cursor on a line with a diagnostic.
 local diag_group = vim.api.nvim_create_augroup('DiagnosticHover', { clear = true })
 vim.api.nvim_create_autocmd('CursorHold', {
 	group = diag_group,
 	callback = function()
-		-- Avoid opening the hover if there's already a floating window 
+		-- Avoid opening the hover if there's already a floating window
 		-- (like a completion menu) open.
 		for _, win in ipairs(vim.api.nvim_list_wins()) do
 			local config = vim.api.nvim_win_get_config(win)
@@ -75,7 +75,7 @@ vim.api.nvim_create_autocmd('CursorHold', {
 	end,
 })
 
--- Why: updatetime (in ms) controls how long Neovim waits after you stop 
+-- Why: updatetime (in ms) controls how long Neovim waits after you stop
 -- typing before it triggers the 'CursorHold' event above.
 vim.opt.updatetime = 500
 

@@ -11,8 +11,9 @@ M.setup = function()
 		require('mini.deps').add('sphamba/smear-cursor.nvim')
 		require('smear_cursor').setup({
 			-- Safe defaults for high performance
-			stiffness = 0.8,
-			trailing_stiffness = 0.5,
+			stiffness = 0.5,
+			trailing_stiffness = 0.3,
+			matrix_pixel_threshold = 0.5,
 			distance_stop_animating = 0.5,
 			hide_target_hack = false,
 		})

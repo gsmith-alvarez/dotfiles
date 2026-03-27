@@ -3,7 +3,7 @@
 -- Location: lua/plugins/navigation/mini-files.lua
 --
 -- PHILOSOPHY: Buffer-Centric Exploration
--- Mini.files treats the file system as a text buffer. You navigate by 
+-- Mini.files treats the file system as a text buffer. You navigate by
 -- moving the cursor and "edit" the file system by editing the buffer text.
 --
 -- WHY: We use `MiniDeps.later` to defer the explorer until after boot.
@@ -13,7 +13,7 @@
 -- MAINTENANCE TIPS:
 -- 1. Use `-` to toggle the explorer in the current directory.
 -- 2. Use `g.` to toggle hidden (dot) files.
--- 3. To perform bulk renames, simply edit the filenames in the buffer 
+-- 3. To perform bulk renames, simply edit the filenames in the buffer
 --    and save with `:w`.
 
 local M = {}
@@ -48,33 +48,22 @@ M.setup = function()
 			vim.keymap.set('n', lhs, rhs, { buffer = buf_id, desc = 'Split ' .. direction })
 		end
 
+		local minifiles_group = vim.api.nvim_create_augroup('MiniFilesCustomization', { clear = true })
+
 		vim.api.nvim_create_autocmd('User', {
+			group = minifiles_group,
 			pattern = 'MiniFilesBufferCreate',
 			callback = function(args)
 				local buf_id = args.data.buf_id
 				map_split(buf_id, '<C-s>', 'belowright horizontal')
 				map_split(buf_id, '<C-v>', 'belowright vertical')
-				vim.keymap.set('n', 'g.', toggle_dotfiles, { buffer = buf_id, desc = 'Toggle Hidden Files' })
+				vim.keymap.set('n', 'g.', toggle_dotfiles,
+					{ buffer = buf_id, desc = 'Toggle Hidden Files' })
 			end,
 		})
 
-		local root_markers = { '.git', 'go.mod', 'Cargo.toml', 'package.json', 'pom.xml', 'pyproject.toml', 'build.zig' }
-
-		local function get_project_root()
-			local path = vim.api.nvim_buf_get_name(0)
-			path = path ~= '' and vim.fn.fnamemodify(path, ':p:h') or vim.fn.getcwd()
-			for dir in vim.fs.parents(path) do
-				for _, marker in ipairs(root_markers) do
-					if vim.uv.fs_stat(dir .. '/' .. marker) then
-						return dir
-					end
-				end
-			end
-			return vim.fn.getcwd()
-		end
-
-		-- <leader>fe and - keymaps moved to lua/core/plugin-keymaps.lua (File section).
-		-- project_root() logic is inlined there as a local helper.
+		-- NOTE: project_root() logic and global keymaps (<leader>fe, -)
+		-- are maintained exclusively in lua/core/plugin-keymaps.lua
 	end)
 end
 
