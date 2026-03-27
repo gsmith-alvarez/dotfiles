@@ -1,4 +1,4 @@
-theme = "dracula"
+theme = "Catppuccin Mocha"
 client_id = "d420a117a32841c2b3474932e49fb54b"
 client_port = 8080
 login_redirect_uri = "http://127.0.0.1:8989/login"
@@ -6,18 +6,13 @@ playback_format = """
 {status} {track} • {artists} {liked}
 {album} • {genres}
 {metadata}"""
-playback_metadata_fields = [
-    "repeat",
-    "shuffle",
-    "volume",
-    "device",
-]
+playback_metadata_fields = ["repeat", "shuffle", "volume", "device"]
 tracks_playback_limit = 50
 app_refresh_duration_in_ms = 32
 playback_refresh_duration_in_ms = 0
 page_size_in_rows = 20
-play_icon = "▶"
-pause_icon = "▌▌"
+play_icon = "󰐊"
+pause_icon = ""
 liked_icon = "♥"
 explicit_icon = "(E)"
 border_type = "Plain"
