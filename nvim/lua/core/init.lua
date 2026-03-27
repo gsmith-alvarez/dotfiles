@@ -24,6 +24,7 @@ local sync_modules = {
 
 	-- 4. Plugin Keymaps: The "Control Room" for all your plugin-related bindings.
 	'core.plugin-keymaps',
+        
 }
 
 for _, module in ipairs(sync_modules) do
@@ -46,8 +47,7 @@ local function load_jit_core()
 		'core.format',
 		'core.lint',
 
-		-- 7. VSCode Integration: Only activates if you use vscode-neovim.
-		'core.vscode',
+		
 	}
 	for _, module in ipairs(jit_modules) do
 		local ok, err = pcall(require, module)

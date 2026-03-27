@@ -33,7 +33,6 @@ M.setup = function()
 		'ui.mini-statusline',
 		'ui.winbar',
 		'ui.mini-clue',
-		'ui.smear-cursor',
 	}
 
 	for _, mod in ipairs(event_modules) do

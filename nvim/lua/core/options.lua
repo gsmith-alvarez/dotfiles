@@ -29,7 +29,8 @@ vim.g.node_host_prog = vim.fn.expand '~/.local/share/mise/shims/node'
 -- custom actions (e.g. <leader>ff to find files). 
 -- This MUST be set before plugins load.
 -- =============================================================================
-vim.g.mapleader = ' ' -- Set <Space> as the leader key.
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' ' -- Set <Space> as the leader key.
 vim.g.maplocalleader = ' '
 
 -- [[ FONT CONFIGURATION ]]

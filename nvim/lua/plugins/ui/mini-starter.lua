@@ -70,7 +70,7 @@ M.setup = function()
 		end
 
 		local info_line = table.concat(parts, '   ')
-		return info_line .. '\n\n' .. 'Type highlighted letter to jump  ·  q to quit'
+		return info_line .. '\n\n' .. 'Type highlighted letter to jump  ·  Q to quit'
 	end
 
 	local function wrap_quote(text, max_width)
@@ -170,7 +170,8 @@ M.setup = function()
 			vim.bo.buftype = 'nofile'
 			vim.bo.bufhidden = 'wipe'
 			vim.bo.modifiable = false
-			vim.keymap.set('n', 'q', '<cmd>quit<CR>', { buffer = true, silent = true })
+			vim.keymap.set('n', 'Q', '<cmd>quit<CR>', { buffer = true, silent = true })
+                        vim.keymap.set('n', '<Esc>', '<cmd>quit<CR>', { buffer = true, silent = true })
 			-- mini.clue intercepts g/z globally; disable it for the starter buffer
 			-- so those keys pass through to mini.starter's query handler
 			vim.b[ev.buf].miniclue_disable = true

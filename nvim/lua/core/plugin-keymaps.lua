@@ -79,11 +79,6 @@ vim.keymap.set({ 'n', 't' }, [[<C-\>]], snacks_call('terminal.toggle'), { desc =
 vim.keymap.set('n', '<leader>tp', tui('btm', 'btm'), { desc = 'Terminal: Process Monitor' })
 vim.keymap.set('n', '<leader>ts', tui('spotify_player', 'spotify_player'), { desc = 'Terminal: Spotify' })
 vim.keymap.set('n', '<leader>ti', tui('podman-tui', 'podman-tui'), { desc = 'Terminal: Containers' })
-vim.keymap.set('n', '<leader>ta', function()
-	local file = vim.fn.expand('%:p')
-	local cmd  = 'aider ' .. (file ~= '' and vim.fn.shellescape(file) or '')
-	tui('aider', 'Aider AI', cmd)()
-end, { desc = 'Terminal: Aider AI' })
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- [[ PLATFORMIO: <leader>p ]]
