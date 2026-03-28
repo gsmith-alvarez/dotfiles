@@ -171,7 +171,7 @@ run = "dconf load /org/cosmic/ < cosmic/cosmic_settings.dconf"
 
 [tasks."nvim:test"]
 description = "Run headless Neovim integration tests"
-run = "cd nvim && ./run_tests.sh"
+run = "cd nvim && just test"
 
 [tasks."dotfiles:bootstrap"]
 description = "Complete one-command setup for a fresh install"
