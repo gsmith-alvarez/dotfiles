@@ -56,27 +56,9 @@ For full provisioning details — packages, hardware, kernel tuning, Flatpaks, f
 Lightweight, portable config built on three pillars — see [`nvim/README.md`](nvim/README.md) for the full architecture, plugin inventory, and keymap registry.
 
 **Key design choices:**
-- No Mason — all LSPs, formatters, and tools managed by `mise`
-- `mini.deps` for plugin management (no lazy.nvim)
-- `snacks.nvim` for picker, notifications, and terminal
-- `blink.cmp` for completion
-- Circuit-breaker pattern: every plugin load is wrapped in `pcall`
-- `lua/core/vscode.lua` bridges leader maps to VSCode commands when running inside vscode-neovim
-
-
---
-
-## VS Code
-
-Config in `Code/User/`. Installed natively via `dnf` to ensure un-sandboxed access to embedded toolchains (`gcc-arm-none-eabi`, hardware debuggers) and `mise` runtimes. Mirrors the Neovim experience via `vscode-neovim`:
-
-- Same `<leader>` key surface — `vscode.lua` remaps snacks/LSP/DAP/PIO maps to native VS Code commands.
-- Catppuccin Mocha theme, relative line numbers, no minimap, format on save.
-- `tasks.json` includes terminal tasks for `lazygit`, `aider`, `btm`, and `spotify_player`.
-
-**Core Extension Toolchain (VS Marketplace):**
-`asvetliakov.vscode-neovim` · `catppuccin.catppuccin-vsc` · `PKief.material-icon-theme` ·
-`usernamehw.errorlens` · `llvm-vs-code-extensions.vscode-clangd` · `platformio.platformio-ide` ·
-`ziglang.vscode-zig` · `rust-lang.rust-analyzer` · `golang.go` · `charliermarsh.ruff` ·
-`tamasfe.even-better-toml` · `johnnymorganz.stylua` · `myriad-dreamin.tinymist` ·
-`mkhl.direnv` · `hbenl.vscode-test-explorer`
+* No Mason — all LSPs, formatters, and tools managed by `mise`
+* `mini.deps` for plugin management (no lazy.nvim)
+* `snacks.nvim` for picker, notifications, and terminal
+* `blink.cmp` for completion
+* Circuit-breaker pattern: every plugin load is wrapped in `pcall`
+* `lua/core/vscode.lua` bridges leader maps to VSCode commands when running inside vscode-neovim
