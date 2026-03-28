@@ -22,11 +22,11 @@
   then looks for the library relative to that location. This works no matter where you call
   the script from.
 
-   1 # Get the directory where the script lives
-   2 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-   3
-   4 # Source the library relative to that directory
-   5 source "$SCRIPT_DIR/../lib/print.sh"
+Get the directory where the script lives
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+Source the library relative to that directory
+source "$SCRIPT_DIR/../lib/print.sh"
    * Trade-off: A bit more verbose, but much more reliable.
 
   3. The Path Search (PATH)
