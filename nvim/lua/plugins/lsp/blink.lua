@@ -108,7 +108,8 @@ M.setup = function()
       },
       completion = {
         trigger = {
-          -- Show completions immediately after typing a trigger character
+          -- Completely disable automatic menu popping
+          show_on_keyword = false,
           show_on_trigger_character = false,
           show_on_insert_on_trigger_character = false,
         },
