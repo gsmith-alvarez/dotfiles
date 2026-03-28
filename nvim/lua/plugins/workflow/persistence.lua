@@ -13,16 +13,16 @@
 -- 3. Use `<leader>qw` to manually save or name a session.
 
 local M = {}
-local utils = require('core.utils')
+local utils = require 'core.utils'
 
 M.setup = function()
   local ok, err = pcall(function()
-    require('mini.sessions').setup({
-      autoread  = false, -- manual restore via keymap
-      autowrite = true,  -- auto-save active session before quitting
-      directory = vim.fn.stdpath('state') .. '/sessions',
-      verbose   = { read = false, write = false, delete = false },
-    })
+    require('mini.sessions').setup {
+      autoread = false, -- manual restore via keymap
+      autowrite = true, -- auto-save active session before quitting
+      directory = vim.fn.stdpath 'state' .. '/sessions',
+      verbose = { read = false, write = false, delete = false },
+    }
     -- Session keymaps in lua/core/plugin-keymaps.lua (<leader>q section).
   end)
 

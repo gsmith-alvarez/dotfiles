@@ -14,16 +14,19 @@
 -- To add a new snippet: copy any block below and modify trigger + body.
 -- Run :LuaSnipListAvailable to verify it's loaded.
 
-local ls  = require 'luasnip'
-local s   = ls.s
-local t   = ls.t
-local i   = ls.i
-local f   = ls.f -- You'll need this for the date/filename
+local ls = require 'luasnip'
+local s = ls.s
+local t = ls.t
+local i = ls.i
+local f = ls.f -- You'll need this for the date/filename
 local fmt = require('luasnip.extras.fmt').fmt
 
 return {
-    -- The Google Style Header
-    s('ghdr', fmt([[
+  -- The Google Style Header
+  s(
+    'ghdr',
+    fmt(
+      [[
 #######################################
 # {}
 # Globals:
@@ -35,32 +38,47 @@ return {
 # Returns:
 #   {}
 #######################################
-]], {
+]],
+      {
         i(1, 'Description'),
         i(2, 'None'),
         i(3, '$@'),
         i(4, 'None'),
         i(5, '0'),
-    })),
+      }
+    )
+  ),
 
-    s('bash', fmt([[
+  s(
+    'bash',
+    fmt(
+      [[
     #!/usr/bin/env bash
     set -euo pipefail
     IFS=$'\n\t'
     {}
-    ]], {
-        i(0)
-    })),
+    ]],
+      {
+        i(0),
+      }
+    )
+  ),
 
-    s('src', fmt([[
+  s(
+    'src',
+    fmt(
+      [[
     LIB_DIR="$(cd "$(dirname "${{BASH_SOURCE[0]}}")" && cd "$(dirname "$(readlink "${{BASH_SOURCE[0]}}" || echo ".")")/../{}" && pwd)"
     readonly LIB_DIR
     # shellcheck disable=SC1091
     source "${{LIB_DIR}}/{}.sh"
     {}
-    ]], {
-        i(1, "lib"),
-        i(2, "print"),
-        i(3)
-    })),
+    ]],
+      {
+        i(1, 'lib'),
+        i(2, 'print'),
+        i(3),
+      }
+    )
+  ),
 }

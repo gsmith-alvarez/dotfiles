@@ -5,16 +5,16 @@
 -- PHILOSOPHY: Unified Discovery Interface (JIT)
 -- Snacks.picker replaces the need for Telescope or Fzf-Lua. It provides
 -- a native-feeling, high-performance finding experience with minimal
--- overhead. 
+-- overhead.
 --
 -- WHY: We use Snacks for project-wide discovery because it integrates
--- perfectly with our "Anti-Fragile" goal: if one picker fails (e.g. 
+-- perfectly with our "Anti-Fragile" goal: if one picker fails (e.g.
 -- git not found), the rest of the editor stays functional.
 --
 -- MAINTENANCE TIPS:
--- 1. All search/find keymaps live in `lua/core/plugin-keymaps.lua` 
+-- 1. All search/find keymaps live in `lua/core/plugin-keymaps.lua`
 --    under the `<leader>s` (Search) and `<leader>f` (Find) sections.
--- 2. This keeps the picker configuration lazy and out of the critical 
+-- 2. This keeps the picker configuration lazy and out of the critical
 --    boot path until first use.
 -- 3. If a search is slow, check if `fd` or `ripgrep` are in your PATH.
 

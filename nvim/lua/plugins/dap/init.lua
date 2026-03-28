@@ -8,7 +8,7 @@
 -- inspection required for professional hardware/systems engineering.
 --
 -- MAINTENANCE TIPS:
--- 1. If debugging fails to start, check `debug.lua` for hardware 
+-- 1. If debugging fails to start, check `debug.lua` for hardware
 --    server (OpenOCD) logic.
 -- 2. Debugging keymaps are central to `core/plugin-keymaps.lua`.
 -- 3. Use `:DapInfo` to see active debug sessions and adapters.
@@ -20,7 +20,7 @@ local utils = require 'core.utils'
 -- We list only the siblings in this specific directory.
 -- Logic: We use the dot-notation path relative to the 'plugins' root.
 local modules = {
-  'dap.debug',                 -- Core DAP + PlatformIO Logic
+  'dap.debug', -- Core DAP + PlatformIO Logic
   'dap.persistent-breakpoint', -- Session Persistence for Traps
 }
 

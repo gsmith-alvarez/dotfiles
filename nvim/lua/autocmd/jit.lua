@@ -18,7 +18,7 @@
 --    the entire JIT engine.
 
 local M = {}
-local utils = require('core.utils')
+local utils = require 'core.utils'
 
 -- [[ INTERNAL STATE: Atomic Loading ]]
 -- Why: We use a local table instead of global vim.g variables to keep the
@@ -30,24 +30,26 @@ local loaded = {
 --- Atomic Loader for Obsidian.
 --- Uses pcall to ensure a missing config file doesn't crash the editor.
 local function load_obsidian(args)
-  if loaded.obsidian then return true end
+  if loaded.obsidian then
+    return true
+  end
 
   -- If triggered by opening a markdown file, only load if in an Obsidian vault.
   -- Why: We don't want the full Obsidian plugin features active when
   -- editing a random README.md in a git repository.
   local buf = args and args.buf or 0
-  if type(args) == "table" and args.event == "FileType" then
-    local vault_path = vim.fn.expand("~/Documents/Obsidian")
+  if type(args) == 'table' and args.event == 'FileType' then
+    local vault_path = vim.fn.expand '~/Documents/Obsidian'
     local current_file = vim.api.nvim_buf_get_name(buf)
 
-    if current_file ~= "" and not current_file:find(vault_path, 1, true) then
-      utils.soft_notify("Not in Obsidian vault. Skipping plugin load.", vim.log.levels.DEBUG)
+    if current_file ~= '' and not current_file:find(vault_path, 1, true) then
+      utils.soft_notify('Not in Obsidian vault. Skipping plugin load.', vim.log.levels.DEBUG)
       return false
     end
   end
 
   -- Load the actual plugin configuration file.
-  local ok, plugin = pcall(require, "plugins.notetaking.obsidian")
+  local ok, plugin = pcall(require, 'plugins.notetaking.obsidian')
   if ok and plugin.setup then
     -- ASYMMETRIC LEVERAGE: Only call setup once to avoid duplicate hooks.
     pcall(plugin.setup)
@@ -57,24 +59,24 @@ local function load_obsidian(args)
     -- but if we're loading JIT (triggered BY FileType), that event already fired.
     -- We must manually re-trigger the FileType event for the current buffer
     -- to ensure obsidian's autocmds run and keymaps get registered.
-    if type(args) == "table" and args.event == "FileType" and vim.bo[buf].filetype == "markdown" then
+    if type(args) == 'table' and args.event == 'FileType' and vim.bo[buf].filetype == 'markdown' then
       -- Re-trigger FileType to let obsidian's autocmds register their BufEnter hooks
-      vim.api.nvim_exec_autocmds("FileType", {
+      vim.api.nvim_exec_autocmds('FileType', {
         buffer = buf,
-        group = "obsidian_setup",
-        modeline = false
+        group = 'obsidian_setup',
+        modeline = false,
       })
       -- Then trigger BufEnter to actually set up the buffer
-      vim.api.nvim_exec_autocmds("BufEnter", {
+      vim.api.nvim_exec_autocmds('BufEnter', {
         buffer = buf,
-        group = "obsidian_setup",
-        modeline = false
+        group = 'obsidian_setup',
+        modeline = false,
       })
     end
 
     return true
   else
-    utils.soft_notify("Failed to JIT load Obsidian: " .. (plugin or "Unknown Error"), vim.log.levels.ERROR)
+    utils.soft_notify('Failed to JIT load Obsidian: ' .. (plugin or 'Unknown Error'), vim.log.levels.ERROR)
     return false
   end
 end
@@ -85,65 +87,58 @@ M.setup = function(injected_group)
   -- OBSIDIAN BUFFER-LOCAL KEYMAPS
   -- ========================================================================
   -- Register this BEFORE the FileType autocmd so it's ready when ObsidianNoteEnter fires.
-  vim.api.nvim_create_autocmd("User", {
-    desc = "Setup Obsidian buffer-local keymaps",
-    pattern = "ObsidianNoteEnter",
+  vim.api.nvim_create_autocmd('User', {
+    desc = 'Setup Obsidian buffer-local keymaps',
+    pattern = 'ObsidianNoteEnter',
     -- Note: We intentionally use the injected_group here instead of creating a new one
     -- to ensure hot-reloading works perfectly.
     group = injected_group,
     callback = function(ev)
       -- Ensure obsidian is loaded before requiring actions
-      if not loaded.obsidian then return end
+      if not loaded.obsidian then
+        return
+      end
 
-      local ok, actions = pcall(require, "obsidian.actions")
-      if not ok then return end
+      local ok, actions = pcall(require, 'obsidian.actions')
+      if not ok then
+        return
+      end
 
       -- Smart action (follow link, tag picker, toggle checkbox, fold cycle)
       -- Provide standard behavior without relying on internal `actions` object
-      vim.keymap.set("n", "<leader>na", function()
-        if require("obsidian.api").cursor_link() then
-          return "<cmd>Obsidian follow_link<CR>"
+      vim.keymap.set('n', '<leader>na', function()
+        if require('obsidian.api').cursor_link() then
+          return '<cmd>Obsidian follow_link<CR>'
         else
-          return "<cmd>Obsidian toggle_checkbox<CR>"
+          return '<cmd>Obsidian toggle_checkbox<CR>'
         end
-      end, { buffer = 0, expr = true, desc = "Obsidian: Smart Action" })
+      end, { buffer = 0, expr = true, desc = 'Obsidian: Smart Action' })
 
       -- Follow link variants
-      vim.keymap.set("n", "<leader>nf", "<cmd>Obsidian follow_link tab<CR>",
-        { buffer = 0, desc = "Obsidian: Follow Link (New Tab)" })
-      vim.keymap.set("n", "<leader>nv", "<cmd>Obsidian follow_link vsplit<CR>",
-        { buffer = 0, desc = "Obsidian: Follow Link (V-Split)" })
-      vim.keymap.set("n", "<leader>nh", "<cmd>Obsidian follow_link hsplit<CR>",
-        { buffer = 0, desc = "Obsidian: Follow Link (H-Split)" })
+      vim.keymap.set('n', '<leader>nf', '<cmd>Obsidian follow_link tab<CR>', { buffer = 0, desc = 'Obsidian: Follow Link (New Tab)' })
+      vim.keymap.set('n', '<leader>nv', '<cmd>Obsidian follow_link vsplit<CR>', { buffer = 0, desc = 'Obsidian: Follow Link (V-Split)' })
+      vim.keymap.set('n', '<leader>nh', '<cmd>Obsidian follow_link hsplit<CR>', { buffer = 0, desc = 'Obsidian: Follow Link (H-Split)' })
 
       -- Remove obsidian's default <CR> (smart_action) and give it to mini.jump2d
-      pcall(vim.keymap.del, "n", "<CR>", { buffer = 0 })
-      vim.keymap.set("n", "<CR>", function()
+      pcall(vim.keymap.del, 'n', '<CR>', { buffer = 0 })
+      vim.keymap.set('n', '<CR>', function()
         require('mini.jump2d').start(require('mini.jump2d').builtin_opts.word_start)
-      end, { buffer = 0, desc = "Jump2d: jump to word" })
+      end, { buffer = 0, desc = 'Jump2d: jump to word' })
 
-      vim.keymap.set("n", "<leader>nT", "<cmd>Obsidian tags<CR>",
-        { buffer = 0, desc = "Obsidian: Search [T]ags" })
-      vim.keymap.set("n", "<leader>no", "<cmd>Obsidian open<CR>",
-        { buffer = 0, desc = "Obsidian: [O]pen in GUI" })
-      vim.keymap.set("n", "<leader>nc", "<cmd>Obsidian toc<CR>",
-        { buffer = 0, desc = "Obsidian: [C]ontents (TOC)" })
+      vim.keymap.set('n', '<leader>nT', '<cmd>Obsidian tags<CR>', { buffer = 0, desc = 'Obsidian: Search [T]ags' })
+      vim.keymap.set('n', '<leader>no', '<cmd>Obsidian open<CR>', { buffer = 0, desc = 'Obsidian: [O]pen in GUI' })
+      vim.keymap.set('n', '<leader>nc', '<cmd>Obsidian toc<CR>', { buffer = 0, desc = 'Obsidian: [C]ontents (TOC)' })
 
       -- Note Creation & Templates
-      vim.keymap.set("n", "<leader>nt", "<cmd>Obsidian template<CR>",
-        { buffer = 0, desc = "Obsidian: Insert [T]emplate" })
+      vim.keymap.set('n', '<leader>nt', '<cmd>Obsidian template<CR>', { buffer = 0, desc = 'Obsidian: Insert [T]emplate' })
 
       -- Visual mode commands - these only work in visual mode
-      vim.keymap.set("v", "<leader>ne", "<cmd>Obsidian extract_note<CR>",
-        { buffer = 0, desc = "Obsidian: Extract Selection to New Note" })
-      vim.keymap.set("v", "<leader>nl", "<cmd>Obsidian link<CR>",
-        { buffer = 0, desc = "Obsidian: Link Selection to Existing Note" })
-      vim.keymap.set("v", "<leader>nN", "<cmd>Obsidian link_new<CR>",
-        { buffer = 0, desc = "Obsidian: Link Selection to New Note" })
+      vim.keymap.set('v', '<leader>ne', '<cmd>Obsidian extract_note<CR>', { buffer = 0, desc = 'Obsidian: Extract Selection to New Note' })
+      vim.keymap.set('v', '<leader>nl', '<cmd>Obsidian link<CR>', { buffer = 0, desc = 'Obsidian: Link Selection to Existing Note' })
+      vim.keymap.set('v', '<leader>nN', '<cmd>Obsidian link_new<CR>', { buffer = 0, desc = 'Obsidian: Link Selection to New Note' })
 
       -- Media & Attachments
-      vim.keymap.set("n", "<leader>np", "<cmd>Obsidian paste_img<CR>",
-        { buffer = 0, desc = "Obsidian: [P]aste Image" })
+      vim.keymap.set('n', '<leader>np', '<cmd>Obsidian paste_img<CR>', { buffer = 0, desc = 'Obsidian: [P]aste Image' })
     end,
   })
 
@@ -151,10 +146,10 @@ M.setup = function(injected_group)
   -- These autocmds detect when you enter a specific domain (like Markdown)
   -- and transparently initialize the required plugin in the background.
 
-  vim.api.nvim_create_autocmd("FileType", {
-    desc = "JIT Load Obsidian on Markdown entry",
+  vim.api.nvim_create_autocmd('FileType', {
+    desc = 'JIT Load Obsidian on Markdown entry',
     group = injected_group, -- <-- Bound to the Master Switch
-    pattern = "markdown",
+    pattern = 'markdown',
     callback = load_obsidian,
   })
 
@@ -175,9 +170,9 @@ M.setup = function(injected_group)
   end
 
   local map = vim.keymap.set
-  map("n", "<leader>nq", obsidian_stub("Obsidian quick_switch"), { desc = "Notes: Quick Switch" })
-  map("n", "<leader>ns", obsidian_stub("Obsidian search"), { desc = "Notes: Search" })
-  map("n", "<leader>nn", obsidian_stub("Obsidian new"), { desc = "Notes: New Note" })
+  map('n', '<leader>nq', obsidian_stub 'Obsidian quick_switch', { desc = 'Notes: Quick Switch' })
+  map('n', '<leader>ns', obsidian_stub 'Obsidian search', { desc = 'Notes: Search' })
+  map('n', '<leader>nn', obsidian_stub 'Obsidian new', { desc = 'Notes: New Note' })
 end
 
 return M

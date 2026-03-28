@@ -24,8 +24,8 @@ local deps_path = vim.fn.stdpath 'data' .. '/mini.deps'
 -- 2. Automated Installation (The Bootstrap)
 -- If the manager itself is missing, we fetch it immediately.
 if not vim.uv.fs_stat(deps_path) then
-	vim.notify('Installing mini.deps...', vim.log.levels.INFO)
-	vim.fn.system { 'git', 'clone', '--filter=blob:none', 'https://github.com/echasnovski/mini.deps', deps_path }
+  vim.notify('Installing mini.deps...', vim.log.levels.INFO)
+  vim.fn.system { 'git', 'clone', '--filter=blob:none', 'https://github.com/echasnovski/mini.deps', deps_path }
 end
 
 -- 3. Runtime Integration
@@ -35,36 +35,36 @@ vim.opt.rtp:prepend(deps_path)
 -- Only runs if the Neovim command is prefixed with PROFILE=1
 -- Example: `PROFILE=1 nvim`
 if vim.env.PROFILE then
-	local snacks_path = deps_path .. '/pack/deps/opt/snacks.nvim'
-	if vim.uv.fs_stat(snacks_path) then
-		vim.opt.rtp:prepend(snacks_path)
-		local ok_snacks, snacks_profiler = pcall(require, 'snacks.profiler')
-		if ok_snacks then
-			snacks_profiler.startup()
-		end
-	end
+  local snacks_path = deps_path .. '/pack/deps/opt/snacks.nvim'
+  if vim.uv.fs_stat(snacks_path) then
+    vim.opt.rtp:prepend(snacks_path)
+    local ok_snacks, snacks_profiler = pcall(require, 'snacks.profiler')
+    if ok_snacks then
+      snacks_profiler.startup()
+    end
+  end
 end
 
 -- 4. Manager Initialization
 local ok, mini_deps = pcall(require, 'mini.deps')
 if ok then
-	mini_deps.setup { path = { package = deps_path } }
-	-- We expose MiniDeps globally so other modules can use it.
-	_G.MiniDeps = mini_deps
+  mini_deps.setup { path = { package = deps_path } }
+  -- We expose MiniDeps globally so other modules can use it.
+  _G.MiniDeps = mini_deps
 else
-	utils.soft_notify('Failed to load mini.deps!', vim.log.levels.ERROR)
+  utils.soft_notify('Failed to load mini.deps!', vim.log.levels.ERROR)
 end
 
 -- 5. Core Environment Synchronization
 -- Initialize mise.nvim so that Neovim's process environment
 -- ($PATH, etc.) reflects the project's mise.toml before language servers boot.
 -- We use MiniDeps.later to avoid blocking the critical startup path (saving ~40ms).
-MiniDeps.add({ source = 'https://plugins.ejri.dev/mise.nvim' })
+MiniDeps.add { source = 'https://plugins.ejri.dev/mise.nvim' }
 MiniDeps.later(function()
-	local ok_mise, mise = pcall(require, 'mise')
-	if ok_mise then
-		mise.setup {}
-	end
+  local ok_mise, mise = pcall(require, 'mise')
+  if ok_mise then
+    mise.setup {}
+  end
 end)
 
 return M

@@ -10,7 +10,8 @@ echo "🚀 Starting Neovim Integration Tests..."
 
 # Execute Neovim headlessly, load the test runner, and exit.
 # We ensure the project root is in the Lua path.
-nvim --headless \
+# We use mise exec to ensure all tools are in the path.
+mise exec -- nvim --headless \
      -u tests/run_tests.lua \
      -c "lua MiniTest.run()" \
      -c "qa!"

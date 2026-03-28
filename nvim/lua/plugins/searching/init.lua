@@ -3,8 +3,8 @@
 -- Domain: Search, Discovery, and Structural Navigation
 --
 -- PHILOSOPHY: Contextual Retrieval
--- Searching is not just about finding strings; it's about navigating the 
--- codebase's structure. This orchestrator manages the high-speed finding 
+-- Searching is not just about finding strings; it's about navigating the
+-- codebase's structure. This orchestrator manages the high-speed finding
 -- engines and symbol browsers.
 --
 -- MAINTENANCE TIPS:
@@ -16,16 +16,16 @@ local M = {}
 local utils = require 'core.utils'
 
 local modules = {
-	'searching.aerial', -- Structural navigation
-	'searching.snacks-picker', -- JIT Finding Engine
+  'searching.aerial', -- Structural navigation
+  'searching.snacks-picker', -- JIT Finding Engine
 }
 
 for _, mod in ipairs(modules) do
-	local module_path = 'plugins.' .. mod
-	local ok, err = pcall(require, module_path)
-	if not ok then
-		utils.soft_notify(string.format('NAV DOMAIN FAILURE: [%s]\n%s', module_path, err), vim.log.levels.ERROR)
-	end
+  local module_path = 'plugins.' .. mod
+  local ok, err = pcall(require, module_path)
+  if not ok then
+    utils.soft_notify(string.format('NAV DOMAIN FAILURE: [%s]\n%s', module_path, err), vim.log.levels.ERROR)
+  end
 end
 
 return M

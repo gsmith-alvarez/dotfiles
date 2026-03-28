@@ -5,7 +5,7 @@
 -- PHILOSOPHY: The Seamless Workbench
 -- Neovim handles the text; Zellij handles the session. This module provides
 -- the bridge for opening new panes, sending commands, and managing the
--- layout from within the editor. 
+-- layout from within the editor.
 --
 -- WHY: We use Zellij for long-running builds and tests to keep Neovim's
 -- UI thread unblocked and responsive.

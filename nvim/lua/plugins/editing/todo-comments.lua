@@ -4,9 +4,9 @@
 -- Architecture: Passive JIT Highlight
 --
 -- PHILOSOPHY: Explicit Metadata
--- This plugin provides an "Anti-Fragile" audit trail of technical debt. 
--- Highlighting is "Passive" (low overhead), so we bootstrap it immediately 
--- to ensure annotations are visible from the first frame. It integrates 
+-- This plugin provides an "Anti-Fragile" audit trail of technical debt.
+-- Highlighting is "Passive" (low overhead), so we bootstrap it immediately
+-- to ensure annotations are visible from the first frame. It integrates
 -- with the Trouble domain for project-wide auditing.
 --
 -- MAINTENANCE TIPS:
@@ -20,20 +20,22 @@ local utils = require 'core.utils'
 local loaded = false
 
 local function bootstrap()
-	if loaded then return true end
+  if loaded then
+    return true
+  end
 
-	local ok, err = pcall(function()
-		require('mini.deps').add('folke/todo-comments.nvim')
-		require('todo-comments').setup { signs = true }
-	end)
+  local ok, err = pcall(function()
+    require('mini.deps').add 'folke/todo-comments.nvim'
+    require('todo-comments').setup { signs = true }
+  end)
 
-	if not ok then
-		utils.soft_notify('todo-comments failed to initialize: ' .. err, vim.log.levels.ERROR)
-		return false
-	end
+  if not ok then
+    utils.soft_notify('todo-comments failed to initialize: ' .. err, vim.log.levels.ERROR)
+    return false
+  end
 
-	loaded = true
-	return true
+  loaded = true
+  return true
 end
 
 -- Bootstrap immediately (highlighting is passive and cheap)

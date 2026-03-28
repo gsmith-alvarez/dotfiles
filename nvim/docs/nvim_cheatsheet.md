@@ -30,6 +30,7 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<leader>K` | N | Keywordprg (man/help) | Core |
 | `<leader>ui` | N | Inspect highlight under cursor | Core |
 | `<leader>uI` | N | Inspect treesitter tree | Core |
+| `<CR>` | N/X/O | Jump to word on screen | `mini.jump2d` |
 
 ---
 
@@ -127,8 +128,9 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `i g` / `a g` | N | Inside / Around entire buffer | `mini.ai` |
 | `ga` / `gA` | N/V | Align text / Align with preview | `mini.align` |
 | `gS` | N | Split / Join code (toggle) | `mini.splitjoin` |
-| `gza` / `gzd` | N | Add / Delete surround | `mini.surround` |
-| `gzr` / `gzh` | N | Replace / Highlight surround | `mini.surround` |
+| `sa` / `sd` | N | Add / Delete surround | `mini.surround` |
+| `sr` / `sh` | N | Replace / Highlight surround | `mini.surround` |
+| `sf` / `sF` | N | Find / Find left surround | `mini.surround` |
 | `<M-h/j/k/l>` | V | Move highlighted block | `mini.move` |
 | `<Tab>` | I | LuaSnip Expand / Jump Node / TabOut / Literal | Core/LuaSnip |
 | `<C-l>` | I/S | LuaSnip: Jump next node (or accept blink) | `LuaSnip` |
@@ -156,6 +158,7 @@ For benchmarking run `PROFILE=1 nvim` (profiler keys are dev-only, not bound glo
 | `<Tab>` / `<S-Tab>` | I | Indent / Dedent list (recalculates numbering) | `autolist.nvim` |
 | `<leader>cn` / `<leader>cp` | N | Cycle list type (e.g. `-` → `*` → `1.`) | `autolist.nvim` |
 | `>>` / `<<` | N | Indent / Dedent list (Normal mode) | `autolist.nvim` |
+| `<C-r>` | N | Recalculate list numbering | `autolist.nvim` |
 
 ### TODO Comments
 

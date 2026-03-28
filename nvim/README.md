@@ -7,13 +7,27 @@ A lightweight, portable, and stable Neovim configuration built on three pillars:
 3. **Stable** — Circuit-breaker pattern throughout. Every plugin load is wrapped in `pcall`. Failures notify without crashing.
 
 ---
-
 ## Architecture Map
 
 ```
 nvim/
 ├── init.lua                          # Phase 0: loader, built-in disables, safe_require boot
+├── justfile                          # Task runner (DevOps orchestration)
+├── selene.toml                       # Linter configuration (Selene)
+├── .stylua.toml                      # Formatter configuration (StyLua)
+├── docs/                             # Documentation and Design Specs
+│   ├── DEVELOPER.md                  # Internal architecture & DevOps guide
+│   ├── nvim_cheatsheet.md            # User-facing keymap reference
+│   └── superpowers/                  # Agent-specific design specs & plans
+├── scripts/                          # Maintenance & CI scripts
+│   └── run_tests.sh                  # Headless integration test runner
+├── tests/                            # Integration & Unit test suite
+│   ├── run_tests.lua                 # MiniTest orchestrator
+│   ├── lint_config.lua               # Test-specific linter settings
+│   └── test_*.lua                    # Domain-specific tests (boot, deps, keymaps...)
 └── lua/
+```
+
     ├── nvim_config/
     │   └── health.lua                # :checkhealth nvim_config (plugins, LSP binaries, tools)
     ├── autocmd/

@@ -12,21 +12,35 @@
 -- [[ PHASE 0: MICROCODE & FOUNDATION ]]
 -- Enables Neovim's built-in byte-code cache for faster startup.
 if vim.loader then
-	vim.loader.enable()
+  vim.loader.enable()
 end
 
 -- [[ PHASE 0.5: LEGACY PURGE ]]
 -- Disable 1990s-era Vim plugins. We use modern, asynchronous Lua alternatives.
 local disabled_built_ins = {
-	'netrw', 'netrwPlugin', 'netrwSettings', 'netrwFileHandlers',
-	'gzip', 'zip', 'zipPlugin', 'tar', 'tarPlugin',
-	'getscript', 'getscriptPlugin', 'vimball', 'vimballPlugin',
-	'2html_plugin', 'logipat', 'rrhelper', 'spellfile_plugin',
-	'matchit', 'fzf',
+  'netrw',
+  'netrwPlugin',
+  'netrwSettings',
+  'netrwFileHandlers',
+  'gzip',
+  'zip',
+  'zipPlugin',
+  'tar',
+  'tarPlugin',
+  'getscript',
+  'getscriptPlugin',
+  'vimball',
+  'vimballPlugin',
+  '2html_plugin',
+  'logipat',
+  'rrhelper',
+  'spellfile_plugin',
+  'matchit',
+  'fzf',
 }
 
 for _, plugin in pairs(disabled_built_ins) do
-	vim.g['loaded_' .. plugin] = 1
+  vim.g['loaded_' .. plugin] = 1
 end
 
 -- =============================================================================
@@ -38,15 +52,14 @@ end
 -- This function is your safety net. If you make a mistake in a Lua file,
 -- this engine catches it so Neovim doesn't crash on startup.
 local function safe_require(module)
-	local ok, err = pcall(require, module)
-	if not ok then
-		-- We schedule the notification so it appears AFTER the UI has loaded.
-		vim.schedule(function()
-			vim.notify(string.format('[BOOT SEQUENCE FAILURE]\nModule: %s\nError: %s', module, err),
-				vim.log.levels.ERROR, { title = 'Init.lua Fault Tolerance' })
-		end)
-	end
-	return ok
+  local ok, err = pcall(require, module)
+  if not ok then
+    -- We schedule the notification so it appears AFTER the UI has loaded.
+    vim.schedule(function()
+      vim.notify(string.format('[BOOT SEQUENCE FAILURE]\nModule: %s\nError: %s', module, err), vim.log.levels.ERROR, { title = 'Init.lua Fault Tolerance' })
+    end)
+  end
+  return ok
 end
 
 -- =============================================================================
@@ -59,9 +72,9 @@ require 'core.utils'
 --    Located in: lua/core/init.lua
 safe_require 'core'
 vim.opt.expandtab = true --Coverting tabs to spaces
-vim.opt.shiftwidth = 4   -- size of indent
-vim.opt.tabstop = 4      -- Number of spaces tabs count for
-vim.opt.softtabstop = 4  -- Number of spaces a tab counts for while editing
+vim.opt.shiftwidth = 4 -- size of indent
+vim.opt.tabstop = 4 -- Number of spaces tabs count for
+vim.opt.softtabstop = 4 -- Number of spaces a tab counts for while editing
 
 -- =============================================================================
 -- PHASE 2: PLUGIN ORCHESTRATION
@@ -79,33 +92,37 @@ safe_require 'plugins'
 -- =============================================================================
 
 local function load_jit_automation()
-	if _G.JIT_AUTOMATION_LOADED then return end
-	_G.JIT_AUTOMATION_LOADED = true
-	-- 3. Automation Layers: Custom user commands and autocommands
-	safe_require 'autocmd'
-	safe_require 'commands'
+  if _G.JIT_AUTOMATION_LOADED then
+    return
+  end
+  _G.JIT_AUTOMATION_LOADED = true
+  -- 3. Automation Layers: Custom user commands and autocommands
+  safe_require 'autocmd'
+  safe_require 'commands'
 end
 
 -- TRIGGER A: User tries to run a custom command
 vim.api.nvim_create_autocmd('CmdUndefined', {
-	group = vim.api.nvim_create_augroup('JIT_Automation', { clear = true }),
-	callback = function()
-		load_jit_automation()
-		vim.api.nvim_clear_autocmds({ group = 'JIT_Automation' })
-	end,
+  group = vim.api.nvim_create_augroup('JIT_Automation', { clear = true }),
+  callback = function()
+    load_jit_automation()
+    vim.api.nvim_clear_autocmds { group = 'JIT_Automation' }
+  end,
 })
 
 -- TRIGGER B: After UI is interactive (deferred to idle loop)
 vim.api.nvim_create_autocmd('VimEnter', {
-	group = 'JIT_Automation',
-	callback = function()
-		vim.defer_fn(load_jit_automation, 1)
-	end,
+  group = 'JIT_Automation',
+  callback = function()
+    vim.defer_fn(load_jit_automation, 1)
+  end,
 })
 
 -- Fallback for extremely fast interactions
 vim.defer_fn(function()
-	if vim.v.vim_did_enter == 1 then load_jit_automation() end
+  if vim.v.vim_did_enter == 1 then
+    load_jit_automation()
+  end
 end, 0)
 
 -- =============================================================================

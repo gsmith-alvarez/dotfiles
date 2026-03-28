@@ -3,8 +3,8 @@
 -- Location: lua/plugins/navigation/history.lua
 --
 -- PHILOSOPHY: Recency-First Discovery
--- We prioritize historical context (recent files, previous searches) as the 
--- fastest way to resume work. This module ensures the infrastructure for 
+-- We prioritize historical context (recent files, previous searches) as the
+-- fastest way to resume work. This module ensures the infrastructure for
 -- project-wide discovery is available.
 --
 -- MAINTENANCE TIPS:
@@ -15,7 +15,7 @@
 local M = {}
 
 M.setup = function()
-	require('mini.deps').add('folke/snacks.nvim')
+  require('mini.deps').add 'folke/snacks.nvim'
 end
 
 return M

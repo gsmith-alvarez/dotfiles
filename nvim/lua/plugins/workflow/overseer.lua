@@ -10,37 +10,39 @@
 -- MAINTENANCE TIPS:
 -- 1. Use `<leader>or` to run a task template (Make, Cargo, etc.).
 -- 2. Use `<leader>ot` to toggle the task list sidebar.
--- 3. If tasks aren't being detected, check if the required build file 
+-- 3. If tasks aren't being detected, check if the required build file
 --    (e.g., Makefile) is in the project root.
 
 local M = {}
-local utils = require('core.utils')
+local utils = require 'core.utils'
 
 local loaded = false
 
 -- [[ THE JIT ENGINE ]]
 local function bootstrap_overseer()
-  if loaded then return true end
+  if loaded then
+    return true
+  end
 
   local ok, err = pcall(function()
-    require('mini.deps').add('stevearc/overseer.nvim')
+    require('mini.deps').add 'stevearc/overseer.nvim'
 
-    require('overseer').setup({
+    require('overseer').setup {
       -- Strategy: Piped to Toggleterm (Ensure Toggleterm is installed)
-      strategy = "terminal",
+      strategy = 'terminal',
 
       -- We keep "builtin" to allow it to auto-detect Makefiles,
       -- VSCode tasks.json, and cargo files automatically when needed.
-      templates = { "builtin" },
+      templates = { 'builtin' },
 
       task_list = {
-        direction = "right",
+        direction = 'right',
         bindings = {
-          ["<C-l>"] = false, -- Prevent collision with Smart-Splits navigation
-          ["q"] = "Close",
+          ['<C-l>'] = false, -- Prevent collision with Smart-Splits navigation
+          ['q'] = 'Close',
         },
       },
-    })
+    }
   end)
 
   if not ok then

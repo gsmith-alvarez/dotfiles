@@ -5,9 +5,9 @@
 --- Location: lua/core/lint.lua
 ---
 --- PHILOSOPHY: Anti-Fragile Performance
---- This module implements an asynchronous linting architecture. By 
---- communicating directly with CLI tools and parsing their output into 
---- Neovim's diagnostic API, we achieve lower overhead than any third-party 
+--- This module implements an asynchronous linting architecture. By
+--- communicating directly with CLI tools and parsing their output into
+--- Neovim's diagnostic API, we achieve lower overhead than any third-party
 --- plugin. This ensures a fluid UI even when running heavy analysis.
 ---
 --- MAINTENANCE TIPS:
@@ -19,9 +19,9 @@
 local M = {}
 
 --- Namespace for our native linter bridge.
--- Why: Namespaces allow us to clear or update ONLY our diagnostics without 
+-- Why: Namespaces allow us to clear or update ONLY our diagnostics without
 -- affecting those from LSP or other plugins.
-local ns = vim.api.nvim_create_namespace('native-lint')
+local ns = vim.api.nvim_create_namespace 'native-lint'
 
 --- Map filetypes to their respective CLI linters and their parsing logic.
 local linters = {
@@ -48,9 +48,37 @@ local linters = {
       return diagnostics
     end,
   },
+  lua = {
+    bin = 'selene',
+    args = { '--display-style', 'json', '$FILENAME' },
+    parser = function(output)
+      local diagnostics = {}
+      -- Selene outputs newline-delimited JSON objects.
+      for _, line in ipairs(vim.split(output, '\n', { trimempty = true })) do
+        -- Skip the final summary lines (e.g. "Results: 0 errors ...")
+        if line:sub(1, 1) == '{' then
+          local ok, entry = pcall(vim.json.decode, line)
+          if ok and entry and entry.primary_label then
+            local span = entry.primary_label.span
+            table.insert(diagnostics, {
+              lnum = span.start_line,
+              col = span.start_column,
+              end_lnum = span.end_line,
+              end_col = span.end_column,
+              severity = (entry.severity == 'Error' or entry.severity == 'Deny') and vim.diagnostic.severity.ERROR
+                or vim.diagnostic.severity.WARN,
+              message = string.format('[%s] %s', entry.code, entry.message),
+              source = 'selene',
+            })
+          end
+        end
+      end
+      return diagnostics
+    end,
+  },
   markdown = {
     bin = 'markdownlint-cli2',
-    -- Note: markdownlint-cli2 doesn't always support JSON output natively 
+    -- Note: markdownlint-cli2 doesn't always support JSON output natively
     -- without external tools. We parse its default format via regex.
     args = { '$FILENAME' },
     parser = function(output)
@@ -58,7 +86,7 @@ local linters = {
       -- Safely iterate over lines using Neovim's native split API.
       for _, line in ipairs(vim.split(output, '\n', { trimempty = true })) do
         -- Format: filename:line:column MDXXX/message
-        local lnum, col, msg = line:match(':(%d+):(%d+)%s+(.*)')
+        local lnum, col, msg = line:match ':(%d+):(%d+)%s+(.*)'
         if lnum and col then
           table.insert(diagnostics, {
             lnum = tonumber(lnum) - 1,
@@ -79,11 +107,15 @@ local linters = {
 function M.lint(bufnr)
   local ft = vim.bo[bufnr].filetype
   local config = linters[ft]
-  if not config then return end
+  if not config then
+    return
+  end
 
   -- Resolve binary path via mise shim.
   local bin_path = vim.fn.executable(config.bin) == 1 and config.bin or nil
-  if not bin_path then return end
+  if not bin_path then
+    return
+  end
 
   local filename = vim.api.nvim_buf_get_name(bufnr)
   local args = {}
@@ -96,8 +128,8 @@ function M.lint(bufnr)
   end
 
   -- EXECUTION: Run the linter asynchronously.
-  -- Why: Running it asynchronously ensures that the UI remains completely 
-  -- fluid while the linter runs in the background. Even slow linters 
+  -- Why: Running it asynchronously ensures that the UI remains completely
+  -- fluid while the linter runs in the background. Even slow linters
   -- won't cause "micro-stuttering" during editing.
   vim.system({ bin_path, unpack(args) }, { text = true }, function(obj)
     local stdout = obj.stdout or ''
@@ -105,11 +137,13 @@ function M.lint(bufnr)
     local output = stdout ~= '' and stdout or stderr
 
     -- Inject diagnostics back into the Neovim event loop.
-    -- Why: vim.diagnostic.set must be called on the main thread. If we called 
-    -- it from inside this async callback directly, Neovim might crash or 
+    -- Why: vim.diagnostic.set must be called on the main thread. If we called
+    -- it from inside this async callback directly, Neovim might crash or
     -- behave unpredictably.
     vim.schedule(function()
-      if not vim.api.nvim_buf_is_valid(bufnr) then return end
+      if not vim.api.nvim_buf_is_valid(bufnr) then
+        return
+      end
       local diagnostics = config.parser(output)
       vim.diagnostic.set(ns, bufnr, diagnostics)
     end)

@@ -7,7 +7,7 @@
 -- ready for use without manual intervention.
 --
 -- MAINTENANCE TIPS:
--- 1. If an external tool (terminal, test runner) fails, check the specific 
+-- 1. If an external tool (terminal, test runner) fails, check the specific
 --    module in this directory.
 -- 2. New workflow-related plugins should be added to the `modules` table.
 -- 3. Most tools here are JIT-loaded to maintain high performance.

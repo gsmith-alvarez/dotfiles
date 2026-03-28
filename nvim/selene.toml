@@ -1,0 +1,10 @@
+# Selene configuration for Neovim config
+std = "lua51"
+
+[rules]
+unused_variable = "warn"
+shadowing = "warn"
+no_global_variable = "allow"
+undefined_variable = "allow"
+unscoped_variables = "allow"
+global_usage = "allow"

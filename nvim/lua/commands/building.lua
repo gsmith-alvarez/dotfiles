@@ -19,128 +19,142 @@ local M = {}
 
 --- Helper: Find the project root based on common markers.
 local function get_project_root()
-    local markers = { 'Cargo.toml', 'go.mod', 'build.zig', 'Makefile', 'pyproject.toml', '.git' }
-    local root = vim.fs.find(markers, { upward = true, stop = vim.env.HOME })[1]
-    if root then
-        return vim.fs.dirname(root)
-    end
-    return nil
+  local markers = { 'Cargo.toml', 'go.mod', 'build.zig', 'Makefile', 'pyproject.toml', '.git' }
+  local root = vim.fs.find(markers, { upward = true, stop = vim.env.HOME })[1]
+  if root then
+    return vim.fs.dirname(root)
+  end
+  return nil
 end
 
 -- [[ Smart Runner ]]
 local function execute_smart_build(is_continuous)
-    local ft = vim.bo.filetype
-    local file = vim.fn.expand '%:p'
-    local root = get_project_root()
-    local cmd = ''
+  local ft = vim.bo.filetype
+  local file = vim.fn.expand '%:p'
+  local root = get_project_root()
+  local cmd = ''
 
-    if ft == 'python' then
-        cmd = string.format('uv run %s', vim.fn.shellescape(file))
-    elseif ft == 'go' then
-        local has_mod = root and vim.fn.filereadable(root .. '/go.mod') == 1
-        cmd = has_mod and 'go run .' or string.format('go run %s', vim.fn.shellescape(file))
-    elseif ft == 'zig' then
-        local has_build = root and vim.fn.filereadable(root .. '/build.zig') == 1
-        cmd = has_build and 'zig build run' or string.format('zig run %s', vim.fn.shellescape(file))
-    elseif ft == 'c' or ft == 'cpp' then
-        if root and vim.fn.filereadable(root .. '/Makefile') == 1 then
-            cmd = 'make'
-        else
-            --  Our flags for C
-            local link_flags = (ft == 'cpp') and '-lc -lc++' or '-lc'
-            local std_flag = (ft == 'cpp') and '-std=c++23' or '-std=c23'
-            cmd = string.format('zig run -cflags %s -Wall -Wextra -O2 -Werror -- %s %s', std_flag,
-                vim.fn.shellescape(file), link_flags)
-        end
-    elseif ft == 'lua' then
-        cmd = string.format('nvim -l %s', vim.fn.shellescape(file))
-    elseif ft == 'sh' or ft == 'bash' then
-        cmd = string.format('bash %s', vim.fn.shellescape(file))
-    elseif ft == 'rust' then
-        local has_cargo = root and vim.fn.filereadable(root .. '/Cargo.toml') == 1
-        if has_cargo then
-            cmd = 'cargo run -q'
-        else
-            local tmp_bin = '/tmp/' .. vim.fn.expand '%:t:r' .. '_rust_run'
-            cmd = string.format([[bash -c "rustc %s -o %s && %s"]], vim.fn.shellescape(file), tmp_bin,
-                tmp_bin)
-        end
+  if ft == 'python' then
+    cmd = string.format('uv run %s', vim.fn.shellescape(file))
+  elseif ft == 'go' then
+    local has_mod = root and vim.fn.filereadable(root .. '/go.mod') == 1
+    cmd = has_mod and 'go run .' or string.format('go run %s', vim.fn.shellescape(file))
+  elseif ft == 'zig' then
+    local has_build = root and vim.fn.filereadable(root .. '/build.zig') == 1
+    cmd = has_build and 'zig build run' or string.format('zig run %s', vim.fn.shellescape(file))
+  elseif ft == 'c' or ft == 'cpp' then
+    if root and vim.fn.filereadable(root .. '/Makefile') == 1 then
+      cmd = 'make'
     else
-        vim.notify('No smart runner for filetype: ' .. ft, vim.log.levels.WARN)
-        return
+      --  Our flags for C
+      local link_flags = (ft == 'cpp') and '-lc -lc++' or '-lc'
+      local std_flag = (ft == 'cpp') and '-std=c++23' or '-std=c23'
+      cmd = string.format('zig run -cflags %s -Wall -Wextra -O2 -Werror -- %s %s', std_flag, vim.fn.shellescape(file), link_flags)
     end
-
-    if is_continuous then
-        -- Route to the daemon
-        vim.cmd('Watch ' .. cmd)
+  elseif ft == 'lua' then
+    cmd = string.format('nvim -l %s', vim.fn.shellescape(file))
+  elseif ft == 'sh' or ft == 'bash' then
+    cmd = string.format('bash %s', vim.fn.shellescape(file))
+  elseif ft == 'rust' then
+    local has_cargo = root and vim.fn.filereadable(root .. '/Cargo.toml') == 1
+    if has_cargo then
+      cmd = 'cargo run -q'
     else
-        -- ASYMMETRIC FIX: Use 'zellij run' which handles STDIN correctly for the 'read' command.
-        -- We use '-c' (close-on-exit) to ensure Zellij closes the pane once bash exits.
-        local hold_open_cmd = string.format('%s; echo ""; echo "Press any key to close..."; read -n 1 -s', cmd)
-
-        -- PERFORMANCE: Use non-blocking libuv system calls instead of vim.fn.jobstart
-        vim.system({ 'zellij', 'run', '-d', 'right', '-c', '--', 'bash', '-c', hold_open_cmd })
-        vim.notify('Executing: ' .. cmd, vim.log.levels.DEBUG)
+      local tmp_bin = '/tmp/' .. vim.fn.expand '%:t:r' .. '_rust_run'
+      cmd = string.format([[bash -c "rustc %s -o %s && %s"]], vim.fn.shellescape(file), tmp_bin, tmp_bin)
     end
+  else
+    vim.notify('No smart runner for filetype: ' .. ft, vim.log.levels.WARN)
+    return
+  end
+
+  if is_continuous then
+    -- Route to the daemon
+    vim.cmd('Watch ' .. cmd)
+  else
+    -- ASYMMETRIC FIX: Use 'zellij run' which handles STDIN correctly for the 'read' command.
+    -- We use '-c' (close-on-exit) to ensure Zellij closes the pane once bash exits.
+    local hold_open_cmd = string.format('%s; echo ""; echo "Press any key to close..."; read -n 1 -s', cmd)
+
+    -- PERFORMANCE: Use non-blocking libuv system calls instead of vim.fn.jobstart
+    vim.system { 'zellij', 'run', '-d', 'right', '-c', '--', 'bash', '-c', hold_open_cmd }
+    vim.notify('Executing: ' .. cmd, vim.log.levels.DEBUG)
+  end
 end
 
 M.commands = {
-    -- [[ Watchexec Continuous Daemon: :Watch ]]
-    Watch = {
-        desc = 'Run command continuously in Zellij via watchexec',
-        nargs = '+',
-        impl = function(opts)
-            local utils = require 'core.utils'
-            local watchexec = vim.fn.executable('watchexec') == 1 and 'watchexec' or nil
+  -- [[ Watchexec Continuous Daemon: :Watch ]]
+  Watch = {
+    desc = 'Run command continuously in Zellij via watchexec',
+    nargs = '+',
+    impl = function(opts)
+      local utils = require 'core.utils'
+      local watchexec = vim.fn.executable 'watchexec' == 1 and 'watchexec' or nil
 
-            if not watchexec then
-                utils.soft_notify('watchexec not found. Install via: mise install watchexec',
-                    vim.log.levels.ERROR)
-                return
-            end
+      if not watchexec then
+        utils.soft_notify('watchexec not found. Install via: mise install watchexec', vim.log.levels.ERROR)
+        return
+      end
 
-            local cmd_args = opts.args
-            if cmd_args:match '%%' then
-                local current_file = vim.fn.expand '%:p'
-                if current_file == '' then
-                    utils.soft_notify('No file open to expand %', vim.log.levels.WARN)
-                    return
-                end
-                cmd_args = cmd_args:gsub('%%', vim.fn.shellescape(current_file))
-            end
+      local cmd_args = opts.args
+      if cmd_args:match '%%' then
+        local current_file = vim.fn.expand '%:p'
+        if current_file == '' then
+          utils.soft_notify('No file open to expand %', vim.log.levels.WARN)
+          return
+        end
+        cmd_args = cmd_args:gsub('%%', vim.fn.shellescape(current_file))
+      end
 
-            local root = get_project_root() or vim.fn.expand '%:p:h'
+      local root = get_project_root() or vim.fn.expand '%:p:h'
 
-            -- Watchexec naturally stays open, so we don't need the 'hold_open' hack here.
-            vim.system({
-                'zellij', 'run', '-d', 'right', '-c', '--',
-                watchexec, '-r', '-c', '-w', root, '--', 'bash', '-c', cmd_args
-            })
+      -- Watchexec naturally stays open, so we don't need the 'hold_open' hack here.
+      vim.system {
+        'zellij',
+        'run',
+        '-d',
+        'right',
+        '-c',
+        '--',
+        watchexec,
+        '-r',
+        '-c',
+        '-w',
+        root,
+        '--',
+        'bash',
+        '-c',
+        cmd_args,
+      }
 
-            vim.notify('Watcher Active: ' .. cmd_args, vim.log.levels.DEBUG)
-        end,
-    },
+      vim.notify('Watcher Active: ' .. cmd_args, vim.log.levels.DEBUG)
+    end,
+  },
 
-    -- [[ Smart Run Entry Points ]]
-    Run = {
-        desc = 'Run',
-        keymap = '<leader>er',
-        impl = function()
-            execute_smart_build(false)
-        end,
-    },
+  -- [[ Smart Run Entry Points ]]
+  Run = {
+    desc = 'Run',
+    keymap = '<leader>er',
+    impl = function()
+      execute_smart_build(false)
+    end,
+  },
 
-    RunWatch = {
-        desc = 'Run Watch',
-        keymap = '<leader>ew',
-        impl = function()
-            execute_smart_build(true)
-        end,
-    },
+  RunWatch = {
+    desc = 'Run Watch',
+    keymap = '<leader>ew',
+    impl = function()
+      execute_smart_build(true)
+    end,
+  },
 }
 
 -- Maintain legacy exports
-M.run = function() execute_smart_build(false) end
-M.run_continuous = function() execute_smart_build(true) end
+M.run = function()
+  execute_smart_build(false)
+end
+M.run_continuous = function()
+  execute_smart_build(true)
+end
 
 return M

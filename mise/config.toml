@@ -112,6 +112,7 @@ shfmt = "latest"
 "npm:markdownlint-cli2" = "latest"
 taplo = "latest"
 yamllint = "latest"
+"cargo:selene" = "latest"          # Lua linter
 
 # --- 6. RUST ECOSYSTEM UTILITIES ---
 cargo-binstall = "latest"

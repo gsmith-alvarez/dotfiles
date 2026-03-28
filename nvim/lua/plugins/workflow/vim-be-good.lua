@@ -12,13 +12,13 @@
 -- 3. Loaded JIT to avoid consuming memory during real work.
 
 local M = {}
-local utils = require('core.utils')
+local utils = require 'core.utils'
 
 M.setup = function()
   local ok, err = pcall(function()
-    require('mini.deps').add({
+    require('mini.deps').add {
       source = 'gsmith-alvarez/vim-be-good',
-    })
+    }
   end)
 
   if not ok then

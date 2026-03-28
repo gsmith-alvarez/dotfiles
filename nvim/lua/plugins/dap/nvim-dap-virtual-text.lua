@@ -7,25 +7,25 @@
 -- ARCHITECTURE: Completely dormant until explicitly invoked by the DAP JIT engine.
 --
 -- MAINTENANCE TIPS:
--- 1. This module is automatically initialized by `debug.lua` during 
+-- 1. This module is automatically initialized by `debug.lua` during
 --    the DAP bootstrap.
 -- 2. If virtual text is too noisy, adjust the `filter` function.
 -- 3. Variable values are displayed at the end of the line (EOL).
 
 local M = {}
-local utils = require('core.utils')
+local utils = require 'core.utils'
 
 -- THE CONTRACT: This function is completely isolated. It will not execute
 -- until explicitly called by the main debug orchestrator.
 M.setup = function()
   local ok, err = pcall(function()
-    local MiniDeps = require('mini.deps')
+    local MiniDeps = require 'mini.deps'
 
     -- 1. Dependency Management
-    MiniDeps.add('theHamsta/nvim-dap-virtual-text')
+    MiniDeps.add 'theHamsta/nvim-dap-virtual-text'
 
     -- 2. Configuration
-    require('nvim-dap-virtual-text').setup({
+    require('nvim-dap-virtual-text').setup {
       enabled = true,
       enabled_commands = true,
       highlight_changed_variables = true,
@@ -41,7 +41,7 @@ M.setup = function()
       -- Display Options
       virt_text_pos = 'eol',
       all_frames = false,
-    })
+    }
   end)
 
   if not ok then
@@ -50,4 +50,3 @@ M.setup = function()
 end
 
 return M
-

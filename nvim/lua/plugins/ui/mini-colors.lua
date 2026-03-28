@@ -5,8 +5,8 @@
 --
 -- PHILOSOPHY: Zero-Dependency Theming
 -- This is a core "Anti-Fragile" pillar. By using `mini.base16` (part of the
--- existing `mini.nvim` core) instead of a standalone theme plugin, we 
--- eliminate an external dependency, avoid complex compile/cache steps, 
+-- existing `mini.nvim` core) instead of a standalone theme plugin, we
+-- eliminate an external dependency, avoid complex compile/cache steps,
 -- and ensure the theme is available even in "safe mode."
 --
 -- MAINTENANCE TIPS:
@@ -18,7 +18,7 @@ local M = {}
 local utils = require 'core.utils'
 
 local ok, err = pcall(function()
-  require('mini.base16').setup({
+  require('mini.base16').setup {
     palette = {
       base00 = '#1e1e2e', -- base        (background)
       base01 = '#181825', -- mantle      (lighter background)
@@ -38,7 +38,7 @@ local ok, err = pcall(function()
       base0F = '#f2cdcd', -- flamingo    (deprecated, embedded)
     },
     use_cterm = false,
-  })
+  }
 end)
 
 if not ok then

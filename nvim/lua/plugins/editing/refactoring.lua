@@ -5,24 +5,26 @@
 --
 -- PHILOSOPHY: Computational Economy
 -- Refactoring is a heavy, AST-dependent operation. To remain "Anti-Fragile,"
--- the engine only spins up the exact moment you attempt a refactor via 
--- `<leader>r`. We also perform an "AST Validation" check before loading, 
+-- the engine only spins up the exact moment you attempt a refactor via
+-- `<leader>r`. We also perform an "AST Validation" check before loading,
 -- ensuring we don't wake the engine in files without Treesitter parsers.
 --
 -- MAINTENANCE TIPS:
--- 1. If refactoring fails, ensure Treesitter has a parser installed 
+-- 1. If refactoring fails, ensure Treesitter has a parser installed
 --    for the current filetype (`:TSInstall <lang>`).
 -- 2. Keybinds are under `<leader>r`.
 -- 3. This module uses a JIT bootstrap to keep startup clean.
 
 local M = {}
-local utils = require('core.utils')
+local utils = require 'core.utils'
 
 local loaded = false
 
 -- [[ The JIT Engine ]]
 local function bootstrap_refactoring()
-  if loaded then return true end
+  if loaded then
+    return true
+  end
 
   -- 1. True AST Validation
   -- We must verify if the engine can actually read the current buffer's filetype.
@@ -33,12 +35,12 @@ local function bootstrap_refactoring()
   end
 
   local ok, err = pcall(function()
-    require('mini.deps').add({
+    require('mini.deps').add {
       source = 'ThePrimeagen/refactoring.nvim',
-      depends = { 'nvim-treesitter/nvim-treesitter' }
-    })
+      depends = { 'nvim-treesitter/nvim-treesitter' },
+    }
 
-    require('refactoring').setup({})
+    require('refactoring').setup {}
   end)
 
   if not ok then

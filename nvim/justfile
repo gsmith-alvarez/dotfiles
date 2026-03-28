@@ -1,0 +1,51 @@
+# Justfile for Neovim Configuration
+# Architecture: Phased DevOps Orchestration
+
+LOG_PATH := "~/.local/state/nvim/config_diagnostics.log"
+
+# Run the full integration test suite
+test:
+    @echo "🚀 Starting Neovim Integration Tests..."
+    @./scripts/run_tests.sh
+
+# Lint Lua files using Selene
+lint:
+    @echo "🔍 Linting Lua files with Selene..."
+    @mise exec -- selene lua/
+
+# Format Lua files using StyLua
+fmt:
+    @echo "🎨 Formatting Lua files..."
+    @mise exec -- stylua .
+
+# Check formatting without modifying files
+fmt-check:
+    @echo "📏 Checking Lua formatting..."
+    @mise exec -- stylua --check .
+
+# Run all pre-commit checks (Lint, Format Check, Test)
+check: lint fmt-check test
+
+# Update plugins headlessly via mini.deps
+update:
+    @echo "🔄 Updating plugins..."
+    @nvim --headless -c "lua require('mini.deps').update()" -c "qa!"
+
+# Run health checks headlessly
+health:
+    @echo "🩺 Running Neovim health checks..."
+    @nvim --headless +checkhealth +qa
+
+# Tail the configuration diagnostics log
+logs:
+    @echo "📜 Tailing config logs..."
+    @tail -f {{LOG_PATH}}
+
+# Clear the configuration diagnostics log
+clean-logs:
+    @echo "🧹 Clearing config logs..."
+    @echo "" > {{LOG_PATH}}
+
+# List available keymaps (requires Neovim running or headless script)
+keymaps:
+    @nvim --headless -c "lua for _, m in ipairs(vim.api.nvim_get_keymap('n')) do print(m.lhs .. ' -> ' .. (m.rhs or '')) end" -c "qa!"

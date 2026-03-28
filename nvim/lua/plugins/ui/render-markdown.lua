@@ -5,8 +5,8 @@
 --
 -- PHILOSOPHY: Context-Aware Activation
 -- Markdown rendering is computationally expensive. To remain "Anti-Fragile,"
--- we strictly sandbox this plugin to only initialize when a Markdown file 
--- is actually opened. This prevents Treesitter overhead from affecting 
+-- we strictly sandbox this plugin to only initialize when a Markdown file
+-- is actually opened. This prevents Treesitter overhead from affecting
 -- Lua or Rust editing sessions.
 --
 -- MAINTENANCE TIPS:
@@ -15,7 +15,7 @@
 -- 3. Heading icons can be customized in the `heading.icons` table.
 
 local M = {}
-local utils = require('core.utils')
+local utils = require 'core.utils'
 
 -- [[ DEFERRED BOOTSTRAPPER: FileType Sandbox ]]
 local group = vim.api.nvim_create_augroup('UI_RenderMarkdown', { clear = true })
@@ -25,23 +25,23 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'markdown', 'markdown.mdx', 'norg', 'rmd', 'org' },
   callback = function()
     local ok, err = pcall(function()
-      require('mini.deps').add({
+      require('mini.deps').add {
         source = 'MeanderingProgrammer/render-markdown.nvim',
         -- Explicitly define dependencies to guarantee render stability
-        depends = { 
-          'nvim-treesitter/nvim-treesitter', 
-          'echasnovski/mini.icons' 
-        }
-      })
-      
-      require('render-markdown').setup({
+        depends = {
+          'nvim-treesitter/nvim-treesitter',
+          'echasnovski/mini.icons',
+        },
+      }
+
+      require('render-markdown').setup {
         -- Minimalist configuration. The plugin has excellent defaults,
         -- but we explicitly define the heading style for visual hierarchy.
         heading = {
           sign = false,
           icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
         },
-      })
+      }
     end)
 
     if not ok then
@@ -49,7 +49,7 @@ vim.api.nvim_create_autocmd('FileType', {
     end
 
     -- Self-destruct to ensure this bootstrap logic only runs once per session
-    vim.api.nvim_clear_autocmds({ group = 'UI_RenderMarkdown' })
+    vim.api.nvim_clear_autocmds { group = 'UI_RenderMarkdown' }
   end,
 })
 

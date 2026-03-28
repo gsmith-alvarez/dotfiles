@@ -66,7 +66,7 @@ The configuration includes a testing suite powered by `mini.test` (or `plenary`)
 ### Running Tests
 To run the full suite of integration tests for core utilities:
 ```bash
-./run_tests.sh
+./scripts/run_tests.sh
 ```
 
 Alternatively, you can run them manually:

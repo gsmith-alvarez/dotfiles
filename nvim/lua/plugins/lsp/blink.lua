@@ -5,12 +5,12 @@
 --
 -- PHILOSOPHY: The Pre-Emptive Strike
 -- Autocompletion is not a standalone UI; it is an integrated client of the LSP.
--- In our "Phased Boot" strategy, Blink must load exactly when a file is read 
--- so its capabilities can be broadcast to the Language Servers the millisecond 
+-- In our "Phased Boot" strategy, Blink must load exactly when a file is read
+-- so its capabilities can be broadcast to the Language Servers the millisecond
 -- they attach. This prevents the "no completions on first attach" bug.
 --
 -- MAINTENANCE TIPS:
--- 1. If the completion menu is slow or broken, check if a new version requires 
+-- 1. If the completion menu is slow or broken, check if a new version requires
 --    a `cargo build` (handled automatically by MiniDeps hooks).
 -- 2. Keybinds for completion are isolated here to avoid global conflicts.
 -- 3. Symbols/Icons are pulled from `lua/core/icons.lua`.
@@ -42,12 +42,12 @@ M.setup = function()
       checkout = 'v1.9.1',
       hooks = {
         post_install = function(args)
-          if vim.fn.executable('cargo') == 1 then
+          if vim.fn.executable 'cargo' == 1 then
             vim.system({ 'cargo', '+nightly', 'build', '--release' }, { cwd = args.path }):wait()
           end
         end,
         post_checkout = function(args)
-          if vim.fn.executable('cargo') == 1 then
+          if vim.fn.executable 'cargo' == 1 then
             vim.system({ 'cargo', '+nightly', 'build', '--release' }, { cwd = args.path }):wait()
           end
         end,
@@ -76,7 +76,7 @@ M.setup = function()
         ['<C-k>'] = { 'select_prev', 'fallback' },
         -- C-l/C-h: accept/hide from menu, then fallback to luasnip.lua's locally_jumpable keymaps
         ['<C-l>'] = { 'accept', 'fallback' },
-        ['<C-h>'] = { 'hide',   'fallback' },
+        ['<C-h>'] = { 'hide', 'fallback' },
 
         -- Tab: accept selected item, fallback to luasnip node jump or TabOut
         ['<Tab>'] = { 'accept', 'fallback' },
@@ -88,7 +88,9 @@ M.setup = function()
         ['<C-w>d'] = {
           function(cmp)
             local item = cmp.get_selected_item()
-            if not item then return false end
+            if not item then
+              return false
+            end
 
             -- Close menu and open in split
             cmp.hide()
@@ -115,12 +117,12 @@ M.setup = function()
         },
         list = {
           selection = {
-            preselect = true,    -- Auto-targets the first item for instant <C-l> acceptance
+            preselect = true, -- Auto-targets the first item for instant <C-l> acceptance
             auto_insert = false, -- Prevents ghost text from mutating your buffer while scrolling
           },
         },
         documentation = {
-          auto_show = true,         -- Show docs panel automatically when navigating items
+          auto_show = true, -- Show docs panel automatically when navigating items
           auto_show_delay_ms = 200, -- Snappy feel — matches VS Code behaviour
           window = { border = 'rounded' },
         },
