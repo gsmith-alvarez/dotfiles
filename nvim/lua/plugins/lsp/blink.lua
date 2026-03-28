@@ -83,6 +83,24 @@ M.setup = function()
 
         ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
         ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+
+        -- Custom split view for documentation
+        ['<C-w>d'] = {
+          function(cmp)
+            local item = cmp.get_selected_item()
+            if not item then return false end
+
+            -- Close menu and open in split
+            cmp.hide()
+            vim.schedule(function()
+              vim.cmd 'vsplit'
+              vim.lsp.buf.hover()
+            end)
+
+            return true
+          end,
+          'fallback',
+        },
       },
       appearance = {
         nerd_font_variant = 'mono',
