@@ -87,8 +87,10 @@ M.setup = function()
 		vim.keymap.set({ 'i', 's' }, '<C-l>', function()
 			if luasnip.locally_jumpable(1) then
 				luasnip.jump(1)
+			elseif luasnip.expandable() then
+				luasnip.expand()
 			end
-		end, { silent = true, desc = 'LuaSnip: jump to next node' })
+		end, { silent = true, desc = 'LuaSnip: jump to next node or expand' })
 
 		vim.keymap.set({ 'i', 's' }, '<C-h>', function()
 			if luasnip.locally_jumpable(-1) then
