@@ -1,11 +1,11 @@
 -- [[ THE ENTRY POINT: init.lua ]]
 -- =============================================================================
 -- Welcome to your Neovim Configuration.
--- 
+--
 -- If you are a newcomer to Neovim:
 -- 1. This file is the "Main Menu" of your editor. It's the first thing Neovim runs.
 -- 2. It follows a "Phased Boot Sequence" (0 to 2) to ensure the fastest startup.
--- 3. It uses an "Anti-Fragile" loader: if one part of your config breaks, the rest 
+-- 3. It uses an "Anti-Fragile" loader: if one part of your config breaks, the rest
 --    of the editor will still work, and you'll see a notification with the error.
 -- =============================================================================
 
@@ -35,7 +35,7 @@ end
 -- =============================================================================
 
 -- [[ THE ANTI-FRAGILE ENGINE ]]
--- This function is your safety net. If you make a mistake in a Lua file, 
+-- This function is your safety net. If you make a mistake in a Lua file,
 -- this engine catches it so Neovim doesn't crash on startup.
 local function safe_require(module)
 	local ok, err = pcall(require, module)
@@ -58,11 +58,15 @@ require 'core.utils'
 -- 2. Core Orchestrator: Loads deps.lua, options, and keymaps.
 --    Located in: lua/core/init.lua
 safe_require 'core'
+vim.opt.expandtab = true --Coverting tabs to spaces
+vim.opt.shiftwidth = 4   -- size of indent
+vim.opt.tabstop = 4      -- Number of spaces tabs count for
+vim.opt.softtabstop = 4  -- Number of spaces a tab counts for while editing
 
 -- =============================================================================
 -- PHASE 2: PLUGIN ORCHESTRATION
 -- =============================================================================
--- We load this synchronously because lua/plugins/init.lua is its own 
+-- We load this synchronously because lua/plugins/init.lua is its own
 -- high-performance orchestrator that handles Scenario-based deferral.
 safe_require 'plugins'
 
