@@ -43,21 +43,24 @@ return {
         i(5, '0'),
     })),
 
-
-    s('bash', t { '#!/usr/bin/env bash', }),
-
-    s('strict', t { 'set -euo pipefail', 'IFS=$\'\\n\\t\'' }),
-
+    s('bash', fmt([[
+    #!/usr/bin/env bash
+    set -euo pipefail
+    IFS=$'\n\t'
+    {}
+    ]], {
+        i(0)
+    })),
 
     s('src', fmt([[
     LIB_DIR="$(cd "$(dirname "${{BASH_SOURCE[0]}}")" && cd "$(dirname "$(readlink "${{BASH_SOURCE[0]}}" || echo ".")")/../{}" && pwd)"
-
     readonly LIB_DIR
-
     # shellcheck disable=SC1091
     source "${{LIB_DIR}}/{}.sh"
+    {}
     ]], {
         i(1, "lib"),
         i(2, "print"),
+        i(3)
     })),
 }
