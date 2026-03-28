@@ -243,8 +243,10 @@ vim.keymap.set('n', '<leader>fd', snacks_call('picker.zoxide'), { desc = 'Find: 
 vim.keymap.set('n', '<leader>fr', snacks_call('picker.recent'), { desc = 'Find: Recent Files' })
 vim.keymap.set('n', '<leader>fc', snacks_call('picker.recent', { filter = { cwd = true } }),
 	{ desc = 'Find: Recent (CWD)' })
-vim.keymap.set('n', '<leader>fs', function() require('mini.starter').open() end, { desc = 'Find: Starter' })
-
+vim.keymap.set('n', '<leader>fs', function()
+	require('plugins.ui.mini-starter').setup(true)
+	require('mini.starter').open()
+end, { desc = 'Find: Starter' })
 vim.keymap.set('n', '<leader>fe', function()
 	require('mini.files').open(project_root())
 end, { desc = 'File: Explorer (Root)' })

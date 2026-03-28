@@ -57,6 +57,9 @@ M.setup = function()
 			},
 		}
 
+		-- Filetype extensions
+		luasnip.filetype_extend("sh", { "bash" })
+
 		-- 3. Cleanup: Automatically unlink snippets when leaving insert mode
 		-- to prevent "stuck" virtual text and Tab hijacked behavior.
 		vim.api.nvim_create_autocmd('InsertLeave', {
@@ -122,8 +125,6 @@ M.setup = function()
 
 		-- NOTE: ModeChange handles cross-buffer jumps and other edge cases.
 		-- InsertLeave is the primary cleanup trigger for user experience.
-
-
 	end)
 
 	if not ok then

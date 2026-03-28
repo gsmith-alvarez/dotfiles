@@ -18,9 +18,12 @@
 -- 3. Header quotes are managed by the asynchronous `quotes.lua` engine.
 
 local M = {}
+local is_setup = false
 
-M.setup = function()
-	if vim.fn.argc() ~= 0 then return end
+M.setup = function(force)
+	if is_setup then return end
+	if not force and vim.fn.argc() ~= 0 then return end
+	is_setup = true
 
 	require('mini.deps').add 'echasnovski/mini.starter'
 	local starter = require 'mini.starter'

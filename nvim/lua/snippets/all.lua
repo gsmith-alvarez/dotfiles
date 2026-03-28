@@ -14,7 +14,7 @@
 -- To add a new snippet: copy any block below and modify trigger + body.
 -- Run :LuaSnipListAvailable to verify it's loaded.
 
-local ls = require 'luasnip'
+local ls  = require 'luasnip'
 local s   = ls.snippet
 local t   = ls.text_node
 local i   = ls.insert_node
@@ -23,10 +23,10 @@ local rep = require('luasnip.extras').rep
 
 return {
 	-- todo: annotate something for later (with severity picker)
-	s('todo', fmt('-- {}({}): {}', { 
+	s('todo', fmt('-- {}({}): {}', {
 		ls.choice_node(1, { t 'TODO', t 'FIXME', t 'BUG', t 'HACK', t 'NOTE' }),
-		i(2, 'author'), 
-		i(3, 'description') 
+		i(2, 'author'),
+		i(3, 'description')
 	})),
 
 	-- bool: toggle between true and false
@@ -64,4 +64,3 @@ return {
 		t '-- =============================================================================',
 	}),
 }
-
