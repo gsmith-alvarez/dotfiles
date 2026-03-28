@@ -6,6 +6,10 @@
 #   fnav z / -z     : Fuzzy search zoxide frecency database
 #   fnav <path>     : Standard cd but registers path with zoxide
 #
+# KEYBINDINGS (Inside FZF):
+#   ctrl-h          : Toggle hidden files (down mode)
+#   ctrl-g          : Toggle git-ignore / reload list (down/zoxide mode)
+#
 # DEPENDENCIES:
 #   fd, fzf, zoxide, eza
 
@@ -43,7 +47,8 @@ function fnav --description "Fuzzy navigate directories (up/down/zoxide)"
     # Create preview command based on eza availability
     set -l preview_cmd "ls -R --color=always {}"
     if test $has_eza -eq 1
-        set preview_cmd "eza --tree --level=1 --icons --color=always {}"
+        # Level 2 tree depth for better context-aware browsing
+        set preview_cmd "eza --tree --level=2 --icons --color=always --group-directories-first {}"
     end
 
     if test "$mode" = "up"
@@ -66,19 +71,24 @@ function fnav --description "Fuzzy navigate directories (up/down/zoxide)"
             --preview-window="right:60%")
 
     else if test "$mode" = "down"
+        # Bindings: ctrl-h to show/hide hidden, ctrl-g to toggle git-ignore logic
         set target (fd --type d --hidden --exclude .git . | fzf --height=40% --layout=reverse \
             --prompt="subdir> " \
             --preview="$preview_cmd" \
-            --preview-window="right:60%")
+            --preview-window="right:60%" \
+            --bind "ctrl-h:reload(fd --type d --hidden --exclude .git .)" \
+            --bind "ctrl-g:reload(fd --type d --exclude .git .)")
 
     else if test "$mode" = "zoxide"
         # query zoxide for frecency paths, exclude current directory
         set -l current_dir (pwd | string replace -r '/$' '')
         set -l escaped_dir (string escape --style=regex "$current_dir")
+        # Binding: ctrl-g to refresh zoxide list
         set target (zoxide query -l 2>/dev/null | string match -v -r "^$escaped_dir/?\$" | fzf --height=40% --layout=reverse \
             --prompt="zoxide> " \
             --preview="$preview_cmd" \
-            --preview-window="right:60%")
+            --preview-window="right:60%" \
+            --bind "ctrl-g:reload(zoxide query -l)")
     end
 
     if test -n "$target"

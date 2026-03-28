@@ -7,3 +7,7 @@ run = "git"
 id = "git"
 url = "*/"
 run = "git"
+
+[[plugin.prepend_previewers]]
+mime = "application/{zip,x-tar,x-bzip2,x-7z-compressed,x-rar,x-xz,zstd,java-archive}"
+run = "ouch"

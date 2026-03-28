@@ -8,6 +8,7 @@
 #   fd, fzf, bat, eza
 
 function fmv --description "Fuzzy move files/directories"
+    _check_deps fd fzf bat eza; or return 1
     set -l sources
 
     # 1. Determine sources
@@ -19,7 +20,7 @@ function fmv --description "Fuzzy move files/directories"
         set sources (fd --hidden --exclude .git | fzf -m \
             --prompt="source(s)> " \
             --header="[TAB] to multi-select, [ENTER] to confirm" \
-            --preview="bat --color=always {} 2>/dev/null || { type -q eza; and eza --tree --level=1 --icons --color=always {}; or ls -R --color=always {}; }" \
+            --preview="if test -d {}; eza --tree --level=2 --icons --color=always {}; else; bat --color=always {}; end" \
             --preview-window="right:60%")
             
         if test -z "$sources"
@@ -33,7 +34,7 @@ function fmv --description "Fuzzy move files/directories"
     set -l dest (begin; echo "."; echo ".."; fd --type d --hidden --exclude .git; end | fzf \
         --prompt="destination> " \
         --header="Select destination directory for $(count $sources) item(s)" \
-        --preview="type -q eza; and eza --tree --level=1 --icons --color=always {} 2>/dev/null; or ls -d {}" \
+        --preview="if test -d {}; eza --tree --level=2 --icons --color=always {}; else; bat --color=always {}; end" \
         --preview-window="right:60%")
 
     # 3. Execute move

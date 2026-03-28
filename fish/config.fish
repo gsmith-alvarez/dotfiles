@@ -2,6 +2,7 @@
 # We activate mise first so all managed binaries are immediately available.
 if type -q mise
     mise activate fish | source
+    mise completion fish | source
 end
 
 ### --- 2. PATH CONSOLIDATION --- ###
@@ -26,7 +27,18 @@ if status is-interactive
     type -q starship; and starship init fish | source
     type -q zoxide; and zoxide init fish --cmd cd | source
     type -q fzf; and fzf --fish | source
-    type -q atuin; and atuin init fish --disable-up-arrow | source
+    type -q atuin; and begin
+        atuin init fish --disable-up-arrow | source
+        # Robust override for mise/topgrade updates to prevent "Unknown command: atuin" errors
+        function _atuin_postexec --on-event fish_postexec
+            set -l s $status
+            if test -n "$ATUIN_HISTORY_ID"; and type -q atuin
+                ATUIN_LOG=error atuin history end --exit $s -- $ATUIN_HISTORY_ID &>/dev/null &
+                disown 2>/dev/null
+            end
+            set --erase ATUIN_HISTORY_ID
+        end
+    end
     type -q navi; and navi widget fish | source
 
     # [[ FZF CHANGES ]]
@@ -181,7 +193,7 @@ if status is-interactive
 
     # Carapace (Completion Engine)
     if type -q carapace
-        set -gx CARAPACE_BRIDGES 'zsh,bash,inshellisense,usage'
+        set -gx CARAPACE_BRIDGES 'zsh,fish,bash'
         carapace _carapace fish | source
     end
 

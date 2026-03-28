@@ -7,3 +7,13 @@ desc = "Jump to char"
 on = "M"
 run = "plugin mount"
 desc = "mount.yazi"
+
+[[mgr.prepend_keymap]]
+on = "C"
+run = "plugin ouch"
+desc = "Compress with ouch"
+
+[[mgr.prepend_keymap]]
+on = "F"
+run = "plugin smart-filter"
+desc = "Smart filter"
