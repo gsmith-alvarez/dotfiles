@@ -2,7 +2,7 @@ theme = Catppuccin Mocha
 
 # Basic Settings
 title = Hello
-command = ~/.local/share/mise/shims/zellij attach -c
+# command = ~/.local/share/mise/shims/zellij attach -c
 shell-integration = fish
 
 # Clipboard Settings
@@ -27,3 +27,20 @@ unfocused-split-opacity = 0.7
 window-decoration = false
 
 quit-after-last-window-closed = false
+
+# Custom Keybindings (Ctrl+Alt Layer for Ghostty Native)
+keybind = ctrl+alt+n=new_split:auto
+keybind = ctrl+alt+x=close_surface
+keybind = ctrl+alt+h=goto_split:left
+keybind = ctrl+alt+j=goto_split:bottom
+keybind = ctrl+alt+k=goto_split:top
+keybind = ctrl+alt+l=goto_split:right
+keybind = ctrl+alt+enter=new_tab
+keybind = ctrl+alt+shift+x=close_tab
+keybind = ctrl+alt+[=previous_tab
+keybind = ctrl+alt+]=next_tab
+keybind = ctrl+alt+f=toggle_fullscreen
+keybind = ctrl+alt+shift+h=resize_split:left,10
+keybind = ctrl+alt+shift+j=resize_split:down,10
+keybind = ctrl+alt+shift+k=resize_split:up,10
+keybind = ctrl+alt+shift+l=resize_split:right,10
