@@ -248,13 +248,19 @@ M.commands = {
 -- [[ Better gx - Open URLs with System Default ]]
 -- We keep this as a direct keymap because it replaces a core vim feature.
 vim.keymap.set('n', 'gx', function()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2] + 1
+
+  -- YouTube Iframe Hack: If cursor is anywhere on a line with a YouTube embed, open it
+  local yt_embed = line:match('youtube%.com/embed/([a-zA-Z0-9_%-]+)')
+  if yt_embed then
+    return vim.ui.open('https://www.youtube.com/watch?v=' .. yt_embed)
+  end
+
   local cfile = vim.fn.expand '<cfile>'
   if cfile:match '^https?://' then
     return vim.ui.open(cfile)
   end
-
-  local line = vim.api.nvim_get_current_line()
-  local col = vim.api.nvim_win_get_cursor(0)[2] + 1
 
   for text, url in line:gmatch '%[([^%]]+)%]%((https?://[^%)]+)%)' do
     local start_idx, end_idx = line:find('%[' .. text:gsub('([^%w])', '%%%1') .. '%]%(' .. url:gsub('([^%w])', '%%%1') .. '%)')

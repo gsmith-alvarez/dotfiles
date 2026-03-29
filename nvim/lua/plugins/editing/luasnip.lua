@@ -80,12 +80,12 @@ M.setup = function()
 
     -- 4. Keymaps: node navigation (only active inside a snippet)
     vim.keymap.set({ 'i', 's' }, '<C-l>', function()
-      if luasnip.locally_jumpable(1) then
-        luasnip.jump(1)
-      elseif luasnip.expandable() then
+      if luasnip.expandable() then
         luasnip.expand()
+      elseif luasnip.jumpable(1) then
+        luasnip.jump(1)
       end
-    end, { silent = true, desc = 'LuaSnip: jump to next node or expand' })
+    end, { silent = true, desc = 'LuaSnip: expand or jumpt to next node' })
 
     vim.keymap.set({ 'i', 's' }, '<C-h>', function()
       if luasnip.locally_jumpable(-1) then

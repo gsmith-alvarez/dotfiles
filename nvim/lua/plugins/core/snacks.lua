@@ -60,7 +60,55 @@ M.bootstrap = function()
 
             progress = { enabled = true },
 
-            image = {},
+            image = {
+                enabled = true,
+                resolve = function(file, src)
+                    -- Custom Inject: YouTube Iframe Thumbnail Hack
+                    -- (Relies on the after/queries/markdown/images.scm Treesitter injection)
+                    local video_id = src:match('youtube%.com/embed/([a-zA-Z0-9_%-]+)')
+                    if video_id then
+                        return 'https://img.youtube.com/vi/' .. video_id .. '/maxresdefault.jpg'
+                    end
+
+                    -- Handle Obsidian wikilink-style image references [[image.png]]
+                    -- and strip optional size arguments like [[image.png|200]]
+                    local clean_src = src:gsub('^%[%[', ''):gsub('%]%]$', ''):gsub('|.*$', '')
+
+                    local ok, obsidian = pcall(require, 'obsidian')
+                    if not ok then
+                        return
+                    end
+
+                    -- Only use Obsidian's resolver if we're in an active vault
+                    -- and the current file is actually a note within that vault.
+                    if _G.Obsidian and _G.Obsidian.workspace then
+                        local api = obsidian.api
+                        if api.path_is_note(file) then
+                            -- 1. Try Obsidian's strict resolution
+                            local resolved = api.resolve_attachment_path(clean_src)
+                            if resolved and vim.fn.filereadable(resolved) == 1 then
+                                return resolved
+                            end
+
+                            -- 2. Fallback: Search the entire vault for the image
+                            -- (Handles attachments saved in deep sub-folders instead of root /attachments)
+                            local vault_root = tostring(_G.Obsidian.workspace.root)
+                            local basename = vim.fs.basename(clean_src)
+                            local found = vim.fs.find(basename, {
+                                path = vault_root,
+                                type = 'file',
+                                limit = 1,
+                            })
+
+                            if found and #found > 0 then
+                                return found[1]
+                            end
+                        end
+                    end
+                end,
+            },
+
+            bigfile = { enabled = true },
 
             dashboard = { enabled = false },
             indent = { enabled = true },

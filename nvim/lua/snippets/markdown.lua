@@ -122,18 +122,39 @@ local function no_prefix(_, _, captures)
   return not c1:match '[\\%a]$'
 end
 
+--- Combines any number of condition functions.
+--- Returns true only if EVERY provided function returns true.
+local function all(...)
+  local conditions = { ... } -- Capture all arguments into a table
+
+  return function(...)
+    for _, condition in ipairs(conditions) do
+      -- If any condition returns false, stop and return false immediately
+      if not condition(...) then
+        return false
+      end
+    end
+    -- If we got through the whole list, they all passed
+    return true
+  end
+end
+
 -- =============================================================================
 -- REGULAR SNIPPETS  (Tab required to expand)
 -- =============================================================================
 local regular = {
   -- \sum / \prod / \int  with limits (typed after the macro is already in the buffer)
-  s({ trig = [[\sum]], wordTrig = false, condition = in_mathzone }, fmt([[\sum_{{{} = {}}}^{{{}}} {}]], { i(1, 'i'), i(2, '1'), i(3, 'N'), i(4) })),
-  s({ trig = [[\prod]], wordTrig = false, condition = in_mathzone }, fmt([[\prod_{{{} = {}}}^{{{}}} {}]], { i(1, 'i'), i(2, '1'), i(3, 'N'), i(4) })),
+  s({ trig = [[\sum]], wordTrig = false, condition = in_mathzone },
+    fmt([[\sum_{{{} = {}}}^{{{}}} {}]], { i(1, 'i'), i(2, '1'), i(3, 'N'), i(4) })),
+  s({ trig = [[\prod]], wordTrig = false, condition = in_mathzone },
+    fmt([[\prod_{{{} = {}}}^{{{}}} {}]], { i(1, 'i'), i(2, '1'), i(3, 'N'), i(4) })),
   s({ trig = [[\int]], wordTrig = false, condition = in_mathzone }, fmt([[\int {} \, d{} {}]], { i(1), i(2, 'x'), i(3) })),
-  s({ trig = 'lim', wordTrig = false, condition = in_mathzone }, fmt([[\lim_{{ {} \to {} }} {}]], { i(1, 'n'), i(2, [[\infty]]), i(3) })),
+  s({ trig = 'lim', wordTrig = false, condition = in_mathzone },
+    fmt([[\lim_{{ {} \to {} }} {}]], { i(1, 'n'), i(2, [[\infty]]), i(3) })),
 
   -- Partial derivatives (non-auto: you choose when to expand)
-  s({ trig = 'par', wordTrig = false, condition = in_mathzone }, fmt([[\frac{{ \partial {} }}{{ \partial {} }} {}]], { i(1, 'y'), i(2, 'x'), i(3) })),
+  s({ trig = 'par', wordTrig = false, condition = in_mathzone },
+    fmt([[\frac{{ \partial {} }}{{ \partial {} }} {}]], { i(1, 'y'), i(2, 'x'), i(3) })),
   s(
     {
       trig = 'pa([A-Za-z])([A-Za-z])',
@@ -150,7 +171,8 @@ local regular = {
   s({ trig = 'pypy', wordTrig = true, condition = not_in_mathzone }, fmt('```python\n{}\n```', { i(1) })),
   s(
     { trig = 'jmain', wordTrig = true, condition = not_in_mathzone },
-    fmt('```java\npublic class {} {{\n    public static void main(String[] args) {{\n        {}\n    }}\n}}\n```', { i(1, 'Main'), i(2) })
+    fmt('```java\npublic class {} {{\n    public static void main(String[] args) {{\n        {}\n    }}\n}}\n```',
+      { i(1, 'Main'), i(2) })
   ),
   s({ trig = 'cpp', wordTrig = true, condition = not_in_mathzone }, fmt('```cpp\n{}\n```', { i(1) })),
   s({ trig = '#!', wordTrig = false, condition = not_in_mathzone }, fmt('```bash\n{}\n```', { i(1) })),
@@ -177,13 +199,20 @@ local auto = {
   ),
 
   -- ── OBSIDIAN CALLOUTS ( tAw ) ───────────────────────────────────────────────
-  s({ trig = 'cdef', wordTrig = true, condition = not_in_mathzone }, fmt('> [!definition] {}\n> {}', { i(1, 'Definition'), i(2) })),
-  s({ trig = 'cex', wordTrig = true, condition = not_in_mathzone }, fmt('> [!example] {}\n> {}', { i(1, 'Example'), i(2) })),
-  s({ trig = 'csol', wordTrig = true, condition = not_in_mathzone }, fmt('> [!success]- {}\n> {}', { i(1, 'Solution'), i(2) })),
-  s({ trig = 'cimp', wordTrig = true, condition = not_in_mathzone }, fmt('> [!warning] {}\n> {}', { i(1, 'Important'), i(2) })),
-  s({ trig = 'cque', wordTrig = true, condition = not_in_mathzone }, fmt('> [!question] {}\n> {}', { i(1, 'Question'), i(2) })),
-  s({ trig = 'cc', wordTrig = true, condition = not_in_mathzone }, fmt('> [!{}] {}\n> {}', { i(1, 'info'), i(2, 'Title'), i(3) })),
-  s({ trig = 'cabs', wordTrig = true, condition = not_in_mathzone }, fmt('> [!abstract] {}\n> {}', { i(1, 'Abstract'), i(2) })),
+  s({ trig = 'cdef', wordTrig = true, condition = not_in_mathzone },
+    fmt('> [!definition] {}\n> {}', { i(1, 'Definition'), i(2) })),
+  s({ trig = 'cex', wordTrig = true, condition = not_in_mathzone },
+    fmt('> [!example] {}\n> {}', { i(1, 'Example'), i(2) })),
+  s({ trig = 'csol', wordTrig = true, condition = not_in_mathzone },
+    fmt('> [!success]- {}\n> {}', { i(1, 'Solution'), i(2) })),
+  s({ trig = 'cimp', wordTrig = true, condition = not_in_mathzone },
+    fmt('> [!warning] {}\n> {}', { i(1, 'Important'), i(2) })),
+  s({ trig = 'cque', wordTrig = true, condition = not_in_mathzone },
+    fmt('> [!question] {}\n> {}', { i(1, 'Question'), i(2) })),
+  s({ trig = 'cc', wordTrig = true, condition = not_in_mathzone },
+    fmt('> [!{}] {}\n> {}', { i(1, 'info'), i(2, 'Title'), i(3) })),
+  s({ trig = 'cabs', wordTrig = true, condition = not_in_mathzone },
+    fmt('> [!abstract] {}\n> {}', { i(1, 'Abstract'), i(2) })),
 
   -- Universal Callout Picker
   s(
@@ -210,7 +239,8 @@ local auto = {
   -- ── MARKDOWN / OBSIDIAN TOOLS ───────────────────────────────────────────────
   s(
     { trig = 'cweb', wordTrig = true, condition = not_in_mathzone },
-    fmt('<iframe src="{}" width="100%" height="{}" style="border:none; border-radius: 8px;"></iframe>\n{}', { i(1, 'URL'), i(2, '500px'), i(3) })
+    fmt('<iframe src="{}" width="100%" height="{}" style="border:none; border-radius: 8px;"></iframe>\n{}',
+      { i(1, 'URL'), i(2, '500px'), i(3) })
   ),
   s({ trig = '-c ', wordTrig = false, condition = not_in_mathzone }, fmt('- [ ] {}', { i(1) })),
   s({ trig = 'ii', wordTrig = false, condition = not_in_mathzone }, fmt('`{}`{}', { i(1), i(2) })),
@@ -391,9 +421,11 @@ local auto = {
   end)()),
 
   -- ── TEXT ENVIRONMENT ( mA ) ──────────────────────────────────────────────────
-  s({ trig = 'text', wordTrig = false, condition = in_mathzone }, fmt([[\text{<>}<>]], { i(1), i(2) }, { delimiters = '<>' })),
+  s({ trig = 'text', wordTrig = false, condition = in_mathzone },
+    fmt([[\text{<>}<>]], { i(1), i(2) }, { delimiters = '<>' })),
   -- " → \text{} (obsidian shorthand)
-  s({ trig = "'", wordTrig = false, condition = in_mathzone }, fmt([[\text{<>}<>]], { i(1), i(2) }, { delimiters = '<>' })),
+  s({ trig = "'", wordTrig = false, condition = in_mathzone },
+    fmt([[\text{<>}<>]], { i(1), i(2) }, { delimiters = '<>' })),
 
   -- ── BASIC OPERATIONS ( mA, no word boundary ) ──────────────────────────────
   s({ trig = 'sr', wordTrig = false, condition = in_mathzone }, t '^{2}'),
@@ -501,16 +533,20 @@ local auto = {
   s({ trig = 'yii', wordTrig = false, condition = in_mathzone }, t 'y_{i}'),
   s({ trig = 'yjj', wordTrig = false, condition = in_mathzone }, t 'y_{j}'),
 
-  s({ trig = 'infi', wordTrig = false, condition = in_mathzone }, fmt([[\int_{{-\infty}}^{{\infty}} {} \, d{} {}]], { i(1), i(2, 'x'), i(3) })),
+  s({ trig = 'infi', wordTrig = false, condition = in_mathzone },
+    fmt([[\int_{{-\infty}}^{{\infty}} {} \, d{} {}]], { i(1), i(2, 'x'), i(3) })),
 
   -- ── INTEGRALS / DERIVATIVES ( mA ) ───────────────────────────────────────────
   s({ trig = 'ddt', wordTrig = false, condition = in_mathzone }, t [[\frac{d}{dt} ]]),
-  s({ trig = 'dint', wordTrig = false, condition = in_mathzone }, fmt([[\int_{{{}}}^{{{}}} {} \, d{} {}]], { i(1, '0'), i(2, '1'), i(3), i(4, 'x'), i(5) })),
+  s({ trig = 'dint', wordTrig = false, condition = in_mathzone },
+    fmt([[\int_{{{}}}^{{{}}} {} \, d{} {}]], { i(1, '0'), i(2, '1'), i(3), i(4, 'x'), i(5) })),
   s({ trig = 'iiint', wordTrig = false, condition = in_mathzone }, t [[\iiint]]),
   s({ trig = 'iint', wordTrig = false, condition = in_mathzone }, t [[\iint]]),
   s({ trig = 'oint', wordTrig = false, condition = in_mathzone }, t [[\oint]]),
-  s({ trig = 'oinf', wordTrig = false, condition = in_mathzone }, fmt([[\int_{{0}}^{{\infty}} {} \, d{} {}]], { i(1), i(2, 'x'), i(3) })),
-  s({ trig = 'infi', wordTrig = false, condition = in_mathzone }, fmt([[\int_{{-\infty}}^{{\infty}} {} \, d{} {}]], { i(1), i(2, 'x'), i(3) })),
+  s({ trig = 'oinf', wordTrig = false, condition = in_mathzone },
+    fmt([[\int_{{0}}^{{\infty}} {} \, d{} {}]], { i(1), i(2, 'x'), i(3) })),
+  s({ trig = 'infi', wordTrig = false, condition = in_mathzone },
+    fmt([[\int_{{-\infty}}^{{\infty}} {} \, d{} {}]], { i(1), i(2, 'x'), i(3) })),
 
   -- ── QUANTUM MECHANICS / PHYSICS ( mA ) ───────────────────────────────────────
   s({ trig = 'dag', wordTrig = false, condition = in_mathzone }, t [[^{\dagger}]]),
@@ -519,7 +555,8 @@ local auto = {
   s({ trig = 'bra', wordTrig = false, condition = in_mathzone }, fmt([[\bra{{{}}} {}]], { i(1), i(2) })),
   s({ trig = 'ket', wordTrig = false, condition = in_mathzone }, fmt([[\ket{{{}}} {}]], { i(1), i(2) })),
   s({ trig = 'brk', wordTrig = false, condition = in_mathzone }, fmt([[\braket{{ {} | {} }} {}]], { i(1), i(2), i(3) })),
-  s({ trig = 'outer', wordTrig = false, condition = in_mathzone }, fmt([[\ket{{{}}} \bra{{{}}} {}]], { i(1, [[\psi]]), rep(1), i(2) })),
+  s({ trig = 'outer', wordTrig = false, condition = in_mathzone },
+    fmt([[\ket{{{}}} \bra{{{}}} {}]], { i(1, [[\psi]]), rep(1), i(2) })),
   s({ trig = 'kbt', wordTrig = false, condition = in_mathzone }, t 'k_{B}T'),
   s({ trig = 'msun', wordTrig = false, condition = in_mathzone }, t [[M_{\odot}]]),
 
@@ -528,15 +565,22 @@ local auto = {
   s({ trig = 'cee', wordTrig = false, condition = in_mathzone }, fmt([[\ce{{ {} }}]], { i(1) })),
   s({ trig = 'he4', wordTrig = false, condition = in_mathzone }, t '{}^{4}_{2}He '),
   s({ trig = 'he3', wordTrig = false, condition = in_mathzone }, t '{}^{3}_{2}He '),
-  s({ trig = 'iso', wordTrig = false, condition = in_mathzone }, fmt('{{}}^{{{}}}_{{{}}}{} ', { i(1, '4'), i(2, '2'), i(3, 'He') })),
+  s({ trig = 'iso', wordTrig = false, condition = in_mathzone },
+    fmt('{{}}^{{{}}}_{{{}}}{} ', { i(1, '4'), i(2, '2'), i(3, 'He') })),
 
   -- ── ENVIRONMENTS ( mA ) ──────────────────────────────────────────────────────
-  s({ trig = 'pmat', wordTrig = false, condition = in_mathzone }, fmt('\\begin{{pmatrix}}\n{}\n\\end{{pmatrix}}', { i(1) })),
-  s({ trig = 'bmat', wordTrig = false, condition = in_mathzone }, fmt('\\begin{{bmatrix}}\n{}\n\\end{{bmatrix}}', { i(1) })),
-  s({ trig = 'Bmat', wordTrig = false, condition = in_mathzone }, fmt('\\begin{{Bmatrix}}\n{}\n\\end{{Bmatrix}}', { i(1) })),
-  s({ trig = 'vmat', wordTrig = false, condition = in_mathzone }, fmt('\\begin{{vmatrix}}\n{}\n\\end{{vmatrix}}', { i(1) })),
-  s({ trig = 'Vmat', wordTrig = false, condition = in_mathzone }, fmt('\\begin{{Vmatrix}}\n{}\n\\end{{Vmatrix}}', { i(1) })),
-  s({ trig = 'matrix', wordTrig = false, condition = in_mathzone }, fmt('\\begin{{matrix}}\n{}\n\\end{{matrix}}', { i(1) })),
+  s({ trig = 'pmat', wordTrig = false, condition = in_mathzone },
+    fmt('\\begin{{pmatrix}}\n{}\n\\end{{pmatrix}}', { i(1) })),
+  s({ trig = 'bmat', wordTrig = false, condition = in_mathzone },
+    fmt('\\begin{{bmatrix}}\n{}\n\\end{{bmatrix}}', { i(1) })),
+  s({ trig = 'Bmat', wordTrig = false, condition = in_mathzone },
+    fmt('\\begin{{Bmatrix}}\n{}\n\\end{{Bmatrix}}', { i(1) })),
+  s({ trig = 'vmat', wordTrig = false, condition = in_mathzone },
+    fmt('\\begin{{vmatrix}}\n{}\n\\end{{vmatrix}}', { i(1) })),
+  s({ trig = 'Vmat', wordTrig = false, condition = in_mathzone },
+    fmt('\\begin{{Vmatrix}}\n{}\n\\end{{Vmatrix}}', { i(1) })),
+  s({ trig = 'matrix', wordTrig = false, condition = in_mathzone },
+    fmt('\\begin{{matrix}}\n{}\n\\end{{matrix}}', { i(1) })),
   s({ trig = 'cases', wordTrig = false, condition = in_mathzone }, fmt('\\begin{{cases}}\n{}\n\\end{{cases}}', { i(1) })),
   s({ trig = 'align', wordTrig = false, condition = in_mathzone }, fmt('\\begin{{align}}\n{}\n\\end{{align}}', { i(1) })),
   s({ trig = 'array', wordTrig = false, condition = in_mathzone }, fmt('\\begin{{array}}\n{}\n\\end{{array}}', { i(1) })),
@@ -555,14 +599,21 @@ local auto = {
   s({ trig = 'lra', wordTrig = false, condition = in_mathzone }, fmt([[\left< {} \right> {}]], { i(1), i(2) })),
 
   -- ── SEQUENCES & SERIES ( mA ) ────────────────────────────────────────────────
-  s({ trig = 'seq', wordTrig = false, condition = in_mathzone }, fmt([[\{{{}_{{{} = {}}}\}}^{{\infty}} {}]], { i(1, 'a_n'), i(2, 'n'), i(3, '1'), i(4) })),
-  s({ trig = 'sumn', wordTrig = false, condition = in_mathzone }, fmt([[sum_{{{} = {}}}^{{\infty}} {}]], { i(1, 'n'), i(2, '1'), i(3) })),
-  s({ trig = 'sumk', wordTrig = false, condition = in_mathzone }, fmt([[sum_{{{} = {}}}^{{{}}} {}]], { i(1, 'k'), i(2, '1'), i(3, 'n'), i(4) })),
+  s({ trig = 'seq', wordTrig = false, condition = in_mathzone },
+    fmt([[\{{{}_{{{} = {}}}\}}^{{\infty}} {}]], { i(1, 'a_n'), i(2, 'n'), i(3, '1'), i(4) })),
+  s({ trig = 'sumn', wordTrig = false, condition = in_mathzone },
+    fmt([[sum_{{{} = {}}}^{{\infty}} {}]], { i(1, 'n'), i(2, '1'), i(3) })),
+  s({ trig = 'sumk', wordTrig = false, condition = in_mathzone },
+    fmt([[sum_{{{} = {}}}^{{{}}} {}]], { i(1, 'k'), i(2, '1'), i(3, 'n'), i(4) })),
   s({ trig = 'limn', wordTrig = false, condition = in_mathzone }, fmt([[\lim_{{{} \to \infty}} {}]], { i(1, 'n'), i(2) })),
-  s({ trig = 'limsup', wordTrig = false, condition = in_mathzone }, fmt([[\limsup_{{{} \to \infty}} {}]], { i(1, 'n'), i(2) })),
-  s({ trig = 'liminf', wordTrig = false, condition = in_mathzone }, fmt([[\liminf_{{{} \to \infty}} {}]], { i(1, 'n'), i(2) })),
-  s({ trig = 'geom', wordTrig = false, condition = in_mathzone }, fmt([[{} \cdot {}^{{{}-1}} {}]], { i(1, 'a'), i(2, 'r'), i(3, 'n'), i(4) })),
-  s({ trig = 'arith', wordTrig = false, condition = in_mathzone }, fmt([[{} + ({} - 1){} {}]], { i(1, 'a'), i(2, 'n'), i(3, 'd'), i(4) })),
+  s({ trig = 'limsup', wordTrig = false, condition = in_mathzone },
+    fmt([[\limsup_{{{} \to \infty}} {}]], { i(1, 'n'), i(2) })),
+  s({ trig = 'liminf', wordTrig = false, condition = in_mathzone },
+    fmt([[\liminf_{{{} \to \infty}} {}]], { i(1, 'n'), i(2) })),
+  s({ trig = 'geom', wordTrig = false, condition = in_mathzone },
+    fmt([[{} \cdot {}^{{{}-1}} {}]], { i(1, 'a'), i(2, 'r'), i(3, 'n'), i(4) })),
+  s({ trig = 'arith', wordTrig = false, condition = in_mathzone },
+    fmt([[{} + ({} - 1){} {}]], { i(1, 'a'), i(2, 'n'), i(3, 'd'), i(4) })),
 
   -- ── CUSTOM / MISC ( mA ) ─────────────────────────────────────────────────────
   s(
@@ -575,88 +626,88 @@ local auto = {
 
   -- ── TRIG FUNCTIONS ( moved to end to prevent shadowing specific snippets like 'dint' ) ──
   s(
-    { trig = '(.-)(arcsin)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(arcsin)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\arcsin]]
     end)
   ),
   s(
-    { trig = '(.-)(arccos)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(arccos)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\arccos]]
     end)
   ),
   s(
-    { trig = '(.-)(arctan)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(arctan)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\arctan]]
     end)
   ),
   s(
-    { trig = '(.-)(sin)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(sin)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\sin]]
     end)
   ),
   s(
-    { trig = '(.-)(cos)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(cos)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\cos]]
     end)
   ),
   s(
-    { trig = '(.-)(tan)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(tan)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\tan]]
     end)
   ),
   s(
-    { trig = '(.-)(csc)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(csc)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\csc]]
     end)
   ),
   s(
-    { trig = '(.-)(sec)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(sec)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\sec]]
     end)
   ),
   s(
-    { trig = '(.-)(cot)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(cot)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\cot]]
     end)
   ),
-  -- s({ trig = '(.-)(sinh)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\sinh]] end)),
-  -- s({ trig = '(.-)(cosh)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\cosh]] end)),
-  -- s({ trig = '(.-)(tanh)', regTrig = true, wordTrig = false, condition = no_prefix }, f(function(_, snip) return snip.captures[1] .. [[\tanh]] end)),
+  -- s({ trig = '(.-)(sinh)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) }, f(function(_, snip) return snip.captures[1] .. [[\sinh]] end)),
+  -- s({ trig = '(.-)(cosh)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) }, f(function(_, snip) return snip.captures[1] .. [[\cosh]] end)),
+  -- s({ trig = '(.-)(tanh)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) }, f(function(_, snip) return snip.captures[1] .. [[\tanh]] end)),
   s(
-    { trig = '(.-)(exp)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(exp)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\exp]]
     end)
   ),
   s(
-    { trig = '(.-)(log)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(log)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\log]]
     end)
   ),
   s(
-    { trig = '(.-)(ln)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(ln)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\ln]]
     end)
   ),
   s(
-    { trig = '(.-)(det)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(det)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\det]]
     end)
   ),
   s(
-    { trig = '(.-)(int)', regTrig = true, wordTrig = false, condition = no_prefix },
+    { trig = '(.-)(int)', regTrig = true, wordTrig = false, condition = all(in_mathzone, no_prefix) },
     f(function(_, snip)
       return snip.captures[1] .. [[\int]]
     end)

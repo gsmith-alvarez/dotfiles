@@ -58,9 +58,10 @@ vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
--- WRAPPING: Enable soft-wrapping (long lines wrap visually but stay on one line).
-vim.opt.wrap = true
-vim.opt.linebreak = true -- Wrap at words, not in the middle of a word.
+-- WRAPPING: Disable global wrapping (keep code straight).
+-- We use `wrapping.nvim` to intelligently enable soft-wrap for prose/markdown.
+vim.opt.wrap = false
+vim.opt.linebreak = true -- Wrap at words, not in the middle of a word (when wrap is enabled).
 vim.opt.showbreak = '↪ ' -- Visual marker for wrapped lines.
 
 -- HISTORY & PERFORMANCE:

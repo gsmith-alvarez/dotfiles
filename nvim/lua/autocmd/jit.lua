@@ -25,7 +25,32 @@ local utils = require 'core.utils'
 -- global namespace clean and avoid accidental overrides.
 local loaded = {
   obsidian = false,
+  wrapping = false,
 }
+
+--- Atomic Loader for Wrapping.nvim
+local function load_wrapping()
+  if loaded.wrapping then
+    return true
+  end
+
+  local ok, plugin = pcall(require, 'plugins.notetaking.wrapping')
+  if ok and plugin.setup then
+    pcall(plugin.setup)
+    loaded.wrapping = true
+    
+    -- JIT Fix: Trigger wrapping immediately on the file that initiated the load
+    local wrap_plugin = package.loaded['wrapping']
+    if wrap_plugin and wrap_plugin.set_mode_heuristically then
+      pcall(wrap_plugin.set_mode_heuristically)
+    end
+    
+    return true
+  else
+    utils.soft_notify('Failed to JIT load Wrapping: ' .. (plugin or 'Unknown Error'), vim.log.levels.ERROR)
+    return false
+  end
+end
 
 --- Atomic Loader for Obsidian.
 --- Uses pcall to ensure a missing config file doesn't crash the editor.
@@ -151,6 +176,13 @@ M.setup = function(injected_group)
     group = injected_group, -- <-- Bound to the Master Switch
     pattern = 'markdown',
     callback = load_obsidian,
+  })
+
+  vim.api.nvim_create_autocmd('FileType', {
+    desc = 'JIT Load Wrapping.nvim for Prose',
+    group = injected_group,
+    pattern = { 'asciidoc', 'gitcommit', 'latex', 'mail', 'markdown', 'norg', 'rst', 'tex', 'text', 'typst' },
+    callback = load_wrapping,
   })
 
   -- [[ 2. PROXY COMMANDS: Global Stub Entry Points ]]
