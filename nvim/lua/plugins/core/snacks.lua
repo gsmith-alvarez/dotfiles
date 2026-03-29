@@ -15,83 +15,84 @@ local snacks_configured = false
 --- Bootstraps the Snacks configuration only when needed.
 --- Why: This avoids the ~7ms setup cost during the initial render.
 M.bootstrap = function()
-  if snacks_configured then
-    return
-  end
+    if snacks_configured then
+        return
+    end
 
-  local ok, err = pcall(function()
-    require('snacks').setup {
-      -- 1. UI: Immediate Message Interception
-      notifier = {
-        enabled = true,
-        timeout = 3000,
-        top_down = false,
-        level = vim.log.levels.INFO,
-      },
-
-      -- 2. PROFILING
-      profiler = { enabled = vim.env.PROFILE ~= nil },
-
-      -- 3. WORKFLOW
-      terminal = {
-        win = { border = 'rounded', winblend = 3, keys = { q = 'hide' } },
-      },
-
-      -- 4. NAVIGATION
-      picker = {
-        enabled = true,
-        ui_select = true,
-        sources = {
-          files = {
-            hidden = true,
-            ignored = true,
-            exclude = { '.git', '.pio', 'node_modules', 'build' },
-          },
-        },
-        win = {
-          input = {
-            keys = {
-              ['<C-j>'] = { 'list_down', mode = { 'i', 'n' } },
-              ['<C-k>'] = { 'list_up', mode = { 'i', 'n' } },
+    local ok, err = pcall(function()
+        require('snacks').setup {
+            -- 1. UI: Immediate Message Interception
+            notifier = {
+                enabled = true,
+                timeout = 3000,
+                top_down = false,
+                level = vim.log.levels.INFO,
             },
-          },
-        },
-      },
 
-      progress = { enabled = true },
+            -- 2. PROFILING
+            profiler = { enabled = vim.env.PROFILE ~= nil },
 
-      -- 5. EXPLICIT OPT-OUT
-      dashboard = { enabled = false },
-      indent = { enabled = true },
-      input = { enabled = false },
-      scope = { enabled = false },
-      scroll = { enabled = true },
-      words = { enabled = true },
-      statuscolumn = { enabled = false },
-      lazygit = { enabled = true },
-    }
-  end)
+            -- 3. WORKFLOW
+            terminal = {
+                win = { border = 'rounded', winblend = 3, keys = { q = 'hide' } },
+            },
 
-  if ok then
-    snacks_configured = true
-  else
-    utils.soft_notify('Snacks.nvim JIT setup failed: ' .. err, vim.log.levels.ERROR)
-  end
+            -- 4. NAVIGATION
+            picker = {
+                enabled = true,
+                ui_select = true,
+                sources = {
+                    files = {
+                        hidden = true,
+                        ignored = true,
+                        exclude = { '.git', '.pio', 'node_modules', 'build' },
+                    },
+                },
+                win = {
+                    input = {
+                        keys = {
+                            ['<C-j>'] = { 'list_down', mode = { 'i', 'n' } },
+                            ['<C-k>'] = { 'list_up', mode = { 'i', 'n' } },
+                        },
+                    },
+                },
+            },
+
+            progress = { enabled = true },
+
+            image = {},
+
+            dashboard = { enabled = false },
+            indent = { enabled = true },
+            input = { enabled = false },
+            scope = { enabled = false },
+            scroll = { enabled = true },
+            words = { enabled = true },
+            statuscolumn = { enabled = false },
+            lazygit = { enabled = true },
+        }
+    end)
+
+    if ok then
+        snacks_configured = true
+    else
+        utils.soft_notify('Snacks.nvim JIT setup failed: ' .. err, vim.log.levels.ERROR)
+    end
 end
 
 M.setup = function()
-  -- We no longer call setup() here.
-  -- Instead, we wait for either a keymap trigger OR the first idle loop.
+    -- We no longer call setup() here.
+    -- Instead, we wait for either a keymap trigger OR the first idle loop.
 
-  -- Fallback: Load after boot is complete so background features (like notifications)
-  -- eventually initialize without blocking the initial render.
-  vim.api.nvim_create_autocmd('VimEnter', {
-    group = vim.api.nvim_create_augroup('SnacksJIT', { clear = true }),
-    callback = function()
-      -- We defer by 1ms to ensure we are completely out of the startup path.
-      vim.defer_fn(M.bootstrap, 1)
-    end,
-  })
+    -- Fallback: Load after boot is complete so background features (like notifications)
+    -- eventually initialize without blocking the initial render.
+    vim.api.nvim_create_autocmd('VimEnter', {
+        group = vim.api.nvim_create_augroup('SnacksJIT', { clear = true }),
+        callback = function()
+            -- We defer by 1ms to ensure we are completely out of the startup path.
+            vim.defer_fn(M.bootstrap, 1)
+        end,
+    })
 end
 
 return M

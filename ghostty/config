@@ -1,8 +1,9 @@
 theme = Catppuccin Mocha
 
 # Basic Settings
-title = Hello
+#title = Hello
 # command = ~/.local/share/mise/shims/zellij attach -c
+command = fish
 shell-integration = fish
 
 # Clipboard Settings
@@ -35,8 +36,8 @@ keybind = ctrl+alt+h=goto_split:left
 keybind = ctrl+alt+j=goto_split:bottom
 keybind = ctrl+alt+k=goto_split:top
 keybind = ctrl+alt+l=goto_split:right
-keybind = ctrl+alt+enter=new_tab
-keybind = ctrl+alt+shift+x=close_tab
+keybind = ctrl+alt+t=new_tab
+keybind = ctrl+alt+w=close_tab
 keybind = ctrl+alt+[=previous_tab
 keybind = ctrl+alt+]=next_tab
 keybind = ctrl+alt+f=toggle_fullscreen

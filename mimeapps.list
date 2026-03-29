@@ -110,3 +110,4 @@ x-scheme-handler/chrome=zen-browser.desktop
 x-scheme-handler/http=zen-browser.desktop
 x-scheme-handler/https=zen-browser.desktop
 x-scheme-handler/terminal=com.mitchellh.ghostty.desktop
+x-scheme-handler/jetbrains=jetbrainsd.desktop
