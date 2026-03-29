@@ -182,6 +182,7 @@ if status is-interactive
     abbr -a ps procs # Modern ps
     abbr -a hx hexyl # Hex viewer for binaries/firmware
     abbr -a mp mprocs # Multi-process TUI runner
+    abbr -a zj "zellij attach -c" # Fast Zellij access
 
     # Modern LS (eza)
     if type -q eza
