@@ -1,0 +1,44 @@
+{
+  "plugins": {
+    "LuaSnip": {
+      "rev": "a62e1083a3cfe8b6b206e7d3d33a51091df25357",
+      "src": "https://github.com/L3MON4D3/LuaSnip"
+    },
+    "blink.cmp": {
+      "rev": "456d38d1cd3743926f329204c2340f3e7840aad6",
+      "src": "https://github.com/saghen/blink.cmp"
+    },
+    "friendly-snippets": {
+      "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
+      "src": "https://github.com/rafamadriz/friendly-snippets"
+    },
+    "mini.icons": {
+      "rev": "bac6317300e205335df425296570d84322730067",
+      "src": "https://github.com/echasnovski/mini.icons"
+    },
+    "mini.nvim": {
+      "rev": "27a3e747a4e603b4121f5759e74020430ec7b7d5",
+      "src": "https://github.com/echasnovski/mini.nvim"
+    },
+    "mise.nvim": {
+      "rev": "38ede119924ee70fe49d51f22c140f85b1c3ccf3",
+      "src": "https://plugins.ejri.dev/mise.nvim"
+    },
+    "nvim-lspconfig": {
+      "rev": "8a9378a822719346a0288fa004dab302ca3c0a8f",
+      "src": "https://github.com/neovim/nvim-lspconfig"
+    },
+    "snacks.nvim": {
+      "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
+      "src": "https://github.com/folke/snacks.nvim"
+    },
+    "tree-sitter-manager.nvim": {
+      "rev": "fa63bc63ae08b661843d9976a43becfbd3daf76c",
+      "src": "https://github.com/romus204/tree-sitter-manager.nvim"
+    },
+    "which-key.nvim": {
+      "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
+      "src": "https://github.com/folke/which-key.nvim"
+    }
+  }
+}

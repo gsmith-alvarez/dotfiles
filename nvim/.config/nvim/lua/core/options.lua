@@ -1,0 +1,134 @@
+-- =============================================================================
+-- [ OPTIONS ]
+-- Global Neovim settings, behaviors, and UI configurations.
+-- =============================================================================
+
+local M = {}
+
+-- 1. [ FILETYPE OPTIMIZATION ]
+-- Predefine common filetypes for a slight speed boost and to ensure
+-- specific extensions or filenames map correctly.
+vim.filetype.add {
+	extension = {
+		lua = 'lua',
+		sh = 'sh',
+		py = 'python',
+		yaml = 'yaml',
+		yml = 'yaml',
+		fish = 'fish',
+		toml = 'toml',
+		md = 'markdown',
+	},
+	filename = {
+		['.gitignore'] = 'gitignore',
+		['.env'] = 'sh',
+		['Justfile'] = 'just',
+		['justfile'] = 'just',
+		['Dockerfile'] = 'dockerfile',
+	},
+}
+
+-- 2. [ LEADERS & GENERAL ]
+vim.g.mapleader = ' '      -- Set leader key to Space
+vim.g.maplocalleader = ' ' -- Set local leader key to Space
+vim.g.have_nerd_font = true -- Inform plugins that a Nerd Font is available
+
+-- 3. [ INTERACTION & UI ]
+vim.opt.mouse = ''          -- Disable mouse support entirely
+vim.o.number = true         -- Show absolute line numbers
+vim.o.relativenumber = true -- Show relative line numbers for easier jumping
+vim.o.showmode = false      -- Don't show mode (e.g. -- INSERT --) as statusline handles it
+vim.o.clipboard = 'unnamedplus' -- Use system clipboard for all yanks/pastes
+vim.o.confirm = true        -- Ask to save changes before quitting an unsaved buffer
+
+-- 4. [ PROVIDER DEACTIVATION ]
+-- Disable providers for languages not used for scripting Neovim to save startup time.
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_node_provider = 0
+
+-- 5. [ TREESITTER & FOLDING ]
+-- Use Treesitter for high-performance, semantic code folding.
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.o.foldtext = ''
+vim.o.foldlevel = 99     -- Start with all folds open
+vim.o.foldnestmax = 10   -- Limit fold nesting depth
+vim.o.fillchars = 'eob: ,fold:╌' -- Custom characters for end-of-buffer and folds
+
+-- 6. [ SEARCH & SPELL ]
+vim.o.ignorecase = true    -- Ignore case in search patterns...
+vim.o.smartcase = true     -- ...unless the pattern contains upper case characters.
+vim.o.inccommand = 'split' -- Show search/replace effects in a live-preview split
+vim.o.spelloptions = 'camel' -- Handle camelCase words in spell checking
+vim.opt.spelllang = { 'en_us' }
+vim.opt.spellfile = vim.fn.stdpath 'config' .. '/spell/en.utf-8.add'
+
+-- 7. [ FORMATTING ]
+-- Pattern for detecting the start of a numbered list (used for `gw` and formatting).
+vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
+
+-- 8. [ PERFORMANCE & PERSISTENCE ]
+vim.o.undofile = true       -- Enable persistent undo across sessions
+vim.o.timeoutlen = 300      -- Time (ms) to wait for a mapped sequence to complete
+vim.o.scrolloff = 10        -- Minimum lines to keep above/below the cursor
+vim.o.shada = "'100,<50,s10,:1000,/100,@100,h" -- Optimize ShaDa file for faster startup
+vim.o.switchbuf = 'usetab'  -- Jump to existing tab if buffer is already open
+
+-- 9. [ SYNTAX & FILETYPE ]
+-- Ensure filetype detection and syntax highlighting are fully enabled.
+vim.cmd 'filetype plugin indent on'
+if vim.fn.exists 'syntax_on' ~= 1 then
+  vim.cmd 'syntax enable'
+end
+
+-- 10. [ WRAPPING & INDENTATION ]
+vim.opt.wrap = false         -- Disable line wrapping by default
+vim.opt.linebreak = true     -- Wrap at words instead of characters when enabled
+vim.opt.showbreak = '↪ '      -- Visual indicator at the start of wrapped lines
+vim.opt.breakindent = true   -- Wrapped lines retain the same indentation level
+vim.o.breakindentopt = 'list:-1' -- Special indentation for lists
+vim.o.colorcolumn = '+1'     -- Highlight the column after 'textwidth'
+vim.o.cursorline = true      -- Highlight the current cursor line
+
+-- Standard 4-space indentation
+vim.opt.expandtab = true     -- Use spaces instead of tabs
+vim.opt.shiftwidth = 4       -- Size of an indent
+vim.opt.tabstop = 4          -- Number of spaces a tab counts for
+vim.opt.softtabstop = 4      -- Number of spaces for a tab while editing
+
+-- 11. [ COMPLETION & PUM ]
+vim.opt.autocomplete = false -- Disable built-in completion (using blink.cmp)
+vim.opt.completeopt:append 'nearest' -- Prioritize completion matches near the cursor
+vim.opt.pumborder = 'rounded' -- Rounded borders for the popup menu
+vim.opt.pummaxwidth = 20     -- Limit popup menu width
+vim.opt.messagesopt:append 'progress:c' -- Show background job progress in messages
+
+-- 12. [ WINDOWS & SPLITS ]
+vim.o.splitright = true      -- Vertical splits open to the right
+vim.o.splitbelow = true      -- Horizontal splits open below
+vim.o.winborder = 'rounded'  -- Rounded borders for floating windows
+
+-- 13. [ WHITESPACE VISUALIZATION ]
+vim.o.list = true            -- Show invisible characters
+vim.opt.listchars = {
+  tab = '» ',
+  trail = '·',
+  nbsp = '␣',
+  leadtab = '» ',
+  extends = '…',
+  precedes = '…',
+}
+
+-- 14. [ COMMAND LINE & STATUS ]
+vim.opt.laststatus = 3       -- Use a single global statusline
+vim.opt.showcmd = true       -- Show the (partial) command in the last line
+vim.opt.showcmdloc = 'statusline' -- Show command keys in the statusline
+
+-- 15. [ PROJECT-SPECIFIC CONFIG ]
+-- Automatically load .nvim.lua, .nvimrc, or .exrc files in the current directory.
+-- Includes security check: Neovim will ask for permission before running them.
+vim.o.exrc = true
+
+return M
