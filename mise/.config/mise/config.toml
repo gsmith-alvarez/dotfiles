@@ -1,0 +1,43 @@
+[settings]
+experimental = true
+env_shell_expand = true
+all_compile = false
+activate_aggressive = true
+color_theme = "catppuccin"
+npm.package_manager = "bun"
+
+[settings.pipx]
+uvx = true
+
+[tools]
+node = "latest"
+bun = "latest"
+
+# LSP
+## Scripting Languages
+lua-language-server = "latest"
+"npm:bash-language-server" = "latest"
+"npm:pyright" = "latest"
+## Config languages
+"npm:vscode-json-languageserver" = "latest"
+"npm:yaml-language-server" = "latest"
+"npm:dockerfile-language-server-nodejs" = "latest"
+
+# Formatters + Linters
+tree-sitter = "latest" # Parsing libary
+ruff = "latest" # Python
+stylua = "latest" # Lua
+## Bash/Fish
+shellcheck = "latest" #linter
+shfmt = "latest" #formatter
+## JS/TS
+oxlint = "latest"
+oxfmt = "latest"
+## Config
+taplo = "latest" # toml
+yamllint = "latest"
+## General
+typos = "latest"
+
+# Rendering
+"npm:@mermaid-js/mermaid-cli" = "latest"
