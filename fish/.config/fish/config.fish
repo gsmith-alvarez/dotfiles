@@ -37,6 +37,12 @@ if status is-interactive
 		abbr -a tree 'eza --tree --icons'
 	end
 
+    # Functions
+    abbr -a u 'fnav up'
+    abbr -a d 'fnav down'
+    abbr -a z 'fnav zoxide'
+    abbr -a sg 'sgrep'
+
 	# Clipboard
 	abbr -a copy wl-copy
 	abbr -a paste wl-paste
