@@ -3,6 +3,43 @@
 -- Entry point for Neovim configuration.
 -- =============================================================================
 
+-- Define config table to be able to pass data between scripts
+-- It is a global variable which can be use both as `_G.Config` and `Config`
+_G.Config = {}
+
+-- Assign the anonymous function directly to the table key.
+Config.safe_require = function(module_or_list, desc)
+    -- Use the call stack to find the executing script, fallback to SYSTEM
+    desc = desc or (debug.getinfo(2, "S") and debug.getinfo(2, "S").source:match("@?(.*/)") or "SYSTEM")
+
+    -- Handle table of modules recursively
+    if type(module_or_list) == 'table' then
+        local loaded_modules = {}
+        for _, m in ipairs(module_or_list) do
+            -- Recursively call and store the payload by module name
+            loaded_modules[m] = Config.safe_require(m, desc)
+        end
+        -- Return the dictionary of loaded modules
+        return loaded_modules
+    end
+
+    -- Base case: handle single string module
+    local ok, result = pcall(require, module_or_list)
+
+    if not ok then
+        vim.schedule(function()
+            vim.notify(
+                string.format('[%s SEQUENCE FAILURE]\nModule: %s\nError: %s', desc, module_or_list, result),
+                vim.log.levels.ERROR,
+                { title = 'Init.lua Fault Tolerance' }
+            )
+        end)
+        return false
+    end
+
+    return result
+end
+
 -- 1. [ PERFORMANCE OPTIMIZATION ]
 -- Enable the experimental Lua loader to speed up startup by caching byte-code.
 if vim.loader then
@@ -63,26 +100,6 @@ end
 local unwanted_paths = { '/usr/share/vim/vimfiles', '/usr/share/vim/vimfiles/after' }
 vim.opt.runtimepath:remove(unwanted_paths)
 
--- 6. [ MODULE LOADING ARCHITECTURE ]
--- Define a helper function to safely load configuration modules.
--- If a module fails to load, it will notify the user via a non-blocking notification
--- instead of crashing the entire startup process.
-local function safe_require(module)
-	local ok, err = pcall(require, module)
-	if not ok then
-		-- Use vim.schedule to ensure notifications don't interfere with startup UI
-		vim.schedule(function()
-			vim.notify(
-				string.format('[BOOT SEQUENCE FAILURE]\nModule: %s\nError: %s', module, err),
-				vim.log.levels.ERROR,
-				{ title = 'Init.lua Fault Tolerance' }
-			)
-		end)
-	end
-	return ok
-end
-
--- 7. [ CORE & PLUGINS INITIALIZATION ]
--- Load the main configuration components.
-safe_require 'core'    -- Essential settings, paths, and keymaps
-safe_require 'plugins' -- Plugin specifications and configurations
+-- 7. [ BOOTSTRAP ]
+-- The 'plugin/' directory is auto-loaded by Neovim's engine.
+-- Core settings, keymaps, and plugin orchestration are handled there.

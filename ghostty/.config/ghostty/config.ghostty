@@ -1,3 +1,9 @@
 theme = Catppuccin Mocha
 background-opacity = 0.85
 background-blur = true
+
+copy-on-select = true
+
+font-family = "Monaspace Krypton NF"
+
+window-decoration = none

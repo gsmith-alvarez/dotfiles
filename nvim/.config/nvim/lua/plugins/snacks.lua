@@ -5,6 +5,10 @@
 
 local M = {}
 
--- TODO: Configure specific snacks modules (e.g. notifier, dash, picker) here.
+local mini = require('plugins.mini')
+
+mini.later(function()
+	-- TODO: Configure specific snacks modules (e.g. notifier, dash, picker) here.
+end)
 
 return M

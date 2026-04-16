@@ -1,6 +1,6 @@
 -- =============================================================================
 -- [ MINI.NVIM ]
--- Configuration for various modular plugins from the 'mini.nvim' collection.
+-- paceruration for various modular plugins from the 'mini.nvim' collection.
 -- =============================================================================
 
 local M = {}
@@ -57,5 +57,42 @@ require('mini.splitjoin').setup()
 
 -- 'mini.ai' provides enhanced text objects (e.g. 'a' for argument, 'f' for function).
 require('mini.ai').setup()
+
+
+-- Loading helpers used to organize config into fail-safe parts. Example usage:
+-- - `now` - execute immediately. Use for what must be executed during startup.
+--   Like colorscheme, statusline, tabline, dashboard, etc.
+-- - `later` - execute a bit later. Use for things not needed during startup.
+-- - `now_if_args` - use only if needed during startup when Neovim is started
+--   like `nvim -- path/to/file`, but otherwise delaying is fine.
+-- - Others are better used only if the above is not enough for good performance.
+--   Use only if you are comfortable with adding complexity to your config:
+--   - `on_event` - execute once on a first matched event. Like "delay until
+--     first Insert mode enter": `on_event('InsertEnter', function() ... end)`.
+--   - `on_filetype` - execute once on a first matched filetype. Like "delay
+--     until first Lua file": `on_filetype('lua', function() ... end)`.
+--
+-- See also:
+-- - `:h MiniMisc.safely()`
+-- - 'plugin/30_mini.lua' and 'plugin/40_plugins.lua'
+local ok_misc, misc = pcall(require, 'mini.misc')
+
+local function pacer_logic(mode, f)
+    if ok_misc then
+        misc.safely(mode, f)
+    else
+        f()
+    end
+end
+
+M.pacer = pacer_logic
+
+M.now = function(f) pacer_logic('now', f) end
+M.later = function(f) pacer_logic('later', f) end
+M.now_if_args = vim.fn.argc(-1) > 0 and M.now or M.later
+M.on_event = function(ev, f) pacer_logic('event:' .. ev, f) end
+M.on_filetype = function(ft, f) pacer_logic('filetype:' .. ft, f) end
+
+if ok_misc then misc.setup_auto_root() end
 
 return M

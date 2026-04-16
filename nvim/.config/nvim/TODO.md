@@ -15,14 +15,14 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 - [ ] Add `soft_notify` / error reporting.
 - [ ] Add any shared path or file helpers.
 
-### `lua/core/options.lua`
+### `plugin/00-options.lua`
 - [ ] Rebuild all editor options.
 - [ ] Set basic UX defaults: numbers, signcolumn, cursorline, split behavior, scrolloff, wrap, conceal, clipboard.
 - [ ] Set editing defaults: indent, tabstop, shiftwidth, expandtab, smartindent, undo, backup.
 - [ ] Set search and completion defaults.
 - [ ] Set diagnostic display defaults.
 
-### `lua/core/keymaps.lua`
+### `plugin/03-keymaps.lua`
 - [ ] Rebuild core save, quit, and escape mappings.
 - [ ] Rebuild buffer navigation and buffer management mappings.
 - [ ] Rebuild window split, window move, and resize mappings.
@@ -40,11 +40,11 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 - [ ] Centralize diagnostic, git, kind, and DAP icons.
 - [ ] Use the icon registry everywhere instead of ad hoc strings.
 
-### `lua/core/plugin-keymaps.lua`
+### `plugin/04-plugin-keymaps.lua`
 - [ ] Create a single registry for global plugin keymaps.
 - [ ] Group mappings by domain and keep them discoverable.
 
-### `lua/core/deps.lua`
+### `plugin/01-path.lua`
 - [ ] Sync Neovim with `mise`.
 - [ ] Confirm PATH resolution for tools used by LSP, formatters, and CLI workflows.
 - [ ] Add health or validation hooks for missing binaries.
@@ -53,35 +53,34 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 - [ ] Keep VSCode-specific behavior isolated.
 - [ ] Load this layer only when running inside VSCode.
 
-### `lua/core/init.lua`
-- [ ] Wire core modules in the correct order.
-- [ ] Load options before keymaps.
-- [ ] Load environment sync early.
-- [ ] Load shared libraries before plugin setup.
+### `plugin/02-pack.lua`
+- [ ] Keep plugin specs grouped by domain.
+- [ ] Keep post-install hooks robust (build tools, copy fallbacks).
+- [ ] Add health checks for missing external build tools.
 
 ## 2. Autocmds
-### `lua/autocmd/basic.lua`
+### `plugin/05-autocmds.lua`
 - [ ] Highlight on yank.
 - [ ] Auto-resize windows on terminal resize.
 - [ ] Auto-create parent directories on save.
 
-### `lua/autocmd/external.lua`
+### `lua/autocmd/external.lua` (optional split from plugin/05-autocmds.lua)
 - [ ] Add large-file protections.
 - [ ] Add special-file handling for archive or external viewers.
 
-### `lua/autocmd/jit.lua`
+### `lua/autocmd/jit.lua` (optional split from plugin/05-autocmds.lua)
 - [ ] Load markdown or note-taking features only when needed.
 - [ ] Keep expensive filetype logic deferred.
 
-### `lua/autocmd/init.lua`
-- [ ] Orchestrate all autocmd modules.
+### `plugin/05-autocmds.lua` orchestration
+- [ ] Keep global autocmds lightweight.
 - [ ] Add hot reload hooks for config files if desired.
 
 ## 3. Plugin Foundation
-### `lua/plugins/init.lua`
-- [ ] Rebuild the plugin bootstrapper.
+### `plugin/05-plugins.lua`
+- [ ] Keep plugin bootstrap list current.
 - [ ] Keep context-aware loading paths separate.
-- [ ] Wrap plugin module loads in `pcall`.
+- [ ] Keep all plugin module loads routed through `Config.safe_require`.
 
 ### `lua/plugins/core/mini.lua`
 - [ ] Add `mini.nvim` core pieces used everywhere.
