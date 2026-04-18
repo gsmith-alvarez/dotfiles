@@ -1,43 +1,57 @@
 [settings]
+# Core settings
 experimental = true
-env_shell_expand = true
 all_compile = false
 activate_aggressive = true
+env_shell_expand = true
+
+# UI/UX
 color_theme = "catppuccin"
-npm.package_manager = "bun"
+
+[settings.npm]
+package_manager = "bun"
 
 [settings.pipx]
 uvx = true
 
 [tools]
+# --- Core Runtimes ---
 node = "latest"
-bun = "latest"
+bun  = "latest"
+zig  = "latest"
 
-# LSP
-## Scripting Languages
-lua-language-server = "latest"
-"npm:bash-language-server" = "latest"
-"npm:pyright" = "latest"
-## Config languages
-"npm:vscode-json-languageserver" = "latest"
-"npm:yaml-language-server" = "latest"
-"npm:dockerfile-language-server-nodejs" = "latest"
+# --- Language Servers (LSP) ---
+lua-language-server                      = "latest" # Lua
+"npm:bash-language-server"               = "latest" # Bash
+"npm:pyright"                            = "latest" # Python
+"npm:vscode-json-languageserver"         = "latest" # JSON
+"npm:yaml-language-server"               = "latest" # YAML
+"npm:dockerfile-language-server-nodejs"  = "latest" # Docker
 
-# Formatters + Linters
-tree-sitter = "latest" # Parsing libary
-ruff = "latest" # Python
-stylua = "latest" # Lua
-## Bash/Fish
-shellcheck = "latest" #linter
-shfmt = "latest" #formatter
-## JS/TS
+# --- Linters & Formatters ---
+# General & Parsing
+tree-sitter = "latest" # Incremental parsing library
+ty          = "latest" # Typo checker (alternative)
+typos       = "latest" # Source code spell checker
+
+# Lua
+stylua = "latest"
+
+# Python
+ruff = "latest"
+
+# Shell (Bash/Fish)
+shellcheck = "latest"
+shfmt      = "latest"
+
+# JS/TS (Rust-powered tools)
 oxlint = "latest"
-oxfmt = "latest"
-## Config
-taplo = "latest" # toml
-yamllint = "latest"
-## General
-typos = "latest"
+oxfmt  = "latest"
 
-# Rendering
-"npm:@mermaid-js/mermaid-cli" = "latest"
+# Config Files
+taplo    = "latest" # TOML
+yamllint = "latest" # YAML
+
+# --- Graphics & Typesetting ---
+"npm:@mermaid-js/mermaid-cli" = "latest" # Diagrams
+"cargo:tectonic"              = "latest" # LaTeX engine
