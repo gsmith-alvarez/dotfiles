@@ -33,13 +33,15 @@ vim.g.mapleader = ' '      -- Set leader key to Space
 vim.g.maplocalleader = ' ' -- Set local leader key to Space
 vim.g.have_nerd_font = true -- Inform plugins that a Nerd Font is available
 
+local set = vim.opt
+
 -- 3. [ INTERACTION & UI ]
-vim.opt.mouse = ''          -- Disable mouse support entirely
-vim.o.number = true         -- Show absolute line numbers
-vim.o.relativenumber = true -- Show relative line numbers for easier jumping
-vim.o.showmode = false      -- Don't show mode (e.g. -- INSERT --) as statusline handles it
-vim.o.clipboard = 'unnamedplus' -- Use system clipboard for all yanks/pastes
-vim.o.confirm = true        -- Ask to save changes before quitting an unsaved buffer
+set.mouse = ''          -- Disable mouse support entirely
+set.number = true         -- Show absolute line numbers
+set.relativenumber = true -- Show relative line numbers for easier jumping
+set.showmode = false      -- Don't show mode (e.g. -- INSERT --) as statusline handles it
+set.clipboard = 'unnamedplus' -- Use system clipboard for all yanks/pastes
+set.confirm = true        -- Ask to save changes before quitting an unsaved buffer
 
 -- 4. [ PROVIDER DEACTIVATION ]
 -- Disable providers for languages not used for scripting Neovim to save startup time.
@@ -50,31 +52,31 @@ vim.g.loaded_node_provider = 0
 
 -- 5. [ TREESITTER & FOLDING ]
 -- Use Treesitter for high-performance, semantic code folding.
-vim.o.foldmethod = 'expr'
-vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-vim.o.foldtext = ''
-vim.o.foldlevel = 99     -- Start with all folds open
-vim.o.foldnestmax = 10   -- Limit fold nesting depth
-vim.o.fillchars = 'eob: ,fold:╌' -- Custom characters for end-of-buffer and folds
+set.foldmethod = 'expr'
+set.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+set.foldtext = ''
+set.foldlevel = 99     -- Start with all folds open
+set.foldnestmax = 10   -- Limit fold nesting depth
+set.fillchars = 'eob: ,fold:╌' -- Custom characters for end-of-buffer and folds
 
 -- 6. [ SEARCH & SPELL ]
-vim.o.ignorecase = true    -- Ignore case in search patterns...
-vim.o.smartcase = true     -- ...unless the pattern contains upper case characters.
-vim.o.inccommand = 'split' -- Show search/replace effects in a live-preview split
-vim.o.spelloptions = 'camel' -- Handle camelCase words in spell checking
-vim.opt.spelllang = { 'en_us' }
-vim.opt.spellfile = vim.fn.stdpath 'config' .. '/spell/en.utf-8.add'
+set.ignorecase = true    -- Ignore case in search patterns...
+set.smartcase = true     -- ...unless the pattern contains upper case characters.
+set.inccommand = 'split' -- Show search/replace effects in a live-preview split
+set.spelloptions = 'camel' -- Handle camelCase words in spell checking
+set.spelllang = { 'en_us' }
+set.spellfile = vim.fn.stdpath 'config' .. '/spell/en.utf-8.add'
 
 -- 7. [ FORMATTING ]
 -- Pattern for detecting the start of a numbered list (used for `gw` and formatting).
-vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
+set.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 
 -- 8. [ PERFORMANCE & PERSISTENCE ]
-vim.o.undofile = true       -- Enable persistent undo across sessions
-vim.o.timeoutlen = 300      -- Time (ms) to wait for a mapped sequence to complete
-vim.o.scrolloff = 10        -- Minimum lines to keep above/below the cursor
-vim.o.shada = "'100,<50,s10,:1000,/100,@100,h" -- Optimize ShaDa file for faster startup
-vim.o.switchbuf = 'usetab'  -- Jump to existing tab if buffer is already open
+set.undofile = true       -- Enable persistent undo across sessions
+set.timeoutlen = 300      -- Time (ms) to wait for a mapped sequence to complete
+set.scrolloff = 10        -- Minimum lines to keep above/below the cursor
+set.shada = "'100,<50,s10,:1000,/100,@100,h" -- Optimize ShaDa file for faster startup
+set.switchbuf = 'usetab'  -- Jump to existing tab if buffer is already open
 
 -- 9. [ SYNTAX & FILETYPE ]
 -- Ensure filetype detection and syntax highlighting are fully enabled.
@@ -84,35 +86,35 @@ if vim.fn.exists 'syntax_on' ~= 1 then
 end
 
 -- 10. [ WRAPPING & INDENTATION ]
-vim.opt.wrap = true          -- Disable line wrapping by default
-vim.opt.linebreak = true     -- Wrap at words instead of characters when enabled
-vim.opt.showbreak = '↪ '      -- Visual indicator at the start of wrapped lines
-vim.opt.breakindent = true   -- Wrapped lines retain the same indentation level
-vim.o.breakindentopt = 'list:-1' -- Special indentation for lists
-vim.o.colorcolumn = '+1'     -- Highlight the column after 'textwidth'
-vim.o.cursorline = true      -- Highlight the current cursor line
+set.wrap = true          -- Disable line wrapping by default
+set.linebreak = true     -- Wrap at words instead of characters when enabled
+set.showbreak = '↪ '      -- Visual indicator at the start of wrapped lines
+set.breakindent = true   -- Wrapped lines retain the same indentation level
+set.breakindentopt = 'list:-1' -- Special indentation for lists
+set.colorcolumn = '+1'     -- Highlight the column after 'textwidth'
+set.cursorline = true      -- Highlight the current cursor line
 
 -- Standard 4-space indentation
-vim.opt.expandtab = true     -- Use spaces instead of tabs
-vim.opt.shiftwidth = 4       -- Size of an indent
-vim.opt.tabstop = 4          -- Number of spaces a tab counts for
-vim.opt.softtabstop = 4      -- Number of spaces for a tab while editing
+set.expandtab = true     -- Use spaces instead of tabs
+set.shiftwidth = 4       -- Size of an indent
+set.tabstop = 4          -- Number of spaces a tab counts for
+set.softtabstop = 4      -- Number of spaces for a tab while editing
 
 -- 11. [ COMPLETION & PUM ]
-vim.opt.autocomplete = false -- Disable built-in completion (using blink.cmp)
-vim.opt.completeopt:append 'nearest' -- Prioritize completion matches near the cursor
-vim.opt.pumborder = 'rounded' -- Rounded borders for the popup menu
-vim.opt.pummaxwidth = 20     -- Limit popup menu width
-vim.opt.messagesopt:append 'progress:c' -- Show background job progress in messages
+set.autocomplete = false -- Disable built-in completion (using blink.cmp)
+set.completeopt:append 'nearest' -- Prioritize completion matches near the cursor
+set.pumborder = 'rounded' -- Rounded borders for the popup menu
+set.pummaxwidth = 20     -- Limit popup menu width
+set.messagesopt:append 'progress:c' -- Show background job progress in messages
 
 -- 12. [ WINDOWS & SPLITS ]
-vim.o.splitright = true      -- Vertical splits open to the right
-vim.o.splitbelow = true      -- Horizontal splits open below
-vim.o.winborder = 'rounded'  -- Rounded borders for floating windows
+set.splitright = true      -- Vertical splits open to the right
+set.splitbelow = true      -- Horizontal splits open below
+set.winborder = 'rounded'  -- Rounded borders for floating windows
 
 -- 13. [ WHITESPACE VISUALIZATION ]
-vim.o.list = true            -- Show invisible characters
-vim.opt.listchars = {
+set.list = true            -- Show invisible characters
+set.listchars = {
   tab = '» ',
   trail = '·',
   nbsp = '␣',
@@ -122,13 +124,13 @@ vim.opt.listchars = {
 }
 
 -- 14. [ COMMAND LINE & STATUS ]
-vim.opt.laststatus = 3       -- Use a single global statusline
-vim.opt.showcmd = true       -- Show the (partial) command in the last line
-vim.opt.showcmdloc = 'statusline' -- Show command keys in the statusline
+set.laststatus = 3       -- Use a single global statusline
+set.showcmd = true       -- Show the (partial) command in the last line
+set.showcmdloc = 'statusline' -- Show command keys in the statusline
 
 -- 15. [ PROJECT-SPECIFIC CONFIG ]
 -- Automatically load .nvim.lua, .nvimrc, or .exrc files in the current directory.
 -- Includes security check: Neovim will ask for permission before running them.
-vim.o.exrc = true
+set.exrc = true
 
 return M
