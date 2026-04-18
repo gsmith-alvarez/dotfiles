@@ -2,7 +2,7 @@
 set -l paths \
 	~/.local/bin \
 	~/.cargo/bin \
-	~/.local/mise/shims 
+	~/.local/share/mise/shims
 
 for path in $paths
 	if test -d $path; and not contains $path $PATH
@@ -15,6 +15,7 @@ set -gx VISUAL nvim
 
 if status is-interactive
 	# Using mise in the interactive path to avoid bloating the global path
+	type -q mise; and mise activate fish | source
 	type -q starship; and starship init fish | source
 	type -q fzf; and fzf --fish | source
 	type -q zoxide; and zoxide init fish --cmd cd | source
@@ -51,8 +52,4 @@ if status is-interactive
 	abbr -a rg batgrep
 	abbr -a diff batdiff
 	abbr -a watch batwatch
-
-
-
-# Commands to run in interactive sessions can go here
 end

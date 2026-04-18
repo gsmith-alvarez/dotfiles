@@ -47,3 +47,9 @@ stow -vt ~ scripts
 ## Development
 
 - **Python:** Managed with [`uv`](https://github.com/astral-sh/uv).
+
+## My UI
+
+terminal nerd font: [Monaspace Krypton](https://monaspace.githubnext.com/)
+
+Gui font: [Monaspace Neon](https://www.programmingfonts.org/#monaspace-neon)
