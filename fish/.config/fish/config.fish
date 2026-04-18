@@ -14,12 +14,13 @@ set -gx EDITOR nvim
 set -gx VISUAL nvim
 
 if status is-interactive
-	# Using mise in the interactive path to avoid bloating the global path
 	type -q mise; and mise activate fish | source
 	type -q starship; and starship init fish | source
 	type -q fzf; and fzf --fish | source
 	type -q zoxide; and zoxide init fish --cmd cd | source
 	type -q atuin; and atuin init fish | source
+    
+    fish_vi_key_bindings
 
 	### Abbreviations
 	abbr -a cat bat
