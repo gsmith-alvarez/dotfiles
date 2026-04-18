@@ -84,7 +84,7 @@ if vim.fn.exists 'syntax_on' ~= 1 then
 end
 
 -- 10. [ WRAPPING & INDENTATION ]
-vim.opt.wrap = false         -- Disable line wrapping by default
+vim.opt.wrap = true          -- Disable line wrapping by default
 vim.opt.linebreak = true     -- Wrap at words instead of characters when enabled
 vim.opt.showbreak = '↪ '      -- Visual indicator at the start of wrapped lines
 vim.opt.breakindent = true   -- Wrapped lines retain the same indentation level

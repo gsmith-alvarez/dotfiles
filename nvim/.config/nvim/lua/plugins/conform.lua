@@ -4,7 +4,7 @@
 -- =============================================================================
 
 -- [[ STEP 1: REGISTRATION ]]
--- Add 'stevearc/conform.nvim' to lua/core/pack.lua and run :PackUpdate.
+-- Add 'stevearc/conform.nvim' to plugin/02-pack.lua and run :PackUpdate.
 
 -- [[ STEP 2: CONFIGURATION ]]
 -- Map specific filetypes to their respective formatters (managed by mise).
@@ -37,11 +37,15 @@
 -- })
 
 -- [[ STEP 6: KEYBINDINGS ]]
--- Add to lua/core/keymaps.lua:
+-- Add to plugin/03-keymaps.lua:
 -- - <leader>cf : Trigger manual format
 
 local M = {}
 
--- TODO: Implement require('conform').setup({ ... })
+local mini = require('plugins.mini')
+
+mini.later(function()
+	-- TODO: Implement require('conform').setup({ ... })
+end)
 
 return M
