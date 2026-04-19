@@ -9,95 +9,100 @@ _G.Config = {}
 
 -- Assign the anonymous function directly to the table key.
 Config.safe_require = function(module_or_list, desc)
-    -- Use the call stack to find the executing script, fallback to SYSTEM
-    desc = desc or (debug.getinfo(2, "S") and debug.getinfo(2, "S").source:match("@?(.*/)") or "SYSTEM")
+	-- Use the call stack to find the executing script, fallback to SYSTEM
+	desc = desc or (debug.getinfo(2, "S") and debug.getinfo(2, "S").source:match("@?(.*/)") or "SYSTEM")
 
-    -- Handle table of modules recursively
-    if type(module_or_list) == 'table' then
-        local loaded_modules = {}
-        for _, m in ipairs(module_or_list) do
-            -- Recursively call and store the payload by module name
-            loaded_modules[m] = Config.safe_require(m, desc)
-        end
-        -- Return the dictionary of loaded modules
-        return loaded_modules
-    end
+	-- Handle table of modules recursively
+	if type(module_or_list) == "table" then
+		local loaded_modules = {}
+		for _, m in ipairs(module_or_list) do
+			-- Recursively call and store the payload by module name
+			loaded_modules[m] = Config.safe_require(m, desc)
+		end
+		-- Return the dictionary of loaded modules
+		return loaded_modules
+	end
 
-    -- Base case: handle single string module
-    local ok, result = pcall(require, module_or_list)
+	-- Base case: handle single string module
+	local ok, result = pcall(require, module_or_list)
 
-    if not ok then
-        vim.schedule(function()
-            vim.notify(
-                string.format('[%s SEQUENCE FAILURE]\nModule: %s\nError: %s', desc, module_or_list, result),
-                vim.log.levels.ERROR,
-                { title = 'Init.lua Fault Tolerance' }
-            )
-        end)
-        return false
-    end
+	-- Check if nil patterns
+	if not ok then
+		vim.schedule(function()
+			vim.notify(
+				string.format("[%s SEQUENCE FAILURE]\nModule: %s\nError: %s", desc, module_or_list, result),
+				vim.log.levels.ERROR,
+				{ title = "Init.lua Fault Tolerance" }
+			)
+		end)
+		return setmetatable({}, {
+			__index = function()
+				return function() end
+			end,
+		})
+	end
 
-    return result
+	return result
 end
 
 -- 1. [ PERFORMANCE OPTIMIZATION ]
 -- Enable the experimental Lua loader to speed up startup by caching byte-code.
 if vim.loader then
-    vim.loader.enable()
+	vim.loader.enable()
 end
 
 -- 2. [ EXPERIMENTAL FEATURES ]
 -- Enable "Experimental 0.12 features" for enhanced UI capabilities.
 -- This uses pcall to safely check if the module exists before requiring.
-if pcall(require, 'vim._core.ui2') then
-    require('vim._core.ui2').enable {}
+if pcall(require, "vim._core.ui2") then
+	require("vim._core.ui2").enable({})
 end
 
 -- 3. [ BUILT-IN PLUGIN ACTIVATION ]
 -- Enable built-in plugins that are useful but not enabled by default.
 local builtins = {
-  'nvim.difftool', -- Enhanced side-by-side directory and file comparison
-  'cfilter',       -- Allows filtering the quickfix and location list (:Cfilter)
-  'nvim.undotree', -- Native interactive undo history visualization
-  'justify',       -- Provides the :Justify command for text alignment
-  'nohlsearch',    -- Automatically disables search highlighting after moving
+	"nvim.difftool", -- Enhanced side-by-side directory and file comparison
+	"cfilter", -- Allows filtering the quickfix and location list (:Cfilter)
+	"nvim.undotree", -- Native interactive undo history visualization
+	"justify", -- Provides the :Justify command for text alignment
+	"nohlsearch", -- Automatically disables search highlighting after moving
 }
 
 for _, plugin in ipairs(builtins) do
-    vim.cmd.packadd(plugin)
+	vim.cmd.packadd(plugin)
 end
 
 -- 4. [ BUILT-IN PLUGIN DEACTIVATION ]
 -- Disable certain built-in features that we replace with more powerful plugins
 -- or simply don't use to reduce bloat and improve startup speed.
 local disabled_builtins = {
-  "netrw",              -- Replaced by mini.files
-  "netrwPlugin",
-  "netrwSettings",
-  "netrwFileHandlers",
-  "gzip",               -- Compression support (unnecessary for most)
-  "zip",
-  "zipPlugin",
-  "tar",
-  "tarPlugin",
-  "getscript",          -- Legacy Vim script distribution tools
-  "getscriptPlugin",
-  "vimball",
-  "vimballPlugin",
-  "2html_plugin",       -- Convert buffer to HTML
-  "logipat",            -- Logical patterns
-  "rrhelper",
-  "matchit",            -- Enhanced % matching (handled by treesitter/mini.ai)
+	"netrw", -- Replaced by mini.files
+	"netrwPlugin",
+	"netrwSettings",
+	"netrwFileHandlers",
+	"gzip", -- Compression support (unnecessary for most)
+	"zip",
+	"zipPlugin",
+	"tar",
+	"tarPlugin",
+	"getscript", -- Legacy Vim script distribution tools
+	"getscriptPlugin",
+	"vimball",
+	"vimballPlugin",
+	"2html_plugin", -- Convert buffer to HTML
+	"logipat", -- Logical patterns
+	"rrhelper",
+	"matchit", -- Enhanced % matching (handled by treesitter/mini.ai)
 }
 
 for _, plugin in ipairs(disabled_builtins) do
-    vim.g['loaded_' .. plugin] = 1
+	vim.g["loaded_" .. plugin] = 1
 end
 
 -- 5. [ RUNTIME PATH CLEANUP ]
 -- Remove legacy Arch Linux Vim paths from the runtimepath to avoid conflicts
 -- and ensure a clean environment.
-local unwanted_paths = { '/usr/share/vim/vimfiles', '/usr/share/vim/vimfiles/after' }
+local unwanted_paths = { "/usr/share/vim/vimfiles", "/usr/share/vim/vimfiles/after" }
 vim.opt.runtimepath:remove(unwanted_paths)
 
 -- 7. [ BOOTSTRAP ]

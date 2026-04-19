@@ -3,12 +3,21 @@
 -- Displays a popup with available keybindings for the current mode/prefix.
 -- =============================================================================
 
-local mini = require('plugins.mini')
+local M = {}
+
+local mini = Config.safe_require("plugins.mini")
 
 mini.later(function()
-	-- 1. [ INITIALIZATION ]
-	-- Use the 'modern' preset for a clean, visually appealing UI.
-	require('which-key').setup({
-		preset = 'helix',
+	require("which-key").setup({
+		preset = "modern",
+		spec = {
+			{ "<leader>c", group = "Code", icon = "" },
+			{ "<leader>f", group = "File", icon = "" },
+			{ "<leader>g", group = "Git", icon = "" },
+			{ "<leader>u", group = "UI", icon = "󰙵" },
+			{ "<leader>w", group = "Window", icon = "" },
+		},
 	})
 end)
+
+return M

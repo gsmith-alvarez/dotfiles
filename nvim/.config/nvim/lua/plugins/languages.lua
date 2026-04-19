@@ -4,102 +4,96 @@
 -- =============================================================================
 
 local M = {}
+local icons = Config.safe_require("core.icons")
+local mini = Config.safe_require("plugins.mini")
 
-local mini = require('plugins.mini')
+-- 1. [ DIAGNOSTICS: UI & SIGNS ]
+-- Configure the diagnostic engine to use our centralized icons.
+-- Neovim 0.10+ uses the 'signs.text' table for gutter icons.
+vim.diagnostic.config({
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
+			[vim.diagnostic.severity.WARN] = icons.diagnostics.Warn,
+			[vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
+			[vim.diagnostic.severity.INFO] = icons.diagnostics.Info,
+		},
+	},
+	virtual_text = {
+		spacing = 4,
+		prefix = "●",
+	},
+	severity_sort = true,
+	float = { border = "rounded" },
+})
 
--- 1. [ TREESITTER: SYNTAX & PARSING ]
+-- 2. [ TREESITTER: SYNTAX & PARSING ]
 -- Manage Treesitter parsers and enable automatic installation for core languages.
 mini.later(function()
-  require('tree-sitter-manager').setup({
-    ensure_installed = { 'python', 'cpp', 'bash', 'fish', 'lua', 'markdown', 'markdown_inline' },
-    auto_install = true,
-  })
+	require("tree-sitter-manager").setup({
+		ensure_installed = { "python", "cpp", "bash", "fish", "lua", "markdown", "markdown_inline" },
+		auto_install = true,
+	})
 end)
 
--- 2. [ LSP: LANGUAGE SERVER OVERRIDES ]
+-- 3. [ LSP: LANGUAGE SERVER OVERRIDES ]
 -- Use vim.lsp.config() to merge project-specific overrides with the
--- default configurations provided by nvim-lspconfig. This avoids
--- redefining entire server setups and ensures we only track our changes.
+-- default configurations provided by nvim-lspconfig.
+
+require("lazydev").setup({
+	library = {
+		-- load luvit types when vim.uv is found
+		{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+	},
+})
 
 -- [ LUA (lua_ls) ]
-vim.lsp.config('lua_ls', {
-  on_init = function(client)
-    if client.workspace_folders then
-      local path = client.workspace_folders[1].name
-      if
-          path ~= vim.fn.stdpath('config')
-          and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
-      then
-        return
-      end
-    end
-
-    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most
-        -- likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-        -- Tell the language server how to find Lua modules same way as Neovim
-        -- (see `:h lua-module-load`)
-        path = {
-          'lua/?.lua',
-          'lua/?/init.lua',
-        },
-      },
-      -- Make the server aware of Neovim runtime files
-      workspace = {
-        checkThirdParty = false,
-        library = {
-          vim.env.VIMRUNTIME,
-        },
-      },
-      -- Enable inlay hints
-      hint = {
-        enable = true,
-        setType = true,
-      },
-    })
-  end,
-  settings = {
-    Lua = {},
-  },
+-- Note: lazydev.nvim handles the VIMRUNTIME and workspace library injection.
+vim.lsp.config("lua_ls", {
+	settings = {
+		Lua = {
+			runtime = { version = "LuaJIT" },
+			workspace = { checkThirdParty = false },
+			hint = { enable = true, setType = true },
+		},
+	},
 })
 
 -- [ C/C++ (clangd) ]
-vim.lsp.config('clangd', {
-  filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'h', 'hpp' },
-  settings = {
-    clangd = {
-      InlayHints = {
-        Designators = true,
-        Enabled = true,
-        ParameterNames = true,
-        DeducedTypes = true,
-      },
-    },
-  },
+vim.lsp.config("clangd", {
+	filetypes = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
+	settings = {
+		clangd = {
+			InlayHints = {
+				Designators = true,
+				Enabled = true,
+				ParameterNames = true,
+				DeducedTypes = true,
+			},
+		},
+	},
 })
 
 -- [ JSON (jsonls) ]
 -- Enable snippet support for jsonls (often required for schema completions)
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
-vim.lsp.config('jsonls', {
-  capabilities = capabilities,
+vim.lsp.config("jsonls", {
+	capabilities = capabilities,
 })
 
--- 3. [ ACTIVATION ]
+-- 4. [ ACTIVATION ]
 -- Enable the configured servers for the current session.
 vim.lsp.enable({
-  'ty',         -- Python (Astral)
-  'ruff',       -- Python (Formatting/Linting)
-  'lua_ls',     -- Lua
-  'bashls',     -- Bash
-  'clangd',     -- C/C++
-  'jsonls',     -- JSON
-  'yamlls',     -- YAML
-  'dockerls',   -- Docker
-  'taplo',      -- TOML
+	"ty", -- Python (Astral)
+	"ruff", -- Python (Formatting/Linting)
+	"lua_ls", -- Lua
+	"bashls", -- Bash
+	"clangd", -- C/C++
+	"jsonls", -- JSON
+	"yamlls", -- YAML
+	"dockerls", -- Docker
+	"taplo", -- TOML
 })
 
 return M

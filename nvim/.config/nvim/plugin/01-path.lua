@@ -14,11 +14,11 @@ vim.env.PATH = vim.fn.expand("~/.local/share/mise/shims") .. ":" .. vim.env.PATH
 
 -- 2. [ MISE INTEGRATION ]
 -- Initialize mise to manage project-specific tool versions.
--- RATIONALE: Using mise provides a reproducible environment for LSPs, 
+-- RATIONALE: Using mise provides a reproducible environment for LSPs,
 -- formatters, and future debugger (DAP) configurations without relying on Mason.
-local ok, mise = pcall(require, 'mise')
+local ok, mise = pcall(require, "mise")
 if ok then
-    mise.setup { sync = true }
+	mise.setup({ sync = true })
 end
 
 return M

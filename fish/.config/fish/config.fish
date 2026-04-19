@@ -56,3 +56,6 @@ if status is-interactive
 end
 # What I get for uninstalling the cosmic store
 set -x XDG_DATA_DIRS /var/lib/flatpak/exports/share $XDG_DATA_DIRS
+
+# Hermes Agent — ensure ~/.local/bin is on PATH
+fish_add_path "$HOME/.local/bin"
