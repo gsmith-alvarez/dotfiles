@@ -1,6 +1,6 @@
 -- =============================================================================
 -- [ MINI.NVIM ]
--- paceruration for various modular plugins from the 'mini.nvim' collection.
+-- Configuration for various modular plugins from the 'mini.nvim' collection.
 -- =============================================================================
 
 local M = {}
@@ -56,18 +56,19 @@ require('mini.jump').setup()
 require('mini.splitjoin').setup()
 
 -- 'mini.ai' provides enhanced text objects (e.g. 'a' for argument, 'f' for function).
-require('mini.ai').setup({
+local ai = require('mini.ai')
+ai.setup({
   custom_textobjects = {
     -- 'f' for "Functions"
-    f = ai.gen_spec.treesitter({a = '@function.outer', i = '@function.inner'}),
-    -- 'c' for "Classes" 
-    c = ai.gen_spec.treesitter({a = '@class.outer', i = '@class.inner'}),
+    f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }),
+    -- 'c' for "Classes"
+    c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }),
     -- 'o' for "Operations/Objects" (Conditionals + Loops)
     o = ai.gen_spec.treesitter({
-      a = {'@conditional.outer', '@loop.outer'},
-      i = {'@conditional.inner', 'loop.inner'}
-  }),
-},
+      a = { '@conditional.outer', '@loop.outer' },
+      i = { '@conditional.inner', '@loop.inner' }
+    }),
+  },
 })
 -- There is some way to get mini.ai to replace treesitter textobjects
 
@@ -90,11 +91,11 @@ require('mini.ai').setup({
 local ok_misc, misc = pcall(require, 'mini.misc')
 
 local function pacer_logic(mode, f)
-    if ok_misc then
-        misc.safely(mode, f)
-    else
-        f()
-    end
+  if ok_misc then
+    misc.safely(mode, f)
+  else
+    f()
+  end
 end
 
 M.pacer = pacer_logic
