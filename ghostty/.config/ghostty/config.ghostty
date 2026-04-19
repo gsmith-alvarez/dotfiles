@@ -26,7 +26,7 @@ keybind = ctrl+shift+h=previous_tab
 keybind = ctrl+shift+l=next_tab
 
 # Workspace Management
-keybind = ctrl+w=close_surface
+keybind = ctrl+shift+w=close_surface
 keybind = ctrl+shift+==equalize_splits
 
 # Global Actions

@@ -54,3 +54,5 @@ if status is-interactive
 	abbr -a diff batdiff
 	abbr -a watch batwatch
 end
+# What I get for uninstalling the cosmic store
+set -x XDG_DATA_DIRS /var/lib/flatpak/exports/share $XDG_DATA_DIRS

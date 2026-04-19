@@ -56,7 +56,20 @@ require('mini.jump').setup()
 require('mini.splitjoin').setup()
 
 -- 'mini.ai' provides enhanced text objects (e.g. 'a' for argument, 'f' for function).
-require('mini.ai').setup()
+require('mini.ai').setup({
+  custom_textobjects = {
+    -- 'f' for "Functions"
+    f = ai.gen_spec.treesitter({a = '@function.outer', i = '@function.inner'}),
+    -- 'c' for "Classes" 
+    c = ai.gen_spec.treesitter({a = '@class.outer', i = '@class.inner'}),
+    -- 'o' for "Operations/Objects" (Conditionals + Loops)
+    o = ai.gen_spec.treesitter({
+      a = {'@conditional.outer', '@loop.outer'},
+      i = {'@conditional.inner', 'loop.inner'}
+  }),
+},
+})
+-- There is some way to get mini.ai to replace treesitter textobjects
 
 
 -- Loading helpers used to organize config into fail-safe parts. Example usage:
@@ -74,7 +87,6 @@ require('mini.ai').setup()
 --
 -- See also:
 -- - `:h MiniMisc.safely()`
--- - 'plugin/30_mini.lua' and 'plugin/40_plugins.lua'
 local ok_misc, misc = pcall(require, 'mini.misc')
 
 local function pacer_logic(mode, f)
