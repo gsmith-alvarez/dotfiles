@@ -43,14 +43,14 @@ end
 -- 1. [ PERFORMANCE OPTIMIZATION ]
 -- Enable the experimental Lua loader to speed up startup by caching byte-code.
 if vim.loader then
-	vim.loader.enable()
+    vim.loader.enable()
 end
 
 -- 2. [ EXPERIMENTAL FEATURES ]
 -- Enable "Experimental 0.12 features" for enhanced UI capabilities.
 -- This uses pcall to safely check if the module exists before requiring.
 if pcall(require, 'vim._core.ui2') then
-	require('vim._core.ui2').enable {}
+    require('vim._core.ui2').enable {}
 end
 
 -- 3. [ BUILT-IN PLUGIN ACTIVATION ]
@@ -64,7 +64,7 @@ local builtins = {
 }
 
 for _, plugin in ipairs(builtins) do
-	vim.cmd.packadd(plugin)
+    vim.cmd.packadd(plugin)
 end
 
 -- 4. [ BUILT-IN PLUGIN DEACTIVATION ]
@@ -91,7 +91,7 @@ local disabled_builtins = {
 }
 
 for _, plugin in ipairs(disabled_builtins) do
-	vim.g['loaded_' .. plugin] = 1
+    vim.g['loaded_' .. plugin] = 1
 end
 
 -- 5. [ RUNTIME PATH CLEANUP ]

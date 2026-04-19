@@ -32,20 +32,30 @@ end
 -- =============================================================================
 
 -- Global augroup for custom configuration to allow easy clearing/re-loading.
-local gr = vim.api.nvim_create_augroup('custom-config', { clear = true })
+-- This ensures that when the config is sourced again, old autocommands are wiped.
+local augroup = vim.api.nvim_create_augroup('custom-config', { clear = true })
 
 --- Create a custom autocommand within the 'custom-config' group.
+--- Why: Centralizes event handling and prevents duplicate registration on reload.
 --- @param event string|table Event name(s) to trigger on (e.g., 'BufWritePost').
 --- @param pattern string|table File pattern(s) to match.
---- @param callback function|string The action to perform.
+--- @param action function|string The action to perform (Lua function or Vim command string).
 --- @param desc string Description of the autocommand for documentation.
-M.new_autocmd = function(event, pattern, callback, desc)
-	vim.api.nvim_create_autocmd(event, {
-		group = gr,
+M.autocmd = function(event, pattern, action, desc)
+	local opts = {
+		group = augroup,
 		pattern = pattern,
-		callback = callback,
 		desc = desc,
-	})
+	}
+
+	-- Automatically route to 'command' or 'callback' based on type.
+	if type(action) == 'string' then
+		opts.command = action
+	else
+		opts.callback = action
+	end
+
+	vim.api.nvim_create_autocmd(event, opts)
 end
 
 --- Custom hook for 'PackChanged' events (specific to the pack manager).
@@ -68,7 +78,7 @@ M.on_packchanged = function(plugin_name, kinds, callback, desc)
 		end
 		callback(ev.data)
 	end
-	M.new_autocmd('PackChanged', '*', f, desc)
+	M.autocmd('PackChanged', '*', f, desc)
 end
 
 -- =============================================================================
