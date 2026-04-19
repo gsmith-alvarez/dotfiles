@@ -3,50 +3,44 @@
 Rebuild order follows the clay-dots architecture from bootstrap to everyday workflows.
 
 ## 0. Bootstrap
-- [ ] Recreate `init.lua` as the only startup entrypoint.
-- [ ] Enable `vim.loader` caching at the top of startup.
-- [ ] Disable legacy built-ins (`netrw`, archive handlers, gzip, etc.).
-- [ ] Add `safe_require()` and use it for all non-core module loads.
-- [ ] Keep startup split into Phase 0, Phase 1, Phase 2, and deferred JIT loads.
+- [x] Recreate `init.lua` as the only startup entrypoint.
+- [x] Enable `vim.loader` caching at the top of startup.
+- [x] Disable legacy built-ins (`netrw`, archive handlers, gzip, etc.).
+- [x] Add `safe_require()` and use it for all non-core module loads.
+- [x] Keep startup split into Phase 0, Phase 1, Phase 2, and deferred JIT loads.
 
 ## 1. Core Runtime
-### `lua/core/utils.lua`
-- [ ] Add logging helpers.
-- [ ] Add `soft_notify` / error reporting.
-- [ ] Add any shared path or file helpers.
 
 ### `plugin/00-options.lua`
-- [ ] Rebuild all editor options.
-- [ ] Set basic UX defaults: numbers, signcolumn, cursorline, split behavior, scrolloff, wrap, conceal, clipboard.
-- [ ] Set editing defaults: indent, tabstop, shiftwidth, expandtab, smartindent, undo, backup.
-- [ ] Set search and completion defaults.
-- [ ] Set diagnostic display defaults.
+- [x] Rebuild all editor options.
+- [x] Set basic UX defaults: numbers, signcolumn, cursorline, split behavior, scrolloff, wrap, conceal, clipboard.
+- [x] Set editing defaults: indent, tabstop, shiftwidth, expandtab, smartindent, undo, backup.
+- [x] Set search and completion defaults.
+- [x] Set diagnostic display defaults.
 
 ### `plugin/03-keymaps.lua`
-- [ ] Rebuild core save, quit, and escape mappings.
-- [ ] Rebuild buffer navigation and buffer management mappings.
-- [ ] Rebuild window split, window move, and resize mappings.
-- [ ] Rebuild search-result movement mappings.
-- [ ] Rebuild visual indent and line-move mappings.
-- [ ] Rebuild quickfix navigation mappings.
-- [ ] Rebuild core utility mappings like file creation and search clear.
+- [x] Rebuild core save, quit, and escape mappings.
+- [x] Rebuild buffer navigation and buffer management mappings.
+- [x] Rebuild window split, window move, and resize mappings.
+- [x] Rebuild search-result movement mappings.
+- [x] Rebuild visual indent and line-move mappings.
+- [x] Rebuild quickfix navigation mappings.
+- [x] Rebuild core utility mappings like file creation and search clear.
 
 ### `lua/core/libs.lua`
-- [ ] Add shared library setup for Lua development.
-- [ ] Add any helper modules needed by plugins.
-- [ ] Add lazydev or equivalent Lua runtime support.
+- [x] Add lazydev or equivalent Lua runtime support.
 
 ### `lua/core/icons.lua`
-- [ ] Centralize diagnostic, git, kind, and DAP icons.
-- [ ] Use the icon registry everywhere instead of ad hoc strings.
+- [x] Centralize diagnostic, git, kind, and DAP icons.
+- [x] Use the icon registry everywhere instead of ad hoc strings.
 
 ### `plugin/04-plugin-keymaps.lua`
-- [ ] Create a single registry for global plugin keymaps.
-- [ ] Group mappings by domain and keep them discoverable.
+- [x] Create a single registry for global plugin keymaps.
+- [x] Group mappings by domain and keep them discoverable.
 
 ### `plugin/01-path.lua`
-- [ ] Sync Neovim with `mise`.
-- [ ] Confirm PATH resolution for tools used by LSP, formatters, and CLI workflows.
+- [x] Sync Neovim with `mise`.
+- [x] Confirm PATH resolution for tools used by LSP, formatters, and CLI workflows.
 - [ ] Add health or validation hooks for missing binaries.
 
 ### `lua/core/vscode.lua`
@@ -60,8 +54,8 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 
 ## 2. Autocmds
 ### `plugin/05-autocmds.lua`
-- [ ] Highlight on yank.
-- [ ] Auto-resize windows on terminal resize.
+- [x] Highlight on yank.
+- [x] Auto-resize windows on terminal resize.
 - [ ] Auto-create parent directories on save.
 
 ### `lua/autocmd/external.lua` (optional split from plugin/05-autocmds.lua)
@@ -78,13 +72,13 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 
 ## 3. Plugin Foundation
 ### `plugin/05-plugins.lua`
-- [ ] Keep plugin bootstrap list current.
-- [ ] Keep context-aware loading paths separate.
-- [ ] Keep all plugin module loads routed through `Config.safe_require`.
+- [x] Keep plugin bootstrap list current.
+- [x] Keep context-aware loading paths separate.
+- [x] Keep all plugin module loads routed through `Config.safe_require`.
 
 ### `lua/plugins/core/mini.lua`
-- [ ] Add `mini.nvim` core pieces used everywhere.
-- [ ] Add deferred `mini.icons` / tabline support if needed.
+- [x] Add `mini.nvim` core pieces used everywhere.
+- [x] Add deferred `mini.icons` / tabline support if needed.
 
 ### `lua/plugins/core/snacks.lua`
 - [ ] Add notifier support.
@@ -95,12 +89,12 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 
 ## 4. UI Layer
 ### `lua/plugins/ui/mini-colors.lua`
-- [ ] Load the colorscheme and palette.
-- [ ] Make the palette the visual base for the entire config.
+- [x] Load the colorscheme and palette.
+- [x] Make the palette the visual base for the entire config.
 
 ### `lua/plugins/ui/which-key.lua`
-- [ ] Add key discovery popups.
-- [ ] Register the major prefix groups.
+- [x] Add key discovery popups.
+- [x] Register the major prefix groups.
 
 ### `lua/plugins/ui/snacks-dashboard.lua`
 - [ ] Add a startup dashboard.
@@ -108,8 +102,8 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 - [ ] Defer expensive dashboard details until after startup.
 
 ### `lua/plugins/ui/mini-statusline.lua`
-- [ ] Add a custom statusline.
-- [ ] Show mode, branch, diff counts, LSP, and environment/version info.
+- [x] Add a custom statusline.
+- [x] Show mode, branch, diff counts, LSP, and environment/version info.
 
 ### `lua/plugins/ui/winbar.lua`
 - [ ] Add file context breadcrumbs.
@@ -124,12 +118,12 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 - [ ] Keep it filetype-local and safe.
 
 ### `lua/plugins/ui/quotes.lua`
-- [ ] Add rotating quote or splash text support.
-- [ ] Cache remote fetches.
+- [ ] Add file context breadcrumbs.
+- [ ] Use Treesitter when available.
 
 ### `lua/plugins/ui/treesitter.lua`
-- [ ] Configure Treesitter highlighting.
-- [ ] Configure textobjects.
+- [x] Configure Treesitter highlighting.
+- [x] Configure textobjects.
 - [ ] Configure sticky context or contextual display.
 
 ## 5. Search and Discovery
@@ -154,12 +148,12 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 
 ## 6. Navigation
 ### `lua/plugins/navigation/history.lua`
-- [ ] Add recent-file or visit history.
 
+## 6. Navigation
 ### `lua/plugins/navigation/mini-files.lua`
-- [ ] Add a modern file explorer.
-- [ ] Support current-file-directory and project-root entrypoints.
-- [ ] Support split-aware browsing.
+- [x] Add a modern file explorer.
+- [x] Support current-file-directory and project-root entrypoints.
+- [x] Support split-aware browsing.
 
 ### `lua/plugins/navigation/smart-splits.lua`
 - [ ] Add pane navigation across Neovim and the multiplexer.
@@ -210,19 +204,19 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 
 ## 8. LSP and Completion
 ### `lua/plugins/lsp/init.lua`
-- [ ] Rebuild the LSP domain orchestrator.
-- [ ] Keep completion setup before server setup.
+- [x] Rebuild the LSP domain orchestrator.
+- [x] Keep completion setup before server setup.
 
 ### `lua/plugins/lsp/blink.lua`
-- [ ] Add completion engine setup.
-- [ ] Add snippets integration.
+- [x] Add completion engine setup.
+- [x] Add snippets integration.
 - [ ] Add capability broadcasting.
 - [ ] Add toggles for LSP and snippet sources.
 
-### `lua/plugins/lsp/native-lsp.lua`
-- [ ] Configure servers with `vim.lsp.config`.
-- [ ] Add hover, definition, declaration, implementation, type, references, and calls mappings.
-- [ ] Add code actions.
+### `lua/plugins/lsp/init.lua` (or `lua/plugins/languages.lua`)
+- [x] Configure servers with `vim.lsp.config`.
+- [x] Add hover, definition, declaration, implementation, type, references, and calls mappings.
+- [x] Add code actions.
 - [ ] Add formatting hooks.
 - [ ] Add inlay hint support.
 - [ ] Add rename and file-rename flows.
@@ -330,8 +324,8 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 - [ ] Add virtual text and underline control.
 
 ### `lua/commands/building.lua`
-- [ ] Add project run/watch commands.
-- [ ] Add terminal handoff or split execution.
+- [x] Add project run/watch commands.
+- [x] Add terminal handoff or split execution.
 
 ### `lua/commands/auditing.lua`
 - [ ] Add tool and health audit commands.

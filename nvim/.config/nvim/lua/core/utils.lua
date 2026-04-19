@@ -13,15 +13,15 @@ local M = {}
 --- @return string path The absolute path to the project root or CWD.
 M.project_root = function()
 	local markers = {
-		'.git',
-		'go.mod',
-		'Cargo.toml',
-		'package.json',
-		'pom.xml',
-		'pyproject.toml',
-		'build.zig',
-		'Makefile',
-		'justfile',
+		".git",
+		"go.mod",
+		"Cargo.toml",
+		"package.json",
+		"pom.xml",
+		"pyproject.toml",
+		"build.zig",
+		"Makefile",
+		"justfile",
 	}
 	return vim.fs.root(0, markers) or vim.fn.getcwd()
 end
@@ -33,7 +33,7 @@ end
 
 -- Global augroup for custom configuration to allow easy clearing/re-loading.
 -- This ensures that when the config is sourced again, old autocommands are wiped.
-local augroup = vim.api.nvim_create_augroup('custom-config', { clear = true })
+local augroup = vim.api.nvim_create_augroup("custom-config", { clear = true })
 
 --- Create a custom autocommand within the 'custom-config' group.
 --- Why: Centralizes event handling and prevents duplicate registration on reload.
@@ -49,7 +49,7 @@ M.autocmd = function(event, pattern, action, desc)
 	}
 
 	-- Automatically route to 'command' or 'callback' based on type.
-	if type(action) == 'string' then
+	if type(action) == "string" then
 		opts.command = action
 	else
 		opts.callback = action
@@ -64,10 +64,10 @@ M.on_packchanged = function(plugin_name, kinds, callback, desc)
 	local f = function(ev)
 		local spec = ev.data.spec
 		local name = spec.name
-			or (spec.src and vim.fn.fnamemodify(spec.src, ':t'))
-			or (type(spec[1]) == 'string' and vim.fn.fnamemodify(spec[1], ':t'))
-			or 'unknown'
-		name = name:gsub('%.nvim$', '')
+			or (spec.src and vim.fn.fnamemodify(spec.src, ":t"))
+			or (type(spec[1]) == "string" and vim.fn.fnamemodify(spec[1], ":t"))
+			or "unknown"
+		name = name:gsub("%.nvim$", "")
 
 		local kind = ev.data.kind
 		if not (name == plugin_name and vim.tbl_contains(kinds, kind)) then
@@ -78,7 +78,7 @@ M.on_packchanged = function(plugin_name, kinds, callback, desc)
 		end
 		callback(ev.data)
 	end
-	M.autocmd('PackChanged', '*', f, desc)
+	M.autocmd("PackChanged", "*", f, desc)
 end
 
 -- =============================================================================
@@ -90,12 +90,12 @@ local map = vim.keymap.set
 
 --- Define a Normal mode mapping with a mandatory description.
 M.nmap = function(keys, func, desc)
-	map('n', keys, func, { desc = desc })
+	map("n", keys, func, { desc = desc })
 end
 
 --- Define an Insert mode mapping with a mandatory description.
 M.imap = function(keys, func, desc)
-	map('i', keys, func, { desc = desc })
+	map("i", keys, func, { desc = desc })
 end
 
 --- Define a mapping for any mode with a mandatory description.
@@ -105,4 +105,3 @@ M.map = function(mode, keys, func, desc)
 end
 
 return M
-

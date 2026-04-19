@@ -8,7 +8,7 @@
 
 -- [[ STEP 2: CONFIGURATION ]]
 -- Map specific filetypes to their respective formatters (managed by mise).
--- 
+--
 -- Recommended Mapping:
 -- - python: { "ruff_format" }
 -- - lua:    { "stylua" }
@@ -42,7 +42,10 @@
 
 local M = {}
 
-local mini = require('plugins.mini')
+local mini = Config.safe_require("plugins.mini")
+if not mini then
+	return
+end
 
 mini.later(function()
 	-- TODO: Implement require('conform').setup({ ... })

@@ -1,19 +1,30 @@
--- ============================================================================= [ BLINK.CMP ]
+-- =============================================================================
+-- [ BLINK.CMP ]
 -- Configuration for the high-performance completion engine.
 -- =============================================================================
 
 local M = {}
 
-local mini = require('plugins.mini')
+local mini = Config.safe_require("plugins.mini")
 
 mini.later(function()
-	require('blink.cmp').setup({
+	require("blink.cmp").setup({
 		keymap = {
-			preset = 'super-tab',
-			['<C-l>'] = { 'snippet_forward', 'accept', 'fallback' },
-			['<C-h>'] = { 'snippet_backward', 'fallback' },
-			['<C-j>'] = { 'select_next', 'fallback' },
-			['<C-k>'] = { 'show_signature', 'hide_signature', 'select_prev', 'fallback' },
+			preset = "super-tab",
+			["<C-l>"] = { "snippet_forward", "accept", "fallback" },
+			["<C-h>"] = { "snippet_backward", "fallback" },
+			["<C-j>"] = { "select_next", "fallback" },
+			["<C-k>"] = { "show_signature", "hide_signature", "select_prev", "fallback" },
+		},
+		sources = {
+			default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+			providers = {
+				lazydev = {
+					name = "LazyDev",
+					module = "lazydev.integrations.blink",
+					score_offset = 100,
+				},
+			},
 		},
 		completion = {
 			documentation = { auto_show = false, auto_show_delay_ms = 200 },
