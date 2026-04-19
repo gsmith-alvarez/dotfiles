@@ -90,20 +90,22 @@ u.nmap('<C-u>', '<C-u>zz', 'Scroll up and center')
 
 -- 11. [ UI TOGGLES ]
 u.nmap('<leader>uw', function()
-	local wo = vim.wo
-	wo.wrap = not wo.wrap
-	wo.linebreak = wo.wrap
-	wo.breakindent = wo.wrap
+  local wo = vim.wo
+  wo.wrap = not wo.wrap
+  wo.linebreak = wo.wrap
+  wo.breakindent = wo.wrap
 end, 'UI: Toggle Soft-Wrap')
 
 -- 12. [ INSPECT / DIAGNOSTICS ]
+-- Note: Native LSP defaults are active (grn: Rename, gra: Code Action,
+-- grr: References, gri: Implementation, gO: Symbols, K: Hover).
+-- Advanced overrides are managed in lua/autocmds/lsp.lua.
 u.nmap('<leader>ui', vim.show_pos, 'Inspect: Highlights')
 u.nmap('<leader>uI', function()
-	vim.treesitter.inspect_tree()
-	vim.api.nvim_input('I')
+  vim.treesitter.inspect_tree()
+  vim.api.nvim_input('I')
 end, 'Inspect: Treesitter (full tree)')
 
 u.nmap('<leader>cd', vim.diagnostic.open_float, 'Open floating diagnostic message')
 
 return M
-
