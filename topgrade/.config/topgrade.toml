@@ -129,7 +129,7 @@
 [pre_commands]
 # "Emacs Snapshot" = "rm -rf ~/.emacs.d/elpa.bak && cp -rl ~/.emacs.d/elpa ~/.emacs.d/elpa.bak"
 "Dotfiles push" = "cd ~/dotfiles && git add -A && git diff --cached --quiet; or git commit -m 'auto: topgrade sync' && git push"
-"Clean Journal logs" = "journalctl --vacuum-time=7d"
+"Clean Journal logs" = "sudo journalctl --vacuum-time=7d"
 "Clean Cliphist" = "cliphist wipe"
 
 # Commands to run after anything
