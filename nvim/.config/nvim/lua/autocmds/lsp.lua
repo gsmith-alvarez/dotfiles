@@ -36,18 +36,6 @@ local lsp_attach = function(args)
 		})
 	end
 
-	-- [[ Format on Save ]]
-	-- Automatically formats the buffer using the attached LSP.
-	if client:supports_method "textDocument/formatting" then
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			buffer = args.buf,
-			callback = function()
-				vim.lsp.buf.format { bufnr = args.buf, id = client.id }
-			end,
-			desc = "LSP Format on Save",
-		})
-	end
-
 	-- [[ Keymaps ]]
 	-- grn: Rename, gra: Code Action, grr: References, gri: Implementation, gO: Symbols.
 	local function map(keys, func, desc)
