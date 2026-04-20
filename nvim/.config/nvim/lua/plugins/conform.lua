@@ -42,7 +42,7 @@
 
 local M = {}
 
-local mini = Config.safe_require("plugins.mini")
+local mini = Config.safe_require "plugins.mini"
 if not mini then
 	return
 end

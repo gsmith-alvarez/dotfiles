@@ -2,11 +2,10 @@
 -- [ GLOBAL AUTOCOMMANDS ]
 -- Event-driven automation and UI enhancements.
 -- =============================================================================
-local u = Config.safe_require("core.utils")
+local u = Config.safe_require "core.utils"
 if not u then
 	return
 end
-
 -- 1. [ TREESITTER ATTACHMENT ]
 -- Automatically start Treesitter highlighting for supported filetypes.
 local treesitter_attach = function(args)
@@ -15,15 +14,13 @@ local treesitter_attach = function(args)
 		pcall(vim.treesitter.start, args.buf, lang)
 	end
 end
-u.autocmd("FileType", "*", treesitter_attach, "Automatically start Treesitter highlighting")
-
+u.autocmd("FileType", "*", treesitter_attach, "Start Treesitter highlighing")
 -- 2. [ UI POLISH ]
 -- Highlight the text briefly after it is yanked to provide visual feedback.
 local highlight_yank = function()
-	vim.highlight.on_yank({ higroup = "Visual", timeout = 200 })
+	vim.highlight.on_yank { higroup = "Visual", timeout = 200 }
 end
 u.autocmd("TextYankPost", "*", highlight_yank, "Highlight yanked text")
-
 -- 3. [ CURSOR PERSISTENCE ]
 -- Retains the position of the cursor between Neovim instances.
 local cursor_persist = function(args)
@@ -33,34 +30,41 @@ local cursor_persist = function(args)
 		vim.api.nvim_win_set_cursor(0, mark)
 		-- Defer centering slightly so it's applied after the buffer renders.
 		vim.schedule(function()
-			vim.cmd("normal! zz")
+			vim.cmd "normal! zz"
 		end)
 	end
 end
 u.autocmd("BufReadPost", "*", cursor_persist, "Restore cursor position on file open")
-
 -- 4. [ WINDOW BEHAVIOR ]
 -- Ensure help files open in a vertical split on the right.
 u.autocmd("FileType", "help", "wincmd L", "Open help in a vertical split")
-
 -- Automatically equalize splits when the terminal window is resized.
 u.autocmd("VimResized", "*", "wincmd =", "Equalize splits on window resize")
-
 -- 5. [ FILETYPE OVERRIDES ]
 -- Force specific highlighting for secret files or configurations.
 u.autocmd("BufRead", { ".env", ".env.*" }, function()
 	vim.bo.filetype = "dosini"
 end, "Syntax highlighting for secret files")
-
 -- 6. [ WHITESPACE MANAGEMENT ]
 -- Convert tabs to spaces on save to maintain consistent formatting.
 u.autocmd("BufWritePre", "*", "retab!", "Convert tabs to spaces on save")
-
--- 7. [ MODULAR REGISTRATION ]
+-- 7. [ FILESYSTEM HELPERS ]
+-- Automatically create parent directories if they don't exist when saving a file.
+u.autocmd("BufWritePre", "*", function(event)
+	if event.match:match "^%w%w+://" then
+		return
+	end
+	local file = vim.uv.fs_realpath(event.match) or event.match
+	local dir = vim.fn.fnamemodify(file, ":p:h")
+	if vim.fn.isdirectory(dir) == 0 then
+		vim.fn.mkdir(dir, "p")
+	end
+end, "Auto-create parent directories on save")
+-- 8. [ MODULAR REGISTRATION ]
 -- Load domain-specific autocommands from the lua/autocmds/ directory.
 -- Maintained either for really large commands or for specific categories
-local autocmds = Config.safe_require("autocmds")
+local autocmds = Config.safe_require "autocmds"
 if not autocmds then
 	return
 end
-autocmds.register("lsp")
+autocmds.register "lsp"

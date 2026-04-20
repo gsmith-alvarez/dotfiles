@@ -7,7 +7,7 @@ local M = {}
 
 -- 1. [ COLORSCHEME (mini.base16) ]
 -- Set up the base16 colorscheme with a custom Catppuccin-inspired palette.
-require("mini.base16").setup({
+require("mini.base16").setup {
 	palette = {
 		base00 = "#1e1e2e", -- mantle
 		base01 = "#181825", -- crust
@@ -28,7 +28,7 @@ require("mini.base16").setup({
 	},
 	use_cterm = nil,
 	plugins = { default = true },
-})
+}
 
 -- 2. [ ICONS (mini.icons) ]
 -- Enable the icon provider and mock 'nvim-web-devicons' for compatibility with other plugins.
@@ -56,20 +56,34 @@ require("mini.jump").setup()
 require("mini.splitjoin").setup()
 
 -- 'mini.ai' provides enhanced text objects (e.g. 'a' for argument, 'f' for function).
-local ai = require("mini.ai")
-ai.setup({
+local ai = require "mini.ai"
+ai.setup {
+	n_lines = 500,
 	custom_textobjects = {
-		-- 'f' for "Functions"
-		f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
-		-- 'c' for "Classes"
-		c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
-		-- 'o' for "Operations/Objects" (Conditionals + Loops)
-		o = ai.gen_spec.treesitter({
+		-- 1. [ TREESITTER OBJECTS ]
+		-- These will only work if Treesitter parsers and queries are installed.
+		f = ai.gen_spec.treesitter { a = "@function.outer", i = "@function.inner" },
+		c = ai.gen_spec.treesitter { a = "@class.outer", i = "@class.inner" },
+		o = ai.gen_spec.treesitter {
 			a = { "@conditional.outer", "@loop.outer" },
 			i = { "@conditional.inner", "@loop.inner" },
-		}),
+		},
+
+		-- 2. [ NATIVE OBJECTS ] (Always work)
+		-- 'g' for "Entire Buffer"
+		g = function()
+			local from = { line = 1, col = 1 }
+			local to = {
+				line = vim.fn.line "$",
+				col = math.max(vim.fn.getline("$"):len(), 1),
+			}
+			return { from = from, to = to }
+		end,
+
+		-- 'd' for "Digit"
+		d = { "%d+" },
 	},
-})
+}
 -- There is some way to get mini.ai to replace treesitter textobjects
 
 -- Loading helpers used to organize config into fail-safe parts. Example usage:

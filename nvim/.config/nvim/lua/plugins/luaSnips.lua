@@ -5,7 +5,7 @@
 
 local M = {}
 
-local mini = Config.safe_require("plugins.mini")
+local mini = Config.safe_require "plugins.mini"
 
 mini.later(function()
 	-- TODO: Add LuaSnip setup and custom snippet loading here.

@@ -43,20 +43,15 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 - [x] Confirm PATH resolution for tools used by LSP, formatters, and CLI workflows.
 - [ ] Add health or validation hooks for missing binaries.
 
-### `lua/core/vscode.lua`
-- [ ] Keep VSCode-specific behavior isolated.
-- [ ] Load this layer only when running inside VSCode.
-
 ### `plugin/02-pack.lua`
 - [ ] Keep plugin specs grouped by domain.
 - [ ] Keep post-install hooks robust (build tools, copy fallbacks).
-- [ ] Add health checks for missing external build tools.
 
 ## 2. Autocmds
 ### `plugin/05-autocmds.lua`
 - [x] Highlight on yank.
 - [x] Auto-resize windows on terminal resize.
-- [ ] Auto-create parent directories on save.
+- [x] Auto-create parent directories on save.
 
 ### `lua/autocmd/external.lua` (optional split from plugin/05-autocmds.lua)
 - [ ] Add large-file protections.
@@ -65,10 +60,6 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 ### `lua/autocmd/jit.lua` (optional split from plugin/05-autocmds.lua)
 - [ ] Load markdown or note-taking features only when needed.
 - [ ] Keep expensive filetype logic deferred.
-
-### `plugin/05-autocmds.lua` orchestration
-- [ ] Keep global autocmds lightweight.
-- [ ] Add hot reload hooks for config files if desired.
 
 ## 3. Plugin Foundation
 ### `plugin/05-plugins.lua`
