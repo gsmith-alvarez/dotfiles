@@ -133,10 +133,10 @@
 # Commands to run after anything
 [post_commands]
 # Custom commands# "Emacs Snapshot" = "rm -rf ~/.emacs.d/elpa.bak && cp -rl ~/.emacs.d/elpa ~/.emacs.d/elpa.bak"
-"Nightly Nvim" = "cd ~/source/neovim && git fetch --prune && git reset --hard origin/master && rm -rf build && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install"
 [commands]
 # "Python Environment" = "~/dev/.env/bin/pip install -i https://pypi.python.org/simple -U --upgrade-strategy eager jupyter"
 # "Custom command using interactive shell (unix)" = "-i vim_upgrade"
+"Nightly Nvim" = "cd ~/source/neovim && git fetch --prune && git reset --hard origin/master && rm -rf build && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install"
 
 
 [python]
