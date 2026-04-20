@@ -5,6 +5,5 @@ local plugin_modules = {
 	"plugins.languages",
 	"plugins.blink",
 	"plugins.luaSnips",
-	"plugins.conform",
 }
 Config.safe_require(plugin_modules, "PLUGIN")

@@ -77,3 +77,4 @@ if not autocmds then
   return
 end
 autocmds.register "lsp"
+autocmds.register "format"
