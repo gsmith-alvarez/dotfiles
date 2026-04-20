@@ -7,7 +7,7 @@
 local M = {}
 local u = Config.safe_require "core.utils"
 if not u then
-	return
+  return
 end
 local map = vim.keymap.set
 
@@ -71,6 +71,7 @@ u.nmap("]q", vim.cmd.cnext, "Quickfix: Next Item")
 u.map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", "File: Save")
 u.nmap("<leader>bn", "<cmd>enew<CR>", "New Buffer")
 u.nmap("<leader>qq", "<cmd>qa<CR>", "Session: Exit Neovim")
+u.nmap("U", "<cmd>Undotree<CR>", "Undotree")
 
 u.nmap("<A-j>", ":m .+1<CR>==", "Move Line Down")
 u.nmap("<A-k>", ":m .-2<CR>==", "Move Line Up")
@@ -83,8 +84,8 @@ u.nmap("<C-u>", "<C-u>zz", "Scroll up and center")
 -- 11. [ INSPECT / DIAGNOSTICS ]
 u.nmap("<leader>ui", vim.show_pos, "Inspect: Highlights")
 u.nmap("<leader>uI", function()
-	vim.treesitter.inspect_tree()
-	vim.api.nvim_input "I"
+  vim.treesitter.inspect_tree()
+  vim.api.nvim_input "I"
 end, "Inspect: Treesitter (full tree)")
 
 u.nmap("<leader>cd", vim.diagnostic.open_float, "Open floating diagnostic message")

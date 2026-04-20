@@ -50,7 +50,7 @@ u.nmap("<leader>sD", function() snacks.picker.diagnostics_buffer() end, "Search 
 u.nmap("<leader>sh", function() snacks.picker.help() end, "Search Help Tags")
 u.nmap("<leader>sH", function() snacks.picker.highlights() end, "Search Highlight Groups")
 u.nmap("<leader>su", function() snacks.picker.undo() end, "Search Undo History")
-u.nmap("<leader>sk", function() snacks.picker.keymaps() end, "Search Keymaps")
+u.nmap("<leader>sk", function() snacks.picker.keymaps({ layout = { preset = "vscode" } }) end, "Search Keymaps")
 u.nmap("<leader>sj", function() snacks.picker.jumps() end, "Search Jumps")
 u.nmap("<leader>sq", function() snacks.picker.qflist() end, "Search Quickfix List")
 u.nmap("<leader>sl", function() snacks.picker.loclist() end, "Search Location List")
