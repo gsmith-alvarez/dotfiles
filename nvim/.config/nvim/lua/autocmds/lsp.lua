@@ -5,7 +5,7 @@
 -- =============================================================================
 
 local M = {}
-local u = require("core.utils")
+local u = require "core.utils"
 
 --- Refactored LSP Attachment
 --- Why: Uses client:supports_method directly to avoid race conditions and
@@ -17,13 +17,13 @@ local lsp_attach = function(args)
 	end
 
 	-- [[ Inlay Hints ]]
-	if client:supports_method("textDocument/inlayHint") then
+	if client:supports_method "textDocument/inlayHint" then
 		vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
 	end
 
 	-- [[ Document Highlight ]]
 	-- Highlights all instances of the symbol under the cursor.
-	if client:supports_method("textDocument/documentHighlight") then
+	if client:supports_method "textDocument/documentHighlight" then
 		vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 			buffer = args.buf,
 			callback = function()
@@ -38,11 +38,11 @@ local lsp_attach = function(args)
 
 	-- [[ Format on Save ]]
 	-- Automatically formats the buffer using the attached LSP.
-	if client:supports_method("textDocument/formatting") then
+	if client:supports_method "textDocument/formatting" then
 		vim.api.nvim_create_autocmd("BufWritePre", {
 			buffer = args.buf,
 			callback = function()
-				vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
+				vim.lsp.buf.format { bufnr = args.buf, id = client.id }
 			end,
 			desc = "LSP Format on Save",
 		})
@@ -54,27 +54,27 @@ local lsp_attach = function(args)
 		vim.keymap.set("n", keys, func, { buffer = args.buf, desc = "LSP: " .. desc })
 	end
 
-	if client:supports_method("textDocument/definition") then
+	if client:supports_method "textDocument/definition" then
 		map("gd", vim.lsp.buf.definition, "Go to Definition")
 	end
 
-	if client:supports_method("textDocument/typeDefinition") then
+	if client:supports_method "textDocument/typeDefinition" then
 		map("gy", vim.lsp.buf.type_definition, "Type Definition")
 	end
 
-	if client:supports_method("textDocument/declaration") then
+	if client:supports_method "textDocument/declaration" then
 		map("gD", vim.lsp.buf.declaration, "Go to Declaration")
 	end
 
 	-- [[ Range Formatting ]]
-	if client:supports_method("textDocument/rangeFormatting") then
+	if client:supports_method "textDocument/rangeFormatting" then
 		vim.keymap.set("x", "<leader>f", function()
-			vim.lsp.buf.format({ bufnr = args.buf })
+			vim.lsp.buf.format { bufnr = args.buf }
 		end, { buffer = args.buf, desc = "LSP: Format Range" })
 	end
 
 	-- [[ Code Lens ]]
-	if client:supports_method("textDocument/codeLens") then
+	if client:supports_method "textDocument/codeLens" then
 		map("<leader>cl", vim.lsp.codelens.run, "CodeLens Action")
 		vim.lsp.codelens.enable(true, { bufnr = args.buf })
 	end
@@ -82,10 +82,10 @@ end
 
 -- [[ Diagnostic Configuration ]]
 -- Define how errors and warnings are displayed globally.
-vim.diagnostic.config({
+vim.diagnostic.config {
 	virtual_text = true, -- Show message at the end of the line
 	signs = true, -- gutter signs (E/W)
-})
+}
 
 -- [[ Autocmd Definitions ]]
 -- Exported to the registrar for automatic setup.

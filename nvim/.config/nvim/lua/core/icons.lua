@@ -3,7 +3,7 @@ local M = {}
 -- 1. [ INITIALIZATION ]
 -- Use the global Config.safe_require to load the icon provider.
 -- This aligns with the 'clay-dots' architecture for fault tolerance.
-local icon_provider = Config.safe_require("mini.icons")
+local icon_provider = Config.safe_require "mini.icons"
 
 --- Safe Icon Fetcher
 --- @param category string The mini.icons category (lsp, diagnostic, file, etc.)

@@ -4,13 +4,13 @@
 -- =============================================================================
 
 local M = {}
-local icons = Config.safe_require("core.icons")
-local mini = Config.safe_require("plugins.mini")
+local icons = Config.safe_require "core.icons"
+local mini = Config.safe_require "plugins.mini"
 
 -- 1. [ DIAGNOSTICS: UI & SIGNS ]
 -- Configure the diagnostic engine to use our centralized icons.
 -- Neovim 0.10+ uses the 'signs.text' table for gutter icons.
-vim.diagnostic.config({
+vim.diagnostic.config {
 	signs = {
 		text = {
 			[vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
@@ -25,27 +25,21 @@ vim.diagnostic.config({
 	},
 	severity_sort = true,
 	float = { border = "rounded" },
-})
+}
 
 -- 2. [ TREESITTER: SYNTAX & PARSING ]
--- Manage Treesitter parsers and enable automatic installation for core languages.
-mini.later(function()
-	require("tree-sitter-manager").setup({
-		ensure_installed = { "python", "cpp", "bash", "fish", "lua", "markdown", "markdown_inline" },
-		auto_install = true,
-	})
-end)
+-- (Configuration handled in lua/plugins/treesitter.lua)
 
 -- 3. [ LSP: LANGUAGE SERVER OVERRIDES ]
 -- Use vim.lsp.config() to merge project-specific overrides with the
 -- default configurations provided by nvim-lspconfig.
 
-require("lazydev").setup({
+require("lazydev").setup {
 	library = {
 		-- load luvit types when vim.uv is found
 		{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 	},
-})
+}
 
 -- [ LUA (lua_ls) ]
 -- Note: lazydev.nvim handles the VIMRUNTIME and workspace library injection.
@@ -84,7 +78,7 @@ vim.lsp.config("jsonls", {
 
 -- 4. [ ACTIVATION ]
 -- Enable the configured servers for the current session.
-vim.lsp.enable({
+vim.lsp.enable {
 	"ty", -- Python (Astral)
 	"ruff", -- Python (Formatting/Linting)
 	"lua_ls", -- Lua
@@ -94,6 +88,6 @@ vim.lsp.enable({
 	"yamlls", -- YAML
 	"dockerls", -- Docker
 	"taplo", -- TOML
-})
+}
 
 return M

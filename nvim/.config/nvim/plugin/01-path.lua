@@ -10,7 +10,7 @@ local M = {}
 -- Prioritize 'mise' shims in the system PATH. This ensures that when Neovim
 -- calls an external command (like 'python' or 'clangd'), it uses the version
 -- managed by mise rather than a system-wide default.
-vim.env.PATH = vim.fn.expand("~/.local/share/mise/shims") .. ":" .. vim.env.PATH
+vim.env.PATH = vim.fn.expand "~/.local/share/mise/shims" .. ":" .. vim.env.PATH
 
 -- 2. [ MISE INTEGRATION ]
 -- Initialize mise to manage project-specific tool versions.
@@ -18,7 +18,7 @@ vim.env.PATH = vim.fn.expand("~/.local/share/mise/shims") .. ":" .. vim.env.PATH
 -- formatters, and future debugger (DAP) configurations without relying on Mason.
 local ok, mise = pcall(require, "mise")
 if ok then
-	mise.setup({ sync = true })
+	mise.setup { sync = true }
 end
 
 return M
