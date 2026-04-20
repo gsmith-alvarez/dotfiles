@@ -41,10 +41,10 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 ### `plugin/01-path.lua`
 - [x] Sync Neovim with `mise`.
 - [x] Confirm PATH resolution for tools used by LSP, formatters, and CLI workflows.
-- [ ] Add health or validation hooks for missing binaries.
+- [x] Add health or validation hooks for missing binaries.
 
 ### `plugin/02-pack.lua`
-- [ ] Keep plugin specs grouped by domain.
+- [x] Keep plugin specs grouped by domain.
 - [ ] Keep post-install hooks robust (build tools, copy fallbacks).
 
 ## 2. Autocmds
@@ -52,14 +52,14 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 - [x] Highlight on yank.
 - [x] Auto-resize windows on terminal resize.
 - [x] Auto-create parent directories on save.
+- [x] Project-aware file renaming (mini.files + snacks.rename).
 
 ### `lua/autocmd/external.lua` (optional split from plugin/05-autocmds.lua)
-- [ ] Add large-file protections.
-- [ ] Add special-file handling for archive or external viewers.
+- [x] Add large-file protections.
+- [x] Add special-file handling for archive or external viewers.
 
 ### `lua/autocmd/jit.lua` (optional split from plugin/05-autocmds.lua)
-- [ ] Load markdown or note-taking features only when needed.
-- [ ] Keep expensive filetype logic deferred.
+- [x] Keep expensive filetype logic deferred.
 
 ## 3. Plugin Foundation
 ### `plugin/05-plugins.lua`
@@ -69,14 +69,13 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 
 ### `lua/plugins/core/mini.lua`
 - [x] Add `mini.nvim` core pieces used everywhere.
-- [x] Add deferred `mini.icons` / tabline support if needed.
+- [x] Implement optimized `now` / `later` deferred loading.
 
 ### `lua/plugins/core/snacks.lua`
-- [ ] Add notifier support.
-- [ ] Add picker support.
-- [ ] Add terminal support.
-- [ ] Add UI select replacement.
-- [ ] Add LSP progress UI.
+- [x] Add notifier support.
+- [x] Add picker support.
+- [x] Add terminal support.
+- [x] Add UI toggles (Zen, Zoom, Wrap, etc.).
 
 ## 4. UI Layer
 ### `lua/plugins/ui/mini-colors.lua`
@@ -85,12 +84,11 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 
 ### `lua/plugins/ui/which-key.lua`
 - [x] Add key discovery popups.
-- [x] Register the major prefix groups.
+- [x] Register the major prefix groups with consistent icons.
 
 ### `lua/plugins/ui/snacks-dashboard.lua`
 - [ ] Add a startup dashboard.
 - [ ] Show recent files, projects, and useful entry actions.
-- [ ] Defer expensive dashboard details until after startup.
 
 ### `lua/plugins/ui/mini-statusline.lua`
 - [x] Add a custom statusline.
@@ -98,260 +96,94 @@ Rebuild order follows the clay-dots architecture from bootstrap to everyday work
 
 ### `lua/plugins/ui/winbar.lua`
 - [ ] Add file context breadcrumbs.
-- [ ] Use Treesitter when available.
 
 ### `lua/plugins/ui/trouble.lua`
 - [ ] Add diagnostics, references, and quickfix UI.
-- [ ] Wire it to search and diagnostic keymaps.
 
 ### `lua/plugins/ui/render-markdown.lua`
 - [ ] Add improved markdown rendering.
-- [ ] Keep it filetype-local and safe.
-
-### `lua/plugins/ui/quotes.lua`
-- [ ] Add file context breadcrumbs.
-- [ ] Use Treesitter when available.
 
 ### `lua/plugins/ui/treesitter.lua`
-- [x] Configure Treesitter highlighting.
-- [x] Configure textobjects.
-- [ ] Configure sticky context or contextual display.
+- [x] Configure Treesitter highlighting with `latex` and `regex` support.
+- [x] Configure textobjects and incremental selection.
 
 ## 5. Search and Discovery
-### `lua/plugins/searching/init.lua`
-- [ ] Rebuild the search domain orchestrator.
-
 ### `lua/plugins/searching/snacks-picker.lua`
-- [ ] Add file search.
-- [ ] Add recent files search.
-- [ ] Add buffer search.
-- [ ] Add config search.
-- [ ] Add project search and project switching.
-- [ ] Add git file search.
-- [ ] Add live grep and grep word.
-- [ ] Add diagnostics search.
-- [ ] Add symbols search.
-- [ ] Add resume-last-search behavior.
-
-### `lua/plugins/searching/aerial.lua`
-- [ ] Add document symbol navigation.
-- [ ] Add symbol tree/jump support.
+- [x] Add file search.
+- [x] Add recent files search.
+- [x] Add buffer search.
+- [x] Add config search.
+- [x] Add project search and project switching (zoxide).
+- [x] Add git file search.
+- [x] Add live grep and grep word.
+- [x] Add diagnostics search.
+- [x] Add symbols search (LSP & Treesitter).
+- [x] Add resume-last-search behavior.
+- [x] Add Wayland clipboard history (cliphist).
 
 ## 6. Navigation
 ### `lua/plugins/navigation/history.lua`
+- [x] Add visual Jumplist navigation.
 
-## 6. Navigation
 ### `lua/plugins/navigation/mini-files.lua`
 - [x] Add a modern file explorer.
 - [x] Support current-file-directory and project-root entrypoints.
 - [x] Support split-aware browsing.
 
 ### `lua/plugins/navigation/smart-splits.lua`
-- [ ] Add pane navigation across Neovim and the multiplexer.
-- [ ] Add pane resize mappings.
-
-### `lua/plugins/navigation/sigils.lua`
-- [ ] Add enhanced mark management.
-- [ ] Add project marks, buffer marks, previews, and rebaking.
+- [x] Add pane navigation across Neovim and the multiplexer (Zellij integration).
 
 ## 7. Editing
-### `lua/plugins/editing/init.lua`
-- [ ] Rebuild the editing domain orchestrator.
-
 ### `lua/plugins/editing/mini-editing.lua`
-- [ ] Add comment motions and line comments.
-- [ ] Add surround operations.
-- [ ] Add alignment helpers.
-- [ ] Add split/join code support.
-- [ ] Add move-line and move-block support.
-- [ ] Add pairs, indent scope, and other small text editing helpers.
-
-### `lua/plugins/editing/autolist.lua`
-- [ ] Continue lists on Enter.
-- [ ] Handle markdown and text block behavior.
-- [ ] Support dedent/list exit flows.
-
-### `lua/plugins/editing/luasnip.lua`
-- [ ] Add snippet expansion.
-- [ ] Add snippet jump keys.
-- [ ] Add choice-node cycling.
-- [ ] Load snippet collections.
+- [x] Add surround operations.
+- [x] Add split/join code support.
+- [x] Add move-line support.
+- [x] Add pairs and indent scope (snacks).
 
 ### `lua/plugins/editing/inc-rename.lua`
-- [ ] Add incremental rename UX.
-- [ ] Wire it to the rename keymap.
-
-### `lua/plugins/editing/refactoring.lua`
-- [ ] Add structural extract/inline refactors.
-- [ ] Add function/variable/file-level refactors.
-
-### `lua/plugins/editing/crates.lua`
-- [ ] Add Rust crate helper flows.
-- [ ] Support version updates and inline hints.
-
-### `lua/plugins/editing/indent.lua`
-- [ ] Add indentation behavior helpers.
-- [ ] Keep visual indent behavior predictable.
+- [x] Add project-wide file renaming (integrated with explorer).
 
 ## 8. LSP and Completion
-### `lua/plugins/lsp/init.lua`
-- [x] Rebuild the LSP domain orchestrator.
-- [x] Keep completion setup before server setup.
-
 ### `lua/plugins/lsp/blink.lua`
 - [x] Add completion engine setup.
 - [x] Add snippets integration.
-- [ ] Add capability broadcasting.
-- [ ] Add toggles for LSP and snippet sources.
 
-### `lua/plugins/lsp/init.lua` (or `lua/plugins/languages.lua`)
+### `lua/plugins/lsp/init.lua`
 - [x] Configure servers with `vim.lsp.config`.
 - [x] Add hover, definition, declaration, implementation, type, references, and calls mappings.
 - [x] Add code actions.
-- [ ] Add formatting hooks.
-- [ ] Add inlay hint support.
-- [ ] Add rename and file-rename flows.
-
-### `lua/plugins/lsp/rust.lua`
-- [ ] Add Rust-specific LSP configuration.
-- [ ] Connect Rust tooling to the rest of the editor.
 
 ## 9. Version Control
-### `lua/plugins/version_control/init.lua`
-- [ ] Rebuild the git domain orchestrator.
-
 ### `lua/plugins/version_control/mini-diff.lua`
-- [ ] Add sign column git markers.
-- [ ] Add hunks navigation.
-- [ ] Add stage and undo hunk actions.
-- [ ] Add diff overlay support.
-- [ ] Add branch/statusline integration.
+- [x] Add hunks navigation and statusline integration.
+- [x] Add stage/modified hunk actions.
 
 ## 10. Workflow
-### `lua/plugins/workflow/init.lua`
-- [ ] Rebuild the workflow domain orchestrator.
-
-### `lua/plugins/workflow/format.lua`
-- [ ] Add async formatting.
-- [ ] Add buffer and selection formatting commands.
-- [ ] Add autoformat-on-save toggle.
-
-### `lua/plugins/workflow/lint.lua`
-- [ ] Add async linting.
-- [ ] Add diagnostics refresh on buffer events.
-
-### `lua/plugins/workflow/overseer.lua`
-- [ ] Add task runner support.
-- [ ] Add template-based job execution.
-- [ ] Add task info and action menus.
-
-### `lua/plugins/workflow/persistence.lua`
-- [ ] Add session save and restore.
-- [ ] Add manual save, restore, and discard flows.
-
 ### `lua/plugins/workflow/test-runner.lua`
-- [ ] Add nearest-test runner.
-- [ ] Add current-file test runner.
-- [ ] Add project-root test runner.
+- [x] Add nearest-test and project-root test runner.
 
 ### `lua/plugins/workflow/toggleterm.lua`
-- [ ] Add terminal/tui integration.
-- [ ] Add launchers for lazygit, aider, or other terminal workflows.
-
-### `lua/plugins/workflow/typst-preview.lua`
-- [ ] Add Typst preview support.
-- [ ] Add preview start, close, and sync actions.
-
-### `lua/plugins/workflow/golem-be-good.lua`
-- [ ] Add motion training if you still want it in the rebuilt setup.
-
-### `lua/plugins/workflow/platformio.lua`
-- [ ] Add PlatformIO task support.
-- [ ] Add build, upload, monitor, and compile-database actions.
-
-### `lua/plugins/workflow/go.lua`
-- [ ] Add Go workflow support.
-- [ ] Add language-specific run or test helpers.
-
-### `lua/plugins/workflow/dadbod.lua`
-- [ ] Add database workflow support.
-- [ ] Add a comfortable query/edit loop.
+- [x] Add terminal/tui integration (snacks.terminal).
+- [x] Add launchers for lazygit.
 
 ## 11. DAP
 ### `lua/plugins/dap/init.lua`
 - [ ] Rebuild the DAP domain orchestrator.
 
-### `lua/plugins/dap/debug.lua`
-- [ ] Add core DAP configuration.
-- [ ] Add language adapters you use.
-- [ ] Add launch and attach setups.
-
-### `lua/plugins/dap/nvim-dap-virtual-text.lua`
-- [ ] Add inline debug values.
-
-### `lua/plugins/dap/persistent-breakpoint.lua`
-- [ ] Persist breakpoints across sessions.
-- [ ] Add breakpoint toggle and clear actions.
-
-## 12. Notes
-### `lua/plugins/notetaking/obsidian.lua`
-- [ ] Add Obsidian vault integration.
-- [ ] Add quick switch and note search.
-- [ ] Add new-note and follow-link actions.
-- [ ] Add buffer-local note actions for tags, TOC, templates, extraction, and linking.
-- [ ] Add image paste and GUI-open helpers.
-
 ## 13. Commands
-### `lua/commands/init.lua`
-- [ ] Rebuild the command domain orchestrator.
-
-### `lua/commands/utilities.lua`
-- [ ] Add jq scratchpad support.
-- [ ] Add sd-based replace support.
-- [ ] Add xh HTTP client helpers.
-
-### `lua/commands/diagnostics.lua`
-- [ ] Add diagnostic display toggles.
-- [ ] Add virtual text and underline control.
-
 ### `lua/commands/building.lua`
-- [x] Add project run/watch commands.
-- [x] Add terminal handoff or split execution.
-
-### `lua/commands/auditing.lua`
-- [ ] Add tool and health audit commands.
-- [ ] Add redirection or capture helpers.
-
-### `lua/commands/mux.lua`
-- [ ] Add multiplexer layout or pane control commands.
-
-### `lua/commands/hot-reload.lua`
-- [ ] Add config reload helpers.
-- [ ] Make the reload path fast and predictable.
-
-### `lua/commands/platformio.lua`
-- [ ] Add direct PlatformIO user commands.
+- [x] Rebuild the build system with modular sub-modules.
+- [x] Add project run/watch commands (watchexec).
+- [x] Add terminal handoff and Zellij split execution.
+- [x] Add intelligent language detection (uv, go run, zig run, cargo, etc.).
 
 ## 14. Validation and Maintenance
-### `docs/`
-- [ ] Write the rebuild notes for future-you.
-- [ ] Keep the module order documented.
-
 ### `scripts/`
-- [ ] Add a headless test runner.
-- [ ] Add a boot verification script.
+- [x] Add a headless test runner (busted-based).
 
 ### `tests/`
-- [ ] Add boot tests.
-- [ ] Add option tests.
-- [ ] Add keymap tests.
-- [ ] Add autocmd tests.
-- [ ] Add plugin-loading tests.
-- [ ] Add snippet tests.
-- [ ] Add format and dependency tests.
-- [ ] Add any matrix coverage you want for platform/tooling differences.
+- [x] Add building system unit and integration tests.
+- [x] Add filesystem/marker branching tests.
 
 ### Config quality
-- [ ] Add health checks for the final setup.
-- [ ] Add linting and formatting for the config itself.
-- [ ] Keep the TODO list synced with the actual modules as they are rebuilt.
+- [x] Sync the TODO list with rebuilt modules.
