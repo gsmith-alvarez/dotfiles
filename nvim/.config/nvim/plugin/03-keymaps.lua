@@ -60,6 +60,7 @@ u.nmap("[b", "<cmd>bprevious<CR>", "Buffer: Prev")
 u.nmap("]b", "<cmd>bnext<CR>", "Buffer: Next")
 u.nmap("<leader>bb", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
 u.nmap("<leader>`", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
+u.nmap("<leader>bd", function() require("snacks").bufdelete() end, "Buffer: Delete")
 u.nmap("<leader>bD", "<cmd>bp | bd #<CR>", "Buffer: Delete + Close Window")
 
 -- 9. [ QUICKFIX NAVIGATION ]
@@ -70,7 +71,6 @@ u.nmap("]q", vim.cmd.cnext, "Quickfix: Next Item")
 u.map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", "File: Save")
 u.nmap("<leader>bn", "<cmd>enew<CR>", "New Buffer")
 u.nmap("<leader>qq", "<cmd>qa<CR>", "Session: Exit Neovim")
-u.nmap("<leader>K", "<cmd>normal! K<CR>", "Keywordprg (man/help)")
 
 u.nmap("<A-j>", ":m .+1<CR>==", "Move Line Down")
 u.nmap("<A-k>", ":m .-2<CR>==", "Move Line Up")
@@ -80,15 +80,7 @@ u.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", "Edit: Move Line Up")
 u.nmap("<C-d>", "<C-d>zz", "Scroll down and center")
 u.nmap("<C-u>", "<C-u>zz", "Scroll up and center")
 
--- 11. [ UI TOGGLES ]
-u.nmap("<leader>uw", function()
-	local wo = vim.wo
-	wo.wrap = not wo.wrap
-	wo.linebreak = wo.wrap
-	wo.breakindent = wo.wrap
-end, "UI: Toggle Soft-Wrap")
-
--- 12. [ INSPECT / DIAGNOSTICS ]
+-- 11. [ INSPECT / DIAGNOSTICS ]
 u.nmap("<leader>ui", vim.show_pos, "Inspect: Highlights")
 u.nmap("<leader>uI", function()
 	vim.treesitter.inspect_tree()

@@ -17,22 +17,23 @@ uvx = true
 [tools]
 # --- Core Runtimes ---
 node = "latest"
-bun  = "latest"
-zig  = "latest"
+bun = "latest"
+zig = "latest"
+watchexec = "latest"
 
 # --- Language Servers (LSP) ---
-lua-language-server                      = "latest" # Lua
-"npm:bash-language-server"               = "latest" # Bash
-"npm:pyright"                            = "latest" # Python
-"npm:vscode-json-languageserver"         = "latest" # JSON
-"npm:yaml-language-server"               = "latest" # YAML
-"npm:dockerfile-language-server-nodejs"  = "latest" # Docker
+lua-language-server = "latest"                     # Lua
+"npm:bash-language-server" = "latest"              # Bash
+"npm:pyright" = "latest"                           # Python
+"npm:vscode-json-languageserver" = "latest"        # JSON
+"npm:yaml-language-server" = "latest"              # YAML
+"npm:dockerfile-language-server-nodejs" = "latest" # Docker
 
 # --- Linters & Formatters ---
 # General & Parsing
 tree-sitter = "latest" # Incremental parsing library
-ty          = "latest" # Typo checker (alternative)
-typos       = "latest" # Source code spell checker
+ty = "latest"          # Typo checker (alternative)
+typos = "latest"       # Source code spell checker
 
 # Lua
 stylua = "latest"
@@ -42,16 +43,16 @@ ruff = "latest"
 
 # Shell (Bash/Fish)
 shellcheck = "latest"
-shfmt      = "latest"
+shfmt = "latest"
 
 # JS/TS (Rust-powered tools)
 oxlint = "latest"
-oxfmt  = "latest"
+oxfmt = "latest"
 
 # Config Files
-taplo    = "latest" # TOML
+taplo = "latest"    # TOML
 yamllint = "latest" # YAML
 
 # --- Graphics & Typesetting ---
 "npm:@mermaid-js/mermaid-cli" = "latest" # Diagrams
-"cargo:tectonic"              = "latest" # LaTeX engine
+"cargo:tectonic" = "latest"              # LaTeX engine

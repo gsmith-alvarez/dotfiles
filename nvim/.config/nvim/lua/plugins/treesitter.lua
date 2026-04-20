@@ -7,8 +7,11 @@ local M = {}
 
 local mini = Config.safe_require "plugins.mini"
 
-mini.later(function()
-	require("nvim-treesitter.configs").setup {
+-- We use 'now' instead of 'later' to ensure parsers are checked and
+-- installed immediately and that queries are available for pickers.
+mini.now(function()
+	local configs = require("nvim-treesitter.configs")
+	configs.setup {
 		-- Ensure parsers are installed
 		ensure_installed = {
 			"lua",
@@ -20,20 +23,25 @@ mini.later(function()
 			"cpp",
 			"bash",
 			"fish",
+			"latex",
+			"regex",
 		},
 		auto_install = true,
 		highlight = {
 			enable = true,
 			additional_vim_regex_highlighting = false,
 		},
+		incremental_selection = {
+			enable = true,
+		},
 		textobjects = {
 			select = {
 				enable = true,
 				lookahead = true,
-				keymaps = {
-					-- We primarily use mini.ai for these, but nvim-treesitter-textobjects
-					-- needs to be enabled for the queries to be loaded correctly.
-				},
+			},
+			move = {
+				enable = true,
+				set_jumps = true,
 			},
 		},
 	}
