@@ -15,6 +15,18 @@ package_manager = "bun"
 uvx = true
 
 [tools]
+# --- CLI Tools ---
+# This exists so that my key workflow is system agnostic
+fzf = "latest"
+fd = "latest"
+ripgrep = "latest"
+ripgrep-all = "latest"
+eza = "latest"
+bat = "latest"
+bat-extras = "latest"
+zoxide = "latest"
+yazi = "latest"
+
 # --- Core Runtimes ---
 node = "latest"
 bun = "latest"
