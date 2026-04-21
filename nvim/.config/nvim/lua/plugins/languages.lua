@@ -1,12 +1,58 @@
 -- =============================================================================
--- Comprehensive configuration for Language Servers and Treesitter.
--- This file acts as the source of truth for language-specific intelligence.
+-- [ LANGUAGES ]
+-- Source of truth for language-specific intelligence.
+-- Treesitter — syntax, parsing, and text objects.
+-- LSP        — language server configuration and activation.
 -- =============================================================================
 
 local M = {}
 local mini = Config.safe_require("plugins.mini")
 
--- 1. [ DIAGNOSTICS: UI & SIGNS ]
+-- -----------------------------------------------------------------------------
+-- 1. [ TREESITTER ]
+-- Uses 'now' to ensure parsers are available immediately for pickers.
+-- -----------------------------------------------------------------------------
+mini.now(function()
+	require("nvim-treesitter").setup({
+		ensure_installed = {
+			"lua",
+			"vim",
+			"vimdoc",
+			"markdown",
+			"markdown_inline",
+			"python",
+			"cpp",
+			"bash",
+			"fish",
+			"latex",
+			"regex",
+		},
+		auto_install = true,
+		highlight = {
+			enable = true,
+			additional_vim_regex_highlighting = false,
+		},
+		incremental_selection = {
+			enable = true,
+		},
+		textobjects = {
+			select = {
+				enable = true,
+				lookahead = true,
+			},
+			move = {
+				enable = true,
+				set_jumps = true,
+			},
+		},
+	})
+end)
+
+-- -----------------------------------------------------------------------------
+-- 2. [ DIAGNOSTICS ]
+-- -----------------------------------------------------------------------------
+
+-- [ DIAGNOSTICS: UI & SIGNS ]
 -- Configure the diagnostic engine to use mini.icons.
 -- Uses the 'signs.text' table for gutter icons.
 vim.diagnostic.config({
@@ -26,10 +72,9 @@ vim.diagnostic.config({
 	float = { border = "rounded" },
 })
 
--- 2. [ TREESITTER: SYNTAX & PARSING ]
--- (Configuration handled in lua/plugins/treesitter.lua)
-
--- 3. [ LSP: LANGUAGE SERVER OVERRIDES ]
+-- -----------------------------------------------------------------------------
+-- 3. [ LSP ]
+-- -----------------------------------------------------------------------------
 -- Use vim.lsp.config() to merge project-specific overrides with the
 -- default configurations provided by nvim-lspconfig.
 

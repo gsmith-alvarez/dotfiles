@@ -15,23 +15,50 @@ mini.later(function()
 	-- Edit entries in-place and save to write changes back to disk.
 	-- -------------------------------------------------------------------------
 	require("quicker").setup({
-		-- Show 2 lines of context above/below each quickfix entry.
-		-- Set to 0 to disable.
 		opts = {
-			number = true,
+			buflisted = false,
+			number = false,
 			relativenumber = false,
 			signcolumn = "auto",
+			winfixheight = true,
+			wrap = false,
 		},
-		-- Use rounded borders on the floating preview window.
+		use_default_opts = true,
+		edit = {
+			enabled = true,
+			autosave = "unmodified",
+		},
+		constrain_cursor = true,
+		highlight = {
+			treesitter = true,
+			lsp = true,
+			load_buffers = false,
+		},
+		follow = { enabled = false },
+		trim_leading_whitespace = "common",
 		max_filename_width = function()
 			return math.floor(math.min(95, vim.o.columns / 2))
 		end,
-		-- Trim leading whitespace from context lines.
-		trim_leading_whitespace = "common",
-		-- Keep the quickfix header (filename, line, col).
-		header_length = 3,
+		header_length = function(type, start_col)
+			return vim.o.columns - start_col
+		end,
+		type_icons = {
+			E = "󰅚 ",
+			W = "󰀪 ",
+			I = " ",
+			N = " ",
+			H = " ",
+		},
+		borders = {
+			vert = "┃",
+			strong_header = "━",
+			strong_cross = "╋",
+			strong_end = "┫",
+			soft_header = "╌",
+			soft_cross = "╂",
+			soft_end = "┨",
+		},
 		keys = {
-			-- Toggle context lines with >  / <
 			{
 				">",
 				function()
@@ -56,18 +83,22 @@ mini.later(function()
 	-- -------------------------------------------------------------------------
 	require("bqf").setup({
 		auto_enable = true,
+		magic_window = true,
 		auto_resize_height = true,
 		preview = {
 			auto_preview = true,
-			win_height = 15,
-			win_vheight = 15,
-			delay_syntax = 80,
 			border = "rounded",
 			show_title = true,
 			show_scroll_bar = false,
+			delay_syntax = 50,
+			win_height = 15,
+			win_vheight = 15,
+			winblend = 0,
+			wrap = false,
+			buf_label = true,
+			should_preview_cb = nil,
 		},
 		func_map = {
-			-- Keep navigation intuitive alongside your existing keymaps.
 			open = "<CR>",
 			openc = "o",
 			vsplit = "<C-v>",
@@ -81,12 +112,13 @@ mini.later(function()
 		filter = {
 			fzf = {
 				action_for = {
-					-- Open in split when pressing <C-x> in fzf mode.
 					["ctrl-x"] = "split",
 					["ctrl-v"] = "vsplit",
-					["ctrl-t"] = "tab drop",
+					["ctrl-t"] = "tabedit",
+					["ctrl-q"] = "signtoggle",
+					["ctrl-c"] = "closeall",
 				},
-				extra_opts = { "--bind", "ctrl-o:toggle-all", "--prompt", "> " },
+				extra_opts = { "--bind", "ctrl-o:toggle-all" },
 			},
 		},
 	})

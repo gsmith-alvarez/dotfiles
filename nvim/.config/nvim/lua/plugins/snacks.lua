@@ -195,4 +195,10 @@ mini.later(function()
 	Snacks.toggle.zoom():map("<leader>uZ")
 end)
 
+-- -----------------------------------------------------------------------------
+-- 4. [ DROPBAR ]
+-- Breadcrumb navigation bar. Minimal config — just needs to be activated.
+-- -----------------------------------------------------------------------------
+Config.safe_require("dropbar").setup()
+
 return M

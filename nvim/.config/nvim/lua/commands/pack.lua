@@ -110,7 +110,7 @@ M.setup = {
 					return not x.active
 				end)
 				:map(function(x)
-					return x.spec.name or vim.fn.fnamemodify(x.path, ":t")
+					return x.spec and x.spec.name or vim.fn.fnamemodify(x.path, ":t")
 				end)
 				:totable()
 
@@ -119,19 +119,47 @@ M.setup = {
 				return
 			end
 
+			table.sort(inactive_plugins)
+
+			-- Reuse existing purge buffer if already open
+			local buf_name = "Plugin_Purge_List"
+			local existing = vim.fn.bufnr(buf_name)
+			if existing ~= -1 then
+				vim.api.nvim_buf_delete(existing, { force = true })
+			end
+
 			local buf = vim.api.nvim_create_buf(false, true)
-			local lines = { "# --- PLUGIN PURGE (Edit then :w to run) ---" }
-			for _, n in ipairs(inactive_plugins) do
-				table.insert(lines, n)
+			vim.api.nvim_buf_set_name(buf, buf_name)
+
+			local lines = {
+				"# --- INTERACTIVE PLUGIN PURGE ---",
+				"# Leave the plugins you WANT TO DELETE.",
+				"# Delete the lines of plugins you want to keep.",
+				"# Run :w to execute the deletion.",
+				"# Press 'q' to cancel and close.",
+				"# --------------------------------",
+			}
+			for _, name in ipairs(inactive_plugins) do
+				table.insert(lines, name)
 			end
 			vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
 			vim.bo[buf].filetype = "plugin_purge"
 			vim.bo[buf].buftype = "acwrite"
+			vim.bo[buf].modified = false
+
 			vim.cmd "vsplit"
 			vim.api.nvim_win_set_buf(0, buf)
 
-			vim.keymap.set("n", "q", "<cmd>bw! <CR>", { buffer = buf, silent = true })
+			local function close()
+				vim.bo[buf].modified = false
+				vim.cmd "close"
+				if vim.api.nvim_buf_is_valid(buf) then
+					vim.api.nvim_buf_delete(buf, { force = true })
+				end
+			end
+
+			vim.keymap.set("n", "q", close, { buffer = buf, silent = true, desc = "Cancel plugin purge" })
 
 			vim.api.nvim_create_autocmd("BufWriteCmd", {
 				buffer = buf,
@@ -143,20 +171,23 @@ M.setup = {
 							table.insert(to_delete, line)
 						end
 					end
+
 					if #to_delete > 0 then
 						local ok, err = pcall(vim.pack.del, to_delete)
 						if ok then
 							notify(
-								"Deleted " .. #to_delete .. " plugins.",
+								"Successfully deleted " .. #to_delete .. " plugins from disk.",
 								vim.log.levels.INFO,
 								{ title = "Plugin Purge" }
 							)
 						else
-							notify("Error: " .. tostring(err), vim.log.levels.ERROR, { title = "Plugin Purge" })
+							notify("Error deleting plugins: " .. tostring(err), vim.log.levels.ERROR, { title = "Plugin Purge" })
 						end
+					else
+						notify("Operation aborted: No plugins selected.", vim.log.levels.WARN, { title = "Plugin Purge" })
 					end
-					vim.bo[buf].modified = false
-					vim.cmd "bwipeout!"
+
+					close()
 				end,
 			})
 		end,
