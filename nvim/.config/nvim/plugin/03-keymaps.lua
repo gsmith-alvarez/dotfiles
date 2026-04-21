@@ -5,9 +5,9 @@
 -- =============================================================================
 
 local M = {}
-local u = Config.safe_require "core.utils"
+local u = Config.safe_require("core.utils")
 if not u then
-  return
+	return
 end
 local map = vim.keymap.set
 
@@ -65,7 +65,9 @@ u.nmap("[b", "<cmd>bprevious<CR>", "Buffer: Prev")
 u.nmap("]b", "<cmd>bnext<CR>", "Buffer: Next")
 u.nmap("<leader>bb", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
 u.nmap("<leader>`", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
-u.nmap("<leader>bd", function() require("snacks").bufdelete() end, "Buffer: Delete")
+u.nmap("<leader>bd", function()
+	require("snacks").bufdelete()
+end, "Buffer: Delete")
 u.nmap("<leader>bD", "<cmd>bp | bd #<CR>", "Buffer: Delete + Close Window")
 
 -- 9. [ QUICKFIX NAVIGATION ]
@@ -87,8 +89,8 @@ u.nmap("<C-u>", "<C-u>zz", "Scroll up and center")
 -- 11. [ INSPECT / DIAGNOSTICS ]
 u.nmap("<leader>ui", vim.show_pos, "Inspect: Highlights")
 u.nmap("<leader>uI", function()
-  vim.treesitter.inspect_tree()
-  vim.api.nvim_input "I"
+	vim.treesitter.inspect_tree()
+	vim.api.nvim_input("I")
 end, "Inspect: Treesitter (full tree)")
 
 u.nmap("<leader>cd", vim.diagnostic.open_float, "Open floating diagnostic message")

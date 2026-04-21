@@ -21,6 +21,7 @@ mini.later(function()
     { "<leader>f", group = "Find", icon = icons.get("lsp", "reference") },
     { "<leader>g", group = "Git", icon = icons.get("filetype", "git") },
     { "<leader>gh", group = "Git Hunk", icon = icons.get("lsp", "event") },
+    { "<leader>o", group = "Obsidian", icon = icons.get("filetype", "markdown") },
     { "<leader>q", group = "Quit/Session", icon = icons.get("os", "exit") },
     { "<leader>s", group = "Search", icon = icons.get("lsp", "snippet") },
     { "<leader>u", group = "UI", icon = icons.get("lsp", "interface") },

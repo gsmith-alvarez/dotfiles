@@ -5,8 +5,9 @@ local M = {}
 
 -- Use Snacks for notifications if available, fallback to native
 local function notify(msg, level, opts)
-	if pcall(require, "snacks") then
-		require("snacks").notify(msg, vim.tbl_extend("force", { level = level }, opts or {}))
+	local snacks = Config.safe_require("snacks")
+	if snacks then
+		snacks.notify(msg, vim.tbl_extend("force", { level = level }, opts or {}))
 	else
 		vim.notify(msg, level, opts)
 	end

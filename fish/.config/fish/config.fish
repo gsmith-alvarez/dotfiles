@@ -69,3 +69,6 @@ set -x XDG_DATA_DIRS /var/lib/flatpak/exports/share $XDG_DATA_DIRS
 
 # Hermes Agent — ensure ~/.local/bin is on PATH
 fish_add_path "$HOME/.local/bin"
+
+# opencode
+fish_add_path /home/giovanni/.opencode/bin

@@ -10,7 +10,7 @@ _G.Config = {}
 -- Assign the anonymous function directly to the table key.
 Config.safe_require = function(module_or_list, desc)
 	-- Use the call stack to find the executing script, fallback to SYSTEM
-	desc = desc or (debug.getinfo(2, "S") and debug.getinfo(2, "S").source:match "@?(.*/)" or "SYSTEM")
+	desc = desc or (debug.getinfo(2, "S") and debug.getinfo(2, "S").source:match("@?(.*/)") or "SYSTEM")
 
 	-- Handle table of modules recursively
 	if type(module_or_list) == "table" then
@@ -29,7 +29,7 @@ Config.safe_require = function(module_or_list, desc)
 	-- Check if nil patterns
 	if not ok then
 		vim.schedule(function()
-			local snacks = pcall(require, "snacks") and require "snacks"
+			local snacks = pcall(require, "snacks") and require("snacks")
 			if snacks then
 				snacks.notify(
 					string.format("[%s SEQUENCE FAILURE]\nModule: %s\nError: %s", desc, module_or_list, result),
@@ -60,10 +60,7 @@ if vim.loader then
 end
 
 -- 2. [ EXPERIMENTAL FEATURES ]
--- Enable "Experimental 0.12 features" for enhanced UI capabilities.
-if pcall(require, "vim._core.ui2") then
-	require("vim._core.ui2").enable {}
-end
+Config.safe_require("vim._core.ui2").enable({})
 
 -- 3. [ BUILT-IN PLUGIN ACTIVATION ]
 -- Enable built-in plugins that are useful but not enabled by default.

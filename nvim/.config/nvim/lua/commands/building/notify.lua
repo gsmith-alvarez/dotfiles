@@ -1,7 +1,7 @@
 local M = {}
 
-local ok, snacks = pcall(require, "snacks")
-local backend = ok and snacks.notify or nil
+local snacks = Config.safe_require("snacks")
+local backend = snacks and snacks.notify or nil
 
 function M.notify(msg, level, opts)
 	if backend then

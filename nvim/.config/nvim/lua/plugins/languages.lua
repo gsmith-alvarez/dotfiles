@@ -8,7 +8,7 @@ local mini = Config.safe_require("plugins.mini")
 
 -- 1. [ DIAGNOSTICS: UI & SIGNS ]
 -- Configure the diagnostic engine to use mini.icons.
--- Neovim 0.10+ uses the 'signs.text' table for gutter icons.
+-- Uses the 'signs.text' table for gutter icons.
 vim.diagnostic.config({
 	signs = {
 		text = {
