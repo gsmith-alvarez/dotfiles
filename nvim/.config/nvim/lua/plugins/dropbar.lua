@@ -5,6 +5,6 @@
 
 local M = {}
 
--- TODO: Add dropbar setup here.
+Config.safe_require("dropbar").setup()
 
 return M

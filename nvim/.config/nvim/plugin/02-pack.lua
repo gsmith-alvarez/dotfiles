@@ -100,6 +100,7 @@ vim.pack.add({
 	gh("echasnovski/mini.icons"),
 	gh("folke/snacks.nvim"),
 	gh("folke/which-key.nvim"),
+	gh("Bekaboo/dropbar.nvim"),
 	gh("neovim/nvim-lspconfig"),
 	gh("folke/lazydev.nvim"),
 	"https://plugins.ejri.dev/mise.nvim",

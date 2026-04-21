@@ -8,5 +8,6 @@ local plugin_modules = {
 	"plugins.obsidian",
 	"plugins.render-markdown",
 	"plugins.which-key",
+	"plugins.dropbar",
 }
 Config.safe_require(plugin_modules, "PLUGIN")

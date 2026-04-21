@@ -36,7 +36,7 @@ vim.g.have_nerd_font = true -- Inform plugins that a Nerd Font is available
 local set = vim.opt
 
 -- 3. [ INTERACTION & UI ]
-set.mouse = "" -- Disable mouse support entirely
+set.mouse = "a" -- Enable mouse support in all modes
 set.number = true -- Show absolute line numbers
 set.relativenumber = true -- Show relative line numbers for easier jumping
 set.showmode = false -- Don't show mode (e.g. -- INSERT --) as statusline handles it
