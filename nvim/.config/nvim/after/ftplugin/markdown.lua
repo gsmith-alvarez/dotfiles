@@ -4,66 +4,55 @@
 -- =============================================================================
 
 local u = Config.safe_require("core.utils")
-if not u then return end
+if not u then
+	return
+end
 
 local autolist = Config.safe_require("autolist")
 
--- Helper to ensure Obsidian is loaded and to set buffer-local maps
-local map = function(mode, keys, func, desc)
-	vim.keymap.set(mode, keys, func, { buffer = true, desc = "Obsidian: " .. desc })
-end
-
 -- 1. [ SMART ACTIONS ]
-map("n", "<leader>oa", function()
+u.nmap("<leader>oa", function()
 	if require("obsidian.api").cursor_link() then
 		return "<cmd>Obsidian follow_link<CR>"
 	else
 		return "<cmd>Obsidian toggle_checkbox<CR>"
 	end
-end, "Smart Action (expr)")
--- We need to re-set it with expr = true
-vim.keymap.set("n", "<leader>oa", function()
-	if require("obsidian.api").cursor_link() then
-		return "<cmd>Obsidian follow_link<CR>"
-	else
-		return "<cmd>Obsidian toggle_checkbox<CR>"
-	end
-end, { buffer = true, expr = true, desc = "Obsidian: Smart Action" })
+end, "Obsidian: Smart Action", { buffer = true, expr = true })
 
 -- 2. [ NAVIGATION & LINKS ]
-map("n", "<leader>of", "<cmd>Obsidian follow_link tab<CR>", "Follow Link (New Tab)")
-map("n", "<leader>ov", "<cmd>Obsidian follow_link vsplit<CR>", "Follow Link (V-Split)")
-map("n", "<leader>oh", "<cmd>Obsidian follow_link hsplit<CR>", "Follow Link (H-Split)")
-map("n", "<leader>oc", "<cmd>Obsidian toc<CR>", "Contents (TOC)")
-map("n", "<leader>oo", "<cmd>Obsidian open<CR>", "Open in GUI")
+u.nmap("<leader>of", "<cmd>Obsidian follow_link tab<CR>", "Obsidian: Follow Link (New Tab)", { buffer = true })
+u.nmap("<leader>ov", "<cmd>Obsidian follow_link vsplit<CR>", "Obsidian: Follow Link (V-Split)", { buffer = true })
+u.nmap("<leader>oh", "<cmd>Obsidian follow_link hsplit<CR>", "Obsidian: Follow Link (H-Split)", { buffer = true })
+u.nmap("<leader>oc", "<cmd>Obsidian toc<CR>", "Obsidian: Contents (TOC)", { buffer = true })
+u.nmap("<leader>oo", "<cmd>Obsidian open<CR>", "Obsidian: Open in GUI", { buffer = true })
 
 -- 3. [ SEARCH ]
-map("n", "<leader>os", "<cmd>Obsidian search<CR>", "Search Notes")
-map("n", "<leader>oq", "<cmd>Obsidian quick_switch<CR>", "Quick Switch")
-map("n", "<leader>ot", "<cmd>Obsidian tags<CR>", "Search Tags")
+u.nmap("<leader>os", "<cmd>Obsidian search<CR>", "Obsidian: Search Notes", { buffer = true })
+u.nmap("<leader>oq", "<cmd>Obsidian quick_switch<CR>", "Obsidian: Quick Switch", { buffer = true })
+u.nmap("<leader>ot", "<cmd>Obsidian tags<CR>", "Obsidian: Search Tags", { buffer = true })
 
 -- 4. [ NOTE CREATION ]
-map("n", "<leader>on", "<cmd>Obsidian new<CR>", "New Note")
-map("n", "<leader>ou", "<cmd>Obsidian unique_note<CR>", "Unique Note")
-map("n", "<leader>oT", "<cmd>Obsidian template<CR>", "Insert Template")
+u.nmap("<leader>on", "<cmd>Obsidian new<CR>", "Obsidian: New Note", { buffer = true })
+u.nmap("<leader>ou", "<cmd>Obsidian unique_note<CR>", "Obsidian: Unique Note", { buffer = true })
+u.nmap("<leader>oT", "<cmd>Obsidian template<CR>", "Obsidian: Insert Template", { buffer = true })
 
 -- 5. [ VISUAL MODE ]
-map("v", "<leader>oe", "<cmd>Obsidian extract_note<CR>", "Extract Note")
-map("v", "<leader>ol", "<cmd>Obsidian link<CR>", "Link Selection")
-map("v", "<leader>oN", "<cmd>Obsidian link_new<CR>", "Link Selection to New")
+u.map("v", "<leader>oe", "<cmd>Obsidian extract_note<CR>", "Obsidian: Extract Note", { buffer = true })
+u.map("v", "<leader>ol", "<cmd>Obsidian link<CR>", "Obsidian: Link Selection", { buffer = true })
+u.map("v", "<leader>oN", "<cmd>Obsidian link_new<CR>", "Obsidian: Link Selection to New", { buffer = true })
 
 -- 6. [ MEDIA ]
-map("n", "<leader>op", "<cmd>Obsidian paste_img<CR>", "Paste Image")
+u.nmap("<leader>op", "<cmd>Obsidian paste_img<CR>", "Obsidian: Paste Image", { buffer = true })
 
 -- 7. [ OVERRIDES ]
-vim.keymap.set("i", "<Tab>", "<cmd>AutolistTab<CR>", { buffer = true, desc = "Autolist: Indent" })
-vim.keymap.set("i", "<S-Tab>", "<cmd>AutolistShiftTab<CR>", { buffer = true, desc = "Autolist: Dedent" })
-vim.keymap.set("i", "<CR>", "<CR><cmd>AutolistNewBullet<CR>", { buffer = true, desc = "Autolist: New Bullet" })
-vim.keymap.set("n", "o", "o<cmd>AutolistNewBullet<CR>", { buffer = true, desc = "Autolist: New Bullet Below" })
-vim.keymap.set("n", "O", "O<cmd>AutolistNewBulletBefore<CR>", { buffer = true, desc = "Autolist: New Bullet Above" })
+u.imap("<Tab>", "<cmd>AutolistTab<CR>", "Autolist: Indent", { buffer = true })
+u.imap("<S-Tab>", "<cmd>AutolistShiftTab<CR>", "Autolist: Dedent", { buffer = true })
+u.imap("<CR>", "<CR><cmd>AutolistNewBullet<CR>", "Autolist: New Bullet", { buffer = true })
+u.nmap("o", "o<cmd>AutolistNewBullet<CR>", "Autolist: New Bullet Below", { buffer = true })
+u.nmap("O", "O<cmd>AutolistNewBulletBefore<CR>", "Autolist: New Bullet Above", { buffer = true })
 
 -- Give <CR> to checkbox toggle, link follow, or jump2d.
-vim.keymap.set("n", "<CR>", function()
+u.nmap("<CR>", function()
 	local line = vim.api.nvim_get_current_line()
 	if line:match("%[[ xX/%-!?]%]") then
 		autolist.toggle_checkbox()
@@ -74,4 +63,4 @@ vim.keymap.set("n", "<CR>", function()
 	else
 		require("mini.jump2d").start(require("mini.jump2d").builtin_opts.word_start)
 	end
-end, { buffer = true, desc = "Toggle Checkbox, Jump, or Follow Link" })
+end, "Obsidian: Toggle Checkbox, Jump, or Follow Link", { buffer = true })

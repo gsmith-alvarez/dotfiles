@@ -2,6 +2,7 @@
 -- =============================================================================
 
 local M = {}
+local u = Config.safe_require("core.utils")
 
 -- Use Snacks for notifications if available, fallback to native
 local function notify(msg, level, opts)
@@ -159,7 +160,7 @@ M.setup = {
 				end
 			end
 
-			vim.keymap.set("n", "q", close, { buffer = buf, silent = true, desc = "Cancel plugin purge" })
+			u.nmap("q", close, "Pack: Cancel Plugin Purge", { buffer = buf, silent = true })
 
 			vim.api.nvim_create_autocmd("BufWriteCmd", {
 				buffer = buf,

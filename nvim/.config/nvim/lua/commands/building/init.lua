@@ -1,3 +1,8 @@
+-- =============================================================================
+-- [ BUILDING COMMANDS ]
+-- Implements :Run, :RunWatch, and :Watch command behaviors.
+-- =============================================================================
+
 local notify = require("commands.building.notify").notify
 local runners = require("commands.building.runners")
 local exec = require("commands.building.executors")
@@ -14,14 +19,21 @@ local ROOT_MARKERS = {
 	"pyproject.toml",
 }
 
+--- Resolve project root for build execution.
+--- @return string|nil root Project root directory when found.
 local function project_root()
 	return vim.fs.root(0, ROOT_MARKERS)
 end
 
+--- Append a keypress prompt so spawned commands stay visible.
+--- @param cmd string Command to wrap.
+--- @return string wrapped Command with pause prompt.
 local function hold_open(cmd)
 	return cmd .. [[; echo ""; echo "Press any key to close..."; read -n 1 -s]]
 end
 
+--- Smart file runner that dispatches by filetype and runtime context.
+--- @param continuous boolean When true, runs in watch mode.
 local function smart_run(continuous)
 	local buf = vim.api.nvim_get_current_buf()
 	local ft = vim.bo[buf].filetype
@@ -57,6 +69,8 @@ local function smart_run(continuous)
 	notify("Executing: " .. cmd, vim.log.levels.DEBUG)
 end
 
+--- Implementation for :Watch command.
+--- @param opts table Command options passed by nvim_create_user_command.
 local function watch_impl(opts)
 	if vim.fn.executable("watchexec") ~= 1 then
 		notify("watchexec not found. Install via: mise install watchexec", vim.log.levels.ERROR)

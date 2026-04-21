@@ -157,50 +157,59 @@ vim.api.nvim_create_autocmd("MenuPopup", {
 -- Lambdas keep LuaLS happy: vim.lsp.buf.* gets inferred as table in some
 -- runtime meta combinations, which doesn't satisfy `fun()`.
 
+--- Trigger LSP definition from popup menu.
 function M.go_to_definition()
 	with_lsp(function()
 		vim.lsp.buf.definition()
 	end, "No LSP definition available")
 end
 
+--- Trigger LSP references from popup menu.
 function M.references()
 	with_lsp(function()
 		vim.lsp.buf.references()
 	end, "No LSP references available")
 end
 
+--- Trigger LSP implementation from popup menu.
 function M.implementation()
 	with_lsp(function()
 		vim.lsp.buf.implementation()
 	end, "No LSP implementation available")
 end
 
+--- Trigger LSP code actions from popup menu.
 function M.code_actions()
 	with_lsp(function()
 		vim.lsp.buf.code_action()
 	end, "No code actions available")
 end
 
+--- Trigger LSP hover from popup menu.
 function M.hover()
 	with_lsp(function()
 		vim.lsp.buf.hover()
 	end, "No hover available")
 end
 
+--- Trigger LSP rename from popup menu.
 function M.rename()
 	with_lsp(function()
 		vim.lsp.buf.rename()
 	end, "No rename action available")
 end
 
+--- Open URL under cursor from popup menu.
 function M.open_url()
 	open_url_under_cursor()
 end
 
+--- Copy current file path to system clipboard.
 function M.copy_file_path()
 	copy_file_path()
 end
 
+--- Open current location in Git browser via Snacks.
 function M.git_browse()
 	local snacks = Config.safe_require("snacks")
 	if snacks and snacks.gitbrowse then

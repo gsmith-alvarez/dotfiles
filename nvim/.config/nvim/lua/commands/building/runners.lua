@@ -1,3 +1,8 @@
+-- =============================================================================
+-- [ BUILD RUNNERS ]
+-- Maps filetypes to shell commands for smart execution.
+-- =============================================================================
+
 local M = {}
 
 local function esc(s)
@@ -74,6 +79,11 @@ local runners = {
 	end,
 }
 
+--- Build a smart execution command for a filetype.
+--- @param ft string Current buffer filetype.
+--- @param ctx table Context table with at least `file` and `root` fields.
+--- @return string|nil cmd Runnable shell command.
+--- @return string|nil err Error message when command cannot be built.
 function M.build(ft, ctx)
 	local runner = runners[ft]
 	if not runner then
@@ -82,6 +92,9 @@ function M.build(ft, ctx)
 	return runner(ctx)
 end
 
+--- Check whether a smart runner exists for a filetype.
+--- @param ft string Filetype to check.
+--- @return boolean has_runner True when a runner exists.
 function M.has(ft)
 	return runners[ft] ~= nil
 end

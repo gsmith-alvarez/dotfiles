@@ -12,6 +12,9 @@ local snacks = Config.safe_require("snacks")
 
 local youtube_cache_dir = vim.fn.stdpath("state") .. "/youtube_thumbnails"
 
+--- Resolve a YouTube thumbnail URL to a cached local file when possible.
+--- @param video_id string YouTube video identifier.
+--- @return string path_or_url Local cached file path or remote fallback URL.
 M.resolve_youtube = function(video_id)
 	local cached = youtube_cache_dir .. "/" .. video_id .. ".jpg"
 	if vim.fn.filereadable(cached) == 1 then
@@ -47,6 +50,10 @@ M.resolve_youtube = function(video_id)
 	return max_url
 end
 
+--- Resolve Obsidian attachments to absolute local paths for image rendering.
+--- @param file string Current buffer file path.
+--- @param src string Raw markdown image/link source.
+--- @return string|nil resolved_path Absolute resolved attachment path.
 M.resolve_obsidian = function(file, src)
 	local obsidian = Config.safe_require("obsidian")
 	if not obsidian or not (_G.Obsidian and _G.Obsidian.workspace) then
@@ -73,9 +80,11 @@ M.resolve_obsidian = function(file, src)
 end
 
 -- [[ GLOBAL DEBUG HELPERS ]]
+--- Debug helper that proxies to snacks.debug.inspect.
 _G.dd = function(...)
 	snacks.debug.inspect(...)
 end
+--- Debug helper that proxies to snacks.debug.backtrace.
 _G.bt = function()
 	snacks.debug.backtrace()
 end
@@ -176,7 +185,9 @@ snacks.setup({
 
 -- 3. [ TOGGLES ]
 -- We define these here using the Snacks Toggle API.
--- These will automatically appear in Which-Key with proper descriptions.
+-- These appear in Which-Key via Snacks toggle integration.
+-- Profiler highlights uses a custom toggle to ensure profiler state is initialized
+-- before enabling highlights.
 local mini = Config.safe_require("plugins.mini")
 mini.later(function()
 	Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
@@ -193,7 +204,27 @@ mini.later(function()
 	Snacks.toggle.indent():map("<leader>ug")
 	Snacks.toggle.dim():map("<leader>uD")
 	Snacks.toggle.profiler():map("<leader>pp")
-	Snacks.toggle.profiler_highlights():map("<leader>ph")
+	Snacks.toggle
+		.new({
+			id = "profiler_highlights",
+			name = "Profiler Highlights",
+			get = function()
+				return Snacks.profiler.ui.enabled
+			end,
+			set = function(state)
+				if state then
+					if not Snacks.profiler.running() then
+						Snacks.profiler.start()
+					end
+					vim.schedule(function()
+						pcall(Snacks.profiler.highlight, true)
+					end)
+					return
+				end
+				pcall(Snacks.profiler.highlight, false)
+			end,
+		})
+		:map("<leader>ph")
 	Snacks.toggle.zen():map("<leader>uz")
 	Snacks.toggle.zoom():map("<leader>uZ")
 end)

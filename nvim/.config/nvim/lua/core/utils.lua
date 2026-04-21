@@ -1,3 +1,8 @@
+-- =============================================================================
+-- [ CORE UTILS ]
+-- Shared helper functions used across commands, autocmds, and keymaps.
+-- =============================================================================
+
 local M = {}
 
 -- =============================================================================
@@ -83,25 +88,55 @@ end
 
 -- =============================================================================
 -- [ KEYBINDINGS ]
--- Standardized mapping helpers to ensure descriptions are always present.
+-- Standardized mapping helpers for consistent keymap declarations.
 -- =============================================================================
 
 local map = vim.keymap.set
 
---- Define a Normal mode mapping with a mandatory description.
-M.nmap = function(keys, func, desc)
-	map("n", keys, func, { desc = desc })
+--- Merge a description and optional keymap options into one opts table.
+--- @param desc string|table|nil Keymap description, or opts table when used as shorthand.
+--- @param opts table|nil Optional keymap options.
+--- @return table merged Keymap options suitable for vim.keymap.set.
+local function merge_map_opts(desc, opts)
+	if type(desc) == "table" and opts == nil then
+		opts = desc
+		desc = opts.desc
+	end
+
+	local merged = vim.tbl_extend("force", {}, opts or {})
+	if desc ~= nil then
+		merged.desc = desc
+	end
+
+	return merged
 end
 
---- Define an Insert mode mapping with a mandatory description.
-M.imap = function(keys, func, desc)
-	map("i", keys, func, { desc = desc })
+--- Define a Normal mode mapping.
+--- @param keys string Left-hand side mapping.
+--- @param func string|function Right-hand side mapping target.
+--- @param desc string|nil Human-readable keymap description.
+--- @param opts table|nil Optional vim.keymap.set options.
+M.nmap = function(keys, func, desc, opts)
+	map("n", keys, func, merge_map_opts(desc, opts))
 end
 
---- Define a mapping for any mode with a mandatory description.
+--- Define an Insert mode mapping.
+--- @param keys string Left-hand side mapping.
+--- @param func string|function Right-hand side mapping target.
+--- @param desc string|nil Human-readable keymap description.
+--- @param opts table|nil Optional vim.keymap.set options.
+M.imap = function(keys, func, desc, opts)
+	map("i", keys, func, merge_map_opts(desc, opts))
+end
+
+--- Define a mapping for any mode.
 --- @param mode string|table Mode short-name (e.g., 'n', 'v', 'i', or {'n', 'v'}).
-M.map = function(mode, keys, func, desc)
-	map(mode, keys, func, { desc = desc })
+--- @param keys string Left-hand side mapping.
+--- @param func string|function Right-hand side mapping target.
+--- @param desc string|nil Human-readable keymap description.
+--- @param opts table|nil Optional vim.keymap.set options.
+M.map = function(mode, keys, func, desc, opts)
+	map(mode, keys, func, merge_map_opts(desc, opts))
 end
 
 return M

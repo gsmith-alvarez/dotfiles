@@ -9,26 +9,25 @@ local u = Config.safe_require("core.utils")
 if not u then
 	return
 end
-local map = vim.keymap.set
 
 -- 1. [ TERMINAL MODE ]
 u.map("t", "<Esc><Esc>", [[<C-\><C-n>]], "Terminal: Exit Mode")
 
 -- 2. [ WINDOW & SPLIT MANAGEMENT ]
-u.nmap("<leader>wv", "<cmd>vsplit<CR>", "Window: Vertical Split")
-u.nmap("<leader>ws", "<cmd>split<CR>", "Window: Horizontal Split")
-u.nmap("<leader>wq", "<cmd>quit<CR>", "Window: Close Current")
-u.nmap("<leader>wo", "<C-w>o", "Window: Close Others")
-u.nmap("<leader>w=", "<C-w>=", "Window: Reset Sizes")
-u.nmap("<leader>wx", "<C-w>x", "Window: Swap with Next")
+u.nmap("<leader>wv", "<cmd>vsplit<CR>", "Window: Split Vertically")
+u.nmap("<leader>ws", "<cmd>split<CR>", "Window: Split Horizontally")
+u.nmap("<leader>wq", "<cmd>quit<CR>", "Window: Close Current Window")
+u.nmap("<leader>wo", "<C-w>o", "Window: Close Other Windows")
+u.nmap("<leader>w=", "<C-w>=", "Window: Equalize Sizes")
+u.nmap("<leader>wx", "<C-w>x", "Window: Swap with Next Window")
 
 u.nmap("<C-Up>", "<cmd>resize +2<cr>", "Window: Resize Up")
 u.nmap("<C-Down>", "<cmd>resize -2<cr>", "Window: Resize Down")
 u.nmap("<C-Left>", "<cmd>vertical resize -2<cr>", "Window: Resize Left")
 u.nmap("<C-Right>", "<cmd>vertical resize +2<cr>", "Window: Resize Right")
 
-map("n", "<leader>-", "<C-w>s", { desc = "Window: Split Horizontal", remap = true })
-map("n", "<leader>|", "<C-w>v", { desc = "Window: Split Vertical", remap = true })
+u.nmap("<leader>-", "<C-w>s", "Window: Split Horizontally", { remap = true })
+u.nmap("<leader>|", "<C-w>v", "Window: Split Vertically", { remap = true })
 
 -- 3. [ NAVIGATION ]
 u.nmap("<C-h>", "<C-w><C-h>", "Window: Focus Left")
@@ -37,17 +36,17 @@ u.nmap("<C-j>", "<C-w><C-j>", "Window: Focus Down")
 u.nmap("<C-k>", "<C-w><C-k>", "Window: Focus Up")
 
 -- 4. [ EDITING PRIMITIVES ]
-u.map({ "n", "x" }, "s", "<Nop>", "Prefix: Surround")
+u.map({ "n", "x" }, "s", "<Nop>", "Prefix: Disable Surround")
 
-map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+u.map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", "Move: Visual Up", { expr = true, silent = true })
+u.map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", "Move: Visual Down", { expr = true, silent = true })
 
 -- 5. [ SEARCH ENHANCEMENTS ]
 u.nmap("<Esc>", "<cmd>nohlsearch<CR>", "Search: Clear Highlight")
-map("n", "n", "'Nn'[v:searchforward] . 'zv'", { expr = true, desc = "Search: Next Result" })
-map("n", "N", "'nN'[v:searchforward] . 'zv'", { expr = true, desc = "Search: Prev Result" })
-map({ "x", "o" }, "n", "'Nn'[v:searchforward]", { expr = true, desc = "Search: Next Result" })
-map({ "x", "o" }, "N", "'nN'[v:searchforward]", { expr = true, desc = "Search: Prev Result" })
+u.map("n", "n", "'Nn'[v:searchforward] . 'zv'", "Search: Next Result", { expr = true })
+u.map("n", "N", "'nN'[v:searchforward] . 'zv'", "Search: Prev Result", { expr = true })
+u.map({ "x", "o" }, "n", "'Nn'[v:searchforward]", "Search: Next Result", { expr = true })
+u.map({ "x", "o" }, "N", "'nN'[v:searchforward]", "Search: Prev Result", { expr = true })
 
 -- 6. [ VISUAL MODE INDENTATION ]
 u.map("x", "<", "<gv", "Edit: Indent Left (keep selected)")
@@ -59,10 +58,10 @@ u.imap(".", ".<C-g>u", nil)
 u.imap(";", ";<C-g>u", nil)
 
 -- 8. [ BUFFER NAVIGATION ]
-u.nmap("H", "<cmd>bprevious<CR>", "Buffer: Prev")
-u.nmap("L", "<cmd>bnext<CR>", "Buffer: Next")
-u.nmap("[b", "<cmd>bprevious<CR>", "Buffer: Prev")
-u.nmap("]b", "<cmd>bnext<CR>", "Buffer: Next")
+u.nmap("H", "<cmd>bprevious<CR>", "Buffer: Go to Previous")
+u.nmap("L", "<cmd>bnext<CR>", "Buffer: Go to Next")
+u.nmap("[b", "<cmd>bprevious<CR>", "Buffer: Go to Previous")
+u.nmap("]b", "<cmd>bnext<CR>", "Buffer: Go to Next")
 u.nmap("<leader>bb", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
 u.nmap("<leader>`", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
 u.nmap("<leader>bd", function()
@@ -71,28 +70,28 @@ end, "Buffer: Delete")
 u.nmap("<leader>bD", "<cmd>bp | bd #<CR>", "Buffer: Delete + Close Window")
 
 -- 9. [ QUICKFIX NAVIGATION ]
-u.nmap("[q", vim.cmd.cprev, "Quickfix: Prev Item")
-u.nmap("]q", vim.cmd.cnext, "Quickfix: Next Item")
+u.nmap("[q", vim.cmd.cprev, "Quickfix: Go to Previous Item")
+u.nmap("]q", vim.cmd.cnext, "Quickfix: Go to Next Item")
 
 -- 10. [ UTILITIES ]
 u.map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", "File: Save")
-u.nmap("<leader>bn", "<cmd>enew<CR>", "New Buffer")
+u.nmap("<leader>bn", "<cmd>enew<CR>", "Buffer: Create New")
 u.nmap("<leader>qq", "<cmd>qa<CR>", "Session: Exit Neovim")
-u.nmap("U", "<cmd>Undotree<CR>", "Undotree")
+u.nmap("U", "<cmd>Undotree<CR>", "Tool: Open Undotree")
 
 u.imap("<A-j>", "<esc><cmd>m .+1<cr>==gi", "Edit: Move Line Down")
 u.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", "Edit: Move Line Up")
 
-u.nmap("<C-d>", "<C-d>zz", "Scroll down and center")
-u.nmap("<C-u>", "<C-u>zz", "Scroll up and center")
+u.nmap("<C-d>", "<C-d>zz", "Scroll: Down and Center")
+u.nmap("<C-u>", "<C-u>zz", "Scroll: Up and Center")
 
 -- 11. [ INSPECT / DIAGNOSTICS ]
-u.nmap("<leader>ui", vim.show_pos, "Inspect: Highlights")
+u.nmap("<leader>ui", vim.show_pos, "Inspect: Show Highlights")
 u.nmap("<leader>uI", function()
 	vim.treesitter.inspect_tree()
 	vim.api.nvim_input("I")
-end, "Inspect: Treesitter (full tree)")
+end, "Inspect: Show Treesitter Tree (Full)")
 
-u.nmap("<leader>cd", vim.diagnostic.open_float, "Open floating diagnostic message")
+u.nmap("<leader>cd", vim.diagnostic.open_float, "Diagnostic: Open Floating Message")
 
 return M
