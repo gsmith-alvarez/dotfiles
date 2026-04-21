@@ -30,15 +30,14 @@ mini.later(function()
     { "<leader>u", group = "UI", icon = icons.get("lsp", "interface") },
     { "<leader>x", group = "Execute", icon = icons.get("lsp", "method") },
 
-    { "s", group = "surround", icon = icons.get("lsp", "operator") },
-    { "sa", desc = "Add" },
-    { "sd", desc = "Delete" },
-    { "sr", desc = "Replace" },
-    { "sf", desc = "Find right" },
-    { "sF", desc = "Find left" },
-    { "sh", desc = "Highlight" },
-    { "sn", desc = "Update next" },
-    { "sl", desc = "Update last" },
+    { "gs", group = "surround", icon = icons.get("lsp", "operator") },
+    { "gsa", desc = "Add surrounding", mode = { "n", "x" } },
+    { "gsd", desc = "Delete surrounding" },
+    { "gsr", desc = "Replace surrounding" },
+    { "gsf", desc = "Find right surrounding" },
+    { "gsF", desc = "Find left surrounding" },
+    { "gsh", desc = "Highlight surrounding" },
+    { "gsn", desc = "Update n_lines" },
 
     -- Bracket Navigation (mini.bracketed)
     { "[", group = "prev", icon = icons.get("lsp", "variable") },
