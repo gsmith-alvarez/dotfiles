@@ -5,7 +5,7 @@
 -- =============================================================================
 
 local M = {}
-local u = require "core.utils"
+local u = require("core.utils")
 
 --- Refactored LSP Attachment
 --- Why: Uses client:supports_method directly to avoid race conditions and
@@ -17,13 +17,13 @@ local lsp_attach = function(args)
 	end
 
 	-- [[ Inlay Hints ]]
-	if client:supports_method "textDocument/inlayHint" then
+	if client:supports_method("textDocument/inlayHint") then
 		vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
 	end
 
 	-- [[ Document Highlight ]]
 	-- Highlights all instances of the symbol under the cursor.
-	if client:supports_method "textDocument/documentHighlight" then
+	if client:supports_method("textDocument/documentHighlight") then
 		vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 			buffer = args.buf,
 			callback = function()
@@ -37,32 +37,33 @@ local lsp_attach = function(args)
 	end
 
 	-- [[ Keymaps ]]
-	-- grn: Rename, gra: Code Action, grr: References, gri: Implementation, gO: Symbols.
-	local function map(keys, func, desc)
-		vim.keymap.set("n", keys, func, { buffer = args.buf, desc = "LSP: " .. desc })
+	-- Explicitly defined to override mini.jump's f/t hooks which otherwise
+	-- intercept the trailing character of gr* sequences (e.g. grt, grf).
+	local function map(keys, func, desc, mode)
+		vim.keymap.set(mode or "n", keys, func, { buffer = args.buf, desc = "LSP: " .. desc })
 	end
 
-	if client:supports_method "textDocument/definition" then
-		map("gd", vim.lsp.buf.definition, "Go to Definition")
-	end
+	map("grn", vim.lsp.buf.rename,           "Rename")
+	map("gra", vim.lsp.buf.code_action,      "Code Action",      { "n", "x" })
+	map("grr", vim.lsp.buf.references,       "References")
+	map("gri", vim.lsp.buf.implementation,   "Implementation")
+	map("grt", vim.lsp.buf.type_definition,  "Type Definition")
+	map("grx", vim.lsp.codelens.run,         "CodeLens Run")
+	map("gO",  vim.lsp.buf.document_symbol,  "Document Symbols")
 
-	if client:supports_method "textDocument/typeDefinition" then
-		map("gy", vim.lsp.buf.type_definition, "Type Definition")
-	end
-
-	if client:supports_method "textDocument/declaration" then
-		map("gD", vim.lsp.buf.declaration, "Go to Declaration")
+	if client:supports_method("textDocument/declaration") then
+		map("grd", vim.lsp.buf.declaration, "Declaration")
 	end
 
 	-- [[ Range Formatting ]]
-	if client:supports_method "textDocument/rangeFormatting" then
+	if client:supports_method("textDocument/rangeFormatting") then
 		vim.keymap.set("x", "<leader>f", function()
-			vim.lsp.buf.format { bufnr = args.buf }
+			vim.lsp.buf.format({ bufnr = args.buf })
 		end, { buffer = args.buf, desc = "LSP: Format Range" })
 	end
 
 	-- [[ Code Lens ]]
-	if client:supports_method "textDocument/codeLens" then
+	if client:supports_method("textDocument/codeLens") then
 		map("<leader>cl", vim.lsp.codelens.run, "CodeLens Action")
 		vim.lsp.codelens.enable(true, { bufnr = args.buf })
 	end
@@ -70,10 +71,10 @@ end
 
 -- [[ Diagnostic Configuration ]]
 -- Define how errors and warnings are displayed globally.
-vim.diagnostic.config {
+vim.diagnostic.config({
 	virtual_text = true, -- Show message at the end of the line
 	signs = true, -- gutter signs (E/W)
-}
+})
 
 -- [[ Autocmd Definitions ]]
 -- Exported to the registrar for automatic setup.

@@ -116,6 +116,25 @@ mini.later(function()
     -- Jump Navigation (Snacks Words)
     { "[[", desc = "Prev Reference" },
     { "]]", desc = "Next Reference" },
+
+    -- LSP: Builtin gr* group
+    { "gr",  group = "LSP Builtin",                   icon = icons.get("lsp", "method") },
+    { "grn", desc = "Rename" },
+    { "gra", desc = "Code Action",    mode = { "n", "x" } },
+    { "grr", desc = "References" },
+    { "gri", desc = "Implementation" },
+    { "grt", desc = "Type Definition" },
+    { "grx", desc = "CodeLens Run" },
+    { "grd", desc = "Declaration" },
+    { "gO",  desc = "Document Symbols" },
+
+    -- LSP: Picker gp* group
+    { "gp",  group = "LSP Picker",                     icon = icons.get("lsp", "method") },
+    { "gpd", desc = "Definition" },
+    { "gpr", desc = "References" },
+    { "gpt", desc = "Type Definition" },
+    { "gpi", desc = "Implementation" },
+    { "gpO", desc = "Document Symbols" },
   }
 end)
 
