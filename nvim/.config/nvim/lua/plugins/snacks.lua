@@ -169,6 +169,7 @@ snacks.setup({
 		},
 	},
 	scratch = { enabled = true },
+	profiler = { enabled = true },
 	toggle = { enabled = true },
 	zen = { enabled = true },
 })
@@ -191,6 +192,8 @@ mini.later(function()
 	Snacks.toggle.inlay_hints():map("<leader>uh")
 	Snacks.toggle.indent():map("<leader>ug")
 	Snacks.toggle.dim():map("<leader>uD")
+	Snacks.toggle.profiler():map("<leader>pp")
+	Snacks.toggle.profiler_highlights():map("<leader>ph")
 	Snacks.toggle.zen():map("<leader>uz")
 	Snacks.toggle.zoom():map("<leader>uZ")
 end)
@@ -199,6 +202,8 @@ end)
 -- 4. [ DROPBAR ]
 -- Breadcrumb navigation bar. Minimal config — just needs to be activated.
 -- -----------------------------------------------------------------------------
-Config.safe_require("dropbar").setup()
+mini.later(function()
+	Config.safe_require("dropbar").setup()
+end)
 
 return M

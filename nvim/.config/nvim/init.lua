@@ -7,6 +7,21 @@
 -- It is a global variable which can be use both as `_G.Config` and `Config`
 _G.Config = {}
 
+if vim.env.PROF then
+	local snacks_path = vim.fn.stdpath("data") .. "/site/pack/core/opt/snacks.nvim"
+	if vim.fn.isdirectory(snacks_path) == 1 then
+		vim.opt.rtp:append(snacks_path)
+		local ok_profiler, profiler = pcall(require, "snacks.profiler")
+		if ok_profiler then
+			profiler.startup({
+				startup = {
+					event = "VimEnter",
+				},
+			})
+		end
+	end
+end
+
 -- Assign the anonymous function directly to the table key.
 Config.safe_require = function(module_or_list, desc)
 	-- Use the call stack to find the executing script, fallback to SYSTEM

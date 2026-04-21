@@ -84,7 +84,18 @@ mini.later(function()
 	})
 end)
 
-Config.safe_require("latex-tools").setup()
+local latex_setup_done = false
+local function setup_latex_tools_once()
+	if latex_setup_done then
+		return
+	end
+	Config.safe_require("latex-tools").setup()
+	latex_setup_done = true
+end
+
+mini.on_filetype("tex", setup_latex_tools_once)
+mini.on_filetype("plaintex", setup_latex_tools_once)
+mini.on_filetype("markdown", setup_latex_tools_once)
 
 -- -----------------------------------------------------------------------------
 -- 2. [ BLINK.CMP ]
