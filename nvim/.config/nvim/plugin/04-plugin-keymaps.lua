@@ -138,7 +138,7 @@ end, "Quickfix List (toggle)")
 u.nmap("<leader>eQ", function()
 	vim.cmd(vim.fn.getloclist(0, { winid = true }).winid ~= 0 and "lclose" or "lopen")
 end, "Location List (toggle)")
-u.nmap("<leader>sf", function()
+u.nmap("<leader>sb", function()
 	require("dropbar.api").pick()
 end, "Search: Pick Breadcrumb")
 
