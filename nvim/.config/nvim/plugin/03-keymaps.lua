@@ -36,8 +36,6 @@ u.nmap("<C-j>", "<C-w><C-j>", "Window: Focus Down")
 u.nmap("<C-k>", "<C-w><C-k>", "Window: Focus Up")
 
 -- 4. [ EDITING PRIMITIVES ]
-u.map({ "n", "x" }, "s", "<Nop>", "Prefix: Disable Surround")
-
 u.map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", "Move: Visual Up", { expr = true, silent = true })
 u.map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", "Move: Visual Down", { expr = true, silent = true })
 

@@ -94,7 +94,19 @@ M.later(function()
 	Config.safe_require("mini.operators").setup()
 	Config.safe_require("mini.pairs").setup()
 	Config.safe_require("mini.surround").setup({
-		highlight_duration = 2000,
+		mappings = {
+			add = "gsa", -- Add surrounding in Normal and Visual modes
+			delete = "gsd", -- Delete surrounding
+			find = "gsf", -- Find surrounding (to the right)
+			find_left = "gsF", -- Find surrounding (to the left)
+			highlight = "gsh", -- Highlight surrounding
+			replace = "gsr", -- Replace surrounding
+			update_n_lines = "gsn", -- Update `n_lines`
+
+			suffix_last = "l", -- Suffix to search with "prev" method
+			suffix_next = "n", -- Suffix to search with "next" method
+		},
+		highlight_duration = 500,
 	})
 	Config.safe_require("mini.diff").setup()
 	Config.safe_require("mini.move").setup()

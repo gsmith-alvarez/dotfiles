@@ -50,10 +50,10 @@ oxlint = "latest"
 oxfmt = "latest"
 
 # Config Files
-taplo = "latest"    # TOML
-yamllint = "latest" # YAML
+taplo = "latest"                             # TOML
+yamllint = "latest"                          # YAML
+"npm:vscode-json-languageservice" = "latest" # JSON
 
 # --- Graphics & Typesetting ---
 "npm:@mermaid-js/mermaid-cli" = "latest" # Diagrams
 "cargo:tectonic" = "latest"              # LaTeX engine
-fzf = "latest"
