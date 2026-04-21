@@ -111,6 +111,7 @@ vim.pack.add({
 	gh("saghen/blink.cmp"),
 	gh("MeanderingProgrammer/render-markdown.nvim"),
 	gh("obsidian-nvim/obsidian.nvim"),
+	gh("gaoDean/autolist.nvim"),
 	gh("gsmith-alvarez/latex-tools.nvim"),
 	gh("L3MON4D3/LuaSnip"),
 	gh("stevearc/quicker.nvim"),
