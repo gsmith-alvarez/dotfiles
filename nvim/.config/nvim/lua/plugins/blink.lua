@@ -29,7 +29,7 @@ mini.later(function()
 			["<C-l>"] = { "snippet_forward", "accept", "fallback" },
 			["<C-h>"] = { "snippet_backward", "fallback" },
 			["<C-j>"] = { "select_next", "fallback" },
-			["<C-k>"] = { "show_signature", "hide_signature", "select_prev", "fallback" },
+			["<C-k>"] = { "select_prev", "show_signature", "hide_signature", "fallback" },
 		},
 		snippets = { preset = "luasnip" },
 		sources = {
@@ -43,9 +43,14 @@ mini.later(function()
 			},
 		},
 		completion = {
-			documentation = { auto_show = false, auto_show_delay_ms = 200 },
+			documentation = {
+				auto_show = true,
+				auto_show_delay_ms = 200,
+				update_delay_ms = 100,
+			},
 			ghost_text = { enabled = false },
 			menu = {
+				direction_priority = { "s", "n" },
 				draw = {
 					components = {
 						kind_icon = {
@@ -70,7 +75,19 @@ mini.later(function()
 				},
 			},
 		},
-		signature = { enabled = true },
+		signature = {
+			enabled = true,
+			trigger = {
+				show_on_keyword = false,
+				show_on_trigger_character = true,
+				show_on_insert_on_trigger_character = true,
+			},
+			window = {
+				border = "rounded",
+				direction_priority = { "n", "s" },
+				show_documentation = false,
+			},
+		},
 	})
 end)
 
