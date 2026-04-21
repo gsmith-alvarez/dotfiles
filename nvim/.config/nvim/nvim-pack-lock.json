@@ -8,6 +8,10 @@
       "rev": "90d14caca4ae557665ab105080c27d5f289a2e30",
       "src": "https://github.com/saghen/blink.cmp"
     },
+    "conform.nvim": {
+      "rev": "086a40dc7ed8242c03be9f47fbcee68699cc2395",
+      "src": "https://github.com/stevearc/conform.nvim"
+    },
     "dropbar.nvim": {
       "rev": "ce202248134e3949aac375fd66c28e5207785b10",
       "src": "https://github.com/Bekaboo/dropbar.nvim"
@@ -59,6 +63,10 @@
     "snacks.nvim": {
       "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
       "src": "https://github.com/folke/snacks.nvim"
+    },
+    "tree-sitter-manager.nvim": {
+      "rev": "540c6dc18bdb470fe8b1aab58898d2fa06bc4185",
+      "src": "https://github.com/romus204/tree-sitter-manager.nvim"
     },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",

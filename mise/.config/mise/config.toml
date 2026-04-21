@@ -56,3 +56,4 @@ yamllint = "latest" # YAML
 # --- Graphics & Typesetting ---
 "npm:@mermaid-js/mermaid-cli" = "latest" # Diagrams
 "cargo:tectonic" = "latest"              # LaTeX engine
+fzf = "latest"

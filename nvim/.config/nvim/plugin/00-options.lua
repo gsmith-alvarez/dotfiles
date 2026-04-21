@@ -8,7 +8,7 @@ local M = {}
 -- 1. [ FILETYPE OPTIMIZATION ]
 -- Predefine common filetypes for a slight speed boost and to ensure
 -- specific extensions or filenames map correctly.
-vim.filetype.add {
+vim.filetype.add({
 	extension = {
 		lua = "lua",
 		sh = "sh",
@@ -26,7 +26,7 @@ vim.filetype.add {
 		["justfile"] = "just",
 		["Dockerfile"] = "dockerfile",
 	},
-}
+})
 
 -- 2. [ LEADERS & GENERAL ]
 vim.g.mapleader = " " -- Set leader key to Space
@@ -54,7 +54,7 @@ vim.g.loaded_node_provider = 0
 -- Use Treesitter for high-performance, semantic code folding.
 set.foldmethod = "expr"
 set.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-set.foldtext = "v:lua.vim.lsp.foldtext()" -- New in 0.13: preserves TS highlights in folds
+set.foldtext = "v:lua.vim.lsp.foldtext()" -- NOTE: Nightly Feature
 set.foldlevel = 99 -- Start with all folds open
 set.foldnestmax = 10 -- Limit fold nesting depth
 set.fillchars = "eob: ,fold:╌" -- Custom characters for end-of-buffer and folds
@@ -65,7 +65,7 @@ set.smartcase = true -- ...unless the pattern contains upper case characters.
 set.inccommand = "split" -- Show search/replace effects in a live-preview split
 set.spelloptions = "camel" -- Handle camelCase words in spell checking
 set.spelllang = { "en_us" }
-set.spellfile = vim.fn.stdpath "config" .. "/spell/en.utf-8.add"
+set.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
 
 -- 7. [ FORMATTING ]
 -- Pattern for detecting the start of a numbered list (used for `gw` and formatting).
@@ -80,9 +80,9 @@ set.switchbuf = "usetab" -- Jump to existing tab if buffer is already open
 
 -- 9. [ SYNTAX & FILETYPE ]
 -- Ensure filetype detection and syntax highlighting are fully enabled.
-vim.cmd "filetype plugin indent on"
-if vim.fn.exists "syntax_on" ~= 1 then
-	vim.cmd "syntax enable"
+vim.cmd("filetype plugin indent on")
+if vim.fn.exists("syntax_on") ~= 1 then
+	vim.cmd("syntax enable")
 end
 
 -- 10. [ WRAPPING & INDENTATION ]
@@ -102,10 +102,10 @@ set.softtabstop = 4 -- Number of spaces for a tab while editing
 
 -- 11. [ COMPLETION & PUM ]
 set.autocomplete = false -- Disable built-in completion (using blink.cmp)
-set.completeopt:append "nearest" -- Prioritize completion matches near the cursor
+set.completeopt:append("nearest") -- Prioritize completion matches near the cursor
 set.pumborder = "rounded" -- Rounded borders for the popup menu
 set.pummaxwidth = 20 -- Limit popup menu width
-set.messagesopt:append "progress:c" -- Show background job progress in messages
+set.messagesopt:append("progress:c") -- Show background job progress in messages
 
 -- 12. [ WINDOWS & SPLITS ]
 set.splitright = true -- Vertical splits open to the right

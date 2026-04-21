@@ -6,6 +6,21 @@
 local M = {}
 
 local mini = Config.safe_require("plugins.mini")
+local icons = Config.safe_require("mini.icons")
+
+local function get_mini_icon(ctx)
+	if ctx.source_name == "Path" then
+		local is_unknown_type =
+			vim.tbl_contains({ "link", "socket", "fifo", "char", "block", "unknown" }, ctx.item.data.type)
+		local mini_icon, mini_hl, _ =
+			icons.get(is_unknown_type and "os" or ctx.item.data.type, is_unknown_type and "" or ctx.label)
+		if mini_icon then
+			return mini_icon, mini_hl
+		end
+	end
+	local mini_icon, mini_hl, _ = icons.get("lsp", ctx.kind)
+	return mini_icon, mini_hl
+end
 
 mini.later(function()
 	require("blink.cmp").setup({
@@ -30,6 +45,30 @@ mini.later(function()
 		completion = {
 			documentation = { auto_show = false, auto_show_delay_ms = 200 },
 			ghost_text = { enabled = false },
+			menu = {
+				draw = {
+					components = {
+						kind_icon = {
+							text = function(ctx)
+								local kind_icon, kind_hl = get_mini_icon(ctx)
+								return kind_icon
+							end,
+							-- (optional) use highlights from mini.icons
+							highlight = function(ctx)
+								local _, hl = get_mini_icon(ctx)
+								return hl
+							end,
+						},
+						kind = {
+							-- (optional) use highlights from mini.icons
+							highlight = function(ctx)
+								local _, hl = get_mini_icon(ctx)
+								return hl
+							end,
+						},
+					},
+				},
+			},
 		},
 		signature = { enabled = true },
 	})

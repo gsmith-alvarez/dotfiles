@@ -48,8 +48,8 @@ M.resolve_youtube = function(video_id)
 end
 
 M.resolve_obsidian = function(file, src)
-	local ok, obsidian = pcall(require, "obsidian")
-	if not ok or not (_G.Obsidian and _G.Obsidian.workspace) then
+	local obsidian = Config.safe_require("obsidian")
+	if not obsidian or not (_G.Obsidian and _G.Obsidian.workspace) then
 		return
 	end
 

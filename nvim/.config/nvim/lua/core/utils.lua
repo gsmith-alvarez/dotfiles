@@ -7,7 +7,7 @@ local M = {}
 
 --- Centralized Project Root Resolver
 --- Why: Deterministic project discovery for LSP, File Explorer, and Grep.
---- Uses vim.fs.root (0.10+) which returns the *nearest* ancestor containing
+--- Uses vim.fs.root which returns the *nearest* ancestor containing
 --- any marker — correct for monorepos where a nested go.mod should win over
 --- a parent .git.
 --- @return string path The absolute path to the project root or CWD.
