@@ -271,6 +271,9 @@ end, "Toggle Scratch Buffer")
 u.nmap("<leader>S", function()
 	snacks.scratch.select()
 end, "Select Scratch Buffer")
+u.nmap("<leader>ps", function()
+	snacks.profiler.scratch()
+end, "Profiler Scratch Buffer")
 
 -- 8. [ NAVIGATION & LSP ]
 -- gp* = Picker variants (mirrors gr* builtins)
