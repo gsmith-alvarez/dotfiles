@@ -15,7 +15,10 @@ mini.later(function()
   }
   wk.add {
     -- Top level groups
+    { "<leader><tab>", group = "Tabs", icon = icons.get("lsp", "class") },
     { "<leader>c", group = "Code", icon = icons.get("lsp", "function") },
+    { "<leader>d", group = "Debug", icon = icons.get("lsp", "event") },
+    { "<leader>dp", group = "Debug Profiler", icon = icons.get("lsp", "event") },
     { "<leader>e", group = "Explore", icon = icons.get("directory", "index") },
     { "<leader>f", group = "Find", icon = icons.get("lsp", "reference") },
     { "<leader>g", group = "Git", icon = icons.get("filetype", "git") },
@@ -40,6 +43,8 @@ mini.later(function()
     -- Bracket Navigation (mini.bracketed)
     { "[", group = "prev", icon = icons.get("lsp", "variable") },
     { "]", group = "next", icon = icons.get("lsp", "variable") },
+    { "g", group = "goto", icon = icons.get("lsp", "method") },
+    { "z", group = "fold", icon = icons.get("lsp", "operator") },
     { "[b", desc = "Buffer" },
     { "]b", desc = "Buffer" },
     { "[d", desc = "Diagnostic" },
@@ -73,6 +78,7 @@ mini.later(function()
     { "<leader>n", desc = "Notify: Show History", icon = icons.get("lsp", "event") },
     { "<leader>.", desc = "Scratch: Toggle Buffer", icon = icons.get("lsp", "snippet") },
     { "<leader>S", desc = "Scratch: Select Buffer", icon = icons.get("lsp", "snippet") },
+    { "gx", desc = "Open with system app", icon = icons.get("lsp", "keyword") },
 
     -- Global/Local help
     {
@@ -139,6 +145,10 @@ mini.later(function()
     { "gpi", desc = "Implementation" },
     { "gpO", desc = "Document Symbols" },
   }
+
+	vim.keymap.set("n", "<C-w><space>", function()
+		wk.show({ keys = "<c-w>", loop = true })
+	end, { desc = "Window Hydra Mode (which-key)" })
 end)
 
 return M
