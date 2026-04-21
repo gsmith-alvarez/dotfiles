@@ -23,6 +23,69 @@ end, "Explore: File Tree (toggle)")
 -- Snacks Helper
 local snacks = Config.safe_require("snacks")
 local picker = snacks.picker
+
+local function multigrep(opts)
+	opts = opts or {}
+	local cwd = opts.cwd and vim.fn.expand(opts.cwd) or vim.uv.cwd()
+	local shortcuts = opts.shortcuts
+		or {
+			l = "*.lua",
+			v = "*.vim",
+			n = "*.{vim,lua}",
+			c = "*.c",
+			r = "*.rs",
+			g = "*.go",
+			m = "*.md",
+			p = "*.py",
+		}
+	local pattern = opts.pattern or "%s"
+
+	picker.pick({
+		title = "Live Grep (with shortcuts)",
+		live = true,
+		debounce = 100,
+		format = "file",
+		sort = false,
+		cwd = cwd,
+		finder = function(finder_opts, ctx)
+			local prompt = ctx.filter.search
+			if not prompt or prompt == "" then
+				return {}
+			end
+
+			local parts = vim.split(prompt, "  ", { plain = true })
+			local grep_pat = vim.trim(parts[1] or "")
+			if grep_pat == "" then
+				return {}
+			end
+			local glob = vim.trim(parts[2] or "")
+
+			local grep_opts = {
+				cwd = cwd,
+				hidden = opts.hidden ~= false,
+				ignored = finder_opts.ignored,
+				follow = finder_opts.follow,
+				exclude = finder_opts.exclude,
+				debug = finder_opts.debug or {},
+				regex = true,
+				ft = opts.ft,
+				args = opts.args,
+			}
+
+			if glob ~= "" then
+				local resolved = shortcuts[glob] or glob
+				grep_opts.glob = string.format(pattern, resolved)
+			else
+				grep_opts.glob = nil
+			end
+
+			local proxy_ctx = setmetatable({ filter = vim.deepcopy(ctx.filter) }, { __index = ctx })
+			proxy_ctx.filter.search = grep_pat
+
+			return require("snacks.picker.source.grep").grep(grep_opts, proxy_ctx)
+		end,
+	})
+end
 -- 2. [ SNACKS: FIND (LEADER F) ]
 -- History & Meta
 u.nmap("<leader>f/", function()
@@ -60,8 +123,20 @@ end, "Search Symbols (document)")
 u.nmap("<leader>sS", function()
 	picker.lsp_workspace_symbols()
 end, "Search Symbols (workspace)")
+u.nmap("<leader>sg", function()
+	multigrep()
+end, "Search Multi Grep")
 u.nmap("<leader>sw", function()
-	picker.grep_word()
+	local word = vim.fn.expand("<cword>")
+	if word == nil or word == "" then
+		return
+	end
+	picker.grep({
+		search = word,
+		regex = false,
+		args = { "--word-regexp" },
+		dirs = { vim.fn.expand("%:p:h") },
+	})
 end, "Search Word (CWD)")
 u.nmap("<leader>sT", function()
 	picker.grep({ search = "TODO|FIXME|NOTE|WIP|INFO" })
