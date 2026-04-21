@@ -6,6 +6,7 @@
 local M = {}
 
 local mini = Config.safe_require "plugins.mini"
+local icons = require("mini.icons")
 
 local wk = require("which-key")
 
@@ -15,17 +16,17 @@ mini.later(function()
   }
   wk.add {
     -- Top level groups
-    { "<leader>c", group = "Code", icon = "" },
-    { "<leader>e", group = "Explore", icon = "󰙅" },
-    { "<leader>f", group = "Find", icon = "" },
-    { "<leader>g", group = "Git", icon = "󰊢" },
-    { "<leader>gh", group = "Git Hunk", icon = "󱖋" },
-    { "<leader>q", group = "Quit/Session", icon = "󰗼" },
-    { "<leader>s", group = "Search", icon = "󰍉" },
-    { "<leader>u", group = "UI", icon = "󰙵" },
-    { "<leader>x", group = "Execute", icon = "" },
+    { "<leader>c", group = "Code", icon = icons.get("lsp", "function") },
+    { "<leader>e", group = "Explore", icon = icons.get("directory", "index") },
+    { "<leader>f", group = "Find", icon = icons.get("lsp", "reference") },
+    { "<leader>g", group = "Git", icon = icons.get("filetype", "git") },
+    { "<leader>gh", group = "Git Hunk", icon = icons.get("lsp", "event") },
+    { "<leader>q", group = "Quit/Session", icon = icons.get("os", "exit") },
+    { "<leader>s", group = "Search", icon = icons.get("lsp", "snippet") },
+    { "<leader>u", group = "UI", icon = icons.get("lsp", "interface") },
+    { "<leader>x", group = "Execute", icon = icons.get("lsp", "method") },
 
-    { "s", group = "surround", icon = "󰗈" },
+    { "s", group = "surround", icon = icons.get("lsp", "operator") },
     { "sa", desc = "Add" },
     { "sd", desc = "Delete" },
     { "sr", desc = "Replace" },
@@ -36,8 +37,8 @@ mini.later(function()
     { "sl", desc = "Update last" },
 
     -- Bracket Navigation (mini.bracketed)
-    { "[", group = "prev", icon = "󰮳" },
-    { "]", group = "next", icon = "󰮳" },
+    { "[", group = "prev", icon = icons.get("lsp", "variable") },
+    { "]", group = "next", icon = icons.get("lsp", "variable") },
     { "[b", desc = "Buffer" },
     { "]b", desc = "Buffer" },
     { "[d", desc = "Diagnostic" },
@@ -51,7 +52,7 @@ mini.later(function()
     {
       "<leader>b",
       group = "buffer",
-      icon = "",
+      icon = icons.get("file", "file"),
       expand = function()
         return require("which-key.extras").expand.buf()
       end,
@@ -59,15 +60,15 @@ mini.later(function()
     {
       "<leader>w",
       group = "window",
-      icon = "",
+      icon = icons.get("os", "windows"),
       expand = function()
         return require("which-key.extras").expand.win()
       end,
     },
 
     -- Single Key Overrides
-    { "<leader><space>", icon = "󰈞" },
-    { "<leader>/", icon = "󰱽" },
+    { "<leader><space>", icon = icons.get("lsp", "constant") },
+    { "<leader>/", icon = icons.get("lsp", "keyword") },
 
     -- Global/Local help
     {
@@ -76,7 +77,7 @@ mini.later(function()
         wk.show { global = false }
       end,
       desc = "Buffer Local Keymaps",
-      icon = "󰈔",
+      icon = icons.get("file", "info"),
     },
 
     -- Text Objects (mini.ai support)
@@ -111,6 +112,9 @@ mini.later(function()
       { "aa", desc = "argument" },
       { "ia", desc = "argument" },
     },
+    -- Jump Navigation (Snacks Words)
+    { "[[", desc = "Prev Reference" },
+    { "]]", desc = "Next Reference" },
   }
 end)
 

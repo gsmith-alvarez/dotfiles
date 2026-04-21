@@ -4,19 +4,18 @@
 -- =============================================================================
 
 local M = {}
-local icons = Config.safe_require "core.icons"
-local mini = Config.safe_require "plugins.mini"
+local mini = Config.safe_require("plugins.mini")
 
 -- 1. [ DIAGNOSTICS: UI & SIGNS ]
--- Configure the diagnostic engine to use our centralized icons.
+-- Configure the diagnostic engine to use mini.icons.
 -- Neovim 0.10+ uses the 'signs.text' table for gutter icons.
-vim.diagnostic.config {
+vim.diagnostic.config({
 	signs = {
 		text = {
-			[vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
-			[vim.diagnostic.severity.WARN] = icons.diagnostics.Warn,
-			[vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
-			[vim.diagnostic.severity.INFO] = icons.diagnostics.Info,
+			[vim.diagnostic.severity.ERROR] = require("mini.icons").get("lsp", "error"),
+			[vim.diagnostic.severity.WARN] = require("mini.icons").get("lsp", "warn"),
+			[vim.diagnostic.severity.HINT] = require("mini.icons").get("lsp", "hint"),
+			[vim.diagnostic.severity.INFO] = require("mini.icons").get("lsp", "info"),
 		},
 	},
 	virtual_text = {
@@ -25,7 +24,7 @@ vim.diagnostic.config {
 	},
 	severity_sort = true,
 	float = { border = "rounded" },
-}
+})
 
 -- 2. [ TREESITTER: SYNTAX & PARSING ]
 -- (Configuration handled in lua/plugins/treesitter.lua)
@@ -34,12 +33,12 @@ vim.diagnostic.config {
 -- Use vim.lsp.config() to merge project-specific overrides with the
 -- default configurations provided by nvim-lspconfig.
 
-require("lazydev").setup {
+Config.safe_require("lazydev").setup({
 	library = {
 		-- load luvit types when vim.uv is found
 		{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 	},
-}
+})
 
 -- [ LUA (lua_ls) ]
 -- Note: lazydev.nvim handles the VIMRUNTIME and workspace library injection.
@@ -78,7 +77,7 @@ vim.lsp.config("jsonls", {
 
 -- 4. [ ACTIVATION ]
 -- Enable the configured servers for the current session.
-vim.lsp.enable {
+vim.lsp.enable({
 	"ty", -- Python (Astral)
 	"ruff", -- Python (Formatting/Linting)
 	"lua_ls", -- Lua
@@ -88,6 +87,6 @@ vim.lsp.enable {
 	"yamlls", -- YAML
 	"dockerls", -- Docker
 	"taplo", -- TOML
-}
+})
 
 return M
