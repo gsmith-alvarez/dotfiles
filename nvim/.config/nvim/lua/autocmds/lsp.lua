@@ -39,32 +39,28 @@ local lsp_attach = function(args)
 	-- [[ Keymaps ]]
 	-- Explicitly defined to override mini.jump's f/t hooks which otherwise
 	-- intercept the trailing character of gr* sequences (e.g. grt, grf).
-	local function map(keys, func, desc, mode)
-		vim.keymap.set(mode or "n", keys, func, { buffer = args.buf, desc = "LSP: " .. desc })
-	end
-
-	map("grn", vim.lsp.buf.rename,           "Rename")
-	map("gra", vim.lsp.buf.code_action,      "Code Action",      { "n", "x" })
-	map("grr", vim.lsp.buf.references,       "References")
-	map("gri", vim.lsp.buf.implementation,   "Implementation")
-	map("grt", vim.lsp.buf.type_definition,  "Type Definition")
-	map("grx", vim.lsp.codelens.run,         "CodeLens Run")
-	map("gO",  vim.lsp.buf.document_symbol,  "Document Symbols")
+	u.nmap("grn", vim.lsp.buf.rename, "LSP: Rename", { buffer = args.buf })
+	u.map({ "n", "x" }, "gra", vim.lsp.buf.code_action, "LSP: Code Action", { buffer = args.buf })
+	u.nmap("grr", vim.lsp.buf.references, "LSP: References", { buffer = args.buf })
+	u.nmap("gri", vim.lsp.buf.implementation, "LSP: Implementation", { buffer = args.buf })
+	u.nmap("grt", vim.lsp.buf.type_definition, "LSP: Type Definition", { buffer = args.buf })
+	u.nmap("grx", vim.lsp.codelens.run, "LSP: CodeLens Run", { buffer = args.buf })
+	u.nmap("gO", vim.lsp.buf.document_symbol, "LSP: Document Symbols", { buffer = args.buf })
 
 	if client:supports_method("textDocument/declaration") then
-		map("grd", vim.lsp.buf.declaration, "Declaration")
+		u.nmap("grd", vim.lsp.buf.declaration, "LSP: Declaration", { buffer = args.buf })
 	end
 
 	-- [[ Range Formatting ]]
 	if client:supports_method("textDocument/rangeFormatting") then
-		vim.keymap.set("x", "<leader>f", function()
+		u.map("x", "<leader>f", function()
 			vim.lsp.buf.format({ bufnr = args.buf })
-		end, { buffer = args.buf, desc = "LSP: Format Range" })
+		end, "LSP: Format Range", { buffer = args.buf })
 	end
 
 	-- [[ Code Lens ]]
 	if client:supports_method("textDocument/codeLens") then
-		map("<leader>cl", vim.lsp.codelens.run, "CodeLens Action")
+		u.nmap("<leader>cl", vim.lsp.codelens.run, "LSP: CodeLens Action", { buffer = args.buf })
 		vim.lsp.codelens.enable(true, { bufnr = args.buf })
 	end
 end

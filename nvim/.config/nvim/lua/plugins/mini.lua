@@ -17,16 +17,26 @@ local function pacer_logic(mode, f)
 	end
 end
 
+--- Run a callback immediately through mini.misc.safely when available.
+--- @param f function Callback to execute.
 M.now = function(f)
 	pacer_logic("now", f)
 end
+--- Run a callback later through mini.misc.safely when available.
+--- @param f function Callback to execute.
 M.later = function(f)
 	pacer_logic("later", f)
 end
 M.now_if_args = vim.fn.argc(-1) > 0 and M.now or M.later
+--- Run a callback on an editor event using mini.misc pacing.
+--- @param ev string Neovim event name.
+--- @param f function Callback to execute.
 M.on_event = function(ev, f)
 	pacer_logic("event:" .. ev, f)
 end
+--- Run a callback on a filetype using mini.misc pacing.
+--- @param ft string Filetype name.
+--- @param f function Callback to execute.
 M.on_filetype = function(ft, f)
 	pacer_logic("filetype:" .. ft, f)
 end

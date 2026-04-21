@@ -6,9 +6,8 @@
 local M = {}
 
 local mini = Config.safe_require "plugins.mini"
-local icons = require("mini.icons")
-
-local wk = require("which-key")
+local icons = Config.safe_require("mini.icons")
+local wk = Config.safe_require("which-key")
 
 mini.later(function()
   wk.setup {
@@ -23,6 +22,7 @@ mini.later(function()
     { "<leader>gh", group = "Git Hunk", icon = icons.get("lsp", "event") },
     { "<leader>o", group = "Obsidian", icon = icons.get("filetype", "markdown") },
     { "<leader>q", group = "Quit/Session", icon = icons.get("os", "exit") },
+    { "<leader>p", group = "Profiler", icon = icons.get("lsp", "event") },
     { "<leader>s", group = "Search", icon = icons.get("lsp", "snippet") },
     { "<leader>u", group = "UI", icon = icons.get("lsp", "interface") },
     { "<leader>x", group = "Execute", icon = icons.get("lsp", "method") },
@@ -68,8 +68,11 @@ mini.later(function()
     },
 
     -- Single Key Overrides
-    { "<leader><space>", icon = icons.get("lsp", "constant") },
-    { "<leader>/", icon = icons.get("lsp", "keyword") },
+    { "<leader><space>", desc = "Find: Smart Files", icon = icons.get("lsp", "constant") },
+    { "<leader>/", desc = "Search: Global Grep", icon = icons.get("lsp", "keyword") },
+    { "<leader>n", desc = "Notify: Show History", icon = icons.get("lsp", "event") },
+    { "<leader>.", desc = "Scratch: Toggle Buffer", icon = icons.get("lsp", "snippet") },
+    { "<leader>S", desc = "Scratch: Select Buffer", icon = icons.get("lsp", "snippet") },
 
     -- Global/Local help
     {
@@ -84,23 +87,23 @@ mini.later(function()
     -- Text Objects (mini.ai support)
     {
       mode = { "o", "x" },
-      { "a", group = "around" },
-      { "i", group = "inside" },
-      { "g", group = "goto" },
+      { "a", group = "around", icon = icons.get("lsp", "class") },
+      { "i", group = "inside", icon = icons.get("lsp", "class") },
+      { "g", group = "goto", icon = icons.get("lsp", "method") },
       { "gg", desc = "first line" },
       { "ge", desc = "prev word end" },
       { "gE", desc = "prev WORD end" },
       { "g_", desc = "last char" },
       { "g,", desc = "next change" },
       { "g;", desc = "prev change" },
-      { "s", group = "surround" },
+      { "s", group = "surround", icon = icons.get("lsp", "operator") },
       { "as", desc = "around surround" },
       { "is", desc = "inside surround" },
-      { "[", group = "prev" },
+      { "[", group = "prev", icon = icons.get("lsp", "variable") },
       { "[b", desc = "buffer" },
       { "[d", desc = "diagnostic" },
       { "[q", desc = "quickfix" },
-      { "]", group = "next" },
+      { "]", group = "next", icon = icons.get("lsp", "variable") },
       { "]b", desc = "buffer" },
       { "]d", desc = "diagnostic" },
       { "]q", desc = "quickfix" },

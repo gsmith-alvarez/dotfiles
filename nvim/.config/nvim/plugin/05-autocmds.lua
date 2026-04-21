@@ -8,13 +8,14 @@ if not u then
 end
 -- 1. [ TREESITTER ATTACHMENT ]
 -- Automatically start Treesitter highlighting for supported filetypes.
+--- @param args table Autocmd callback args.
 local treesitter_attach = function(args)
   local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
   if lang then
     pcall(vim.treesitter.start, args.buf, lang)
   end
 end
-u.autocmd("FileType", "*", treesitter_attach, "Start Treesitter highlighing")
+u.autocmd("FileType", "*", treesitter_attach, "Start Treesitter highlighting")
 -- 2. [ UI POLISH ]
 -- Highlight the text briefly after it is yanked to provide visual feedback.
 local highlight_yank = function()
@@ -23,6 +24,7 @@ end
 u.autocmd("TextYankPost", "*", highlight_yank, "Highlight yanked text")
 -- 3. [ CURSOR PERSISTENCE ]
 -- Retains the position of the cursor between Neovim instances.
+--- @param args table Autocmd callback args.
 local cursor_persist = function(args)
   local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
   local line_count = vim.api.nvim_buf_line_count(args.buf)
