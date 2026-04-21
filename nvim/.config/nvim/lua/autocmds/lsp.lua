@@ -10,6 +10,7 @@ local u = require("core.utils")
 --- Refactored LSP Attachment
 --- Why: Uses client:supports_method directly to avoid race conditions and
 ---      loops on every cursor move/save. Sets up buffer-local autocommands.
+--- @param args table LspAttach autocmd callback args.
 local lsp_attach = function(args)
 	local client = vim.lsp.get_client_by_id(args.data.client_id)
 	if not client then

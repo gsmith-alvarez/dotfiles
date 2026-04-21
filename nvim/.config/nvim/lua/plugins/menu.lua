@@ -35,8 +35,8 @@ local function open_url_under_cursor()
 	vim.fn.jobstart({ opener, word }, { detach = true })
 end
 
----@param action fun()
----@param fallback_msg? string
+--- @param action fun()
+--- @param fallback_msg? string
 local function with_lsp(action, fallback_msg)
 	if not has_lsp() then
 		notify(fallback_msg or "No LSP client attached")
