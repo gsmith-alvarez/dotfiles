@@ -4,7 +4,8 @@ Most of the clay-dots architecture is now implemented and verified. These are th
 
 ## 1. UI Enhancements
 - [ ] **Startup Dashboard**: Configure `snacks.dashboard` to show recent files, projects, and useful entry actions.
-- [ ] **Trouble UI**: Implement `folke/trouble.nvim` for advanced project-wide diagnostics, references, and quickfix views.
+- [x] **Trouble UI**: Implement `folke/trouble.nvim` for advanced project-wide diagnostics, references, and quickfix views.
+    I covered this with quicker and nvim-bqf
 
 ## 2. Debugging (DAP)
 - [ ] **DAP Orchestrator**: Rebuild the DAP (Debug Adapter Protocol) domain. Setup `nvim-dap`, `nvim-dap-ui`, and language-specific adapters.
