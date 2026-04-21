@@ -6,6 +6,8 @@
 local u = Config.safe_require("core.utils")
 if not u then return end
 
+local autolist = Config.safe_require("autolist")
+
 -- Helper to ensure Obsidian is loaded and to set buffer-local maps
 local map = function(mode, keys, func, desc)
 	vim.keymap.set(mode, keys, func, { buffer = true, desc = "Obsidian: " .. desc })
@@ -54,11 +56,22 @@ map("v", "<leader>oN", "<cmd>Obsidian link_new<CR>", "Link Selection to New")
 map("n", "<leader>op", "<cmd>Obsidian paste_img<CR>", "Paste Image")
 
 -- 7. [ OVERRIDES ]
--- Give <CR> to jump2d unless we are on a link
+vim.keymap.set("i", "<Tab>", "<cmd>AutolistTab<CR>", { buffer = true, desc = "Autolist: Indent" })
+vim.keymap.set("i", "<S-Tab>", "<cmd>AutolistShiftTab<CR>", { buffer = true, desc = "Autolist: Dedent" })
+vim.keymap.set("i", "<CR>", "<CR><cmd>AutolistNewBullet<CR>", { buffer = true, desc = "Autolist: New Bullet" })
+vim.keymap.set("n", "o", "o<cmd>AutolistNewBullet<CR>", { buffer = true, desc = "Autolist: New Bullet Below" })
+vim.keymap.set("n", "O", "O<cmd>AutolistNewBulletBefore<CR>", { buffer = true, desc = "Autolist: New Bullet Above" })
+
+-- Give <CR> to checkbox toggle, link follow, or jump2d.
 vim.keymap.set("n", "<CR>", function()
+	local line = vim.api.nvim_get_current_line()
+	if line:match("%[[ xX/%-!?]%]") then
+		autolist.toggle_checkbox()
+		return
+	end
 	if require("obsidian.api").cursor_link() then
 		vim.cmd("Obsidian follow_link")
 	else
 		require("mini.jump2d").start(require("mini.jump2d").builtin_opts.word_start)
 	end
-end, { buffer = true, desc = "Jump or Follow Link" })
+end, { buffer = true, desc = "Toggle Checkbox, Jump, or Follow Link" })

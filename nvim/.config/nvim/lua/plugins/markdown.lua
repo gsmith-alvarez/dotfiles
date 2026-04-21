@@ -35,4 +35,20 @@ Config.safe_require("obsidian").setup({
 	legacy_commands = false,
 })
 
+Config.safe_require("autolist").setup({
+	lists = {
+		markdown = {
+			">%s*[-+*]",
+			">%s*%d+[.)]",
+			">%s*%a[.)]",
+			">%s*%u+[.)]",
+			">",
+			"[-+*]",
+			"%d+[.)]",
+			"%a[.)]",
+			"%u+[.)]",
+		},
+	},
+})
+
 return M

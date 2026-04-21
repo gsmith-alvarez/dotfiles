@@ -9,3 +9,5 @@
     - [x] config files (json, toml, yaml configured)
     - [ ] debugger
 - [ ] Create installation script (automate `stow` and package installation)
+- [ ] Obsidian.nvim
+    - Make a quickfix menu for links and maybe tags in obsidian vaults
