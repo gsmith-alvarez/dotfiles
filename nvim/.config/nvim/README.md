@@ -1,66 +1,58 @@
-# Neovim Config Structure
+# Engineering-Centric Neovim Configuration
 
-This config follows Neovim's native runtime layout. The main idea is simple:
+A native-first, explicit Neovim configuration designed for engineering studies, rapid prototyping, and academic note-taking. Built to run on **Neovim Nightly**.
 
-- Use `plugin/` for files that should run automatically on startup.
-- Use `lua/` for modules that should only run when explicitly required.
-- Use `after/` for overrides that must run later than everything else.
+## 🛠 Core Philosophy
 
-## How This Config Loads
+- **Native over Abstraction:** Avoids complex plugin managers in favor of Neovim's built-in `vim.pack` system and standard runtime layout.
+- **Explicit & Simple:** Configuration is kept readable and side-effect-aware, prioritizing understanding over "magic" one-liners.
+- **Fault Tolerance:** Uses a custom `safe_require` mechanism to ensure that a single failing module or missing plugin doesn't break the entire editor startup.
+- **Self-Healing:** Automatically handles background builds for heavy plugins like `blink.cmp` (Rust/Cargo) and `LuaSnip` (C/Make).
 
-Startup flow:
+## 🚀 Prototyping & Workflow
 
-1. Neovim starts and reads `init.lua`.
-2. `init.lua` defines global bootstrap helpers (for example `Config.safe_require`).
-3. Neovim automatically executes files in `plugin/` in lexicographic order.
-4. `plugin/05-plugins.lua` requires plugin modules from `lua/plugins/*`.
-5. `after/` is loaded last and can override previous behavior.
+Designed for the "Learning-by-Doing" approach to programming:
 
-Current `plugin/` order in this repo:
+- **Smart Run:** Custom `:Run` command that detects filetypes and executes scripts in a **Zellij** pane or **Snacks** terminal.
+- **Live Watch:** Integration with `watchexec` via `:Watch` and `:RunWatch` for real-time feedback while scripting.
+- **Academic Stack:** Optimized for LaTeX (Tectonic engine) and Obsidian-style Markdown note-taking, making it a primary tool for engineering coursework.
 
-- `plugin/00-options.lua`
-- `plugin/01-path.lua`
-- `plugin/02-pack.lua`
-- `plugin/03-keymaps.lua`
-- `plugin/04-plugin-keymaps.lua`
-- `plugin/05-autocmds.lua`
-- `plugin/05-plugins.lua`
+## 📦 Native Plugin Management
 
-## Standard Neovim Runtime Subdirectories
+Managed via Neovim's `vim.pack` with custom lifecycle commands:
 
-Inside `~/.config/nvim/`, Neovim recognizes specific runtime folders. Other folder names are not loaded by core automatically (though plugins may use them).
+- `:PackStatus`: Shows a detailed report of loaded, lazy-loaded, and inactive plugins.
+- `:PackUpdate`: Fetches and installs updates for all configured plugins.
+- `:PackRestore`: Syncs plugins exactly to the `nvim-pack-lock.json` for reproducibility.
+- `:PackPurge`: Opens an interactive buffer to safely remove unused plugin directories.
+- `:PackCleanLock`: Resets the lockfile to allow for a fresh dependency resolution.
 
-1. `lua/` - Lua modules loaded via `require()`.
-2. `plugin/` - Auto-loaded once on startup.
-3. `after/` - Overrides loaded after the main runtime.
-4. `ftplugin/` - Filetype-local settings (for example `python.lua`).
-5. `ftdetect/` - Filetype detection rules.
-6. `colors/` - Colorschemes.
-7. `queries/` - Treesitter query overrides/extensions.
-8. `doc/` - Help docs indexed by `:helptags`.
-9. `autoload/` - Vimscript autoload functions.
-10. `indent/` - Filetype indentation logic.
-11. `syntax/` - Legacy syntax highlight rules.
-12. `compiler/` - `:compiler` definitions and errorformats.
-13. `keymap/` - Keymap/input-method files.
-14. `spell/` - Spell files and custom dictionaries.
-15. `rplugin/` - Remote plugin entrypoints.
-16. `pack/` - Native package layout.
-17. `parser/` - Treesitter parser binaries (sometimes in data dir instead).
+## 🏗 Project Structure
 
-## Common Non-Standard (Plugin-Owned) Folders
+Following Neovim's native runtime engine:
 
-These are common but plugin-specific:
+- `plugin/`: Side-effect scripts loaded automatically on startup (Options, Keymaps, Package Specs).
+- `lua/core/`: Internal utilities and the `safe_require` engine.
+- `lua/plugins/`: Modular configuration for the plugin ecosystem.
+- `lua/commands/`: Implementation of the Smart Run, Watch, and Plugin Management systems.
+- `after/`: Context-specific overrides (LSP, Ftplugins).
+- `tests/`: Automated verification of the build runners and filesystem helpers.
 
-- `snippets/` - snippet collections/load paths (for example LuaSnip ecosystems).
-- `themes/` - user-defined theme organization.
-- `undodir/` - persistent undo storage path (used if `vim.opt.undodir` points here).
+## 📦 Dependencies
 
-## Practical Rule of Thumb
+Managed via `mise` (or your preferred tool manager):
 
-- Put side-effect startup scripts in `plugin/`.
-- Put reusable functions/modules in `lua/`.
-- Put filetype behavior in `ftplugin/`.
-- Put late overrides in `after/`.
+| Category | Tools |
+| :--- | :--- |
+| **Runtimes** | Node.js, Bun, Zig, Cargo |
+| **LSPs** | Lua, Bash, Pyright, JSON, YAML, Docker, clangd |
+| **Format/Lint** | Ruff, Stylua, Checkshell, Shfmt, Taplo, Oxlint |
+| **Typesetting** | Tectonic (LaTeX), Mermaid-CLI, dvisvgm |
+| **Utilities** | watchexec, tree-sitter-cli, typos |
 
-This keeps load order predictable and takes advantage of Neovim's built-in runtime engine.
+## 🔧 Installation
+
+1. Ensure you are on **Neovim Nightly**.
+2. Install the required tools listed above via `mise install`.
+3. Clone into `~/.config/nvim`.
+4. Neovim will automatically bootstrap the `vim.pack` system and build necessary binaries on first launch.
