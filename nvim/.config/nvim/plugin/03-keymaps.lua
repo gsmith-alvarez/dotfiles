@@ -22,6 +22,11 @@ u.nmap("<leader>wo", "<C-w>o", "Window: Close Others")
 u.nmap("<leader>w=", "<C-w>=", "Window: Reset Sizes")
 u.nmap("<leader>wx", "<C-w>x", "Window: Swap with Next")
 
+u.nmap("<C-Up>", "<cmd>resize +2<cr>", "Window: Resize Up")
+u.nmap("<C-Down>", "<cmd>resize -2<cr>", "Window: Resize Down")
+u.nmap("<C-Left>", "<cmd>vertical resize -2<cr>", "Window: Resize Left")
+u.nmap("<C-Right>", "<cmd>vertical resize +2<cr>", "Window: Resize Right")
+
 map("n", "<leader>-", "<C-w>s", { desc = "Window: Split Horizontal", remap = true })
 map("n", "<leader>|", "<C-w>v", { desc = "Window: Split Vertical", remap = true })
 
@@ -73,8 +78,6 @@ u.nmap("<leader>bn", "<cmd>enew<CR>", "New Buffer")
 u.nmap("<leader>qq", "<cmd>qa<CR>", "Session: Exit Neovim")
 u.nmap("U", "<cmd>Undotree<CR>", "Undotree")
 
-u.nmap("<A-j>", ":m .+1<CR>==", "Move Line Down")
-u.nmap("<A-k>", ":m .-2<CR>==", "Move Line Up")
 u.imap("<A-j>", "<esc><cmd>m .+1<cr>==gi", "Edit: Move Line Down")
 u.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", "Edit: Move Line Up")
 
