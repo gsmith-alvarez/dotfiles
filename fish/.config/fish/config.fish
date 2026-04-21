@@ -14,7 +14,7 @@ set -gx EDITOR nvim
 set -gx VISUAL nvim
 
 if status is-login
-    if not pgrep -x "wl-paste" > /dev/null
+    if not pgrep -x wl-paste >/dev/null
         wl-paste --type text --watch cliphist store &
         wl-paste --type image --watch cliphist store &
     end
@@ -26,7 +26,7 @@ if status is-interactive
     type -q fzf; and fzf --fish | source
     type -q zoxide; and zoxide init fish --cmd cd | source
     type -q atuin; and atuin init fish | source
-    
+
     fish_vi_key_bindings
 
     ### Abbreviations
@@ -36,9 +36,10 @@ if status is-interactive
     abbr -a cp "rsync -ah --info-progress2"
     abbr -a rm "rm -i"
     abbr -a mv "mv -i"
-    abbr -a v "nvim"
-    abbr -a copy "wl-copy"
-    abbr -a paste "wl-paste"
+    abbr -a mkdir "mkdir -p"
+    abbr -a v nvim
+    abbr -a copy wl-copy
+    abbr -a paste wl-paste
     abbr -a ch "cliphist list | fzf | cliphist decode | wl-copy"
 
     # eza - ls
@@ -53,7 +54,7 @@ if status is-interactive
     abbr -a u 'fnav up'
     abbr -a d 'fnav down'
     abbr -a z 'fnav zoxide'
-    abbr -a sg 'sgrep'
+    abbr -a sg sgrep
 
     # Clipboard
     abbr -a copy wl-copy
