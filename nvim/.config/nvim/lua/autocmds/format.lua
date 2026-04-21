@@ -64,7 +64,7 @@ M.setup = {
 		pattern = "*",
 		action = function()
 			local ft = vim.bo.filetype
-			local skip = { lua = true, sh = true, bash = true, fish = true }
+			local skip = { lua = true, sh = true, bash = true, fish = true, markdown = true, text = true }
 			if not skip[ft] then
 				vim.lsp.buf.format({ async = false, timeout_ms = 2000 })
 			end

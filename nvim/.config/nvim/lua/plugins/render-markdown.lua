@@ -5,6 +5,13 @@
 
 local M = {}
 
--- TODO: Add render-markdown setup and visual preferences here.
+Config.safe_require("render-markdown").setup({
+	completions = { lsp = { enabled = true } },
+	latex = { enabled = false },
+	headings = {
+		sign = false,
+		icons = { "󰲡 ", "󰲣 ", "󰲥 ", "󰲧 ", "󰲩 ", "󰲫 " },
+	},
+})
 
 return M

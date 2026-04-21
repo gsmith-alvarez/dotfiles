@@ -4,7 +4,7 @@
 -- =============================================================================
 
 local M = {}
-local u = require "core.utils"
+local u = require("core.utils")
 
 -- Use Snacks for notifications if available, fallback to native
 local function notify(msg, level, opts)
@@ -22,7 +22,7 @@ local function host(domain)
 	end
 end
 
-local gh = host "github.com"
+local gh = host("github.com")
 
 local function get_lib_extension()
 	local os = jit.os:lower()
@@ -46,7 +46,7 @@ local function notify_build_failed(name, obj)
 end
 
 local function build_blink(path)
-	if vim.fn.executable "cargo" ~= 1 then
+	if vim.fn.executable("cargo") ~= 1 then
 		notify("cargo not found; skipping blink.cmp build", vim.log.levels.WARN)
 		return
 	end
@@ -64,7 +64,7 @@ local function build_blink(path)
 end
 
 local function build_luasnip(path)
-	if vim.fn.executable "make" ~= 1 then
+	if vim.fn.executable("make") ~= 1 then
 		notify("make not found; skipping LuaSnip build", vim.log.levels.WARN)
 		return
 	end
@@ -95,23 +95,26 @@ u.on_packchanged("LuaSnip", build_kinds, function(data)
 end, "Build LuaSnip")
 
 -- 3. [ PLUGIN SPECIFICATIONS ]
-vim.pack.add {
-	gh "echasnovski/mini.nvim",
-	gh "echasnovski/mini.icons",
-	gh "folke/snacks.nvim",
-	gh "folke/which-key.nvim",
-	gh "neovim/nvim-lspconfig",
-	gh "folke/lazydev.nvim",
+vim.pack.add({
+	gh("echasnovski/mini.nvim"),
+	gh("echasnovski/mini.icons"),
+	gh("folke/snacks.nvim"),
+	gh("folke/which-key.nvim"),
+	gh("neovim/nvim-lspconfig"),
+	gh("folke/lazydev.nvim"),
 	"https://plugins.ejri.dev/mise.nvim",
-	gh "nvim-treesitter/nvim-treesitter",
-	gh "nvim-treesitter/nvim-treesitter-textobjects",
-	gh "L3MON4D3/LuaSnip",
-	gh "rafamadriz/friendly-snippets",
-	gh "saghen/blink.cmp",
-}
+	gh("nvim-treesitter/nvim-treesitter"),
+	gh("nvim-treesitter/nvim-treesitter-textobjects"),
+	gh("rafamadriz/friendly-snippets"),
+	gh("saghen/blink.cmp"),
+	gh("MeanderingProgrammer/render-markdown.nvim"),
+	gh("obsidian-nvim/obsidian.nvim"),
+	gh("gsmith-alvarez/latex-tools.nvim"),
+	gh("L3MON4D3/LuaSnip"),
+})
 
 -- 4. [ SELF-HEALING STARTUP CHECK ]
-local data_site = vim.fn.stdpath "data" .. "/site/pack/core/opt"
+local data_site = vim.fn.stdpath("data") .. "/site/pack/core/opt"
 local blink_path = data_site .. "/blink.cmp"
 local luasnip_path = data_site .. "/LuaSnip"
 

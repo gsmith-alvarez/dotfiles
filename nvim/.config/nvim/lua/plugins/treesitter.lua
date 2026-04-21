@@ -10,8 +10,8 @@ local mini = Config.safe_require "plugins.mini"
 -- We use 'now' instead of 'later' to ensure parsers are checked and
 -- installed immediately and that queries are available for pickers.
 mini.now(function()
-	local configs = require("nvim-treesitter.configs")
-	configs.setup {
+	local ts = require("nvim-treesitter")
+	ts.setup {
 		-- Ensure parsers are installed
 		ensure_installed = {
 			"lua",

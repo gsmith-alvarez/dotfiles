@@ -5,6 +5,17 @@
 
 local M = {}
 
--- TODO: Configure vault paths and workspace settings here.
+Config.safe_require("obsidian").setup({
+	workspaces = {
+		{
+			name = "vault",
+			path = "~/Documents/Obsidian",
+		},
+	},
+	-- Doesn't work with render-markdown for render-markdown
+	ui = { enabled = false },
+	-- Disable legacy commands warning
+	legacy_commands = false,
+})
 
 return M
