@@ -41,36 +41,34 @@ M.on_filetype = function(ft, f)
 	pacer_logic("filetype:" .. ft, f)
 end
 
-if package.loaded["mini.misc"] then
-	misc.setup_auto_root()
-end
+-- Deferred to avoid conflicts with :restart process handover
+vim.schedule(function()
+	if package.loaded["mini.misc"] then
+		misc.setup_auto_root()
+	end
+end)
 
 -- [ 2. IMMEDIATE SETUP (M.now) ]
 -- Critical UI components and theme that should be loaded during startup.
 M.now(function()
-	-- A. COLORSCHEME (mini.base16)
-	Config.safe_require("mini.base16").setup({
-		palette = {
-			base00 = "#1e1e2e", -- mantle
-			base01 = "#181825", -- crust
-			base02 = "#313244", -- surface0
-			base03 = "#45475a", -- surface1
-			base04 = "#585b70", -- surface2
-			base05 = "#cdd6f4", -- text
-			base06 = "#f5e0dc", -- rosewater
-			base07 = "#b4befe", -- lavender
-			base08 = "#f38ba8", -- red
-			base09 = "#fab387", -- peach
-			base0A = "#f9e2af", -- yellow
-			base0B = "#a6e3a1", -- green
-			base0C = "#94e2d5", -- teal
-			base0D = "#89b4fa", -- blue
-			base0E = "#cba6f7", -- mauve
-			base0F = "#f2cdcd", -- flamingo
-		},
-		use_cterm = nil,
-		plugins = { default = true },
-	})
+	-- A. COLORSCHEME (catppuccin)
+	local catppuccin = Config.safe_require("catppuccin")
+	if catppuccin then
+		catppuccin.setup({
+			color_overrides = {
+				mocha = {
+					base = "#230817",
+				},
+			},
+		})
+		vim.cmd.colorscheme("catppuccin")
+	end
+
+	-- Custom highlight overrides for MiniDiff
+	vim.api.nvim_set_hl(0, "MiniDiffOverAdd", { link = "DiffAdd" })
+	vim.api.nvim_set_hl(0, "MiniDiffOverDelete", { link = "DiffDelete" })
+	vim.api.nvim_set_hl(0, "MiniDiffOverChange", { link = "DiffChange" })
+	vim.api.nvim_set_hl(0, "MiniDiffOverContext", { link = "DiffText" })
 
 	-- B. ICONS (mini.icons)
 	local icons = Config.safe_require("mini.icons")
@@ -93,6 +91,10 @@ M.later(function()
 	Config.safe_require("mini.comment").setup()
 	Config.safe_require("mini.operators").setup()
 	Config.safe_require("mini.pairs").setup()
+	Config.safe_require("mini.align").setup()
+	Config.safe_require("mini.git").setup()
+	Config.safe_require("mini.trailspace").setup()
+	Config.safe_require("mini.visits").setup()
 	Config.safe_require("mini.surround").setup({
 		mappings = {
 			add = "gsa", -- Add surrounding in Normal and Visual modes
@@ -108,6 +110,8 @@ M.later(function()
 		},
 		highlight_duration = 500,
 	})
+	Config.safe_require("mini.bufremove").setup()
+	Config.safe_require("mini.map").setup()
 	Config.safe_require("mini.diff").setup()
 	Config.safe_require("mini.move").setup()
 	Config.safe_require("mini.bracketed").setup()
@@ -120,13 +124,15 @@ M.later(function()
 
 	-- C. HIGHLIGHTING (mini.hipatterns)
 	local hipatterns = Config.safe_require("mini.hipatterns")
-	local hi_extra = require("mini.extra").gen_highlighter
 	hipatterns.setup({
 		highlighters = {
 			-- Highlight standalone 'FIXME', 'TODO', 'NOTE'
-			fixme = hi_extra.words({ "FIXME", "WIP" }, "MiniHypatternsFixme"),
-			todo = hi_extra.words({ "TODO" }, "MiniHypatternsTodo"),
-			note = hi_extra.words({ "NOTE", "INFO" }, "MiniHypatternsNote"),
+			fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
+			hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
+			wip = { pattern = "%f[%w]()WIP()%f[%W]", group = "MiniHipatternsHack" },
+			todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
+			note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
+			info = { pattern = "%f[%w]()INFO()%f[%W]", group = "MiniHipatternsNote" },
 
 			-- Highlight hex colors
 			hex_color = hipatterns.gen_highlighter.hex_color(),

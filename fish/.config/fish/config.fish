@@ -44,10 +44,11 @@ if status is-interactive
 
     # eza - ls
     if type -q eza
-        abbr -a ls 'eza --icons --group-directories-first'
-        abbr -a ll 'eza -lh --icons --grid --group-directories-first'
-        abbr -a la 'eza -a --icons --group-directories-first'
-        abbr -a tree 'eza --tree --icons'
+        alias eza 'eza --icons --hyperlink --group-directories-first'
+        abbr -a ls eza
+        abbr -a ll 'eza -lh --grid'
+        abbr -a la 'eza -a'
+        abbr -a tree 'eza --tree'
     end
 
     # Functions
