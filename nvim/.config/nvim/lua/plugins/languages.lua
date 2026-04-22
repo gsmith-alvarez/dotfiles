@@ -13,7 +13,7 @@ local mini = Config.safe_require("plugins.mini")
 -- Uses 'now' to ensure parsers are available immediately for pickers.
 -- -----------------------------------------------------------------------------
 mini.now(function()
-	require("nvim-treesitter").setup({
+	Config.safe_require("nvim-treesitter").setup({
 		ensure_installed = {
 			"lua",
 			"vim",
@@ -26,6 +26,8 @@ mini.now(function()
 			"fish",
 			"latex",
 			"regex",
+			"html",
+			"yaml",
 		},
 		auto_install = true,
 		highlight = {
@@ -35,15 +37,17 @@ mini.now(function()
 		incremental_selection = {
 			enable = true,
 		},
-		textobjects = {
-			select = {
-				enable = true,
-				lookahead = true,
-			},
-			move = {
-				enable = true,
-				set_jumps = true,
-			},
+	})
+	Config.safe_require("nvim-treesitter-textobjects").setup({
+		select = {
+			enable = false,
+		},
+		move = {
+			enable = false,
+			set_jumps = false,
+		},
+		swap = {
+			enable = false,
 		},
 	})
 end)

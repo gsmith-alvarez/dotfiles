@@ -16,17 +16,13 @@ end
 --- Run a command in a detached zellij pane.
 --- @param bash_cmd string Command string executed by `bash -c`.
 function M.zellij_pane(bash_cmd)
-	vim.system(
-		{ "zellij", "run", "-d", "right", "-c", "--", "bash", "-c", bash_cmd },
-		{ text = true },
-		function(obj)
-			if obj.code ~= 0 then
-				vim.schedule(function()
-					notify(("zellij run failed (exit %d): %s"):format(obj.code, obj.stderr or ""), vim.log.levels.ERROR)
-				end)
-			end
+	vim.system({ "zellij", "run", "-d", "right", "-c", "--", "bash", "-c", bash_cmd }, { text = true }, function(obj)
+		if obj.code ~= 0 then
+			vim.schedule(function()
+				notify(("zellij run failed (exit %d): %s"):format(obj.code, obj.stderr or ""), vim.log.levels.ERROR)
+			end)
 		end
-	)
+	end)
 end
 
 --- Run a command in Snacks floating terminal.
