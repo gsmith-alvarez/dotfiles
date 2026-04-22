@@ -26,7 +26,7 @@ local lsp_attach = function(args)
 	-- Highlights all instances of the symbol under the cursor.
 	if client:supports_method("textDocument/documentHighlight") then
 		vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-			buffer = args.buf,
+			buf = args.buf,
 			callback = function()
 				if vim.fn.mode() ~= "i" then
 					vim.lsp.buf.clear_references()

@@ -41,9 +41,12 @@ M.on_filetype = function(ft, f)
 	pacer_logic("filetype:" .. ft, f)
 end
 
-if package.loaded["mini.misc"] then
-	misc.setup_auto_root()
-end
+	-- Deferred to avoid conflicts with :restart process handover
+	vim.schedule(function()
+		if package.loaded["mini.misc"] then
+			misc.setup_auto_root()
+		end
+	end)
 
 -- [ 2. IMMEDIATE SETUP (M.now) ]
 -- Critical UI components and theme that should be loaded during startup.
