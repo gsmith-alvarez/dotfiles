@@ -178,6 +178,7 @@ snacks.setup({
 		},
 	},
 	scratch = { enabled = true },
+	-- PROF=1 is what I have it set to
 	profiler = { enabled = true },
 	toggle = { enabled = true },
 	zen = { enabled = true },
