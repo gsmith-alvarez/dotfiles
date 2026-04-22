@@ -96,6 +96,10 @@ M.later(function()
 	Config.safe_require("mini.comment").setup()
 	Config.safe_require("mini.operators").setup()
 	Config.safe_require("mini.pairs").setup()
+	Config.safe_require("mini.align").setup()
+	Config.safe_require("mini.git").setup()
+	Config.safe_require("mini.trailspace").setup()
+	Config.safe_require("mini.visits").setup()
 	Config.safe_require("mini.surround").setup({
 		mappings = {
 			add = "gsa", -- Add surrounding in Normal and Visual modes

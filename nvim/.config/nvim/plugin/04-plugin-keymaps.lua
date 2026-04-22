@@ -102,6 +102,21 @@ end, "Find: Resume Last Search")
 u.nmap("<leader>fb", function()
 	picker.buffers()
 end, "Find: Buffers")
+u.nmap("<leader>fv", function()
+	local visits = Config.safe_require("mini.visits")
+	local paths = visits.list_paths()
+	if #paths == 0 then
+		vim.notify("No visits recorded", vim.log.levels.INFO)
+		return
+	end
+	picker.pick({
+		title = "Visits",
+		items = vim.tbl_map(function(p)
+			return { text = p, file = p }
+		end, paths),
+		format = "file",
+	})
+end, "Find: Recent Visits")
 u.nmap("<leader>ff", function()
 	picker.files()
 end, "Find: Files")
@@ -234,6 +249,13 @@ end, "Git: Open Lazygit")
 u.map({ "n", "v" }, "<leader>gB", function()
 	snacks.gitbrowse()
 end, "Git: Open Browser")
+-- Git Object / History
+u.nmap("<leader>gO", function()
+	require("mini.git").show_at_cursor()
+end, "Git: Show Object at Cursor")
+u.map({ "n", "v" }, "<leader>gH", function()
+	require("mini.git").show_range_history()
+end, "Git: Show Range History")
 -- Git Log
 u.nmap("<leader>gl", function()
 	picker.git_log()
@@ -274,6 +296,10 @@ end, "Scratch: Select Buffer")
 u.nmap("<leader>ps", function()
 	snacks.profiler.scratch()
 end, "Profiler: Open Scratch Buffer")
+
+u.nmap("<leader>ct", function()
+	require("mini.trailspace").trim()
+end, "Code: Trim Trailing Whitespace")
 
 -- 8. [ NAVIGATION & LSP ]
 -- gp* = Picker variants (mirrors gr* builtins)

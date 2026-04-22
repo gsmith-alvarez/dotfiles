@@ -22,13 +22,19 @@ mini.later(function()
     { "<leader>e", group = "Explore", icon = icons.get("directory", "index") },
     { "<leader>f", group = "Find", icon = icons.get("lsp", "reference") },
     { "<leader>g", group = "Git", icon = icons.get("filetype", "git") },
-    { "<leader>gh", group = "Git Hunk", icon = icons.get("lsp", "event") },
+    { "<leader>gh", group = "Git Hunk",    icon = icons.get("lsp", "event") },
+    { "<leader>gO", desc = "Git: Show Object at Cursor" },
+    { "<leader>gH", desc = "Git: Show Range History", mode = { "n", "v" } },
     { "<leader>o", group = "Obsidian", icon = icons.get("filetype", "markdown") },
     { "<leader>q", group = "Quit/Session", icon = icons.get("os", "exit") },
     { "<leader>p", group = "Profiler", icon = icons.get("lsp", "event") },
     { "<leader>s", group = "Search", icon = icons.get("lsp", "snippet") },
     { "<leader>u", group = "UI", icon = icons.get("lsp", "interface") },
     { "<leader>x", group = "Execute", icon = icons.get("lsp", "method") },
+
+    -- Align (mini.align)
+    { "ga", desc = "Align",              mode = { "n", "x" }, icon = icons.get("lsp", "operator") },
+    { "gA", desc = "Align (with preview)", mode = { "n", "x" }, icon = icons.get("lsp", "operator") },
 
     { "gs", group = "surround", icon = icons.get("lsp", "operator") },
     { "gsa", desc = "Add surrounding", mode = { "n", "x" } },
@@ -72,6 +78,8 @@ mini.later(function()
     },
 
     -- Single Key Overrides
+    { "<leader>ct", desc = "Code: Trim Trailing Whitespace" },
+    { "<leader>fv", desc = "Find: Recent Visits" },
     { "<leader><space>", desc = "Find: Smart Files", icon = icons.get("lsp", "constant") },
     { "<leader>/", desc = "Search: Global Grep", icon = icons.get("lsp", "keyword") },
     { "<leader>n", desc = "Notify: Show History", icon = icons.get("lsp", "event") },
