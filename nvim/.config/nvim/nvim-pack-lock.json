@@ -44,6 +44,10 @@
       "rev": "38ede119924ee70fe49d51f22c140f85b1c3ccf3",
       "src": "https://plugins.ejri.dev/mise.nvim"
     },
+    "nvim": {
+      "rev": "426dbebe06b5c69fd846ceb17b42e12f890aedf1",
+      "src": "https://github.com/catppuccin/nvim"
+    },
     "nvim-bqf": {
       "rev": "c282a62bec6c0621a1ef5132aa3f4c9fc4dcc2c7",
       "src": "https://github.com/kevinhwang91/nvim-bqf"

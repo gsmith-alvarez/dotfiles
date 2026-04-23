@@ -98,6 +98,7 @@ end, "Build LuaSnip")
 
 -- 3. [ PLUGIN SPECIFICATIONS ]
 vim.pack.add({
+	gh("catppuccin/nvim"),
 	gh("echasnovski/mini.nvim"),
 	gh("echasnovski/mini.icons"),
 	gh("folke/snacks.nvim"),

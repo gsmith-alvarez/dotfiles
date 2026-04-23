@@ -309,7 +309,8 @@ u.nmap("<leader>gca", "<Cmd>Git commit --amend<CR>", "Git: Commit Amend")
 u.nmap("<leader>gdd", "<Cmd>Git diff<CR>", "Git: Diff (Workspace)")
 u.nmap("<leader>gdb", "<Cmd>Git diff -- %<CR>", "Git: Diff (Buffer)")
 u.nmap("<leader>gdo", function()
-	require("mini.diff").toggle_overlay()
+	local bufnr = vim.api.nvim_get_current_buf()
+	require("mini.diff").toggle_overlay(bufnr)
 end, "Git: Toggle Diff Overlay")
 
 -- 7. [ TOP-LEVEL UTILS ]
