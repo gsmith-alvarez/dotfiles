@@ -133,9 +133,12 @@ M.later(function()
 	hipatterns.setup({
 		highlighters = {
 			-- Highlight standalone 'FIXME', 'TODO', 'NOTE'
-			fixme = hi_extra.words({ "FIXME", "WIP" }, "MiniHypatternsFixme"),
-			todo = hi_extra.words({ "TODO" }, "MiniHypatternsTodo"),
-			note = hi_extra.words({ "NOTE", "INFO" }, "MiniHypatternsNote"),
+			fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
+			hack  = { pattern = "%f[%w]()HACK()%f[%W]",  group = "MiniHipatternsHack"  },
+			wip   = { pattern = "%f[%w]()WIP()%f[%W]",   group = "MiniHipatternsHack"  },
+			todo  = { pattern = "%f[%w]()TODO()%f[%W]",  group = "MiniHipatternsTodo"  },
+			note  = { pattern = "%f[%w]()NOTE()%f[%W]",  group = "MiniHipatternsNote"  },
+			info  = { pattern = "%f[%w]()INFO()%f[%W]",  group = "MiniHipatternsNote"  },
 
 			-- Highlight hex colors
 			hex_color = hipatterns.gen_highlighter.hex_color(),

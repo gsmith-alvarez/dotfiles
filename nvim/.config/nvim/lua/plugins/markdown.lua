@@ -7,10 +7,13 @@
 
 local M = {}
 
+local mini = Config.safe_require("plugins.mini")
+
 -- -----------------------------------------------------------------------------
 -- 1. [ RENDER-MARKDOWN ]
 -- Must be set up before obsidian to ensure its rendering hooks are in place.
 -- -----------------------------------------------------------------------------
+mini.later(function()
 Config.safe_require("render-markdown").setup({
 	completions = { lsp = { enabled = true } },
 	latex = { enabled = false },
@@ -33,6 +36,8 @@ Config.safe_require("obsidian").setup({
 	-- Disabled in favour of render-markdown.nvim
 	ui = { enabled = false },
 	legacy_commands = false,
+	-- HACK: see completion.lua obsidian providers
+	completion = { blink = false },
 })
 
 Config.safe_require("autolist").setup({
@@ -50,5 +55,6 @@ Config.safe_require("autolist").setup({
 		},
 	},
 })
+end)
 
 return M

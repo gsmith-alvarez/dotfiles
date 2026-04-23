@@ -9,8 +9,12 @@
       "src": "https://github.com/gaoDean/autolist.nvim"
     },
     "blink.cmp": {
-      "rev": "90d14caca4ae557665ab105080c27d5f289a2e30",
+      "rev": "61a1391399076ca37f06f63cca0a8fe22b267463",
       "src": "https://github.com/saghen/blink.cmp"
+    },
+    "blink.lib": {
+      "rev": "4b9a304a1d715c180c8a0d1db7b76a8c6868ed8f",
+      "src": "https://github.com/saghen/blink.lib"
     },
     "dropbar.nvim": {
       "rev": "ce202248134e3949aac375fd66c28e5207785b10",
@@ -57,7 +61,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
     "obsidian.nvim": {
-      "rev": "325a83ae6f410b5087af4fa912950671be8b271b",
+      "rev": "af9857e4993e0adddb897f09c2805b44a0d913ea",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim"
     },
     "quicker.nvim": {
