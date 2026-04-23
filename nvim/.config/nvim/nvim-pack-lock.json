@@ -72,6 +72,10 @@
       "rev": "d67113f11384c0dad96fced2f7b91f1fc811e97f",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
+    "sigils.nvim": {
+      "rev": "a3a1fcf86be425a6fd68a35c82d79b5599fd965b",
+      "src": "https://github.com/gsmith-alvarez/sigils.nvim"
+    },
     "snacks.nvim": {
       "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
       "src": "https://github.com/folke/snacks.nvim"

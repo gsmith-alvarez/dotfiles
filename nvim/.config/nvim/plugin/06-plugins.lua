@@ -12,5 +12,6 @@ local plugin_modules = {
 	"plugins.which-key",
 	"plugins.menu",
 	"plugins.quickfix",
+	"plugins.navigation",
 }
 Config.safe_require(plugin_modules, "PLUGIN")
