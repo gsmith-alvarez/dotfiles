@@ -9,11 +9,11 @@
       "src": "https://github.com/gaoDean/autolist.nvim"
     },
     "blink.cmp": {
-      "rev": "fd0fe1ad450a407be34d18642784c71d3ee48d19",
+      "rev": "136acdc2fee92d3d20a6b1a6b35ed84e3fd7447f",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.lib": {
-      "rev": "1c9dfb261b8be35f689c6d83dfd3e92b7f59ecf8",
+      "rev": "ef9437e736991500b6b07ee627fa2b128016d97b",
       "src": "https://github.com/saghen/blink.lib"
     },
     "dropbar.nvim": {

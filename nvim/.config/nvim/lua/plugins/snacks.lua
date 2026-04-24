@@ -51,32 +51,19 @@ M.resolve_youtube = function(video_id)
 end
 
 --- Resolve Obsidian attachments to absolute local paths for image rendering.
---- @param file string Current buffer file path.
+--- @param path string Current buffer file path.
 --- @param src string Raw markdown image/link source.
 --- @return string|nil resolved_path Absolute resolved attachment path.
-M.resolve_obsidian = function(file, src)
+M.resolve_obsidian = function(path, src)
 	local obsidian = Config.safe_require("obsidian")
-	if not obsidian or not (_G.Obsidian and _G.Obsidian.workspace) then
+	if not obsidian then
 		return
 	end
 
 	local api = obsidian.api
-	if not api.path_is_note(file) then
-		return
+	if api.path_is_note(path) then
+		return api.resolve_attachment_path(src)
 	end
-
-	local resolved = api.resolve_attachment_path(src)
-	if resolved and vim.fn.filereadable(resolved) == 1 then
-		return resolved
-	end
-
-	local found = vim.fs.find(vim.fs.basename(src), {
-		path = tostring(_G.Obsidian.workspace.root),
-		type = "file",
-		limit = 1,
-	})
-
-	return found and found[1] or nil
 end
 
 -- [[ GLOBAL DEBUG HELPERS ]]
@@ -137,8 +124,7 @@ snacks.setup({
 				return M.resolve_youtube(video_id)
 			end
 
-			local clean_src = src:gsub("^%[%[", ""):gsub("%]%]$", ""):gsub("|.*$", "")
-			return M.resolve_obsidian(file, clean_src)
+			return M.resolve_obsidian(file, src)
 		end,
 	},
 	lazygit = { enabled = true },

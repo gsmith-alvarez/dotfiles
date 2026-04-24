@@ -36,8 +36,18 @@ mini.later(function()
 		-- Disabled in favour of render-markdown.nvim
 		ui = { enabled = false },
 		legacy_commands = false,
-		-- HACK: see completion.lua obsidian providers
-		completion = { blink = false },
+		picker = {
+			name = "snacks.pick",
+		},
+		completion = { blink = true },
+		attachments = {
+			---@param path obsidian.Path
+			img_text_func = function(path)
+				local name = vim.fs.basename(tostring(path))
+				local encoded_name = require("obsidian.util").urlencode(name)
+				return string.format("![%s](%s)", name, encoded_name)
+			end,
+		},
 	})
 
 	Config.safe_require("autolist").setup({

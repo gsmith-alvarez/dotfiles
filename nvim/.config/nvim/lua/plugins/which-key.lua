@@ -9,7 +9,7 @@ local mini = Config.safe_require("plugins.mini")
 local icons = Config.safe_require("mini.icons")
 local wk = Config.safe_require("which-key")
 
-mini.later(function()
+mini.now(function()
 	wk.setup({
 		preset = "helix",
 	})

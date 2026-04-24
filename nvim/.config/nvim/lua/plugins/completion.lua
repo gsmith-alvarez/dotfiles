@@ -135,45 +135,9 @@ mini.later(function()
 				-- HACK: blink.cmp@61a1391 defines add_source_provider() calling validate_provider which
 				-- doesn't exist in config/sources.lua. Declared here statically to bypass that broken path.
 				-- When fixed, remove these three providers and set completion.blink = true in obsidian setup.
-				obsidian = {
-					name = "obsidian",
-					module = "obsidian.completion.sources.blink.refs",
-					async = true,
-					opts = {},
-					enabled = function()
-						return vim.bo.filetype == "markdown"
-							and vim.bo.buftype ~= "prompt"
-							and vim.b.completion ~= false
-					end,
-				},
-				obsidian_new = {
-					name = "obsidian_new",
-					module = "obsidian.completion.sources.blink.new",
-					async = true,
-					opts = {},
-					enabled = function()
-						return vim.bo.filetype == "markdown"
-							and vim.bo.buftype ~= "prompt"
-							and vim.b.completion ~= false
-					end,
-				},
-				obsidian_tags = {
-					name = "obsidian_tags",
-					module = "obsidian.completion.sources.blink.tags",
-					async = true,
-					opts = {},
-					enabled = function()
-						return vim.bo.filetype == "markdown"
-							and vim.bo.buftype ~= "prompt"
-							and vim.b.completion ~= false
-					end,
-				},
 			},
 		},
 		completion = {
-			trigger = {
-				show_on_insert_on_trigger_character = true,
-			},
 			documentation = {
 				auto_show = true,
 				auto_show_delay_ms = 200,
@@ -217,5 +181,3 @@ mini.later(function()
 		},
 	})
 end)
-
-return M
