@@ -9,11 +9,11 @@
       "src": "https://github.com/gaoDean/autolist.nvim"
     },
     "blink.cmp": {
-      "rev": "136acdc2fee92d3d20a6b1a6b35ed84e3fd7447f",
+      "rev": "e1dbca9ea1d8dc7a83e27a52bbd990bd717e54a6",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.lib": {
-      "rev": "ef9437e736991500b6b07ee627fa2b128016d97b",
+      "rev": "dda2666685a5ac3598166577d2e34f1fff6b1637",
       "src": "https://github.com/saghen/blink.lib"
     },
     "dropbar.nvim": {
@@ -37,7 +37,7 @@
       "src": "https://github.com/echasnovski/mini.icons"
     },
     "mini.nvim": {
-      "rev": "5849ef04c32a6a8e55957b946c0a275801d87530",
+      "rev": "4f6f84a96b076747b736d100388a8d7844771d7d",
       "src": "https://github.com/echasnovski/mini.nvim"
     },
     "mise.nvim": {
@@ -53,7 +53,7 @@
       "src": "https://github.com/kevinhwang91/nvim-bqf"
     },
     "nvim-lspconfig": {
-      "rev": "81878de76c0de4ce289513734ad80c31ec7871b8",
+      "rev": "8fde495949782bb61c2605174e231d145a048d8c",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {

@@ -47,34 +47,8 @@ mini.now(function()
 		{ "<leader>v", group = "Visits", icon = icons.get("lsp", "reference") },
 		{ "<leader>vp", group = "Visits: Pick", icon = icons.get("lsp", "keyword") },
 		{ "<leader>vl", group = "Visits: Label", icon = icons.get("lsp", "string") },
-
-		-- Align (mini.align)
-		{ "ga", desc = "Align", mode = { "n", "x" }, icon = icons.get("lsp", "operator") },
-		{ "gA", desc = "Align (with preview)", mode = { "n", "x" }, icon = icons.get("lsp", "operator") },
-
-		{ "gs", group = "surround", icon = icons.get("lsp", "operator") },
-		{ "gsa", desc = "Add surrounding", mode = { "n", "x" } },
-		{ "gsd", desc = "Delete surrounding" },
-		{ "gsr", desc = "Replace surrounding" },
-		{ "gsf", desc = "Find right surrounding" },
-		{ "gsF", desc = "Find left surrounding" },
-		{ "gsh", desc = "Highlight surrounding" },
-		{ "gsn", desc = "Update n_lines" },
-
-		-- Bracket Navigation (mini.bracketed)
-		{ "[", group = "prev", icon = icons.get("lsp", "variable") },
-		{ "]", group = "next", icon = icons.get("lsp", "variable") },
-		{ "g", group = "goto", icon = icons.get("lsp", "method") },
-		{ "z", group = "fold", icon = icons.get("lsp", "operator") },
-		{ "[b", desc = "Buffer" },
-		{ "]b", desc = "Buffer" },
-		{ "[d", desc = "Diagnostic" },
-		{ "]d", desc = "Diagnostic" },
-		{ "[f", desc = "File" },
-		{ "]f", desc = "File" },
-		{ "[q", desc = "Quickfix" },
-		{ "]q", desc = "Quickfix" },
-
+		{ "gp", group = "LSP: Picker", icon = icons.get("lsp", "keyword") },
+		{ "gs", group = "Sort/Surrond", icon = "󱄽" },
 		-- Expanders for built-in info
 		{
 			"<leader>b",
@@ -91,34 +65,6 @@ mini.now(function()
 			expand = function()
 				return require("which-key.extras").expand.win()
 			end,
-		},
-
-		-- Single Key Overrides
-		{ "<leader>ct", desc = "Code: Trim Trailing Whitespace" },
-		{ "<leader>fb", desc = "Find: Buffers" },
-		{ "<leader>fff", desc = "Find: Files" },
-		{ "<leader>ffg", desc = "Find: Git Files" },
-		{ "<leader>ffp", desc = "Find: Projects" },
-		{ "<leader>ffz", desc = "Find: Zoxide Path" },
-		{ "<leader>ffv", desc = "Find: Recent Visits" },
-		{ "<leader>fhs", desc = "Find: Search History" },
-		{ "<leader>fhc", desc = "Find: Command History" },
-		{ "<leader>fhr", desc = "Find: Resume Last Search" },
-		{ "<leader><space>", desc = "Find: Smart Files", icon = icons.get("lsp", "constant") },
-		{ "<leader>/", desc = "Search: Global Grep", icon = icons.get("lsp", "keyword") },
-		{ "<leader>n", desc = "Notify: Show History", icon = icons.get("lsp", "event") },
-		{ "<leader>.", desc = "Scratch: Toggle Buffer", icon = icons.get("lsp", "snippet") },
-		{ "<leader>S", desc = "Scratch: Select Buffer", icon = icons.get("lsp", "snippet") },
-		{ "gx", desc = "Open with system app", icon = icons.get("lsp", "keyword") },
-
-		-- Global/Local help
-		{
-			"<leader>?",
-			function()
-				wk.show({ global = false })
-			end,
-			desc = "Buffer Local Keymaps",
-			icon = icons.get("file", "info"),
 		},
 
 		-- Text Objects (mini.ai support)
@@ -153,79 +99,6 @@ mini.now(function()
 			{ "aa", desc = "argument" },
 			{ "ia", desc = "argument" },
 		},
-		-- Buffer sub-mappings (alongside expander)
-		{ "<leader>ba", desc = "Buffer: Alternate" },
-		{ "<leader>bs", desc = "Buffer: Scratch" },
-		{ "<leader>bd", desc = "Buffer: Delete" },
-		{ "<leader>bD", desc = "Buffer: Delete!" },
-		{ "<leader>bw", desc = "Buffer: Wipeout" },
-		{ "<leader>bW", desc = "Buffer: Wipeout!" },
-
-		-- Find Group Sub-mappings
-		{ "<leader>fee", desc = "Explore: Open Directory (CWD)" },
-		{ "<leader>fef", desc = "Explore: Open File Directory" },
-		{ "<leader>fep", desc = "Explore: Open Plugins Directory" },
-		{ "<leader>fgg", desc = "Search: Multi Grep" },
-		{ "<leader>fgw", desc = "Search: Word (CWD)" },
-		{ "<leader>fgt", desc = "Search: Find TODO/FIXME/NOTE" },
-		{ "<leader>fgc", desc = "Search: Clipboard" },
-
-		-- Search Group Sub-mappings
-		{ "<leader>sci", desc = "Config: Edit init.lua" },
-		{ "<leader>scc", desc = "Config: Find File" },
-		{ "<leader>sck", desc = "Config: Search Keymaps" },
-		{ "<leader>scp", desc = "Config: Find Plugin Source" },
-		{ "<leader>sco", desc = "Config: Edit Options" },
-		{ "<leader>sss", desc = "Search: Find Document Symbols" },
-		{ "<leader>ssS", desc = "Search: Find Workspace Symbols" },
-		{ "<leader>sst", desc = "Search: Treesitter" },
-		{ "<leader>ssb", desc = "Search: Pick Breadcrumb" },
-		{ "<leader>sdw", desc = "Search: Find Workspace Diagnostics" },
-		{ "<leader>sdb", desc = "Search: Find Buffer Diagnostics" },
-		{ "<leader>sih", desc = "Search: Help Tags" },
-		{ "<leader>siH", desc = "Search: Highlight Groups" },
-		{ "<leader>siu", desc = "Search: Undo History" },
-		{ "<leader>sin", desc = "Search: Notifications" },
-		{ "<leader>sim", desc = "Search: Manuals" },
-		{ "<leader>sii", desc = "Search: Icons" },
-		{ "<leader>siq", desc = "Search: Quickfix List" },
-		{ "<leader>sil", desc = "Search: Location List" },
-		{ "<leader>siM", desc = "Search: Marks" },
-		{ "<leader>sij", desc = "Search: Jumps" },
-
-		-- UI / Toggles
-		{ "<leader>uq", desc = "List: Toggle Quickfix" },
-		{ "<leader>ul", desc = "List: Toggle Location" },
-		{ "<leader>un", desc = "Notify: Show History" },
-
-		-- Git: Sub-groups
-		{ "<leader>gcc", desc = "Git: Commit" },
-		{ "<leader>gca", desc = "Git: Commit Amend" },
-		{ "<leader>gdd", desc = "Git: Diff (Workspace)" },
-		{ "<leader>gdb", desc = "Git: Diff (Buffer)" },
-		{ "<leader>gdo", desc = "Git: Toggle Diff Overlay" },
-		{ "<leader>gll", desc = "Git: Lazygit Log" },
-		{ "<leader>glf", desc = "Git: Lazygit Log (File)" },
-		{ "<leader>glp", desc = "Git: Picker Log (All)" },
-		{ "<leader>glb", desc = "Git: Picker Log (Buffer)" },
-		{ "<leader>glh", desc = "Git: Show Range History", mode = { "n", "v" } },
-		{ "<leader>gbb", desc = "Git: Show Branches" },
-		{ "<leader>gbw", desc = "Git: Open Browser", mode = { "n", "v" } },
-
-		-- Code / LSP (under existing <leader>c group)
-		{ "<leader>ca", desc = "Code: Action", mode = { "n", "x" } },
-		{ "<leader>cd", desc = "Code: Diagnostic Popup" },
-		{ "<leader>cf", desc = "Code: Format", mode = { "n", "x" } },
-		{ "<leader>ch", desc = "Code: Hover" },
-		{ "<leader>cl", desc = "Code: CodeLens" },
-		{ "<leader>cr", desc = "Code: Rename" },
-		{ "<leader>cgd", desc = "LSP: Definition" },
-		{ "<leader>cgi", desc = "LSP: Implementation" },
-		{ "<leader>cgr", desc = "LSP: References" },
-		{ "<leader>cgt", desc = "LSP: Type Definition" },
-		{ "<leader>cww", desc = "Code: Trim Trailing Whitespace" },
-		{ "<leader>cxx", desc = "Code: Smart Run" },
-		{ "<leader>cxw", desc = "Code: Smart Run (watch)" },
 	})
 
 	vim.keymap.set("n", "<C-w><space>", function()

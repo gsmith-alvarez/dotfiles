@@ -124,13 +124,7 @@ vim.pack.add({
 
 -- 4. [ SELF-HEALING STARTUP CHECK ]
 local data_site = vim.fn.stdpath("data") .. "/site/pack/core/opt"
-local blink_path = data_site .. "/blink.cmp"
 local luasnip_path = data_site .. "/LuaSnip"
-
-local site_lib = vim.fn.stdpath("data") .. "/site/lib"
-if vim.fn.isdirectory(blink_path) == 1 and vim.fn.glob(site_lib .. "/libblink_cmp_fuzzy*") == "" then
-	build_blink()
-end
 
 if
 	vim.fn.isdirectory(luasnip_path) == 1
