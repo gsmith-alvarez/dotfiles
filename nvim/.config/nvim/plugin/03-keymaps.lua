@@ -75,7 +75,7 @@ u.nmap("]q", vim.cmd.cnext, "Quickfix: Go to Next Item")
 u.map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", "File: Save")
 u.nmap("<leader>bn", "<cmd>enew<CR>", "Buffer: Create New")
 u.nmap("<leader>qq", "<cmd>qa<CR>", "Session: Exit Neovim")
-u.nmap("U", "<cmd>Undotree<CR>", "Tool: Open Undotree")
+u.nmap("<A-u>", "<cmd>Undotree<CR>", "Tool: Open Undotree")
 
 u.imap("<A-j>", "<esc><cmd>m .+1<cr>==gi", "Edit: Move Line Down")
 u.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", "Edit: Move Line Up")
