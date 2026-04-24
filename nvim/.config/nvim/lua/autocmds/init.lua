@@ -4,7 +4,7 @@
 -- =============================================================================
 
 local M = {}
-local utils = Config.safe_require "core.utils"
+local utils = Config.safe_require("core.utils")
 if not utils then
 	return
 end

@@ -9,11 +9,11 @@
       "src": "https://github.com/gaoDean/autolist.nvim"
     },
     "blink.cmp": {
-      "rev": "61a1391399076ca37f06f63cca0a8fe22b267463",
+      "rev": "fd0fe1ad450a407be34d18642784c71d3ee48d19",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.lib": {
-      "rev": "4b9a304a1d715c180c8a0d1db7b76a8c6868ed8f",
+      "rev": "1c9dfb261b8be35f689c6d83dfd3e92b7f59ecf8",
       "src": "https://github.com/saghen/blink.lib"
     },
     "dropbar.nvim": {
@@ -53,7 +53,7 @@
       "src": "https://github.com/kevinhwang91/nvim-bqf"
     },
     "nvim-lspconfig": {
-      "rev": "e146efacbafed3789ac568abcc5a981c5decaa58",
+      "rev": "81878de76c0de4ce289513734ad80c31ec7871b8",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -77,7 +77,7 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "sigils.nvim": {
-      "rev": "a3a1fcf86be425a6fd68a35c82d79b5599fd965b",
+      "rev": "93e010cbe584c3ac23a67835615e7ec171b2034e",
       "src": "https://github.com/gsmith-alvarez/sigils.nvim"
     },
     "snacks.nvim": {

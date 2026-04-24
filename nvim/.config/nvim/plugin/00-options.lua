@@ -152,4 +152,7 @@ set.exrc = true
 -- Keep markdown indentation/list behavior under user control.
 vim.g.markdown_recommended_style = 0
 
+-- Getting rid of LSP duplication as we keep it in mini statusline
+set.messagesopt:remove("progress:c")
+
 return M

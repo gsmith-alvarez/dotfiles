@@ -64,6 +64,29 @@ local lsp_attach = function(args)
 		u.nmap("<leader>cl", vim.lsp.codelens.run, "LSP: CodeLens Action", { buffer = args.buf })
 		vim.lsp.codelens.enable(true, { bufnr = args.buf })
 	end
+
+	-- [[ LSP Loading Status]]
+	vim.ui.progress_status()
+	vim.api.nvim_create_autocmd("LspProgress", {
+		callback = function(ev)
+			local value = ev.data.params.value
+			vim.api.nvim_echo({ { value.message or "" } }, false, {
+				id = "lsp." .. ev.data.client_id,
+				kind = "progress",
+				source = "vim.lsp",
+				title = value.title,
+				status = value.kind ~= "end" and "running" or "success",
+				percent = value.percentage,
+			})
+		end,
+	})
+
+	-- Redraw statusline whenever progress state changes
+	vim.api.nvim_create_autocmd("Progress", {
+		callback = function()
+			vim.cmd.redrawstatus()
+		end,
+	})
 end
 
 -- [[ Diagnostic Configuration ]]
