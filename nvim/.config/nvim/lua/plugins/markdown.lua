@@ -37,7 +37,7 @@ mini.later(function()
 		ui = { enabled = false },
 		legacy_commands = false,
 		picker = {
-			name = "snacks.pick",
+			name = "snacks",
 		},
 		completion = { blink = true },
 		attachments = {
