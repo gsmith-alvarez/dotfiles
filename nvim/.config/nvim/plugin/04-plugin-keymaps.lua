@@ -87,7 +87,8 @@ local function multigrep(opts)
 	})
 end
 
--- 2. [ FIND (LEADER F) - Files & Patterns ]
+-- 2. [ FIND (LEADER F) - Files & Buffers ]
+-- Everything here results in opening a file or switching buffers.
 -- Fast access
 u.nmap("<leader>fb", function()
 	picker.buffers()
@@ -127,11 +128,13 @@ u.nmap("<leader>ffv", function()
 	})
 end, "Find: Recent Visits")
 
--- Grep Group (<leader>fg)
-u.nmap("<leader>fgg", function()
+-- 3. [ SEARCH (LEADER S) - Content & Internals ]
+-- Everything here searches text, metadata, symbols, or history.
+-- Grep Group (<leader>sg)
+u.nmap("<leader>sG", function()
 	multigrep()
 end, "Search: Multi Grep")
-u.nmap("<leader>fgw", function()
+u.nmap("<leader>sgw", function()
 	local word = vim.fn.expand("<cword>")
 	if word == nil or word == "" then
 		return
@@ -143,41 +146,40 @@ u.nmap("<leader>fgw", function()
 		dirs = { vim.fn.expand("%:p:h") },
 	})
 end, "Search: Word (CWD)")
-u.nmap("<leader>fgt", function()
+u.nmap("<leader>sgt", function()
 	picker.grep({ search = "TODO|FIXME|NOTE|WIP|INFO" })
 end, "Search: Find TODO/FIXME/NOTE")
-u.nmap("<leader>fgc", function()
+u.nmap("<leader>sgc", function()
 	picker.cliphist()
 end, "Search: Clipboard")
 
--- History Group (<leader>fh)
-u.nmap("<leader>fhs", function()
+-- History Group (<leader>sh)
+u.nmap("<leader>shs", function()
 	picker.search_history()
-end, "Find: Search History")
-u.nmap("<leader>fhc", function()
+end, "Search: Search History")
+u.nmap("<leader>shc", function()
 	picker.command_history()
-end, "Find: Command History")
-u.nmap("<leader>fhr", function()
+end, "Search: Command History")
+u.nmap("<leader>shr", function()
 	picker.resume()
-end, "Find: Resume Last Search")
+end, "Search: Resume Last Search")
 
--- 3. [ SEARCH (LEADER S) - Metadata & Config ]
--- Config Group (<leader>sc)
-u.nmap("<leader>sci", "<Cmd>edit $MYVIMRC<CR>", "Config: Edit init.lua")
-u.nmap("<leader>scc", function()
+-- Config Group (<leader>fc)
+u.nmap("<leader>fci", "<Cmd>edit $MYVIMRC<CR>", "Config: Edit init.lua")
+u.nmap("<leader>fcc", function()
 	picker.files({ cwd = vim.fn.stdpath("config") })
 end, "Config: Find File")
-u.nmap("<leader>sck", function()
+u.nmap("<leader>sK", function()
 	picker.keymaps({ layout = { preset = "vscode" } })
-end, "Config: Search Keymaps")
-u.nmap("<leader>scp", function()
+end, "Search: Search Keymaps")
+u.nmap("<leader>fcp", function()
 	picker.files({
 		title = "Plugin Source",
 		cwd = vim.fn.stdpath("data") .. "/site/pack/core/opt",
 	})
 end, "Config: Find Plugin Source")
 local cfg = vim.fn.stdpath("config")
-u.nmap("<leader>sco", "<Cmd>edit " .. cfg .. "/plugin/00-options.lua<CR>", "Config: Edit Options")
+u.nmap("<leader>fco", "<Cmd>edit " .. cfg .. "/plugin/00-options.lua<CR>", "Config: Edit Options")
 
 -- Symbols Group (<leader>ss)
 u.nmap("<leader>sss", function()

@@ -25,7 +25,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "latex-tools.nvim": {
-      "rev": "5a7fcc5c6ca86578157f686c55247a7ff4a0ef20",
+      "rev": "f00aa5e7b41345b38c2b8590bada0bedb7a44f49",
       "src": "https://github.com/gsmith-alvarez/latex-tools.nvim"
     },
     "lazydev.nvim": {
