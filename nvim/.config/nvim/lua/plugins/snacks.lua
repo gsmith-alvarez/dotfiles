@@ -8,6 +8,7 @@ local M = {}
 -- 1. [ INITIALIZATION ]
 -- Load snacks immediately to ensure global helpers and 'get' functions
 -- are available for early-attach events (LSP, BufRead).
+-- Includes custom resolution logic for images (YouTube thumbnails and Obsidian attachments).
 local snacks = Config.safe_require("snacks")
 
 local youtube_cache_dir = vim.fn.stdpath("state") .. "/youtube_thumbnails"

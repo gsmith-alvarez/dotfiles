@@ -1,6 +1,8 @@
 -- =============================================================================
 -- [ CORE UTILS ]
 -- Shared helper functions used across commands, autocmds, and keymaps.
+-- Includes the 'safe_require' engine that prevents a single failing module
+-- from breaking the entire configuration.
 -- =============================================================================
 
 local M = {}

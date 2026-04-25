@@ -7,6 +7,8 @@ local M = {}
 
 -- [ 1. MINI.MISC & PACER SETUP ]
 -- 'mini.misc' provides the `safely` function used for deferred loading.
+-- We use a "pacer" pattern (now/later) to optimize startup time by deferring
+-- non-critical plugin initialization.
 local misc = Config.safe_require("mini.misc")
 
 local function pacer_logic(mode, f)
