@@ -367,12 +367,12 @@ u.nmap("<leader>cgt", function()
 end, "LSP: Type Definition")
 
 -- Utils Group (<leader>cw)
-u.nmap("<leader>cww", function()
+u.nmap("<leader>cw", function()
 	require("mini.trailspace").trim()
 end, "Code: Trim Trailing Whitespace")
 
 -- Execute Group (<leader>cx)
-u.nmap("<leader>cxx", "<Cmd>Run<CR>", "Code: Smart Run")
+u.nmap("<leader>cX", "<Cmd>Run<CR>", "Code: Smart Run")
 u.nmap("<leader>cxw", "<Cmd>RunWatch<CR>", "Code: Smart Run (watch)")
 
 -- 7. [ PICKER VARIANTS (GP*) ]
