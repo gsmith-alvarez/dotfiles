@@ -25,7 +25,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "latex-tools.nvim": {
-      "rev": "ce770d52d453ef3ab995743a5386b74c88ad9ce9",
+      "rev": "5a7fcc5c6ca86578157f686c55247a7ff4a0ef20",
       "src": "https://github.com/gsmith-alvarez/latex-tools.nvim"
     },
     "lazydev.nvim": {
@@ -77,7 +77,7 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "sigils.nvim": {
-      "rev": "93e010cbe584c3ac23a67835615e7ec171b2034e",
+      "rev": "e5e34154f212f681db8f9b15e2a43b5f657990e1",
       "src": "https://github.com/gsmith-alvarez/sigils.nvim"
     },
     "snacks.nvim": {

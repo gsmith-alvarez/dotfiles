@@ -89,13 +89,24 @@ local function setup_latex_tools_once()
 	if latex_setup_done then
 		return
 	end
-	Config.safe_require("latex-tools").setup()
+
+	local lt = Config.safe_require("latex-tools")
+	if not lt then
+		return
+	end
+
+	lt.setup({
+		snippets = {
+			filetypes = { "markdown" },
+		},
+	})
+
 	latex_setup_done = true
 end
 
-mini.on_filetype("tex", setup_latex_tools_once)
-mini.on_filetype("plaintex", setup_latex_tools_once)
 mini.on_filetype("markdown", setup_latex_tools_once)
+mini.on_filetype("markdown.mdx", setup_latex_tools_once)
+mini.on_filetype("mdx", setup_latex_tools_once)
 
 -- -----------------------------------------------------------------------------
 -- 2. [ BLINK.CMP ]
@@ -120,8 +131,34 @@ mini.later(function()
 			preset = "super-tab",
 			["<C-l>"] = { "snippet_forward", "accept", "fallback" },
 			["<C-h>"] = { "snippet_backward", "fallback" },
-			["<C-j>"] = { "select_next", "fallback" },
-			["<C-k>"] = { "select_prev", "show_signature", "hide_signature", "fallback" },
+			["<C-j>"] = {
+				function(cmp)
+					if cmp.is_visible() then
+						return cmp.select_next()
+					end
+					local ls = Config.safe_require("luasnip")
+					if ls.choice_active() then
+						ls.change_choice(1)
+						return true
+					end
+				end,
+				"fallback",
+			},
+			["<C-k>"] = {
+				function(cmp)
+					if cmp.is_visible() then
+						return cmp.select_prev()
+					end
+					local ls = Config.safe_require("luasnip")
+					if ls.choice_active() then
+						ls.change_choice(-1)
+						return true
+					end
+				end,
+				"show_signature",
+				"hide_signature",
+				"fallback",
+			},
 		},
 		snippets = { preset = "luasnip" },
 		sources = {
@@ -132,9 +169,6 @@ mini.later(function()
 					module = "lazydev.integrations.blink",
 					score_offset = 100,
 				},
-				-- HACK: blink.cmp@61a1391 defines add_source_provider() calling validate_provider which
-				-- doesn't exist in config/sources.lua. Declared here statically to bypass that broken path.
-				-- When fixed, remove these three providers and set completion.blink = true in obsidian setup.
 			},
 		},
 		completion = {
