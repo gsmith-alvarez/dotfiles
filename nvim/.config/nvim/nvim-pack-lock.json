@@ -25,7 +25,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "latex-tools.nvim": {
-      "rev": "47de3c3e6453ad1777b1a85c8f5648b2de268aee",
+      "rev": "ce770d52d453ef3ab995743a5386b74c88ad9ce9",
       "src": "https://github.com/gsmith-alvarez/latex-tools.nvim"
     },
     "lazydev.nvim": {
@@ -41,8 +41,8 @@
       "src": "https://github.com/echasnovski/mini.nvim"
     },
     "mise.nvim": {
-      "rev": "38ede119924ee70fe49d51f22c140f85b1c3ccf3",
-      "src": "https://plugins.ejri.dev/mise.nvim"
+      "rev": "7207e60c62b20c7ffbe31800e899e2a5cc94e68b",
+      "src": "https://github.com/gsmith-alvarez/mise.nvim"
     },
     "nvim": {
       "rev": "426dbebe06b5c69fd846ceb17b42e12f890aedf1",
