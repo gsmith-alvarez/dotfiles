@@ -126,7 +126,9 @@ local function get_mini_icon(ctx)
 end
 
 mini.later(function()
-	require("blink.cmp").setup({
+	local cmp = Config.safe_require("blink.cmp")
+	cmp.build():wait(60000)
+	cmp.setup({
 		keymap = {
 			preset = "super-tab",
 			["<C-l>"] = { "snippet_forward", "accept", "fallback" },

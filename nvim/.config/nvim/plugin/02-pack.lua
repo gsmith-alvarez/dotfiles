@@ -1,22 +1,15 @@
 -- =============================================================================
 -- [ PLUGIN MANAGEMENT ]
--- Uses Neovim's native 'vim.pack' system to manage and download plugins.
 -- =============================================================================
-
 local M = {}
 local u = require("core.utils")
 
--- Use Snacks for notifications if available, fallback to native
+-- 1. [ HELPER FUNCTIONS ]
 local function notify(msg, level, opts)
 	local snacks = Config.safe_require("snacks")
-	if snacks then
-		snacks.notify(msg, vim.tbl_extend("force", { level = level }, opts or {}))
-	else
-		vim.notify(msg, level, opts)
-	end
+	snacks.notify(msg, vim.tbl_extend("force", { level = level }, opts or {}))
 end
 
--- 1. [ HELPER FUNCTIONS ]
 local function host(domain)
 	return function(repo)
 		return "https://" .. domain .. "/" .. repo
@@ -45,32 +38,11 @@ local function notify_build_failed(name, obj)
 		)
 	end)
 end
-
-local function build_blink()
-	local ok, cmp = pcall(require, "blink.cmp")
-	if not ok then
-		notify("blink.cmp not loadable; skipping build", vim.log.levels.WARN, { title = "plugin/02-pack.lua" })
-		return
-	end
-	notify("Building blink.cmp...", vim.log.levels.INFO, { title = "plugin/02-pack.lua" })
-	local build_ok, err = pcall(function()
-		cmp.build():wait(60000)
-	end)
-	vim.schedule(function()
-		if build_ok then
-			notify("blink.cmp build complete.", vim.log.levels.INFO, { title = "plugin/02-pack.lua" })
-		else
-			notify("blink.cmp build failed: " .. tostring(err), vim.log.levels.ERROR, { title = "plugin/02-pack.lua" })
-		end
-	end)
-end
-
 local function build_luasnip(path)
 	if vim.fn.executable("make") ~= 1 then
 		notify("make not found; skipping LuaSnip build", vim.log.levels.WARN)
 		return
 	end
-
 	notify("Building LuaSnip (jsregexp) in the background...", vim.log.levels.INFO)
 	vim.system({ "make", "install_jsregexp" }, { cwd = path }, function(obj)
 		local ext = get_lib_extension()
@@ -87,11 +59,6 @@ end
 
 -- 2. [ AUTOMATIC POST-INSTALL/UPDATE HOOKS ]
 local build_kinds = { "install", "update" }
-
-u.on_packchanged("blink.cmp", build_kinds, function()
-	build_blink()
-end, "Build blink.cmp")
-
 u.on_packchanged("LuaSnip", build_kinds, function(data)
 	build_luasnip(data.path)
 end, "Build LuaSnip")
@@ -125,7 +92,6 @@ vim.pack.add({
 -- 4. [ SELF-HEALING STARTUP CHECK ]
 local data_site = vim.fn.stdpath("data") .. "/site/pack/core/opt"
 local luasnip_path = data_site .. "/LuaSnip"
-
 if
 	vim.fn.isdirectory(luasnip_path) == 1
 	and vim.fn.filereadable(luasnip_path .. "/deps/luasnip-jsregexp" .. get_lib_extension()) == 0
