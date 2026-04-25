@@ -17,7 +17,7 @@
       "src": "https://github.com/saghen/blink.lib"
     },
     "dropbar.nvim": {
-      "rev": "ce202248134e3949aac375fd66c28e5207785b10",
+      "rev": "f0a42bd92aa647e44221397723453403f5e20f16",
       "src": "https://github.com/Bekaboo/dropbar.nvim"
     },
     "friendly-snippets": {
@@ -25,7 +25,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "latex-tools.nvim": {
-      "rev": "47de3c3e6453ad1777b1a85c8f5648b2de268aee",
+      "rev": "f00aa5e7b41345b38c2b8590bada0bedb7a44f49",
       "src": "https://github.com/gsmith-alvarez/latex-tools.nvim"
     },
     "lazydev.nvim": {
@@ -41,8 +41,8 @@
       "src": "https://github.com/echasnovski/mini.nvim"
     },
     "mise.nvim": {
-      "rev": "38ede119924ee70fe49d51f22c140f85b1c3ccf3",
-      "src": "https://plugins.ejri.dev/mise.nvim"
+      "rev": "1142b06681ce6cb0a0d87ee0269ce5ca709fd164",
+      "src": "https://github.com/gsmith-alvarez/mise.nvim"
     },
     "nvim": {
       "rev": "426dbebe06b5c69fd846ceb17b42e12f890aedf1",
@@ -77,7 +77,7 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "sigils.nvim": {
-      "rev": "93e010cbe584c3ac23a67835615e7ec171b2034e",
+      "rev": "86ba8922e0ab24ea5eaef26260e9aaf6969cbb81",
       "src": "https://github.com/gsmith-alvarez/sigils.nvim"
     },
     "snacks.nvim": {

@@ -18,7 +18,7 @@ vim.env.PATH = vim.fn.expand "~/.local/share/mise/shims" .. ":" .. vim.env.PATH
 -- formatters, and future debugger (DAP) configurations without relying on Mason.
 local ok, mise = pcall(require, "mise")
 if ok then
-	mise.setup { sync = true }
+	mise.setup {}
 end
 
 return M

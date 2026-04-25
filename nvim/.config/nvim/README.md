@@ -15,7 +15,37 @@ Designed for the "Learning-by-Doing" approach to programming:
 
 - **Smart Run:** Custom `:Run` command that detects filetypes and executes scripts in a **Zellij** pane or **Snacks** terminal.
 - **Live Watch:** Integration with `watchexec` via `:Watch` and `:RunWatch` for real-time feedback while scripting.
-- **Academic Stack:** Optimized for LaTeX (Tectonic engine) and Obsidian-style Markdown note-taking, making it a primary tool for engineering coursework.
+
+### Supported Runners
+
+| Language | Default Command / Logic |
+| :--- | :--- |
+| **Python** | `uv run <file>` |
+| **Go** | `go run .` (if go.mod exists) or `go run <file>` |
+| **Rust** | `cargo run` (if Cargo.toml exists) or `rustc` + execution |
+| **Zig** | `zig build run` (if build.zig exists) or `zig run <file>` |
+| **C / C++** | `make` / `cmake` detection; falls back to `zig run` (C23/C++23) |
+| **Lua** | `nvim -l <file>` (Neovim script mode) |
+| **Shell** | `bash <file>` |
+
+## 🎨 UI & Aesthetics
+
+Modern, minimal interface with high-performance components:
+
+- **Breadcrumbs:** Context-aware symbols provided by `dropbar.nvim`.
+- **Icons:** Consistent, lightweight icon set via `mini.icons`.
+- **Markdown:** In-buffer rendering (headings, lists, callouts) via `render-markdown.nvim`.
+- **Notifications:** Sleek, non-blocking alerts via `snacks.notifier`.
+- **Picker:** Fast, unified search and discovery via `snacks.picker`.
+
+## 📓 Academic Stack & Obsidian
+
+Optimized for engineering coursework and knowledge management:
+
+- **Obsidian Integration:** Seamless vault navigation and link management via `obsidian.nvim`.
+- **Image Rendering:** In-editor preview of local attachments and remote YouTube thumbnails.
+- **Math & LaTeX:** Smart rendering of math blocks in Markdown using the Tectonic engine.
+- **Automated Lists:** Smart list continuation and checkbox toggling for efficient note-taking.
 
 ## 📦 Native Plugin Management
 

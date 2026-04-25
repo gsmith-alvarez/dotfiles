@@ -11,7 +11,7 @@ if not u then
 end
 
 -- 1. [ TERMINAL MODE ]
-u.map("t", "<Esc><Esc>", [[<C-\><C-n>]], "Terminal: Exit Mode")
+u.map("t", "<A-Esc>", [[<C-\><C-n>]], "Terminal: Exit Mode")
 
 -- 2. [ WINDOW & SPLIT MANAGEMENT ]
 u.nmap("<leader>wv", "<cmd>vsplit<CR>", "Window: Split Vertically")
