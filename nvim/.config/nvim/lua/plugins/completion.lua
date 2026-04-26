@@ -80,7 +80,7 @@ mini.later(function()
 
 	-- Load custom Lua snippets (for advanced logic)
 	require("luasnip.loaders.from_lua").lazy_load({
-		paths = { vim.fn.stdpath("config") .. "/lua/snippets" },
+		paths = { vim.fn.stdpath("config") .. "/snippets" },
 	})
 end)
 
@@ -164,7 +164,7 @@ mini.later(function()
 		},
 		snippets = { preset = "luasnip" },
 		sources = {
-			default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+			default = { "lazydev", "lsp", "path", "snippets" },
 			providers = {
 				lazydev = {
 					name = "LazyDev",

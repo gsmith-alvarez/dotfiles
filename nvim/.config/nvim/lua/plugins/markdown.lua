@@ -48,6 +48,14 @@ mini.now(function()
 				return string.format("![%s](%s)", name, encoded_name)
 			end,
 		},
+		templates = {
+			-- Path is relative to the workspace path defined above
+			folder = "500-Resources/Templates",
+			date_format = "%Y-%m-%d",
+			time_format = "%H:%M",
+			-- Allow overriding existing variables in the note
+			substitutions = {},
+		},
 	})
 
 	Config.safe_require("autolist").setup({
