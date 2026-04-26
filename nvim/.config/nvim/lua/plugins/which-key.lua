@@ -17,7 +17,6 @@ mini.now(function()
 		-- Top level groups
 		{ "<leader>c", group = "Code", icon = "" },
 		{ "<leader>cg", group = "Code: Go to", icon = icons.get("lsp", "method") },
-		{ "<leader>cw", group = "Code: Utils", icon = icons.get("lsp", "operator") },
 		{ "<leader>cx", group = "Code: Execute", icon = icons.get("lsp", "event") },
 		{ "<leader>d", group = "Debug", icon = icons.get("lsp", "event") },
 		{ "<leader>dp", group = "Debug Profiler", icon = icons.get("lsp", "event") },

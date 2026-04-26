@@ -64,3 +64,7 @@ u.nmap("<CR>", function()
 		require("mini.jump2d").start(require("mini.jump2d").builtin_opts.word_start)
 	end
 end, "Obsidian: Toggle Checkbox, Jump, or Follow Link", { buffer = true })
+
+-- 8. [ Notes Helper ]
+u.imap("<C-b>", "****<Left><Left>", "Markdown: Bolding")
+u.imap("<C-i>", "__<Left>", "Markdown: italics")

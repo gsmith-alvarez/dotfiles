@@ -53,6 +53,9 @@ end, "Syntax highlighting for secret files")
 -- 6. [ WHITESPACE MANAGEMENT ]
 -- Convert tabs to spaces on save to maintain consistent formatting.
 u.autocmd("BufWritePre", "*", "silent! %retab!", "Convert tabs to spaces on save")
+u.autocmd("BufWritePre", "*", function()
+	Config.safe_require("mini.trailspace").trim()
+end, "Trims Trailing Whitesapce")
 -- 7. [ FILESYSTEM HELPERS ]
 -- Automatically create parent directories if they don't exist when saving a file.
 u.autocmd("BufWritePre", "*", function(event)
@@ -60,7 +63,7 @@ u.autocmd("BufWritePre", "*", function(event)
 		return
 	end
 	local file = vim.uv.fs_realpath(event.match) or event.match
-	dir = vim.fn.fnamemodify(file, ":p:h")
+	local dir = vim.fn.fnamemodify(file, ":p:h")
 	if vim.fn.isdirectory(dir) == 0 then
 		vim.fn.mkdir(dir, "p")
 	end

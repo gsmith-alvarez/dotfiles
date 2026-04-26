@@ -138,7 +138,7 @@
 [commands]
 # "Python Environment" = "~/dev/.env/bin/pip install -i https://pypi.python.org/simple -U --upgrade-strategy eager jupyter"
 # "Custom command using interactive shell (unix)" = "-i vim_upgrade"
-"Nightly Nvim" = "cd ~/source/neovim && git fetch --prune && git reset --hard origin/master && rm -rf build && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install"
+"Nightly Nvim" = "cd ~/source/neovim && git fetch --prune && git reset --hard origin/master && sudo rm -rf build .deps && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install"
 "Hermes Update" = "hermes update"
 
 [python]

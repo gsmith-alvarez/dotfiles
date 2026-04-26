@@ -38,8 +38,6 @@ if status is-interactive
     abbr -a mv "mv -i"
     abbr -a mkdir "mkdir -p"
     abbr -a v nvim
-    abbr -a copy wl-copy
-    abbr -a paste wl-paste
     abbr -a ch "cliphist list | fzf | cliphist decode | wl-copy"
 
     # eza - ls
