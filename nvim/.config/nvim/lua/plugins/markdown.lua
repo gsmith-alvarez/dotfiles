@@ -39,8 +39,7 @@ mini.later(function()
 		picker = {
 			name = "snacks",
 		},
-		-- blink sources are declared manually in plugins/completion.lua
-		-- to avoid obsidian's inject_sources() breaking with newer blink.cmp
+		-- blink sources declared manually in plugins/completion.lua
 		completion = { blink = false },
 		attachments = {
 			---@param path obsidian.Path
@@ -51,6 +50,18 @@ mini.later(function()
 			end,
 		},
 	})
+
+	-- mini.later() runs after VimEnter, so BufEnter has already fired for any
+	-- files opened at startup. Manually start the obsidian LSP for those buffers
+	-- so they don't miss the BufEnter autocmd obsidian just registered.
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_is_valid(buf) then
+			local ft = vim.bo[buf].filetype
+			if ft == "markdown" or ft == "quarto" then
+				require("obsidian.lsp").start(buf)
+			end
+		end
+	end
 
 	Config.safe_require("autolist").setup({
 		lists = {
