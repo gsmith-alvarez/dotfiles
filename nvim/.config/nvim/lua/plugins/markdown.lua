@@ -13,7 +13,7 @@ local mini = Config.safe_require("plugins.mini")
 -- 1. [ RENDER-MARKDOWN ]
 -- Must be set up before obsidian to ensure its rendering hooks are in place.
 -- -----------------------------------------------------------------------------
-mini.later(function()
+mini.now(function()
 	Config.safe_require("render-markdown").setup({
 		completions = { lsp = { enabled = true } },
 		latex = { enabled = false },
@@ -37,7 +37,7 @@ mini.later(function()
 		ui = { enabled = false },
 		legacy_commands = false,
 		picker = {
-			name = "snacks",
+			name = "snacks.pick",
 		},
 		completion = { blink = true },
 		attachments = {
