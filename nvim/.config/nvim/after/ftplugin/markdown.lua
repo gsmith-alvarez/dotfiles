@@ -20,7 +20,22 @@ u.nmap("<leader>oa", function()
 end, "Obsidian: Smart Action", { buffer = true, expr = true })
 
 -- 2. [ NAVIGATION & LINKS ]
-u.nmap("<leader>of", "<cmd>Obsidian follow_link tab<CR>", "Obsidian: Follow Link (New Tab)", { buffer = true })
+-- Open in new tab via LSP definition with a custom on_list handler,
+-- since obsidian.nvim does not have a built-in 'tab' open strategy.
+u.nmap("<leader>of", function()
+	vim.lsp.buf.definition({
+		on_list = function(options)
+			if #options.items == 0 then
+				return
+			end
+			local item = options.items[1]
+			local fname = item.filename or vim.uri_to_fname(item.uri or "")
+			if fname ~= "" then
+				vim.cmd("tabedit " .. vim.fn.fnameescape(fname))
+			end
+		end,
+	})
+end, "Obsidian: Follow Link (New Tab)", { buffer = true })
 u.nmap("<leader>ov", "<cmd>Obsidian follow_link vsplit<CR>", "Obsidian: Follow Link (V-Split)", { buffer = true })
 u.nmap("<leader>oh", "<cmd>Obsidian follow_link hsplit<CR>", "Obsidian: Follow Link (H-Split)", { buffer = true })
 u.nmap("<leader>oc", "<cmd>Obsidian toc<CR>", "Obsidian: Contents (TOC)", { buffer = true })

@@ -39,7 +39,9 @@ mini.later(function()
 		picker = {
 			name = "snacks",
 		},
-		completion = { blink = true },
+		-- blink sources are declared manually in plugins/completion.lua
+		-- to avoid obsidian's inject_sources() breaking with newer blink.cmp
+		completion = { blink = false },
 		attachments = {
 			---@param path obsidian.Path
 			img_text_func = function(path)

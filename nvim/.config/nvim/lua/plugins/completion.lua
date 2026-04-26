@@ -165,11 +165,26 @@ mini.later(function()
 		snippets = { preset = "luasnip" },
 		sources = {
 			default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+			per_filetype = {
+				markdown = { "obsidian", "obsidian_new", "obsidian_tags", inherit_defaults = true },
+			},
 			providers = {
 				lazydev = {
 					name = "LazyDev",
 					module = "lazydev.integrations.blink",
 					score_offset = 100,
+				},
+				obsidian = {
+					name = "obsidian",
+					module = "obsidian.completion.sources.blink.refs",
+				},
+				obsidian_new = {
+					name = "obsidian_new",
+					module = "obsidian.completion.sources.blink.new",
+				},
+				obsidian_tags = {
+					name = "obsidian_tags",
+					module = "obsidian.completion.sources.blink.tags",
 				},
 			},
 		},
