@@ -164,7 +164,7 @@ mini.later(function()
 		},
 		snippets = { preset = "luasnip" },
 		sources = {
-			default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+			default = { "lazydev", "lsp", "path", "snippets" },
 			per_filetype = {
 				markdown = { "obsidian", "obsidian_new", "obsidian_tags", inherit_defaults = true },
 			},
