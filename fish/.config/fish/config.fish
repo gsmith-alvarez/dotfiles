@@ -33,7 +33,7 @@ if status is-interactive
     abbr -a cat bat
     abbr -a man batman
     abbr -a find fd
-    abbr -a cp "rsync -ah --info-progress2"
+    abbr -a cp "rsync -avh --info-progress2"
     abbr -a rm "rm -i"
     abbr -a mv "mv -i"
     abbr -a mkdir "mkdir -p"
