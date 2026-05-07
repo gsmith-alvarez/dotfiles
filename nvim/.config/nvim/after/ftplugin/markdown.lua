@@ -10,6 +10,34 @@ end
 
 local autolist = Config.safe_require("autolist")
 
+local function is_list_indent_at_eol()
+	local line = vim.api.nvim_get_current_line()
+	local col = vim.fn.getpos(".")[3] - 1
+	local marker = line:match("^%s*>?%s*(%S+)%s")
+
+	return col >= #line - 1
+		and marker ~= nil
+		and (marker == "-" or marker == "+" or marker == "*" or marker:match("^%w+[.)]$") ~= nil)
+end
+
+local function autolist_tab()
+	if is_list_indent_at_eol() then
+		vim.schedule(autolist.recalculate)
+		return "<C-t>"
+	end
+
+	return "<Tab>"
+end
+
+local function autolist_shift_tab()
+	if is_list_indent_at_eol() then
+		vim.schedule(autolist.recalculate)
+		return "<C-d>"
+	end
+
+	return "<S-Tab>"
+end
+
 -- 1. [ SMART ACTIONS ]
 u.nmap("<leader>oa", function()
 	if require("obsidian.api").cursor_link() then
@@ -45,8 +73,8 @@ u.map("v", "<leader>oN", "<cmd>Obsidian link_new<CR>", "Obsidian: Link Selection
 u.nmap("<leader>op", "<cmd>Obsidian paste_img<CR>", "Obsidian: Paste Image", { buffer = true })
 
 -- 7. [ OVERRIDES ]
-u.imap("<Tab>", "<cmd>AutolistTab<CR>", "Autolist: Indent", { buffer = true })
-u.imap("<S-Tab>", "<cmd>AutolistShiftTab<CR>", "Autolist: Dedent", { buffer = true })
+u.imap("<Tab>", autolist_tab, "Autolist: Indent", { buffer = true, expr = true })
+u.imap("<S-Tab>", autolist_shift_tab, "Autolist: Dedent", { buffer = true, expr = true })
 u.imap("<CR>", "<CR><cmd>AutolistNewBullet<CR>", "Autolist: New Bullet", { buffer = true })
 u.nmap("o", "o<cmd>AutolistNewBullet<CR>", "Autolist: New Bullet Below", { buffer = true })
 u.nmap("O", "O<cmd>AutolistNewBulletBefore<CR>", "Autolist: New Bullet Above", { buffer = true })

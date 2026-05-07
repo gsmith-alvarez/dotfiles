@@ -1,8 +1,0 @@
-return {
-  default = {
-    verbose = true,
-    output = "utfTerminal",
-    pattern = "_spec",
-    helper = "tests/support/helpers.lua",
-  },
-}

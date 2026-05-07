@@ -83,7 +83,6 @@ local builtins = {
 	"nvim.difftool",
 	"cfilter",
 	"nvim.undotree",
-	"justify",
 	"nohlsearch",
 }
 

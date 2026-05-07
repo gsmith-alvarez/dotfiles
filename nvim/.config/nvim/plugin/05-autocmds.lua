@@ -19,7 +19,7 @@ u.autocmd("FileType", "*", treesitter_attach, "Start Treesitter highlighting")
 -- 2. [ UI POLISH ]
 -- Highlight the text briefly after it is yanked to provide visual feedback.
 local highlight_yank = function()
-	vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
+	vim.hl.hl_op({ higroup = "Visual", timeout = 200 })
 end
 u.autocmd("TextYankPost", "*", highlight_yank, "Highlight yanked text")
 -- 3. [ CURSOR PERSISTENCE ]

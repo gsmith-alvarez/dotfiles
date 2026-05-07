@@ -46,7 +46,7 @@ local fmt = require("luasnip.extras.fmt").fmt
 -- return snips
 
 local snips = {
-	s("Def", fmt(">**DEF**: {}\n>>{}", { i(1, "term"), i(2, "Definition") })),
+	s("Def", fmt("> **DEF**: {}\n> > {}", { i(1, "term"), i(2, "Definition") })),
 }
 
 return snips

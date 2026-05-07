@@ -1,0 +1,24 @@
+#!/usr/bin/env fish
+# cheatsheet: https://devhints.io/fish
+
+function fish_user_key_bindings
+    # Load fzf key bindings if fzf was initialized
+    if functions -q fzf_key_bindings
+        fzf_key_bindings
+    end
+
+    # Atuin key bindings
+    if type -q atuin
+        # Vi Insert Mode
+        bind -M insert \cr _atuin_search
+        bind -M insert up _atuin_bind_up
+        bind -M insert \e\[A _atuin_bind_up
+        bind -M insert \eOA _atuin_bind_up
+
+        # Vi Normal/Default Mode (Missing from the standard Atuin init)
+        bind -M default \cr _atuin_search
+        bind -M default up _atuin_bind_up
+        bind -M default \e\[A _atuin_bind_up
+        bind -M default \eOA _atuin_bind_up
+    end
+end

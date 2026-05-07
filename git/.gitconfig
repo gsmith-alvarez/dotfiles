@@ -1,0 +1,43 @@
+[include]
+    path = ~/.gitconfig.local
+
+[includeIf "gitdir:~/work/"]
+    path = ~/.gitconfig.work
+
+[core]
+    editor = nvim
+    excludesfile = ~/.gitignore_global
+    pager = delta
+    untrackedCache = true
+    preloadIndex = true
+
+[gc]
+    auto = 0
+
+[pull]
+    rebase = true
+
+[fetch]
+    prune = true
+
+[init]
+    defaultBranch = main
+
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    lg = log --oneline --graph --decorate
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    light = false
+    side-by-side = true
+    line-numbers = true
+    hyperlink = true
+
+[merge]
+    conflictstyle = zdiff3

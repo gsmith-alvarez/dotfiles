@@ -1,76 +1,65 @@
 # Dotfiles
 
-My personal Arch Linux configuration and dotfiles, featuring **Cosmic DE** and the **Catppuccin** color scheme.
+Personal Fedora configuration featuring Cosmic DE and the Catppuccin Mocha theme.
 
 ## Core Stack
 
 - **Desktop Environment:** [Cosmic DE](https://github.com/pop-os/cosmic-epoch)
 - **Shell:** [Fish Shell](https://fishshell.com/)
-- **AUR Helper:** [paru](https://github.com/Morganamilo/paru)
-- **Symlink Management:** [GNU Stow](https://www.gnu.org/software/stow/)
 - **Theme:** [Catppuccin Mocha](https://catppuccin.com/)
+- **Terminal:** [Ghostty](https://ghostty.org/) (Monaspace Krypton NF font, background blur)
+- **Prompt:** [Starship](https://starship.rs/)
+- **System Provisioner:** [init.sh](init.sh) (updates, DNF/Flatpak packages, systemd services)
 
 ## Highlights
 
-### 🚀 `fnav` (Fish Navigation)
-A custom fuzzy directory navigator that combines [`fd`](https://github.com/sharkdp/fd), [`fzf`](https://github.com/junegunn/fzf), [`zoxide`](https://github.com/ajeetdsouza/zoxide), and [`eza`](https://github.com/eza-community/eza).
+### fnav (Fish Navigation)
+Fuzzy directory navigator combining [fd](https://github.com/sharkdp/fd), [fzf](https://github.com/junegunn/fzf), [zoxide](https://github.com/ajeetdsouza/zoxide), and [eza](https://github.com/eza-community/eza).
 - `fnav` / `d`: Fuzzy search subdirectories.
 - `fnav up` / `u`: Fuzzy search parent directories.
 - `fnav zoxide` / `z`: Fuzzy search zoxide database.
-- Features integrated `eza` tree previews and hidden file toggles.
+- Displays eza tree previews and toggles hidden files.
 
-### 📁 [Yazi](https://github.com/sxyazi/yazi) File Manager
-Highly customized with specialized plugins:
-- [`ouch`](https://github.com/pypa/ouch): Archive preview and extraction.
-- `git`: Real-time git status in the file manager.
-- `smart-filter`: Intelligent file filtering.
-- Plugins for `chmod`, `mount`, and `jump-to-char`.
+### Yazi File Manager
+[Yazi](https://github.com/sxyazi/yazi) file manager with plugins:
+- [ouch](https://github.com/pypa/ouch): Archive preview and extraction.
+- `git`: Real-time status display.
+- Plugins: `smart-filter`, `chmod`, `mount`, `jump-to-char`.
 
-### ⚡ Development Tools
-- **[Mise](https://mise.jdx.dev/):** Manages runtimes ([Node](https://nodejs.org/), [Bun](https://bun.sh/), [Zig](https://ziglang.org/)) and LSPs (Pyright, Bash, JSON, YAML).
-- **[Neovim](https://neovim.io/):** Nightly builds with a custom modular config.
-    - Custom "Building" system for running/executing code.
-    - UI enhancements: [`blink.cmp`](https://github.com/Saghen/blink.cmp), [`snacks.nvim`](https://github.com/folke/snacks.nvim), [`dropbar.nvim`](https://github.com/Bekaboo/dropbar.nvim), [`mini.nvim`](https://github.com/echasnovski/mini.nvim).
-- **Containers:** Native [Podman](https://podman.io/) and [Distrobox](https://github.com/89luca89/distrobox) workflow.
+### Development
+- **[Mise](https://mise.jdx.dev/):** Runtime manager (Node, Bun, Zig) and LSPs (Pyright, Bash, JSON, YAML).
+- **[Neovim](https://neovim.io/):** Nightly builds with custom runner system and UI additions (blink.cmp, snacks.nvim, dropbar.nvim, mini.nvim).
+- **Containers:** Podman and Distrobox.
+- **Clipboard:** wl-clipboard and cliphist.
+
+### System & Audio
+- **Graphics Tablet:** OpenTabletDriver and wayscriber.
+- **Media:** spotify-player and Easy Effects.
 
 ## Installation
 
-Currently managed manually via GNU Stow. 
+Deploy configurations using the stow script:
 
 ```bash
-# Example: stow a package
+./stow.sh
+```
+
+Or manually:
+
+```bash
 stow -vt ~ package_name
 ```
 
-## Arch Maintenance
-
-Managed via [`pacman-contrib`](https://archlinux.org/packages/extra/x86_64/pacman-contrib/):
-- `paccache`: Last 3 versions (`rk3`) via systemd timers.
-- `checkupdates`: Safe update checking.
-- [`topgrade`](https://github.com/topgrade-rs/topgrade): Aggregate update manager.
-
-## Terminal & UI
-
-- **Terminal:** [Ghostty](https://ghostty.org/)
-    - **Font:** [`Monaspace Krypton NF`](https://monaspace.githubnext.com/) (with ligatures and texture healing).
-    - **Features:** Background blur, split navigation (`Ctrl+Alt+H/J/K/L`).
-- **Prompt:** [Starship](https://starship.rs/)
-- **Clipboard:** [`wl-clipboard`](https://github.com/bugaevc/wl-clipboard) + [`cliphist`](https://github.com/sentriz/cliphist) (integrated into `fzf` via Fish abbreviation `ch`).
-
-## System & Peripherals
-
-- **Graphics Tablet:** [OpenTabletDriver](https://opentabletdriver.net/) + `wayscriber`.
-- **Music:** [`spotify-player`](https://github.com/aiko-chan-ai/spotify-player). + [Easy Effects](https://github.com/wwmm/easyeffects)
-
 ## Fish Abbreviations
 
-| Abbr | Command | Tool |
+| Abbr | Command | Description |
 | :--- | :--- | :--- |
-| `v` | `nvim` | [Neovim](https://neovim.io/) |
-| `ls` | `eza ...` | [eza](https://github.com/eza-community/eza) |
-| `rg` | `batgrep` | [bat-extras](https://github.com/eth-p/bat-extras) |
-| `cat` | `bat` | [bat](https://github.com/sharkdp/bat) |
-| `find` | `fd` | [fd](https://github.com/sharkdp/fd) |
-| `ch` | Cliphist selector | [cliphist](https://github.com/sentriz/cliphist) |
-| `copy`/`paste` | `wl-copy` / `wl-paste` | [wl-clipboard](https://github.com/bugaevc/wl-clipboard) |
-| `u`/`d`/`z` | `fnav ...` | [fnav](fish/.config/fish/functions/fnav.fish) |
+| `v` | `nvim` | Edit with Neovim |
+| `ls` | `eza ...` | List files with eza |
+| `rg` | `batgrep` | Search text with bat-extras |
+| `cat` | `bat` | View file with bat |
+| `find` | `fd` | Find files with fd |
+| `ch` | Cliphist selector | View clipboard history |
+| `copy` | `wl-copy` | Copy to clipboard |
+| `paste` | `wl-paste` | Paste from clipboard |
+| `u`/`d`/`z` | `fnav ...` | Navigate directories |

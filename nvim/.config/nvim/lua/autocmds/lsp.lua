@@ -7,9 +7,49 @@
 local M = {}
 local u = require("core.utils")
 
---- Refactored LSP Attachment
---- Why: Uses client:supports_method directly to avoid race conditions and
----      loops on every cursor move/save. Sets up buffer-local autocommands.
+---@type table<number, { token: lsp.ProgressToken, msg: string, done: boolean }[]>
+local progress = vim.defaulttable()
+
+local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+
+local lsp_progress = function(ev)
+	local client = vim.lsp.get_client_by_id(ev.data.client_id)
+	local value = ev.data.params.value --[[@as { percentage?: number, title?: string, message?: string, kind: "begin"|"report"|"end" }]]
+	if not client or type(value) ~= "table" then
+		return
+	end
+
+	local p = progress[client.id]
+	for i = 1, #p + 1 do
+		if i == #p + 1 or p[i].token == ev.data.params.token then
+			p[i] = {
+				token = ev.data.params.token,
+				msg = ("[%3d%%] %s%s"):format(
+					value.kind == "end" and 100 or value.percentage or 100,
+					value.title or "",
+					value.message and (" **%s**"):format(value.message) or ""
+				),
+				done = value.kind == "end",
+			}
+			break
+		end
+	end
+
+	local msg = {}
+	progress[client.id] = vim.tbl_filter(function(v)
+		return table.insert(msg, v.msg) or not v.done
+	end, p)
+
+	vim.notify(table.concat(msg, "\n"), vim.log.levels.INFO, {
+		id = "lsp_progress",
+		title = client.name,
+		opts = function(notif)
+			notif.icon = #progress[client.id] == 0 and " "
+				or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+		end,
+	})
+end
+
 --- @param args table LspAttach autocmd callback args.
 local lsp_attach = function(args)
 	local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -64,76 +104,7 @@ local lsp_attach = function(args)
 		u.nmap("<leader>cl", vim.lsp.codelens.run, "LSP: CodeLens Action", { buffer = args.buf })
 		vim.lsp.codelens.enable(true, { bufnr = args.buf })
 	end
-
-	-- [[ LSP Loading Status]]
-	---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
-	local progress = vim.defaulttable()
-
-	vim.ui.progress_status()
-
-	vim.api.nvim_create_autocmd("LspProgress", {
-		---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
-		callback = function(ev)
-			local client = vim.lsp.get_client_by_id(ev.data.client_id)
-			local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
-			if not client or type(value) ~= "table" then
-				return
-			end
-
-			-- Feed vim.ui.progress_status()
-			vim.api.nvim_echo({ { value.message or "" } }, false, {
-				id = "lsp." .. ev.data.client_id,
-				kind = "progress",
-				source = "vim.lsp",
-				title = value.title,
-				status = value.kind ~= "end" and "running" or "success",
-				percent = value.percentage,
-			})
-
-			-- Feed snacks.nvim notifier
-			local p = progress[client.id]
-			for i = 1, #p + 1 do
-				if i == #p + 1 or p[i].token == ev.data.params.token then
-					p[i] = {
-						token = ev.data.params.token,
-						msg = ("[%3d%%] %s%s"):format(
-							value.kind == "end" and 100 or value.percentage or 100,
-							value.title or "",
-							value.message and (" **%s**"):format(value.message) or ""
-						),
-						done = value.kind == "end",
-					}
-					break
-				end
-			end
-			local msg = {} ---@type string[]
-			progress[client.id] = vim.tbl_filter(function(v)
-				return table.insert(msg, v.msg) or not v.done
-			end, p)
-			local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-			vim.notify(table.concat(msg, "\n"), "info", {
-				id = "lsp_progress",
-				title = client.name,
-				opts = function(notif)
-					notif.icon = #progress[client.id] == 0 and " "
-						or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-				end,
-			})
-		end,
-	})
-
-	vim.api.nvim_create_autocmd("Progress", {
-		callback = function()
-			vim.cmd.redrawstatus()
-		end,
-	})
 end
--- [[ Diagnostic Configuration ]]
--- Define how errors and warnings are displayed globally.
-vim.diagnostic.config({
-	virtual_text = true, -- Show message at the end of the line
-	signs = true, -- gutter signs (E/W)
-})
 
 -- [[ Autocmd Definitions ]]
 -- Exported to the registrar for automatic setup.
@@ -143,6 +114,12 @@ M.setup = {
 		pattern = "*",
 		action = lsp_attach,
 		desc = "Initialize LSP features on attach",
+	},
+	{
+		event = "LspProgress",
+		pattern = "*",
+		action = lsp_progress,
+		desc = "Show LSP progress notifications",
 	},
 }
 

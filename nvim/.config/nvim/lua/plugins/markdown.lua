@@ -37,9 +37,8 @@ mini.now(function()
 		ui = { enabled = false },
 		legacy_commands = false,
 		picker = {
-			name = "snacks.pick",
+			name = "snacks.picker",
 		},
-		completion = { blink = true },
 		attachments = {
 			---@param path obsidian.Path
 			img_text_func = function(path)
@@ -61,12 +60,17 @@ mini.now(function()
 	Config.safe_require("autolist").setup({
 		lists = {
 			markdown = {
+				"> >%s*[-+*]",
+				"> >%s*%d+[.)]",
+				"> >%s*%a[.)]",
+				"> >%s*%u+[.)]",
+				"> >",
+				"[-+*]",
 				">%s*[-+*]",
 				">%s*%d+[.)]",
 				">%s*%a[.)]",
 				">%s*%u+[.)]",
 				">",
-				"[-+*]",
 				"%d+[.)]",
 				"%a[.)]",
 				"%u+[.)]",

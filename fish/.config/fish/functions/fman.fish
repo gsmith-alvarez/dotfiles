@@ -16,11 +16,11 @@ function fman --description "Fuzzy find man pages and view with batman"
     # Fetch all man pages, present to fzf
     set -l selected (man -k . | fzf --reverse --height=80% \
         --prompt="man> " \
-        --preview="echo {} | awk '{print \$1}' | xargs -I % batman %" \
+        --preview="batman {1}" \
         --preview-window="right:60%")
 
     if test -n "$selected"
-        set -l manpage (echo $selected | awk '{print $1}')
+        set -l manpage (string split ' ' $selected)[1]
         batman $manpage
     end
 end

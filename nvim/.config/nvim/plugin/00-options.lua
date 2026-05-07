@@ -55,7 +55,7 @@ vim.g.loaded_node_provider = 0
 -- Use Treesitter for high-performance, semantic code folding.
 set.foldmethod = "expr"
 set.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-set.foldtext = "v:lua.vim.lsp.foldtext()" -- NOTE: Nightly Feature
+set.foldtext = "v:lua.vim.lsp.foldtext()"
 set.foldlevel = 99 -- Start with all folds open
 set.foldnestmax = 10 -- Limit fold nesting depth
 set.fillchars = "eob: ,fold:╌" -- Custom characters for end-of-buffer and folds
@@ -81,7 +81,6 @@ set.jumpoptions = "view" -- Preserve view when jumping
 set.splitkeep = "screen" -- Keep screen stable on split changes
 set.smoothscroll = true -- Smooth scrolling behavior
 set.scrolloff = 10 -- Minimum lines to keep above/below the cursor
-set.shada = "'100,<50,s10,:1000,/100,@100,h" -- Optimize ShaDa file for faster startup
 set.switchbuf = "usetab" -- Jump to existing tab if buffer is already open
 
 -- 9. [ SYNTAX & FILETYPE ]
@@ -120,7 +119,6 @@ set.completeopt:append("nearest") -- Prioritize completion matches near the curs
 set.completetimeout = 100 -- Limit built-in completion source delay
 set.pumborder = "rounded" -- Rounded borders for the popup menu
 set.pummaxwidth = 20 -- Limit popup menu width
-set.messagesopt:append("progress:c") -- Show background job progress in messages
 
 -- 12. [ WINDOWS & SPLITS ]
 set.splitright = true -- Vertical splits open to the right
@@ -151,8 +149,5 @@ set.exrc = true
 -- 16. [ MARKDOWN ]
 -- Keep markdown indentation/list behavior under user control.
 vim.g.markdown_recommended_style = 0
-
--- Getting rid of LSP duplication as we keep it in mini statusline
-set.messagesopt:remove("progress:c")
 
 return M

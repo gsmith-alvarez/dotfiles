@@ -26,12 +26,20 @@ bat = "latest"
 bat-extras = "latest"
 zoxide = "latest"
 yazi = "latest"
+github-cli = "latest"
+xh = "latest"
+delta = "latest"
+"cargo:tealdeer" = "latest"
+sd = "latest"
+atuin = "latest"
 
 # --- Core Runtimes ---
 node = "latest"
 bun = "latest"
 zig = "latest"
 watchexec = "latest"
+uv = "latest"
+luajit = "latest"
 
 # --- Language Servers (LSP) ---
 lua-language-server = "latest"                     # Lua
@@ -49,6 +57,7 @@ typos = "latest"       # Source code spell checker
 
 # Lua
 stylua = "latest"
+"cargo:selene" = "latest"
 
 # Python
 ruff = "latest"
