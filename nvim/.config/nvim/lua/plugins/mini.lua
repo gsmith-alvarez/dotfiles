@@ -87,7 +87,12 @@ end)
 M.later(function()
 	-- A. NAVIGATION & EDITING
 	Config.safe_require("mini.files").setup()
-	Config.safe_require("mini.jump2d").setup()
+	Config.safe_require("mini.jump2d").setup({
+		mappings = {
+			-- Resolves conflict with obsidian.nvim
+			start_jumping = "<S-CR>",
+		},
+	})
 	Config.safe_require("mini.jump").setup()
 	Config.safe_require("mini.splitjoin").setup()
 	Config.safe_require("mini.comment").setup()
