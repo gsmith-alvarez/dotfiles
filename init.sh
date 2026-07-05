@@ -85,6 +85,10 @@ main() {
 	# mise may not yet be on PATH if dotfiles haven't been sourced in this shell session
 	"$HOME/.local/bin/mise" install -y
 
+	echo "=== Installing Yazi packages ==="
+	"$HOME/.local/bin/mise" exec -- ya pkg install --discard
+
+
 	# 6. Flatpak Setup
 	echo "=== Provisioning Flatpak applications ==="
 	sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
