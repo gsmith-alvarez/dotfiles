@@ -93,4 +93,8 @@ if status is-interactive
     abbr -a diff batdiff
     abbr -a watch batwatch
 
+    #python
+    abbr -a uvr 'uv run'
+    abbr -a pytest 'uv run pytest'
+
 end
