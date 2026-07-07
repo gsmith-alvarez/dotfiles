@@ -87,6 +87,7 @@ vim.pack.add({
 	gh("stevearc/quicker.nvim"),
 	gh("kevinhwang91/nvim-bqf"),
 	gh("gsmith-alvarez/sigils.nvim"),
+	gh("gsmith-alvarez/run.nvim"),
 })
 
 -- 4. [ SELF-HEALING STARTUP CHECK ]

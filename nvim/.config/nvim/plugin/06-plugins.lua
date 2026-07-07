@@ -13,5 +13,6 @@ local plugin_modules = {
 	"plugins.menu",
 	"plugins.quickfix",
 	"plugins.navigation",
+	"plugins.run",
 }
 Config.safe_require(plugin_modules, "PLUGIN")

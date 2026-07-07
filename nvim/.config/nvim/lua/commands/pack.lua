@@ -163,7 +163,7 @@ M.setup = {
 			u.nmap("q", close, "Pack: Cancel Plugin Purge", { buffer = buf, silent = true })
 
 			vim.api.nvim_create_autocmd("BufWriteCmd", {
-				buffer = buf,
+				buf = buf,
 				callback = function()
 					local current_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 					local to_delete = {}
