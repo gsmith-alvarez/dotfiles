@@ -72,14 +72,14 @@ main() {
 	sudo dnf install -y \
 		mise fish ghostty starship wl-clipboard cliphist cargo opentabletdriver \
 		gcc gcc-c++ make pkgconf-pkg-config cairo-devel wayland-devel pango-devel \
-		wayscriber wayscriber-configurator topgrade lazygit hw-probe btop \
+		wayscriber wayscriber-configurator lazygit hw-probe btop \
 		libxkbcommon-devel cairo-gobject-devel
 
 	# 5. Rust Ecosystem & Language Runtime Tooling
 	echo "=== Installing Cargo binaries ==="
 	# cargo-update provides cargo install-update; use it to skip already-current installs
 	cargo install --locked cargo-cache cargo-update
-	cargo install-update -i spotify_player fsel
+	cargo install-update -i spotify_player fsel kanata topgrade
 
 	echo "=== Initializing mise tools ==="
 	# mise may not yet be on PATH if dotfiles haven't been sourced in this shell session
@@ -87,7 +87,6 @@ main() {
 
 	echo "=== Installing Yazi packages ==="
 	"$HOME/.local/bin/mise" exec -- ya pkg install --discard
-
 
 	# 6. Flatpak Setup
 	echo "=== Provisioning Flatpak applications ==="

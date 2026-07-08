@@ -33,6 +33,19 @@ mini.now(function()
 				path = "~/Documents/Obsidian",
 			},
 		},
+		completion = {
+			min_chars = 1,
+		},
+		-- Use note titles as filenames instead of Zettelkasten random numbers
+		note_id_func = function(title)
+			if title ~= nil then
+				-- Remove characters that are illegal in filenames but keep casing and spaces
+				return title:gsub("[^%w%s%-]", "")
+			else
+				-- Fall back to Zettelkasten ID if no title
+				return tostring(os.time())
+			end
+		end,
 		-- Disabled in favour of render-markdown.nvim
 		ui = { enabled = false },
 		legacy_commands = false,
@@ -53,7 +66,17 @@ mini.now(function()
 			date_format = "%Y-%m-%d",
 			time_format = "%H:%M",
 			-- Allow overriding existing variables in the note
-			substitutions = {},
+			substitutions = {
+				today = function()
+					return os.date("%Y-%m-%d")
+				end,
+				yesterday = function()
+					return os.date("%Y-%m-%d", os.time() - 86400)
+				end,
+				tomorrow = function()
+					return os.date("%Y-%m-%d", os.time() + 86400)
+				end,
+			},
 		},
 	})
 

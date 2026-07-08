@@ -40,11 +40,7 @@ end
 
 -- 1. [ SMART ACTIONS ]
 u.nmap("<leader>oa", function()
-	if require("obsidian.api").cursor_link() then
-		return "<cmd>Obsidian follow_link<CR>"
-	else
-		return "<cmd>Obsidian toggle_checkbox<CR>"
-	end
+	return require("obsidian.actions").smart_action()
 end, "Obsidian: Smart Action", { buffer = true, expr = true })
 
 -- 2. [ NAVIGATION & LINKS ]
@@ -79,19 +75,23 @@ u.imap("<CR>", "<CR><cmd>AutolistNewBullet<CR>", "Autolist: New Bullet", { buffe
 u.nmap("o", "o<cmd>AutolistNewBullet<CR>", "Autolist: New Bullet Below", { buffer = true })
 u.nmap("O", "O<cmd>AutolistNewBulletBefore<CR>", "Autolist: New Bullet Above", { buffer = true })
 
--- Give <CR> to checkbox toggle, link follow, or jump2d.
+-- Give <CR> to checkbox toggle, link follow, fold cycle, or jump2d.
 u.nmap("<CR>", function()
 	local line = vim.api.nvim_get_current_line()
+	local obs_api = require("obsidian.api")
+
 	if line:match("%[[ xX/%-!?]%]") then
 		autolist.toggle_checkbox()
 		return
 	end
-	if require("obsidian.api").cursor_link() then
+	if obs_api.cursor_link() then
 		vim.cmd("Obsidian follow_link")
+	elseif obs_api.cursor_heading() or obs_api.cursor_frontmatter() then
+		vim.cmd("normal! za")
 	else
 		require("mini.jump2d").start(require("mini.jump2d").builtin_opts.word_start)
 	end
-end, "Obsidian: Toggle Checkbox, Jump, or Follow Link", { buffer = true })
+end, "Obsidian: Toggle Checkbox, Jump, Follow Link, or Cycle Fold", { buffer = true })
 
 -- 8. [ Notes Helper ]
 u.imap("<C-b>", "****<Left><Left>", "Markdown: Bolding")
