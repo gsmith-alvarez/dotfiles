@@ -62,21 +62,6 @@ local lsp_attach = function(args)
 		vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
 	end
 
-	-- [[ Document Highlight ]]
-	-- Highlights all instances of the symbol under the cursor.
-	if client:supports_method("textDocument/documentHighlight") then
-		vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-			buf = args.buf,
-			callback = function()
-				if vim.fn.mode() ~= "i" then
-					vim.lsp.buf.clear_references()
-					vim.lsp.buf.document_highlight()
-				end
-			end,
-			desc = "LSP Reference Highlighting",
-		})
-	end
-
 	-- [[ Keymaps ]]
 	-- grn/gra/grr/gri/grt/grx/gO are Nvim 0.13 default global mappings and
 	-- are intentionally not redefined here (longest-match resolution means
