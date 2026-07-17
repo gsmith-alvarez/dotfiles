@@ -17,11 +17,12 @@ local treesitter_attach = function(args)
 end
 u.autocmd("FileType", "*", treesitter_attach, "Start Treesitter highlighting")
 -- 2. [ UI POLISH ]
--- Highlight the text briefly after it is yanked to provide visual feedback.
+-- Highlight the affected text briefly after a yank or put to provide
+-- visual feedback (TextPutPost is new in Nvim 0.13).
 local highlight_yank = function()
 	vim.hl.hl_op({ higroup = "Visual", timeout = 200 })
 end
-u.autocmd("TextYankPost", "*", highlight_yank, "Highlight yanked text")
+u.autocmd({ "TextYankPost", "TextPutPost" }, "*", highlight_yank, "Highlight yanked/put text")
 -- 3. [ CURSOR PERSISTENCE ]
 -- Retains the position of the cursor between Neovim instances.
 --- @param args table Autocmd callback args.
