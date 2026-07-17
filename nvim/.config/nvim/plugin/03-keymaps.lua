@@ -62,10 +62,6 @@ u.nmap("[b", "<cmd>bprevious<CR>", "Buffer: Go to Previous")
 u.nmap("]b", "<cmd>bnext<CR>", "Buffer: Go to Next")
 u.nmap("<leader>bb", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
 u.nmap("<leader>`", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
-u.nmap("<leader>bd", function()
-	require("snacks").bufdelete()
-end, "Buffer: Delete")
-u.nmap("<leader>bD", "<cmd>bp | bd #<CR>", "Buffer: Delete + Close Window")
 
 -- 9. [ QUICKFIX NAVIGATION ]
 u.nmap("[q", vim.cmd.cprev, "Quickfix: Go to Previous Item")
