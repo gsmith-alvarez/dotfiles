@@ -105,13 +105,11 @@ vim.lsp.config("clangd", {
 	},
 })
 
--- [ JSON (jsonls) ]
--- Enable snippet support for jsonls (often required for schema completions)
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-vim.lsp.config("jsonls", {
-	capabilities = capabilities,
-})
+-- [ CAPABILITIES ]
+-- blink.cmp does not auto-inject its capabilities; advertise them to every
+-- server through the wildcard config (includes snippetSupport, so the old
+-- jsonls-only override is no longer needed).
+vim.lsp.config("*", { capabilities = Config.safe_require("blink.cmp").get_lsp_capabilities() })
 
 -- 4. [ ACTIVATION ]
 -- Enable the configured servers for the current session.
