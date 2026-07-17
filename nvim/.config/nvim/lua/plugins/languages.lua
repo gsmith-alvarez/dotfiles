@@ -10,46 +10,35 @@ local mini = Config.safe_require("plugins.mini")
 
 -- -----------------------------------------------------------------------------
 -- 1. [ TREESITTER ]
--- Uses 'now' to ensure parsers are available immediately for pickers.
+-- nvim-treesitter tracks the rewritten 'main' branch, where setup() only
+-- accepts 'install_dir'. Parser installation is explicit and idempotent
+-- (already-installed parsers are skipped).
+-- Highlighting is started per-buffer by the FileType autocmd in
+-- plugin/05-autocmds.lua (vim.treesitter.start) — the recommended pattern.
+-- Node selection is built into Nvim 0.13: an/in (parent/child node) and
+-- [n/]n/[N/]N (node/sibling) in Visual mode.
 -- -----------------------------------------------------------------------------
 mini.now(function()
-	Config.safe_require("nvim-treesitter").setup({
-		ensure_installed = {
-			"lua",
-			"vim",
-			"vimdoc",
-			"markdown",
-			"markdown_inline",
-			"python",
-			"cpp",
-			"bash",
-			"fish",
-			"latex",
-			"regex",
-			"html",
-			"yaml",
-		},
-		auto_install = true,
-		highlight = {
-			enable = true,
-			additional_vim_regex_highlighting = false,
-		},
-		incremental_selection = {
-			enable = true,
-		},
+	local ts = Config.safe_require("nvim-treesitter")
+	ts.setup()
+	ts.install({
+		"lua",
+		"vim",
+		"vimdoc",
+		"markdown",
+		"markdown_inline",
+		"python",
+		"cpp",
+		"bash",
+		"fish",
+		"latex",
+		"regex",
+		"html",
+		"yaml",
 	})
-	Config.safe_require("nvim-treesitter-textobjects").setup({
-		select = {
-			enable = false,
-		},
-		move = {
-			enable = false,
-			set_jumps = false,
-		},
-		swap = {
-			enable = false,
-		},
-	})
+	-- textobjects is kept for its queries/*.scm files, which back the
+	-- mini.ai treesitter textobjects (f/c/o specs). No modules are enabled.
+	Config.safe_require("nvim-treesitter-textobjects").setup()
 end)
 
 -- -----------------------------------------------------------------------------
