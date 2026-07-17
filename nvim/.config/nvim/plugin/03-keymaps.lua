@@ -56,18 +56,13 @@ u.imap(".", ".<C-g>u", nil)
 u.imap(";", ";<C-g>u", nil)
 
 -- 8. [ BUFFER NAVIGATION ]
+-- Note: [b/]b and [q/]q are Nvim 0.13 default mappings; H/L are the fast path.
 u.nmap("H", "<cmd>bprevious<CR>", "Buffer: Go to Previous")
 u.nmap("L", "<cmd>bnext<CR>", "Buffer: Go to Next")
-u.nmap("[b", "<cmd>bprevious<CR>", "Buffer: Go to Previous")
-u.nmap("]b", "<cmd>bnext<CR>", "Buffer: Go to Next")
 u.nmap("<leader>bb", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
 u.nmap("<leader>`", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
 
--- 9. [ QUICKFIX NAVIGATION ]
-u.nmap("[q", vim.cmd.cprev, "Quickfix: Go to Previous Item")
-u.nmap("]q", vim.cmd.cnext, "Quickfix: Go to Next Item")
-
--- 10. [ UTILITIES ]
+-- 9. [ UTILITIES ]
 u.map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", "File: Save")
 u.nmap("<leader>bn", "<cmd>enew<CR>", "Buffer: Create New")
 u.nmap("<leader>qq", "<cmd>qa<CR>", "Session: Exit Neovim")
@@ -79,7 +74,7 @@ u.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", "Edit: Move Line Up")
 u.nmap("<C-d>", "<C-d>zz", "Scroll: Down and Center")
 u.nmap("<C-u>", "<C-u>zz", "Scroll: Up and Center")
 
--- 11. [ INSPECT / DIAGNOSTICS ]
+-- 10. [ INSPECT / DIAGNOSTICS ]
 u.nmap("<leader>ui", vim.show_pos, "Inspect: Show Highlights")
 u.nmap("<leader>uI", function()
 	vim.treesitter.inspect_tree()
