@@ -41,7 +41,7 @@ set.mousescroll = "ver:25,hor:6" -- Tune mouse wheel scroll speed
 set.number = true -- Show absolute line numbers
 set.relativenumber = true -- Show relative line numbers for easier jumping
 set.showmode = false -- Don't show mode (e.g. -- INSERT --) as statusline handles it
-set.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus" -- Use system clipboard locally; keep OSC52 behavior over SSH
+set.clipboard = "unnamedplus" -- Use system clipboard; over SSH Nvim auto-falls-back to the OSC52 provider
 set.confirm = true -- Ask to save changes before quitting an unsaved buffer
 
 -- 4. [ PROVIDER DEACTIVATION ]
