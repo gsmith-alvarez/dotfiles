@@ -86,6 +86,4 @@ u.nmap("<leader>uI", function()
 	vim.api.nvim_input("I")
 end, "Inspect: Show Treesitter Tree (Full)")
 
-u.nmap("<leader>cd", vim.diagnostic.open_float, "Diagnostic: Open Floating Message")
-
 return M
