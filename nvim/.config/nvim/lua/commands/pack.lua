@@ -28,9 +28,11 @@ M.setup = {
 		end,
 	},
 	PackStatus = {
-		options = { desc = "Print a summary of active and inactive plugins" },
+		options = { desc = "Print a summary of active and inactive plugins (fetches pending updates)" },
 		impl = function()
-			local plugins = vim.pack.get(nil, { info = true })
+			-- offline = false fetches remotes first, so data.rev_to reports
+			-- the revision of a pending update (new in Nvim 0.13).
+			local plugins = vim.pack.get(nil, { info = true, offline = false })
 			local loaded, added, inactive = {}, {}, {}
 			local rtp_paths = vim.api.nvim_list_runtime_paths()
 			local rtp_lookup = {}
@@ -45,6 +47,9 @@ M.setup = {
 					or "unknown"
 				local intent = (data.spec and data.spec.version) and data.spec.version or "main"
 				local hash = data.rev and data.rev:sub(1, 7) or "unknown"
+				if data.rev_to and data.rev_to ~= data.rev then
+					hash = string.format("%s -> %s (update available)", hash, data.rev_to:sub(1, 7))
+				end
 				local line = string.format("  - %-25s | %-8s | %s", plugin_name, intent, hash)
 				local plugin_path = data.path:gsub("/$", "")
 				if rtp_lookup[plugin_path] then
