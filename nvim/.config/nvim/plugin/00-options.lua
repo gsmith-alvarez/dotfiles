@@ -81,6 +81,7 @@ set.jumpoptions = "view" -- Preserve view when jumping
 set.splitkeep = "screen" -- Keep screen stable on split changes
 set.smoothscroll = true -- Smooth scrolling behavior
 set.scrolloff = 10 -- Minimum lines to keep above/below the cursor
+set.scrolloffpad = 1 -- Allow the cursor to stay centered at end-of-file (Nvim 0.13)
 set.switchbuf = "usetab" -- Jump to existing tab if buffer is already open
 
 -- 9. [ SYNTAX & FILETYPE ]
