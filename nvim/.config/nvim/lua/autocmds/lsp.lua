@@ -78,15 +78,9 @@ local lsp_attach = function(args)
 	end
 
 	-- [[ Keymaps ]]
-	-- Explicitly defined to override mini.jump's f/t hooks which otherwise
-	-- intercept the trailing character of gr* sequences (e.g. grt, grf).
-	u.nmap("grn", vim.lsp.buf.rename, "LSP: Rename", { buffer = args.buf })
-	u.map({ "n", "x" }, "gra", vim.lsp.buf.code_action, "LSP: Code Action", { buffer = args.buf })
-	u.nmap("grr", vim.lsp.buf.references, "LSP: References", { buffer = args.buf })
-	u.nmap("gri", vim.lsp.buf.implementation, "LSP: Implementation", { buffer = args.buf })
-	u.nmap("grt", vim.lsp.buf.type_definition, "LSP: Type Definition", { buffer = args.buf })
-	u.nmap("grx", vim.lsp.codelens.run, "LSP: CodeLens Run", { buffer = args.buf })
-	u.nmap("gO", vim.lsp.buf.document_symbol, "LSP: Document Symbols", { buffer = args.buf })
+	-- grn/gra/grr/gri/grt/grx/gO are Nvim 0.13 default global mappings and
+	-- are intentionally not redefined here (longest-match resolution means
+	-- mini.jump's standalone f/t maps never intercept the gr* sequences).
 
 	if client:supports_method("textDocument/declaration") then
 		u.nmap("grd", vim.lsp.buf.declaration, "LSP: Declaration", { buffer = args.buf })
@@ -100,8 +94,8 @@ local lsp_attach = function(args)
 	end
 
 	-- [[ Code Lens ]]
+	-- Note: <leader>cl and grx (run lens) are mapped globally elsewhere.
 	if client:supports_method("textDocument/codeLens") then
-		u.nmap("<leader>cl", vim.lsp.codelens.run, "LSP: CodeLens Action", { buffer = args.buf })
 		vim.lsp.codelens.enable(true, { bufnr = args.buf })
 	end
 end
