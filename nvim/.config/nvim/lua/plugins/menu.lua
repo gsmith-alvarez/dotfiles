@@ -27,12 +27,7 @@ local function open_url_under_cursor()
 		notify("No URL under cursor")
 		return
 	end
-	if vim.ui and vim.ui.open then
-		vim.ui.open(word)
-		return
-	end
-	local opener = vim.fn.has("mac") == 1 and "open" or "xdg-open"
-	vim.fn.jobstart({ opener, word }, { detach = true })
+	vim.ui.open(word)
 end
 
 --- @param action fun()

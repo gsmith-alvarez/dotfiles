@@ -62,7 +62,7 @@ vim.diagnostic.config({
 		prefix = "●",
 	},
 	severity_sort = true,
-	float = { border = "rounded" },
+	-- No float.border: 'winborder' (rounded) already applies to diagnostic floats.
 })
 
 -- -----------------------------------------------------------------------------

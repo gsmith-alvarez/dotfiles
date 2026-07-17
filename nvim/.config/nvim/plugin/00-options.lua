@@ -5,26 +5,13 @@
 
 local M = {}
 
--- 1. [ FILETYPE OPTIMIZATION ]
--- Predefine common filetypes for a slight speed boost and to ensure
--- specific extensions or filenames map correctly.
+-- 1. [ FILETYPE OVERRIDES ]
+-- Only custom mappings live here; standard extensions/filenames (lua, sh,
+-- py, yaml, md, .gitignore, Dockerfile, Justfile, ...) are all detected by
+-- Nvim's built-in Lua filetype detection.
 vim.filetype.add({
-	extension = {
-		lua = "lua",
-		sh = "sh",
-		py = "python",
-		yaml = "yaml",
-		yml = "yaml",
-		fish = "fish",
-		toml = "toml",
-		md = "markdown",
-	},
 	filename = {
-		[".gitignore"] = "gitignore",
 		[".env"] = "sh",
-		["Justfile"] = "just",
-		["justfile"] = "just",
-		["Dockerfile"] = "dockerfile",
 	},
 })
 
@@ -85,12 +72,8 @@ set.scrolloffpad = 1 -- Allow the cursor to stay centered at end-of-file (Nvim 0
 set.switchbuf = "usetab" -- Jump to existing tab if buffer is already open
 
 -- 9. [ SYNTAX & FILETYPE ]
--- Ensure filetype detection and syntax highlighting are fully enabled.
-vim.cmd("filetype plugin indent on")
-if vim.fn.exists("syntax_on") ~= 1 then
-	vim.cmd("syntax enable")
-end
-
+-- Note: filetype detection, ftplugins and syntax highlighting are enabled
+-- by Nvim at startup; no explicit :filetype/:syntax commands are needed.
 vim.api.nvim_create_autocmd("FileType", {
 	desc = "Keep formatoptions clean for editing",
 	callback = function()
