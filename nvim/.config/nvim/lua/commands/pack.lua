@@ -31,7 +31,7 @@ M.setup = {
 		options = { desc = "Print a summary of active and inactive plugins (fetches pending updates)" },
 		impl = function()
 			-- offline = false fetches remotes first, so data.rev_to reports
-			-- the revision of a pending update (new in Nvim 0.13).
+			-- the revision of a pending update
 			local plugins = vim.pack.get(nil, { info = true, offline = false })
 			local loaded, added, inactive = {}, {}, {}
 			local rtp_paths = vim.api.nvim_list_runtime_paths()
@@ -92,7 +92,7 @@ M.setup = {
 	PackCleanLock = {
 		options = { desc = "Delete the pack lockfile" },
 		impl = function()
-			local lockfile_path = vim.fn.stdpath "config" .. "/nvim-pack-lock.json"
+			local lockfile_path = vim.fn.stdpath("config") .. "/nvim-pack-lock.json"
 			if vim.fn.filereadable(lockfile_path) == 1 then
 				if vim.fn.delete(lockfile_path) == 0 then
 					notify(
@@ -154,12 +154,12 @@ M.setup = {
 			vim.bo[buf].buftype = "acwrite"
 			vim.bo[buf].modified = false
 
-			vim.cmd "vsplit"
+			vim.cmd("vsplit")
 			vim.api.nvim_win_set_buf(0, buf)
 
 			local function close()
 				vim.bo[buf].modified = false
-				vim.cmd "close"
+				vim.cmd("close")
 				if vim.api.nvim_buf_is_valid(buf) then
 					vim.api.nvim_buf_delete(buf, { force = true })
 				end
@@ -173,7 +173,7 @@ M.setup = {
 					local current_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 					local to_delete = {}
 					for _, line in ipairs(current_lines) do
-						if line ~= "" and not line:match "^#" then
+						if line ~= "" and not line:match("^#") then
 							table.insert(to_delete, line)
 						end
 					end
@@ -187,10 +187,18 @@ M.setup = {
 								{ title = "Plugin Purge" }
 							)
 						else
-							notify("Error deleting plugins: " .. tostring(err), vim.log.levels.ERROR, { title = "Plugin Purge" })
+							notify(
+								"Error deleting plugins: " .. tostring(err),
+								vim.log.levels.ERROR,
+								{ title = "Plugin Purge" }
+							)
 						end
 					else
-						notify("Operation aborted: No plugins selected.", vim.log.levels.WARN, { title = "Plugin Purge" })
+						notify(
+							"Operation aborted: No plugins selected.",
+							vim.log.levels.WARN,
+							{ title = "Plugin Purge" }
+						)
 					end
 
 					close()

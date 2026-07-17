@@ -63,10 +63,6 @@ local lsp_attach = function(args)
 	end
 
 	-- [[ Keymaps ]]
-	-- grn/gra/grr/gri/grt/grx/gO are Nvim 0.13 default global mappings and
-	-- are intentionally not redefined here (longest-match resolution means
-	-- mini.jump's standalone f/t maps never intercept the gr* sequences).
-
 	if client:supports_method("textDocument/declaration") then
 		u.nmap("grd", vim.lsp.buf.declaration, "LSP: Declaration", { buffer = args.buf })
 	end

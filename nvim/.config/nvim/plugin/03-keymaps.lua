@@ -56,7 +56,6 @@ u.imap(".", ".<C-g>u", nil)
 u.imap(";", ";<C-g>u", nil)
 
 -- 8. [ BUFFER NAVIGATION ]
--- Note: [b/]b and [q/]q are Nvim 0.13 default mappings; H/L are the fast path.
 u.nmap("H", "<cmd>bprevious<CR>", "Buffer: Go to Previous")
 u.nmap("L", "<cmd>bnext<CR>", "Buffer: Go to Next")
 u.nmap("<leader>bb", "<cmd>e #<CR>", "Buffer: Switch to Alternate")

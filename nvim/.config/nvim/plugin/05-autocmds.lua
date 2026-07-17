@@ -18,7 +18,7 @@ end
 u.autocmd("FileType", "*", treesitter_attach, "Start Treesitter highlighting")
 -- 2. [ UI POLISH ]
 -- Highlight the affected text briefly after a yank or put to provide
--- visual feedback (TextPutPost is new in Nvim 0.13).
+-- visual feedback
 local highlight_yank = function()
 	vim.hl.hl_op({ higroup = "Visual", timeout = 200 })
 end
