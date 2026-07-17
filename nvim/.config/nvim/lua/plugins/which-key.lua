@@ -21,6 +21,7 @@ mini.now(function()
 	wk.add({
 		-- Top level groups
 		{ "<leader>c", group = "Code", icon = "" },
+		{ "<leader>cg", desc = "Goto Definition", icon = icons.get("lsp", "keyword") },
 		{ "<leader>d", group = "Debug", icon = icons.get("lsp", "event") },
 		{ "<leader>f", group = "Find (Files/Buffers)", icon = icons.get("lsp", "reference") },
 		{ "<leader>g", group = "Git", icon = icons.get("filetype", "git") },
