@@ -52,7 +52,14 @@ u.autocmd("BufRead", { ".env", ".env.*" }, function()
 end, "Syntax highlighting for secret files")
 -- 6. [ WHITESPACE MANAGEMENT ]
 -- Convert tabs to spaces on save to maintain consistent formatting.
-u.autocmd("BufWritePre", "*", "silent! %retab!", "Convert tabs to spaces on save")
+-- Guarded: filetypes where leading tabs are semantic (make, go, just) or
+-- buffers using real tabs ('noexpandtab') must never be retabbed.
+local retab_skip = { make = true, go = true, just = true }
+u.autocmd("BufWritePre", "*", function()
+	if vim.bo.expandtab and not retab_skip[vim.bo.filetype] then
+		vim.cmd("silent! %retab!")
+	end
+end, "Convert tabs to spaces on save")
 u.autocmd("BufWritePre", "*", function()
 	Config.safe_require("mini.trailspace").trim()
 end, "Trims Trailing Whitesapce")
