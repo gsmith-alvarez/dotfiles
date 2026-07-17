@@ -246,7 +246,7 @@ u.nmap("<A-q>", toggle_qf, "List: Toggle Quickfix")
 local toggle_loc = function()
 	vim.cmd(vim.fn.getloclist(0, { winid = true }).winid ~= 0 and "lclose" or "lopen")
 end
-u.nmap("<leader>ul", toggle_loc, "List: Toggle Location")
+u.nmap("<leader>xl", toggle_loc, "List: Toggle Location")
 u.nmap("<A-x>", toggle_loc, "List: Toggle Location")
 u.nmap("<leader>un", function()
 	snacks.notifier.show_history()
