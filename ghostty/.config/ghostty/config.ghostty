@@ -26,6 +26,12 @@ font-feature = ss08
 window-decoration = none
 notify-on-command-finish= unfocused
 quit-after-last-window-closed = true
+gtk-titlebar = true
+gtk-titlebar-style = native
+gtk-wide-tabs = true
+gtk-toolbar-style = flat
+gtk-tabs-location = top
+window-show-tab-bar = auto
 
 # --- Keybindings ---
 # Split Navigation
