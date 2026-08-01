@@ -77,6 +77,8 @@ vim.pack.add({
 	gh("rafamadriz/friendly-snippets"),
 	gh("saghen/blink.lib"),
 	gh("saghen/blink.cmp"),
+	gh("lewis6991/async.nvim"),
+	gh("theprimeagen/refactoring.nvim"),
 	gh("MeanderingProgrammer/render-markdown.nvim"),
 	gh("obsidian-nvim/obsidian.nvim"),
 	gh("gaoDean/autolist.nvim"),
