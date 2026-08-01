@@ -1,18 +1,10 @@
--- =============================================================================
--- [ MARKDOWN ]
--- render-markdown.nvim — in-buffer markdown rendering.
--- obsidian.nvim        — Obsidian vault integration.
--- Note: obsidian's built-in UI is disabled in favour of render-markdown.
--- =============================================================================
+-- markdown
 
 local M = {}
 
 local mini = Config.safe_require("plugins.mini")
 
--- -----------------------------------------------------------------------------
--- 1. [ RENDER-MARKDOWN ]
--- Must be set up before obsidian to ensure its rendering hooks are in place.
--- -----------------------------------------------------------------------------
+-- 1. Render-markdown
 mini.now(function()
 	Config.safe_require("render-markdown").setup({
 		completions = { lsp = { enabled = true } },
@@ -23,9 +15,7 @@ mini.now(function()
 		},
 	})
 
-	-- -----------------------------------------------------------------------------
-	-- 2. [ OBSIDIAN.NVIM ]
-	-- -----------------------------------------------------------------------------
+-- 2. Obsidian.nvim
 	Config.safe_require("obsidian").setup({
 		workspaces = {
 			{
@@ -36,17 +26,13 @@ mini.now(function()
 		completion = {
 			min_chars = 1,
 		},
-		-- Use note titles as filenames instead of Zettelkasten random numbers
 		note_id_func = function(title)
 			if title ~= nil then
-				-- Remove characters that are illegal in filenames but keep casing and spaces
 				return title:gsub("[^%w%s%-]", "")
 			else
-				-- Fall back to Zettelkasten ID if no title
 				return tostring(os.time())
 			end
 		end,
-		-- Disabled in favour of render-markdown.nvim
 		ui = { enabled = false },
 		legacy_commands = false,
 		picker = {
@@ -61,11 +47,9 @@ mini.now(function()
 			end,
 		},
 		templates = {
-			-- Path is relative to the workspace path defined above
 			folder = "500-Resources/Templates",
 			date_format = "%Y-%m-%d",
 			time_format = "%H:%M",
-			-- Allow overriding existing variables in the note
 			substitutions = {
 				today = function()
 					return os.date("%Y-%m-%d")

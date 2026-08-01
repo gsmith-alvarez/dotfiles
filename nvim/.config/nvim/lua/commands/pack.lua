@@ -1,10 +1,8 @@
--- [[ PLUGIN MANAGEMENT DOMAIN: lua/commands/pack.lua ]]
--- =============================================================================
+-- plugin management
 
 local M = {}
 local u = Config.safe_require("core.utils")
 
--- Use Snacks for notifications if available, fallback to native
 local function notify(msg, level, opts)
 	local snacks = Config.safe_require("snacks")
 	if snacks then
@@ -127,7 +125,6 @@ M.setup = {
 
 			table.sort(inactive_plugins)
 
-			-- Reuse existing purge buffer if already open
 			local buf_name = "Plugin_Purge_List"
 			local existing = vim.fn.bufnr(buf_name)
 			if existing ~= -1 then

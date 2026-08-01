@@ -1,24 +1,14 @@
--- =============================================================================
--- [ TOOL & PATH MANAGEMENT ]
--- Centralized configuration for external binaries, versioning, and environment.
--- This module ensures Neovim can locate compilers, debuggers, and language servers.
--- =============================================================================
+-- tool & path management
 
 local M = {}
 
--- 1. [ ENVIRONMENT SETUP ]
--- Prioritize virtual environment if active, followed by 'mise' shims, and finally
--- the rest of the system PATH. This ensures that when Neovim calls an external
--- command (like 'python' or 'clangd'), it resolves tool versions correctly.
+-- 1. Environment setup
 local path = vim.env.PATH
 
--- Prepend mise shims to prioritize mise-managed global/project tools
 local mise_shim = vim.fn.expand("~/.local/share/mise/shims")
 path = mise_shim .. ":" .. path
 
--- 2. [ VIRTUAL ENV DETECTION & SOURCING ]
--- If a virtual environment is active in the parent shell or exists in the
--- current working directory, prioritize its binaries over global/mise tools.
+-- 2. Virtual env detection & sourcing
 local venv = vim.env.VIRTUAL_ENV
 if not venv then
 	local cwd = vim.fn.getcwd()
@@ -36,10 +26,7 @@ end
 
 vim.env.PATH = path
 
--- 3. [ MISE INTEGRATION ]
--- Initialize mise to manage project-specific tool versions.
--- RATIONALE: Using mise provides a reproducible environment for LSPs,
--- formatters, and future debugger (DAP) configurations without relying on Mason.
+-- 3. Mise integration
 local ok, mise = pcall(require, "mise")
 if ok then
 	mise.setup({})

@@ -1,10 +1,8 @@
--- =============================================================================
--- [ PLUGIN MANAGEMENT ]
--- =============================================================================
+-- plugin management
 local M = {}
 local u = require("core.utils")
 
--- 1. [ HELPER FUNCTIONS ]
+-- 1. Helper functions
 local function notify(msg, level, opts)
 	local snacks = Config.safe_require("snacks")
 	snacks.notify(msg, vim.tbl_extend("force", { level = level }, opts or {}))
@@ -57,13 +55,13 @@ local function build_luasnip(path)
 	end)
 end
 
--- 2. [ AUTOMATIC POST-INSTALL/UPDATE HOOKS ]
+-- 2. Automatic post-install/update hooks
 local build_kinds = { "install", "update" }
 u.on_packchanged("LuaSnip", build_kinds, function(data)
 	build_luasnip(data.path)
 end, "Build LuaSnip")
 
--- 3. [ PLUGIN SPECIFICATIONS ]
+-- 3. Plugin specifications
 vim.pack.add({
 	gh("catppuccin/nvim"),
 	gh("echasnovski/mini.nvim"),
@@ -90,7 +88,7 @@ vim.pack.add({
 	gh("gsmith-alvarez/run.nvim"),
 })
 
--- 4. [ SELF-HEALING STARTUP CHECK ]
+-- 4. Self-healing startup check
 local data_site = vim.fn.stdpath("data") .. "/site/pack/core/opt"
 local luasnip_path = data_site .. "/LuaSnip"
 if

@@ -1,19 +1,11 @@
--- =============================================================================
--- [ QUICKFIX ]
--- quicker.nvim  — editable quickfix buffer with context lines.
--- nvim-bqf      — floating preview and fzf-style filtering in quickfix.
--- =============================================================================
+-- quickfix
 
 local M = {}
 
 local mini = Config.safe_require("plugins.mini")
 
 mini.later(function()
-	-- -------------------------------------------------------------------------
-	-- 1. [ QUICKER.NVIM ]
-	-- Turns the quickfix list into an editable buffer.
-	-- Edit entries in-place and save to write changes back to disk.
-	-- -------------------------------------------------------------------------
+	-- 1. Quicker.nvim
 	require("quicker").setup({
 		opts = {
 			buflisted = false,
@@ -76,11 +68,7 @@ mini.later(function()
 		},
 	})
 
-	-- -------------------------------------------------------------------------
-	-- 2. [ NVIM-BQF ]
-	-- Adds a floating preview window and fzf-based filtering to quickfix.
-	-- Works automatically — just open the quickfix list and use <p> to preview.
-	-- -------------------------------------------------------------------------
+	-- 2. nvim-bqf
 	require("bqf").setup({
 		auto_enable = true,
 		magic_window = true,

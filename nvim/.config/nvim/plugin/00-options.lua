@@ -1,79 +1,68 @@
--- =============================================================================
--- [ OPTIONS ]
--- Global Neovim settings, behaviors, and UI configurations.
--- =============================================================================
+-- options
 
 local M = {}
 
--- 1. [ FILETYPE OVERRIDES ]
--- Only custom mappings live here; standard extensions/filenames (lua, sh,
--- py, yaml, md, .gitignore, Dockerfile, Justfile, ...) are all detected by
--- Nvim's built-in Lua filetype detection.
+-- 1. Filetype overrides
 vim.filetype.add({
 	filename = {
 		[".env"] = "sh",
 	},
 })
 
--- 2. [ LEADERS & GENERAL ]
-vim.g.mapleader = " " -- Set leader key to Space
-vim.g.maplocalleader = " " -- Set local leader key to Space
-vim.g.have_nerd_font = true -- Inform plugins that a Nerd Font is available
+-- 2. Leaders & general
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+vim.g.have_nerd_font = true
 
 local set = vim.opt
 
--- 3. [ INTERACTION & UI ]
-set.mouse = "a" -- Enable mouse support in all modes
-set.mousescroll = "ver:25,hor:6" -- Tune mouse wheel scroll speed
-set.number = true -- Show absolute line numbers
-set.relativenumber = true -- Show relative line numbers for easier jumping
-set.showmode = false -- Don't show mode (e.g. -- INSERT --) as statusline handles it
-set.clipboard = "unnamedplus" -- Use system clipboard; over SSH Nvim auto-falls-back to the OSC52 provider
-set.confirm = true -- Ask to save changes before quitting an unsaved buffer
+-- 3. Interaction & UI
+set.mouse = "a"
+set.mousescroll = "ver:25,hor:6"
+set.number = true
+set.relativenumber = true
+set.showmode = false
+set.clipboard = "unnamedplus" -- System clipboard; OSC52 fallback over SSH
+set.confirm = true
 
--- 4. [ PROVIDER DEACTIVATION ]
--- Disable providers for languages not used for scripting Neovim to save startup time.
+-- 4. Provider deactivation
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_node_provider = 0
 
--- 5. [ TREESITTER & FOLDING ]
--- Use Treesitter for high-performance, semantic code folding.
+-- 5. Treesitter & folding
 set.foldmethod = "expr"
 set.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 set.foldtext = "v:lua.vim.lsp.foldtext()"
-set.foldlevel = 99 -- Start with all folds open
-set.foldnestmax = 10 -- Limit fold nesting depth
-set.fillchars = "eob: ,fold:╌" -- Custom characters for end-of-buffer and folds
+set.foldlevel = 99
+set.foldnestmax = 10
+set.fillchars = "eob: ,fold:╌"
 
--- 6. [ SEARCH & SPELL ]
-set.ignorecase = true -- Ignore case in search patterns...
-set.smartcase = true -- ...unless the pattern contains upper case characters.
-set.inccommand = "split" -- Show search/replace effects in a live-preview split
-set.spelloptions = "camel" -- Handle camelCase words in spell checking
+-- 6. Search & spell
+set.ignorecase = true
+set.smartcase = true
+set.inccommand = "split"
+set.spelloptions = "camel"
 set.spelllang = { "en_us" }
 set.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
 
--- 7. [ FORMATTING ]
--- Pattern for detecting the start of a numbered list (used for `gw` and formatting).
+-- 7. Formatting
 set.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
-set.iskeyword = "@,48-57,_,192-255,-" -- Treat dash-separated text as one word
+set.iskeyword = "@,48-57,_,192-255,-" -- Keep dash-separated words as one word
 
--- 8. [ PERFORMANCE & PERSISTENCE ]
-set.undofile = true -- Enable persistent undo across sessions
-set.timeoutlen = 300 -- Time (ms) to wait for a mapped sequence to complete
-set.updatetime = 200 -- Faster CursorHold/diagnostic refresh
+-- 8. Performance & persistence
+set.undofile = true
+set.timeoutlen = 300
+set.updatetime = 200
 set.jumpoptions = "view" -- Preserve view when jumping
 set.splitkeep = "screen" -- Keep screen stable on split changes
-set.smoothscroll = true -- Smooth scrolling behavior
-set.scrolloff = 10 -- Minimum lines to keep above/below the cursor
+set.smoothscroll = true
+set.scrolloff = 10
 set.scrolloffpad = 1 -- Allow the cursor to stay centered at end-of-file
-set.switchbuf = "usetab" -- Jump to existing tab if buffer is already open
+set.switchbuf = "usetab"
 
--- 9. [ SYNTAX & FILETYPE ]
--- Note: filetype detection, ftplugins and syntax highlighting are enabled
--- by Nvim at startup; no explicit :filetype/:syntax commands are needed.
+-- Nvim enables filetype detection & syntax at startup.
 vim.api.nvim_create_autocmd("FileType", {
 	desc = "Keep formatoptions clean for editing",
 	callback = function()
@@ -81,36 +70,36 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- 10. [ WRAPPING & INDENTATION ]
-set.wrap = true -- Disable line wrapping by default
-set.linebreak = true -- Wrap at words instead of characters when enabled
-set.showbreak = "↪ " -- Visual indicator at the start of wrapped lines
-set.breakindent = true -- Wrapped lines retain the same indentation level
-set.breakindentopt = "list:-1" -- Special indentation for lists
-set.colorcolumn = "+1" -- Highlight the column after 'textwidth'
-set.cursorline = true -- Highlight the current cursor line
-set.cursorlineopt = "screenline,number" -- Better cursorline behavior with wrapped lines
+-- 10. Wrapping & indentation
+set.wrap = true
+set.linebreak = true
+set.showbreak = "↪ "
+set.breakindent = true
+set.breakindentopt = "list:-1"
+set.colorcolumn = "+1"
+set.cursorline = true
+set.cursorlineopt = "screenline,number"
 
 -- Standard 4-space indentation
-set.expandtab = true -- Use spaces instead of tabs
-set.shiftwidth = 4 -- Size of an indent
-set.tabstop = 4 -- Number of spaces a tab counts for
-set.softtabstop = 4 -- Number of spaces for a tab while editing
+set.expandtab = true
+set.shiftwidth = 4
+set.tabstop = 4
+set.softtabstop = 4
 
--- 11. [ COMPLETION & PUM ]
-set.autocomplete = false -- Disable built-in completion (using blink.cmp)
-set.completeopt:append("nearest") -- Prioritize completion matches near the cursor
-set.completetimeout = 100 -- Limit built-in completion source delay
-set.pumborder = "rounded" -- Rounded borders for the popup menu
-set.pummaxwidth = 20 -- Limit popup menu width
+-- 11. Completion & pum
+set.autocomplete = false
+set.completeopt:append("nearest")
+set.completetimeout = 100
+set.pumborder = "rounded"
+set.pummaxwidth = 20
 
--- 12. [ WINDOWS & SPLITS ]
-set.splitright = true -- Vertical splits open to the right
-set.splitbelow = true -- Horizontal splits open below
-set.winborder = "rounded" -- Rounded borders for floating windows
+-- 12. Windows & splits
+set.splitright = true
+set.splitbelow = true
+set.winborder = "rounded"
 
--- 13. [ WHITESPACE VISUALIZATION ]
-set.list = true -- Show invisible characters
+-- 13. Whitespace visualization
+set.list = true
 set.listchars = {
 	tab = "» ",
 	trail = "·",
@@ -120,18 +109,15 @@ set.listchars = {
 	precedes = "…",
 }
 
--- 14. [ COMMAND LINE & STATUS ]
-set.laststatus = 3 -- Use a single global statusline
-set.showcmd = true -- Show the (partial) command in the last line
-set.showcmdloc = "statusline" -- Show command keys in the statusline
+-- 14. Command line & status
+set.laststatus = 3
+set.showcmd = true
+set.showcmdloc = "statusline"
 
--- 15. [ PROJECT-SPECIFIC CONFIG ]
--- Automatically load .nvim.lua, .nvimrc, or .exrc files in the current directory.
--- Includes security check: Neovim will ask for permission before running them.
+-- 15. Project-specific config
 set.exrc = true
 
--- 16. [ MARKDOWN ]
--- Keep markdown indentation/list behavior under user control.
+-- 16. Markdown
 vim.g.markdown_recommended_style = 0
 
 return M

@@ -1,14 +1,8 @@
--- =============================================================================
--- [ MINI.NVIM ]
--- Configuration for various modular plugins from the 'mini.nvim' collection.
--- =============================================================================
+-- mini.nvim
 
 local M = {}
 
--- [ 1. MINI.MISC & PACER SETUP ]
--- 'mini.misc' provides the `safely` function used for deferred loading.
--- We use a "pacer" pattern (now/later) to optimize startup time by deferring
--- non-critical plugin initialization.
+-- 1. Mini.misc & pacer setup
 local misc = Config.safe_require("mini.misc")
 
 local function pacer_logic(mode, f)
@@ -43,15 +37,13 @@ M.on_filetype = function(ft, f)
 	pacer_logic("filetype:" .. ft, f)
 end
 
--- Deferred to avoid conflicts with :restart process handover
 vim.schedule(function()
 	if package.loaded["mini.misc"] then
 		misc.setup_auto_root()
 	end
 end)
 
--- [ 2. IMMEDIATE SETUP (M.now) ]
--- Critical UI components and theme that should be loaded during startup.
+-- 2. Immediate setup (M.now)
 M.now(function()
 	-- A. COLORSCHEME (catppuccin)
 	local catppuccin = Config.safe_require("catppuccin")
@@ -82,15 +74,13 @@ M.now(function()
 	Config.safe_require("mini.statusline").setup()
 end)
 
--- [ 3. DEFERRED SETUP (M.later) ]
--- Non-critical tools and editing enhancements loaded after startup.
+-- 3. Deferred setup (M.later)
 M.later(function()
 	-- A. NAVIGATION & EDITING
 	Config.safe_require("mini.files").setup()
 	Config.safe_require("mini.input").setup()
 	Config.safe_require("mini.jump2d").setup({
 		mappings = {
-			-- Resolves conflict with obsidian.nvim
 			start_jumping = "<S-CR>",
 		},
 	})
@@ -122,7 +112,6 @@ M.later(function()
 	local hipatterns = Config.safe_require("mini.hipatterns")
 	hipatterns.setup({
 		highlighters = {
-			-- Highlight standalone 'FIXME', 'TODO', 'NOTE'
 			fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
 			hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
 			wip = { pattern = "%f[%w]()WIP()%f[%W]", group = "MiniHipatternsHack" },
@@ -130,7 +119,6 @@ M.later(function()
 			note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
 			info = { pattern = "%f[%w]()INFO()%f[%W]", group = "MiniHipatternsNote" },
 
-			-- Highlight hex colors
 			hex_color = hipatterns.gen_highlighter.hex_color(),
 		},
 	})
@@ -147,7 +135,6 @@ M.later(function()
 				a = { "@conditional.outer", "@loop.outer" },
 				i = { "@conditional.inner", "@loop.inner" },
 			}),
-			-- From mini.extra
 			i = ai_extra.indent(),
 			b = ai_extra.buffer(),
 			d = ai_extra.diagnostic(),

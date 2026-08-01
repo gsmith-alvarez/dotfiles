@@ -1,8 +1,4 @@
--- =============================================================================
--- [ KEYMAPS ]
--- Fundamental Keyboard Interaction Layer.
--- Defines global keybindings that do not depend on external plugins.
--- =============================================================================
+-- keymaps
 
 local M = {}
 local u = Config.safe_require("core.utils")
@@ -10,10 +6,10 @@ if not u then
 	return
 end
 
--- 1. [ TERMINAL MODE ]
+-- 1. Terminal mode
 u.map("t", "<A-t>", [[<C-\><C-n>]], "Terminal: Exit Mode")
 
--- 2. [ WINDOW & SPLIT MANAGEMENT ]
+-- 2. Window & split management
 u.nmap("<leader>wv", "<cmd>vsplit<CR>", "Window: Split Vertically")
 u.nmap("<leader>ws", "<cmd>split<CR>", "Window: Split Horizontally")
 u.nmap("<leader>wq", "<cmd>quit<CR>", "Window: Close Current Window")
@@ -29,39 +25,39 @@ u.nmap("<C-Right>", "<cmd>vertical resize +2<cr>", "Window: Resize Right")
 u.nmap("<leader>-", "<C-w>s", "Window: Split Horizontally", { remap = true })
 u.nmap("<leader>|", "<C-w>v", "Window: Split Vertically", { remap = true })
 
--- 3. [ NAVIGATION ]
+-- 3. Navigation
 u.nmap("<C-h>", "<C-w><C-h>", "Window: Focus Left")
 u.nmap("<C-l>", "<C-w><C-l>", "Window: Focus Right")
 u.nmap("<C-j>", "<C-w><C-j>", "Window: Focus Down")
 u.nmap("<C-k>", "<C-w><C-k>", "Window: Focus Up")
 
--- 4. [ EDITING PRIMITIVES ]
+-- 4. Editing primitives
 u.map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", "Move: Visual Up", { expr = true, silent = true })
 u.map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", "Move: Visual Down", { expr = true, silent = true })
 
--- 5. [ SEARCH ENHANCEMENTS ]
+-- 5. Search enhancements
 u.nmap("<Esc>", "<cmd>nohlsearch<CR>", "Search: Clear Highlight")
 u.map("n", "n", "'Nn'[v:searchforward] . 'zv'", "Search: Next Result", { expr = true })
 u.map("n", "N", "'nN'[v:searchforward] . 'zv'", "Search: Prev Result", { expr = true })
 u.map({ "x", "o" }, "n", "'Nn'[v:searchforward]", "Search: Next Result", { expr = true })
 u.map({ "x", "o" }, "N", "'nN'[v:searchforward]", "Search: Prev Result", { expr = true })
 
--- 6. [ VISUAL MODE INDENTATION ]
+-- 6. Visual mode indentation
 u.map("x", "<", "<gv", "Edit: Indent Left (keep selected)")
 u.map("x", ">", ">gv", "Edit: Indent Right (keep selected)")
 
--- 7. [ INSERT MODE UNDO BREAKPOINTS ]
+-- 7. Insert mode undo breakpoints
 u.imap(",", ",<C-g>u", nil)
 u.imap(".", ".<C-g>u", nil)
 u.imap(";", ";<C-g>u", nil)
 
--- 8. [ BUFFER NAVIGATION ]
+-- 8. Buffer navigation
 u.nmap("H", "<cmd>bprevious<CR>", "Buffer: Go to Previous")
 u.nmap("L", "<cmd>bnext<CR>", "Buffer: Go to Next")
 u.nmap("<leader>bb", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
 u.nmap("<leader>`", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
 
--- 9. [ UTILITIES ]
+-- 9. Utilities
 u.map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", "File: Save")
 u.nmap("<leader>bn", "<cmd>enew<CR>", "Buffer: Create New")
 u.nmap("<leader>qq", "<cmd>qa<CR>", "Session: Exit Neovim")
@@ -73,7 +69,7 @@ u.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", "Edit: Move Line Up")
 u.nmap("<C-d>", "<C-d>zz", "Scroll: Down and Center")
 u.nmap("<C-u>", "<C-u>zz", "Scroll: Up and Center")
 
--- 10. [ INSPECT / DIAGNOSTICS ]
+-- 10. Inspect / diagnostics
 u.nmap("<leader>ui", vim.show_pos, "Inspect: Show Highlights")
 u.nmap("<leader>uI", function()
 	vim.treesitter.inspect_tree()

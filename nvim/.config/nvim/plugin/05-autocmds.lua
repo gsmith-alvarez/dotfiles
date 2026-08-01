@@ -1,13 +1,9 @@
--- =============================================================================
--- [ GLOBAL AUTOCOMMANDS ]
--- Event-driven automation and UI enhancements.
--- =============================================================================
+-- global autocommands
 local u = Config.safe_require("core.utils")
 if not u then
 	return
 end
--- 1. [ TREESITTER ATTACHMENT ]
--- Automatically start Treesitter highlighting for supported filetypes.
+-- 1. Treesitter attachment
 --- @param args table Autocmd callback args.
 local treesitter_attach = function(args)
 	local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
@@ -16,15 +12,12 @@ local treesitter_attach = function(args)
 	end
 end
 u.autocmd("FileType", "*", treesitter_attach, "Start Treesitter highlighting")
--- 2. [ UI POLISH ]
--- Highlight the affected text briefly after a yank or put to provide
--- visual feedback
+-- 2. UI polish
 local highlight_yank = function()
 	vim.hl.hl_op({ higroup = "Visual", timeout = 200 })
 end
 u.autocmd({ "TextYankPost", "TextPutPost" }, "*", highlight_yank, "Highlight yanked/put text")
--- 3. [ CURSOR PERSISTENCE ]
--- Retains the position of the cursor between Neovim instances.
+-- 3. Cursor persistence
 --- @param args table Autocmd callback args.
 local cursor_persist = function(args)
 	local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
@@ -38,23 +31,18 @@ local cursor_persist = function(args)
 	end
 end
 u.autocmd("BufReadPost", "*", cursor_persist, "Restore cursor position on file open")
--- 4. [ WINDOW BEHAVIOR ]
--- Ensure help/man files open in a vertical split on the right.
+-- 4. Window behavior
 u.autocmd("FileType", { "help", "man" }, function()
 	vim.cmd("wincmd L")
 end, "Open help/man in a vertical split")
 
--- Automatically equalize splits when the terminal window is resized.
 u.autocmd("VimResized", "*", "wincmd =", "Equalize splits on window resize")
--- 5. [ FILETYPE OVERRIDES ]
--- Force specific highlighting for secret files or configurations.
+-- 5. Filetype overrides
 u.autocmd("BufRead", { ".env", ".env.*" }, function()
 	vim.bo.filetype = "dosini"
 end, "Syntax highlighting for secret files")
--- 6. [ WHITESPACE MANAGEMENT ]
--- Convert tabs to spaces on save to maintain consistent formatting.
--- Guarded: filetypes where leading tabs are semantic (make, go, just) or
--- buffers using real tabs ('noexpandtab') must never be retabbed.
+-- 6. Whitespace management
+-- Skip make/go/just and noexpandtab buffers.
 local retab_skip = { make = true, go = true, just = true }
 u.autocmd("BufWritePre", "*", function()
 	if vim.bo.expandtab and not retab_skip[vim.bo.filetype] then
@@ -64,33 +52,20 @@ end, "Convert tabs to spaces on save")
 u.autocmd("BufWritePre", "*", function()
 	Config.safe_require("mini.trailspace").trim()
 end, "Trims Trailing Whitesapce")
--- 7. [ FILESYSTEM HELPERS ]
--- Automatically create parent directories if they don't exist when saving a file.
+-- 7. Filesystem helpers
 u.autocmd("BufWritePre", "*", function(event)
-	if event.match:match("^%w%w+://") then
-		return
-	end
-	local file = vim.uv.fs_realpath(event.match) or event.match
 	local dir = vim.fn.fnamemodify(file, ":p:h")
 	if vim.fn.isdirectory(dir) == 0 then
 		vim.fn.mkdir(dir, "p")
 	end
 end, "Auto-create parent directories on save")
 
--- Integrated File Renaming:
--- When a file is renamed via 'mini.files', this hook triggers 'snacks.rename'
--- to automatically update LSP references and imports across the project.
 u.autocmd("User", "MiniFilesActionRename", function(event)
 	require("snacks").rename.on_rename_file(event.data.from, event.data.to)
 end, "Project-aware file renaming (mini.files + snacks.rename)")
-
--- Templates
--- Use templates when ipening a file if it exists.
 u.autocmd("BufNewFile", "*", "silent! 0r " .. vim.fn.stdpath("config") .. "/templates/skeleton.%:e", "Use a template")
 
--- 8. [ MODULAR REGISTRATION ]
--- Load domain-specific autocommands from the lua/autocmds/ directory.
--- Maintained either for really large commands or for specific categories
+-- 8. Modular registration
 local autocmds = Config.safe_require("autocmds")
 if not autocmds then
 	return

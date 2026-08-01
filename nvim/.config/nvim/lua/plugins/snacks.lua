@@ -1,14 +1,9 @@
--- =============================================================================
--- [ SNACKS.NVIM ]
--- Configuration for the snacks.nvim utility collection.
--- =============================================================================
+-- snacks.nvim
 
 local M = {}
 
--- 1. [ INITIALIZATION ]
--- Load snacks immediately to ensure global helpers and 'get' functions
--- are available for early-attach events (LSP, BufRead).
--- Includes custom resolution logic for images (YouTube thumbnails and Obsidian attachments).
+-- 1. Initialization
+-- Load early so helpers are ready for LSP/BufRead events.
 local snacks = Config.safe_require("snacks")
 
 local youtube_cache_dir = vim.fn.stdpath("state") .. "/youtube_thumbnails"
@@ -67,7 +62,7 @@ M.resolve_obsidian = function(path, src)
 	end
 end
 
--- [[ GLOBAL DEBUG HELPERS ]]
+-- GLOBAL DEBUG HELPERS
 --- Debug helper that proxies to snacks.debug.inspect.
 _G.dd = function(...)
 	snacks.debug.inspect(...)
@@ -82,9 +77,7 @@ vim._print = function(...)
 	_G.dd(...)
 end
 
--- 2. [ CONSOLIDATED SETUP ]
--- Snacks is highly modular and lazy-loads its tools by default.
--- We call setup once here to initialize the core config table.
+-- 2. Consolidated setup
 snacks.setup({
 	-- A. UI & VISUALS (Logic runs on buffer events)
 	bigfile = { enabled = true },
@@ -165,17 +158,12 @@ snacks.setup({
 		},
 	},
 	scratch = { enabled = true },
-	-- PROF=1 is what I have it set to
 	profiler = { enabled = true },
 	toggle = { enabled = true },
 	zen = { enabled = true },
 })
 
--- 3. [ TOGGLES ]
--- We define these here using the Snacks Toggle API.
--- These appear in Which-Key via Snacks toggle integration.
--- Profiler highlights uses a custom toggle to ensure profiler state is initialized
--- before enabling highlights.
+-- 3. Toggles
 local mini = Config.safe_require("plugins.mini")
 mini.later(function()
 	Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
@@ -217,10 +205,7 @@ mini.later(function()
 	Snacks.toggle.zoom():map("<leader>uZ")
 end)
 
--- -----------------------------------------------------------------------------
--- 4. [ DROPBAR ]
--- Breadcrumb navigation bar. Minimal config — just needs to be activated.
--- -----------------------------------------------------------------------------
+-- 4. Dropbar
 mini.later(function()
 	Config.safe_require("dropbar").setup()
 end)

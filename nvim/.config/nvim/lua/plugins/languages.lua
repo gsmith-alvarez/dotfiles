@@ -1,23 +1,9 @@
--- =============================================================================
--- [ LANGUAGES ]
--- Source of truth for language-specific intelligence.
--- Treesitter — syntax, parsing, and text objects.
--- LSP        — language server configuration and activation.
--- =============================================================================
+-- languages
 
 local M = {}
 local mini = Config.safe_require("plugins.mini")
 
--- -----------------------------------------------------------------------------
--- 1. [ TREESITTER ]
--- nvim-treesitter tracks the rewritten 'main' branch, where setup() only
--- accepts 'install_dir'. Parser installation is explicit and idempotent
--- (already-installed parsers are skipped).
--- Highlighting is started per-buffer by the FileType autocmd in
--- plugin/05-autocmds.lua (vim.treesitter.start) — the recommended pattern.
--- Node selection is built into Nvim 0.13: an/in (parent/child node) and
--- [n/]n/[N/]N (node/sibling) in Visual mode.
--- -----------------------------------------------------------------------------
+-- 1. Treesitter
 mini.now(function()
 	local ts = Config.safe_require("nvim-treesitter")
 	ts.setup()
@@ -36,18 +22,12 @@ mini.now(function()
 		"html",
 		"yaml",
 	})
-	-- textobjects is kept for its queries/*.scm files, which back the
-	-- mini.ai treesitter textobjects (f/c/o specs). No modules are enabled.
 	Config.safe_require("nvim-treesitter-textobjects").setup()
 end)
 
--- -----------------------------------------------------------------------------
--- 2. [ DIAGNOSTICS ]
--- -----------------------------------------------------------------------------
+-- 2. Diagnostics
 
--- [ DIAGNOSTICS: UI & SIGNS ]
--- Configure the diagnostic engine to use mini.icons.
--- Uses the 'signs.text' table for gutter icons.
+-- DIAGNOSTICS: UI & SIGNS
 vim.diagnostic.config({
 	signs = {
 		text = {
@@ -62,24 +42,17 @@ vim.diagnostic.config({
 		prefix = "●",
 	},
 	severity_sort = true,
-	-- No float.border: 'winborder' (rounded) already applies to diagnostic floats.
 })
 
--- -----------------------------------------------------------------------------
--- 3. [ LSP ]
--- -----------------------------------------------------------------------------
--- Use vim.lsp.config() to merge project-specific overrides with the
--- default configurations provided by nvim-lspconfig.
+-- 3. LSP
 
 Config.safe_require("lazydev").setup({
 	library = {
-		-- load luvit types when vim.uv is found
 		{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 	},
 })
 
--- [ LUA (lua_ls) ]
--- Note: lazydev.nvim handles the VIMRUNTIME and workspace library injection.
+-- LUA (lua_ls)
 vim.lsp.config("lua_ls", {
 	settings = {
 		Lua = {
@@ -90,7 +63,7 @@ vim.lsp.config("lua_ls", {
 	},
 })
 
--- [ C/C++ (clangd) ]
+-- C/C++ (clangd)
 vim.lsp.config("clangd", {
 	filetypes = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
 	settings = {
@@ -105,14 +78,10 @@ vim.lsp.config("clangd", {
 	},
 })
 
--- [ CAPABILITIES ]
--- blink.cmp does not auto-inject its capabilities; advertise them to every
--- server through the wildcard config (includes snippetSupport, so the old
--- jsonls-only override is no longer needed).
+-- blink.cmp doesn't auto-inject capabilities; advertise via wildcard.
 vim.lsp.config("*", { capabilities = Config.safe_require("blink.cmp").get_lsp_capabilities() })
 
--- 4. [ ACTIVATION ]
--- Enable the configured servers for the current session.
+-- 4. Activation
 vim.lsp.enable({
 	"ty", -- Python (Astral)
 	"ruff", -- Python (Formatting/Linting)

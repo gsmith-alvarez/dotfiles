@@ -1,8 +1,4 @@
--- [[ FORMAT DOMAIN: lua/autocmds/format.lua ]]
--- =============================================================================
--- Purpose: Format on save for multiple filetypes using external tools or LSP.
--- Domain:  Formatting
--- =============================================================================
+-- format
 
 local M = {}
 

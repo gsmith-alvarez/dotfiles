@@ -1,10 +1,5 @@
--- =============================================================================
--- [ INIT.LUA ]
--- Entry point for Neovim configuration.
--- =============================================================================
+-- init.lua
 
--- Define config table to be able to pass data between scripts
--- It is a global variable which can be use both as `_G.Config` and `Config`
 _G.Config = {}
 
 if vim.env.PROF then
@@ -22,26 +17,19 @@ if vim.env.PROF then
 	end
 end
 
--- Assign the anonymous function directly to the table key.
 Config.safe_require = function(module_or_list, desc)
-	-- Use the call stack to find the executing script, fallback to SYSTEM
 	desc = desc or (debug.getinfo(2, "S") and debug.getinfo(2, "S").source:match("@?(.*/)") or "SYSTEM")
 
-	-- Handle table of modules recursively
 	if type(module_or_list) == "table" then
 		local loaded_modules = {}
 		for _, m in ipairs(module_or_list) do
-			-- Recursively call and store the payload by module name
 			loaded_modules[m] = Config.safe_require(m, desc)
 		end
-		-- Return the dictionary of loaded modules
 		return loaded_modules
 	end
 
-	-- Base case: handle single string module
 	local ok, result = pcall(require, module_or_list)
 
-	-- Check if nil patterns
 	if not ok then
 		vim.schedule(function()
 			local snacks = pcall(require, "snacks") and require("snacks")
@@ -68,17 +56,15 @@ Config.safe_require = function(module_or_list, desc)
 	return result
 end
 
--- 1. [ PERFORMANCE OPTIMIZATION ]
--- Enable the experimental Lua loader to speed up startup by caching byte-code.
+-- 1. Performance optimization
 if vim.loader then
 	vim.loader.enable()
 end
 
--- 2. [ EXPERIMENTAL FEATURES ]
+-- 2. Experimental features
 Config.safe_require("vim._core.ui2").enable({})
 
--- 3. [ BUILT-IN PLUGIN ACTIVATION ]
--- Enable built-in plugins that are useful but not enabled by default.
+-- 3. Built-in plugin activation
 local builtins = {
 	"nvim.difftool",
 	"cfilter",
@@ -90,7 +76,7 @@ for _, plugin in ipairs(builtins) do
 	vim.cmd.packadd(plugin)
 end
 
--- 4. [ BUILT-IN PLUGIN DEACTIVATION ]
+-- 4. Built-in plugin deactivation
 local disabled_builtins = {
 	"netrw",
 	"netrwPlugin",
@@ -115,9 +101,8 @@ for _, plugin in ipairs(disabled_builtins) do
 	vim.g["loaded_" .. plugin] = 1
 end
 
--- 5. [ RUNTIME PATH CLEANUP ]
+-- 5. Runtime path cleanup
 local unwanted_paths = { "/usr/share/vim/vimfiles", "/usr/share/vim/vimfiles/after" }
 vim.opt.runtimepath:remove(unwanted_paths)
 
--- 6. [ BOOTSTRAP ]
--- The 'plugin/' directory is auto-loaded by Neovim's engine.
+-- 6. Bootstrap

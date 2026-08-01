@@ -1,17 +1,12 @@
--- =============================================================================
--- [ MENU.LUA ]
--- Right-click popup menu with safe, context-aware actions.
--- Inspired by TJ DeVries' Neovim popup menu setup.
--- =============================================================================
+-- menu.lua
 local M = {}
 
 vim.opt.mousemodel = "popup"
 
--- Disable Neovim's default MenuPopup autocmd so it doesn't fight ours.
--- The default group is "nvim.popupmenu" (with a dot) in 0.11+.
+-- Disable default nvim.popupmenu (0.11+) to avoid conflict.
 pcall(vim.api.nvim_del_augroup_by_name, "nvim.popupmenu")
 
--- ---------- helpers ---------------------------------------------------------
+-- Helpers
 
 local function has_lsp()
 	return next(vim.lsp.get_clients({ bufnr = 0 })) ~= nil
@@ -58,14 +53,12 @@ local function copy_file_path()
 	notify("Copied file path")
 end
 
--- All menu manipulation goes through this so a missing item never throws.
 local function menu(cmd)
 	vim.cmd("silent! " .. cmd)
 end
 
--- ---------- menu definitions -----------------------------------------------
+-- Menu definitions
 
--- Wipe potentially-existing items before redefining (silent so first load is fine).
 local items = {
 	"Go\\ to\\ definition",
 	"References",
@@ -81,8 +74,6 @@ for _, item in ipairs(items) do
 	menu("aunmenu PopUp." .. item)
 end
 
--- Define our items via the silent helper too — anoremenu doesn't error on redefine,
--- but staying consistent keeps load-order surprises out of the picture.
 menu([[aunmenu   PopUp]])
 menu([[anoremenu PopUp.Inspect <Cmd>Inspect<CR>]])
 menu([[amenu     PopUp.-1- <Nop>]])
@@ -100,7 +91,7 @@ menu([[anoremenu PopUp.Open\ in\ web\ browser <Cmd>lua require('plugins.menu').o
 menu([[amenu     PopUp.-4- <Nop>]])
 menu([[anoremenu PopUp.Git\ Browse        <Cmd>lua require('plugins.menu').git_browse()<CR>]])
 
--- ---------- context-aware enable/disable -----------------------------------
+-- Context-aware enable/disable
 
 local group = vim.api.nvim_create_augroup("user_popupmenu", { clear = true })
 
@@ -148,9 +139,8 @@ vim.api.nvim_create_autocmd("MenuPopup", {
 	end,
 })
 
--- ---------- exposed actions -------------------------------------------------
--- Lambdas keep LuaLS happy: vim.lsp.buf.* gets inferred as table in some
--- runtime meta combinations, which doesn't satisfy `fun()`.
+-- Exposed actions
+-- Lambdas keep LuaLS happy (avoids fun() inference issues).
 
 --- Trigger LSP definition from popup menu.
 function M.go_to_definition()

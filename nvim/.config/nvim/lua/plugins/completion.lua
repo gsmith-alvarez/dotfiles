@@ -1,18 +1,11 @@
--- =============================================================================
--- [ COMPLETION ]
--- LuaSnip — snippet engine and loader.
--- blink.cmp — high-performance completion engine.
--- Note: blink.cmp Cargo build script is in plugin/02-pack.lua.
--- =============================================================================
+-- completion
 
 local M = {}
 
 local mini = Config.safe_require("plugins.mini")
 local icons = Config.safe_require("mini.icons")
 
--- -----------------------------------------------------------------------------
--- 1. [ LUASNIP ]
--- -----------------------------------------------------------------------------
+-- 1. Luasnip
 mini.later(function()
 	local ls = Config.safe_require("luasnip")
 	local types = require("luasnip.util.types")
@@ -72,13 +65,11 @@ mini.later(function()
 		},
 	})
 
-	-- Load friendly-snippets + custom VSCode/JSON snippets
 	require("luasnip.loaders.from_vscode").lazy_load()
 	require("luasnip.loaders.from_vscode").lazy_load({
 		paths = { vim.fn.stdpath("config") .. "/snippets" },
 	})
 
-	-- Load custom Lua snippets (for advanced logic)
 	require("luasnip.loaders.from_lua").lazy_load({
 		paths = { vim.fn.stdpath("config") .. "/snippets" },
 	})
@@ -108,9 +99,7 @@ mini.on_filetype("markdown", setup_latex_tools_once)
 mini.on_filetype("markdown.mdx", setup_latex_tools_once)
 mini.on_filetype("mdx", setup_latex_tools_once)
 
--- -----------------------------------------------------------------------------
--- 2. [ BLINK.CMP ]
--- -----------------------------------------------------------------------------
+-- 2. Blink.cmp
 local function get_mini_icon(ctx)
 	if ctx.source_name == "Path" then
 		local is_unknown_type =

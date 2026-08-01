@@ -1,22 +1,10 @@
--- =============================================================================
--- [ CORE UTILS ]
--- Shared helper functions used across commands, autocmds, and keymaps.
--- Includes the 'safe_require' engine that prevents a single failing module
--- from breaking the entire configuration.
--- =============================================================================
+-- core utils
 
 local M = {}
 
--- =============================================================================
--- [ FILESYSTEM & PROJECTS ]
--- Helpers for project discovery and filesystem navigation.
--- =============================================================================
+-- filesystem & projects
 
---- Centralized Project Root Resolver
---- Why: Deterministic project discovery for LSP, File Explorer, and Grep.
---- Uses vim.fs.root which returns the *nearest* ancestor containing
---- any marker — correct for monorepos where a nested go.mod should win over
---- a parent .git.
+--- Resolve project root (nearest ancestor with a marker; handles monorepos).
 --- @return string path The absolute path to the project root or CWD.
 M.project_root = function()
 	local markers = {
@@ -33,17 +21,11 @@ M.project_root = function()
 	return vim.fs.root(0, markers) or vim.fn.getcwd()
 end
 
--- =============================================================================
--- [ AUTOCOMMANDS & EVENTS ]
--- Simplified API for Neovim's event system.
--- =============================================================================
+-- autocommands & events
 
--- Global augroup for custom configuration to allow easy clearing/re-loading.
--- This ensures that when the config is sourced again, old autocommands are wiped.
 local augroup = vim.api.nvim_create_augroup("custom-config", { clear = true })
 
 --- Create a custom autocommand within the 'custom-config' group.
---- Why: Centralizes event handling and prevents duplicate registration on reload.
 --- @param event string|table Event name(s) to trigger on (e.g., 'BufWritePost').
 --- @param pattern string|table File pattern(s) to match.
 --- @param action function|string The action to perform (Lua function or Vim command string).
@@ -88,10 +70,7 @@ M.on_packchanged = function(plugin_name, kinds, callback, desc)
 	M.autocmd("PackChanged", "*", f, desc)
 end
 
--- =============================================================================
--- [ KEYBINDINGS ]
--- Standardized mapping helpers for consistent keymap declarations.
--- =============================================================================
+-- keybindings
 
 local map = vim.keymap.set
 

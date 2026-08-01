@@ -1,7 +1,4 @@
--- =============================================================================
--- [ WHICH-KEY ]
--- Displays a popup with available keybindings for the current mode/prefix.
--- =============================================================================
+-- which-key
 
 local M = {}
 

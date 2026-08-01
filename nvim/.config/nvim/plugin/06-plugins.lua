@@ -1,7 +1,4 @@
--- =============================================================================
--- [ PLUGIN MODULE REGISTRY ]
--- Central list of plugin configuration modules to load.
--- =============================================================================
+-- plugin module registry
 
 local plugin_modules = {
 	"plugins.mini",

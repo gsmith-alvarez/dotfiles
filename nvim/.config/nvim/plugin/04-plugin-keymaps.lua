@@ -1,9 +1,6 @@
--- =============================================================================
--- [ PLUGIN KEYMAPS ]
--- Keybindings that specifically target and require external plugins.
--- =============================================================================
+-- plugin keymaps
 local u = Config.safe_require("core.utils")
--- 1. [ MINI.FILES ]
+-- 1. Mini.files
 local toggle_file_tree = function()
 	local mf = Config.safe_require("mini.files")
 	if not mf.close() then
@@ -89,9 +86,7 @@ local function multigrep(opts)
 	})
 end
 
--- 2. [ FIND (LEADER F) - Files & Buffers ]
--- Everything here results in opening a file or switching buffers.
--- Fast access
+-- 2. Find (leader f) - files & buffers
 u.nmap("<leader>fb", function()
 	picker.buffers()
 end, "Find: Buffers")
@@ -130,8 +125,7 @@ u.nmap("<leader>fr", function()
 	})
 end, "Find: Recent Visits")
 
--- 3. [ SEARCH (LEADER S) - Content & Internals ]
--- Everything here searches text, metadata, symbols, or history.
+-- 3. Search (leader s) - content & internals
 u.nmap("<leader>sg", function()
 	multigrep()
 end, "Search: Live Grep")
@@ -236,7 +230,7 @@ u.nmap("<leader>sj", function()
 	picker.jumps()
 end, "Search: Jumps")
 
--- 4. [ UI & TOGGLES (LEADER U) ]
+-- 4. UI & toggles (leader u)
 local toggle_qf = function()
 	vim.cmd(vim.fn.getqflist({ winid = true }).winid ~= 0 and "cclose" or "copen")
 end
@@ -252,7 +246,7 @@ u.nmap("<leader>un", function()
 	snacks.notifier.show_history()
 end, "Notify: Show History")
 
--- 6. [ GIT (LEADER G) ]
+-- 6. Git (leader g)
 -- Top-level
 u.nmap("<leader>gg", function()
 	snacks.lazygit()
@@ -313,7 +307,7 @@ u.nmap("<leader>gx", function()
 	require("mini.diff").toggle_overlay(bufnr)
 end, "Git: Toggle Diff Overlay")
 
--- 7. [ TOP-LEVEL UTILS ]
+-- 7. Top-level utils
 u.nmap("<leader><space>", function()
 	picker.smart()
 end, "Find: Smart Files")
@@ -333,7 +327,7 @@ u.nmap("<leader>ps", function()
 	snacks.profiler.scratch()
 end, "Profiler: Open Scratch Buffer")
 
--- 13. [ CODE / LSP (LEADER C) ]
+-- 13. Code / LSP (leader c)
 u.map({ "n", "x" }, "<leader>ca", function()
 	vim.lsp.buf.code_action()
 end, "Code: Action")
@@ -404,7 +398,7 @@ end, "Code: Goto Definition")
 u.nmap("<leader>cx", "<Cmd>Run<CR>", "Code: Smart Run")
 u.nmap("<leader>cX", "<Cmd>RunWatch<CR>", "Code: Smart Run (watch)")
 
--- 7. [ PICKER VARIANTS (GP*) ]
+-- 7. Picker variants (gp*)
 u.nmap("gpd", function()
 	picker.lsp_definitions()
 end, "LSP: Find Definitions (Picker)")
@@ -421,7 +415,7 @@ u.nmap("gpO", function()
 	picker.lsp_symbols()
 end, "LSP: Find Document Symbols (Picker)")
 
--- 8. [ NAVIGATION UTILS ]
+-- 8. Navigation utils
 u.nmap("<A-t>", function()
 	snacks.terminal()
 end, "Terminal: Toggle")
@@ -432,7 +426,7 @@ u.map({ "n", "t" }, "[[", function()
 	snacks.words.jump(-vim.v.count1)
 end, "Reference: Jump to Previous")
 
--- 9. [ MINI.SESSIONS (LEADER Q) ]
+-- 9. Mini.sessions (leader q)
 local sessions = Config.safe_require("mini.sessions")
 u.nmap("<leader>qs", function()
 	sessions.select()
@@ -447,7 +441,7 @@ u.nmap("<leader>qw", function()
 end, "Session: Write (CWD)")
 u.nmap("<leader>qR", "<Cmd>lua MiniSessions.restart()<CR>", "Session: Restart")
 
--- 10. [ BUFFER (LEADER B) ]
+-- 10. Buffer (leader b)
 local new_scratch_buffer = function()
 	vim.api.nvim_win_set_buf(0, vim.api.nvim_create_buf(true, true))
 end
@@ -466,11 +460,11 @@ u.nmap("<leader>bW", function()
 	require("mini.bufremove").wipeout(0, true)
 end, "Buffer: Wipeout!")
 
--- 15. [ TERMINAL (LEADER T) ]
+-- 15. Terminal (leader t)
 u.nmap("<leader>tt", "<Cmd>vertical term<CR>", "Terminal: Vertical Split")
 u.nmap("<leader>tT", "<Cmd>horizontal term<CR>", "Terminal: Horizontal Split")
 
--- 15. [ VISITS (LEADER V) ]
+-- 15. Visits (leader v)
 local visits = Config.safe_require("mini.visits")
 local function pick_visits_labeled(label, cwd_filter)
 	local sort = visits.gen_sort.default({ recency_weight = 1 })

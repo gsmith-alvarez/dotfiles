@@ -1,8 +1,4 @@
--- [[ LSP DOMAIN: lua/autocmds/lsp.lua ]]
--- =============================================================================
--- Purpose: Autocommands related to Language Server Protocol features.
--- Domain:  Intelligence & Diagnostics
--- =============================================================================
+-- lsp
 
 local M = {}
 local u = require("core.utils")
@@ -82,7 +78,6 @@ local lsp_attach = function(args)
 end
 
 -- [[ Autocmd Definitions ]]
--- Exported to the registrar for automatic setup.
 M.setup = {
 	{
 		event = "LspAttach",
