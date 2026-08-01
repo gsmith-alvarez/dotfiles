@@ -78,8 +78,11 @@ vim.lsp.config("clangd", {
 	},
 })
 
--- blink.cmp doesn't auto-inject capabilities; advertise via wildcard.
-vim.lsp.config("*", { capabilities = Config.safe_require("blink.cmp").get_lsp_capabilities() })
+-- blink.cmp doesn't auto-inject capabilities; advertise via wildcard when present.
+local blink = Config.safe_require("blink.cmp")
+if blink then
+	vim.lsp.config("*", { capabilities = blink.get_lsp_capabilities() })
+end
 
 -- 4. Activation
 vim.lsp.enable({

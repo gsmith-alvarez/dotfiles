@@ -38,7 +38,7 @@ end, "Open help/man in a vertical split")
 
 u.autocmd("VimResized", "*", "wincmd =", "Equalize splits on window resize")
 -- 5. Filetype overrides
-u.autocmd("BufRead", { ".env", ".env.*" }, function()
+u.autocmd({ "BufRead", "BufNewFile" }, { ".env", ".env.*" }, function()
 	vim.bo.filetype = "dosini"
 end, "Syntax highlighting for secret files")
 -- 6. Whitespace management
@@ -54,7 +54,11 @@ u.autocmd("BufWritePre", "*", function()
 end, "Trims Trailing Whitesapce")
 -- 7. Filesystem helpers
 u.autocmd("BufWritePre", "*", function(event)
-	local dir = vim.fn.fnamemodify(file, ":p:h")
+	local name = vim.api.nvim_buf_get_name(event.buf)
+	if name == "" then
+		return
+	end
+	local dir = vim.fn.fnamemodify(name, ":p:h")
 	if vim.fn.isdirectory(dir) == 0 then
 		vim.fn.mkdir(dir, "p")
 	end

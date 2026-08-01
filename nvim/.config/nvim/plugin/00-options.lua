@@ -2,13 +2,6 @@
 
 local M = {}
 
--- 1. Filetype overrides
-vim.filetype.add({
-	filename = {
-		[".env"] = "sh",
-	},
-})
-
 -- 2. Leaders & general
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -76,7 +69,7 @@ set.linebreak = true
 set.showbreak = "↪ "
 set.breakindent = true
 set.breakindentopt = "list:-1"
-set.colorcolumn = "+1"
+set.colorcolumn = "" -- scoped to markdown ftplugin; +1 needs a textwidth to render correctly
 set.cursorline = true
 set.cursorlineopt = "screenline,number"
 
@@ -116,6 +109,7 @@ set.showcmdloc = "statusline"
 
 -- 15. Project-specific config
 set.exrc = true
+set.secure = true -- block untrusted :autocmd/:shell/:python in project .nvimrc/.exrc
 
 -- 16. Markdown
 vim.g.markdown_recommended_style = 0
