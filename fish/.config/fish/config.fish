@@ -67,6 +67,7 @@ if status is-interactive
     abbr -a mkdir "mkdir -p"
     abbr -a v nvim
     abbr -a ch "cliphist list | fzf | cliphist decode | wl-copy"
+    abbr -a cnavi "navi --cheatsh"
 
     # eza - ls
     if type -q eza

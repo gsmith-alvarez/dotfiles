@@ -192,7 +192,10 @@ end, "Search: Pick Breadcrumb")
 
 -- Diagnostics
 u.nmap("<leader>sd", function()
-	picker.diagnostics()
+	-- Snacks scopes this picker to the process CWD by default. Workspace
+	-- diagnostics can belong to files outside that directory, so do not
+	-- apply the CWD filter here.
+	picker.diagnostics({ filter = { cwd = false } })
 end, "Search: Find Workspace Diagnostics")
 u.nmap("<leader>sD", function()
 	picker.diagnostics_buffer()
@@ -350,9 +353,6 @@ end
 u.nmap("<leader>xx", function()
 	vim.diagnostic.setloclist()
 end, "List: Diagnostics to Location List")
-u.nmap("<leader>xq", function()
-	vim.diagnostic.setqflist()
-end, "List: Project Diagnostics to Quickfix List")
 u.nmap("<leader>x[", function()
 	cycle_list_history("older")
 end, "List: Older History List")
