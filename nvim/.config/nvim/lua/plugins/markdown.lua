@@ -5,7 +5,7 @@ local M = {}
 local mini = Config.safe_require("plugins.mini")
 
 -- 1. Render-markdown
-mini.now(function()
+mini.on_filetype("markdown", function()
 	Config.safe_require("render-markdown").setup({
 		completions = { lsp = { enabled = true } },
 		latex = { enabled = false },
