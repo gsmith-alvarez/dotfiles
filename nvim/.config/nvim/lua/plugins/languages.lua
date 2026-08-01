@@ -76,8 +76,25 @@ vim.lsp.config("clangd", {
 			},
 		},
 	},
+	cmd = {
+		"clangd",
+		"--background-index", -- Force clangd to index the project in the background
+		"--clang-tidy", -- Enable linter diagnostics
+		"--header-insertion=never", -- Prevents auto-inserting unwanted headers
+	},
+})
+-- PYTHON (Astral: ty & ruff)
+vim.lsp.config("ty", {
+	settings = {
+		ty = {
+			diagnosticMode = "workspace",
+		},
+	},
 })
 
+vim.lsp.config("ruff", {
+	settings = {},
+})
 -- blink.cmp doesn't auto-inject capabilities; advertise via wildcard when present.
 local blink = Config.safe_require("blink.cmp")
 if blink then
@@ -86,8 +103,8 @@ end
 
 -- 4. Activation
 vim.lsp.enable({
-	"ty", -- Python (Astral)
-	"ruff", -- Python (Formatting/Linting)
+	"ty", -- Python Type Checker
+	"ruff", -- Python Linter & Formatter
 	"lua_ls", -- Lua
 	"bashls", -- Bash
 	"clangd", -- C/C++
