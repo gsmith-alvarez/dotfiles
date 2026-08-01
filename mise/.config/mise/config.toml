@@ -32,13 +32,16 @@ delta = "latest"
 "cargo:tealdeer" = "latest"
 sd = "latest"
 atuin = "latest"
+"pipx:visidata" = { version = "latest", extras = ["full"] }
+duckdb = "latest"
+navi = "latest"
+usage = "latest"
 
 # --- Core Runtimes ---
 node = "latest"
 bun = "latest"
 zig = "latest"
 watchexec = "latest"
-uv = "latest"
 luajit = "latest"
 
 # --- Language Servers (LSP) ---
@@ -56,6 +59,7 @@ ty = "latest"          # Typo checker (alternative)
 typos = "latest"       # Source code spell checker
 
 # Lua
+lua = "latest"
 stylua = "latest"
 "cargo:selene" = "latest"
 
@@ -78,3 +82,4 @@ yamllint = "latest"                          # YAML
 # --- Graphics & Typesetting ---
 "npm:@mermaid-js/mermaid-cli" = "latest" # Diagrams
 "cargo:tectonic" = "latest"              # LaTeX engine
+"github:can1357/oh-my-pi" = "latest"
