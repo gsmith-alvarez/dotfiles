@@ -7,7 +7,9 @@ local misc = Config.safe_require("mini.misc")
 
 local function pacer_logic(mode, f)
 	if package.loaded["mini.misc"] then
-		misc.safely(mode, f)
+		misc.safely(mode, function()
+			vim.schedule(f)
+		end)
 	else
 		f()
 	end
