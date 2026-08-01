@@ -70,9 +70,9 @@ main() {
 	# 4. Monolithic Package Installation
 	echo "=== Installing applications and development libraries ==="
 	sudo dnf install -y \
-		mise fish ghostty starship wl-clipboard cliphist cargo opentabletdriver \
+		mise fish ghostty starship wl-clipboard cliphist syncthing cargo opentabletdriver \
 		gcc gcc-c++ make pkgconf-pkg-config cairo-devel wayland-devel pango-devel \
-		wayscriber wayscriber-configurator lazygit hw-probe btop \
+		wayscriber wayscriber-configurator lazygit hw-probe btop sqlite-devel \
 		libxkbcommon-devel cairo-gobject-devel
 
 	# 5. Rust Ecosystem & Language Runtime Tooling
@@ -101,7 +101,8 @@ main() {
 		com.obsproject.Studio \
 		org.qbittorrent.qBittorrent \
 		com.github.wwmm.easyeffects \
-		com.github.tchx84.Flatseal
+		com.github.tchx84.Flatseal \
+		org.freecad.FreeCAD
 
 	# 7. Neovim Build Sourcing
 	echo "=== Fetching and preparing Neovim source ==="
