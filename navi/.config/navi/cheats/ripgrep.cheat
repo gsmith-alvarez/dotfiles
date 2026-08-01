@@ -1,0 +1,31 @@
+% ripgrep
+
+# Recursive search for pattern in current dir
+rg <pattern>
+
+# Search for exact string (no regex)
+rg --fixed-strings <literal_string>
+
+# Show N lines of context around matches
+rg --context <N> <pattern>
+
+# Search only .py files (glob)
+rg --type py <pattern>
+
+# Show only filenames containing matches
+rg --files-with-matches <pattern>
+
+# Invert match (lines NOT matching)
+rg --invert-match <pattern>
+
+# Count matches per file
+rg --count <pattern>
+
+# Follow symlinks and search hidden files
+rg --hidden --follow <pattern>
+
+# Search for pattern, show line numbers
+rg --line-number <pattern>
+
+# Print only the matched text, not the whole line
+rg --only-matching <pattern>

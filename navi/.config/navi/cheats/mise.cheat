@@ -1,0 +1,40 @@
+% mise
+
+# List all installed tools and versions
+mise ls
+
+# Install all tools from config
+mise install
+
+# Install a specific tool version
+mise install <tool>@<version>
+
+# Set local tool version (creates .mise.toml)
+mise use <tool>@<version>
+
+# Set global tool version (writes config)
+mise use --global <tool>@<version>
+
+# Run a command within a tool context
+mise exec <tool>@<version> -- <command>
+
+# Show current version for a tool
+mise current <tool>
+
+# Upgrade all tools
+mise upgrade
+
+# Remove a tool version
+mise uninstall <tool>@<version>
+
+# Show what's available for a tool
+mise ls-remote <tool>
+
+# Print the path to a tool's binary
+mise which <tool>
+
+# Generate shell activation script
+mise activate <shell>
+
+# Prune unused tool versions
+mise prune

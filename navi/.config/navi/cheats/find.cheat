@@ -1,0 +1,66 @@
+% find
+
+# Find files by name in current directory
+find . -name '<filename>'
+
+# Find files by name (case-insensitive)
+find . -iname '<filename>'
+
+# Find directories matching a name
+find . -type d -name '<dirname>'
+
+# Find files matching a name
+find . -type f -name '<filename>'
+
+# Find and delete matching files
+find . -name '<pattern>' -delete
+
+# Find and execute a command on each result
+find . -name '<pattern>' -exec <command> {} \;
+
+# Find files by size (greater than N MB)
+find . -type f -size +<N>M
+
+# Find files by size (less than N bytes)
+find . -type f -size -<N>c
+
+# Find files modified in the last N minutes
+find . -type f -mmin -<N>
+
+# Find files modified more than N days ago
+find . -type f -mtime +<N>
+
+# Find files accessed in the last N days
+find . -type f -atime -<N>
+
+# Find files newer than a reference file
+find . -type f -newer <reference_file>
+
+# Find empty files and directories
+find . -empty
+
+# Find files with specific permissions
+find . -type f -perm <mode>
+
+# Find files without read permission
+find . ! -readable -type f
+
+# Combine multiple conditions (and/or)
+find . -type f \( -name '*.txt' -o -name '*.md' \)
+
+# Search and print with custom format
+find . -type f -printf '%s %p\n'
+
+# Limit depth of search
+find . -maxdepth <N> -name '<pattern>'
+
+# Find broken symlinks
+find . -type l ! -exec test -e {} \; -print
+
+# Find files owned by a specific user
+find . -user <username>
+
+# Find files changed exactly N days ago
+find . -type f -mtime <N>
+
+$ filename: echo -e '*.log\n*.tmp\n*.cache' | sort

@@ -1,0 +1,174 @@
+% systemd, linux
+
+; variables:
+$ service: systemctl list-unit-files --type=service --no-pager --no-legend | cut -d " " -f 1
+$ target: systemctl list-unit-files --type=target --no-pager --no-legend | cut -d " " -f 1
+$ unit: systemctl list-unit-files --type=<unit_type> --no-pager --no-legend | cut -d " " -f 1
+$ unit_type: systemctl -t help --- --header-lines 1
+$ running_socket: systemctl list-units --type=socket --no-pager --no-legend --state=active --plain | cut -d " " -f 1
+$ inactive_socket: systemctl list-units --type=socket --no-pager --no-legend --state=inactive --plain | cut -d " " -f 1
+$ socket: systemctl list-units --type=socket --no-pager --no-legend --plain --all | cut -d " " -f 1
+
+# Stop service
+sudo systemctl stop <running_service>
+$ running_service: systemctl list-units --type=service --no-pager --no-legend --state=running --plain | cut -d " " -f 1
+
+# Disable socket
+sudo systemctl disable <running_socket>
+
+# Enable socket
+sudo systemctl enable --user <socket>
+
+# Show socket status
+sudo systemctl status <socket>
+
+# Stop socket
+sudo systemctl stop <running_socket>
+
+# Start socket
+sudo systemctl stop <inactive_socket>
+
+# Start service
+sudo systemctl start <service>
+
+# Restart service
+sudo systemctl restart <service>
+
+# Show service status
+systemctl status <service>
+
+# Show service details
+systemctl show <service>
+
+# View service file
+sudo systemctl cat <service>
+
+# Show service logs
+journalctl -u <service>
+
+# Reload daemon
+sudo systemctl daemon-reload
+
+# Show failed units
+systemctl --failed
+
+# Show targets
+systemctl list-unit-files --type=target
+
+# Show sockets
+systemctl list-unit-files --type=socket
+
+# Show services
+systemctl list-unit-files --type=service
+
+# Show timers
+systemctl list-unit-files --type=timer
+
+# Is system running?
+systemctl is-system-running
+
+# logind status
+systemctl status systemd-logind
+
+# View dbus socket
+ls -lah /run/dbus/system_bus_socket
+
+# Clear journalctl logs
+sudo journalctl --rotate; sudo journalctl --vacuum-time=1s
+
+# Default target
+systemctl get-default
+
+# List unit dependencies
+systemctl list-dependencies <unit>
+
+# List unit dependents
+systemctl list-dependencies --reverse <unit>
+
+
+
+% systemd user, linux
+
+; variables
+$ service: systemctl --user list-unit-files --type=service --no-pager --no-legend | cut -d " " -f 1
+$ target: systemctl --user list-unit-files --type=target --no-pager --no-legend | cut -d " " -f 1
+$ unit: systemctl --user list-unit-files --type=<unit_type> --no-pager --no-legend | cut -d " " -f 1
+$ running_socket: systemctl --user list-units --type=socket --no-pager --no-legend --state=active --plain | cut -d " " -f 1
+$ inactive_socket: systemctl --user list-units --type=socket --no-pager --no-legend --state=inactive --plain | cut -d " " -f 1
+$ socket: systemctl --user list-units --type=socket --no-pager --no-legend --plain --all | cut -d " " -f 1
+
+# Disable user socket
+systemctl disable --user <running_socket>
+
+# Enable user socket
+systemctl enable --user <socket>
+
+# Show user socket status
+systemctl --user status <socket>
+
+# Stop user socket
+systemctl stop --user <running_socket>
+
+# start user socket
+systemctl start --user <inactive_socket>
+
+# Stop user service
+systemctl --user stop <running_service>
+$ running_service: systemctl --user list-units --type=service --no-pager --no-legend --state=running --plain | cut -d " " -f 1
+
+# Start user service
+systemctl --user start <service>
+
+# Restart user service
+systemctl --user restart <service>
+
+# Show user service status
+systemctl --user status <service>
+
+# Show user service details
+systemctl --user show <service>
+
+# View user service file
+systemctl --user cat <service>
+
+# Show user service logs
+journalctl --user -u <service>
+
+# Reload user daemon
+systemctl --user daemon-reload
+
+# Show failed user units
+systemctl --user --failed
+
+# View user folder
+echo $XDG_RUNTIME_DIR; ls -lah $XDG_RUNTIME_DIR
+
+# Login sessions
+loginctl
+
+# Show user targets
+systemctl --user list-unit-files --type=target
+
+# Show user sockets
+systemctl --user list-unit-files --type=socket
+
+# Show user services
+systemctl --user list-unit-files --type=service
+
+# Show user timers
+systemctl --user list-unit-files --type=timer
+
+# List user unit dependencies
+systemctl --user list-dependencies <unit>
+
+# List user unit dependents
+systemctl --user list-dependencies --reverse <unit>
+
+# Analyze systemd next timers iterations
+systemd-analyze calendar --iterations=5 "*-*-* 0/3:00:00 America/Sao_Paulo"
+
+# Analyze systemd services initialization time to find performance issues
+systemd-analyze blame
+
+# Detect if running in a Virtual Machine (VM)
+systemd-detect-virt

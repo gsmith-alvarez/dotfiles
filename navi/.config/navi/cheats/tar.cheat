@@ -1,0 +1,60 @@
+% tar, archive
+
+# Create uncompressed tar archive
+tar cf <archive>.tar <files>
+
+# Extract tar archive
+tar xf <archive>.tar
+
+# List contents of an archive (no extract)
+tar tf <archive>.tar
+
+# Create gzip-compressed archive (.tar.gz / .tgz)
+tar czf <archive>.tar.gz <files>
+
+# Extract gzip-compressed archive
+tar xzf <archive>.tar.gz
+
+# Create bzip2-compressed archive (.tar.bz2)
+tar cjf <archive>.tar.bz2 <files>
+
+# Extract bzip2-compressed archive
+tar xjf <archive>.tar.bz2
+
+# Create xz-compressed archive (.tar.xz)
+tar cJf <archive>.tar.xz <files>
+
+# Extract xz-compressed archive
+tar xJf <archive>.tar.xz
+
+# Create zstd-compressed archive (.tar.zst)
+tar --zstd -cf <archive>.tar.zst <files>
+
+# Extract zstd-compressed archive
+tar --zstd -xf <archive>.tar.zst
+
+# Extract to a specific directory
+tar xzf <archive>.tar.gz -C <target_dir>
+
+# Extract a specific file from archive
+tar xzf <archive>.tar.gz <file_inside>
+
+# Create archive excluding certain patterns
+tar czf <archive>.tar.gz --exclude='*.log' --exclude='node_modules' <dir>
+
+# Verbose mode (show files as processed)
+tar czvf <archive>.tar.gz <dir>
+
+# Preserve permissions and ownership
+tar czpf <archive>.tar.gz <dir>
+
+# Add files to an existing archive
+tar rf <archive>.tar <new_file>
+
+# Show total size before creating
+tar czf - <dir> | wc -c
+
+# Create archive from files listed in a file
+tar czf <archive>.tar.gz -T <file_list>
+
+$ archive: ls *.tar *.tar.gz *.tgz *.tar.bz2 *.tar.xz 2>/dev/null

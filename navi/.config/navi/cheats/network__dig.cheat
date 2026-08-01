@@ -1,0 +1,60 @@
+% dig, dns, dns-lookup
+
+# Basic A record lookup
+dig <domain>
+
+# Lookup a specific record type
+dig <domain> <type>
+
+# Short output (just the answer)
+dig +short <domain>
+
+# Query a specific nameserver
+dig @<nameserver> <domain>
+
+# Lookup AAAA (IPv6) record
+dig <domain> AAAA
+
+# Lookup MX (mail exchange) record
+dig <domain> MX
+
+# Lookup NS (nameserver) record
+dig <domain> NS
+
+# Lookup TXT record (SPF, verification)
+dig <domain> TXT
+
+# Lookup CNAME record
+dig <domain> CNAME
+
+# Lookup SOA record
+dig <domain> SOA
+
+# Lookup all record types
+dig <domain> ANY
+
+# Reverse DNS lookup (IP to hostname)
+dig -x <ip_address>
+
+# Trace the delegation path
+dig +trace <domain>
+
+# Show only the answer section
+dig +noall +answer <domain>
+
+# Show response time and stats
+dig +stats <domain>
+
+# Use TCP instead of UDP (for large responses)
+dig +tcp <domain>
+
+# DNSSEC validation check
+dig <domain> DNSKEY
+
+# Bulk lookup from a file (one domain per line)
+dig -f <domain_file> +short
+
+# Find your public IP via OpenDNS
+dig +short myip.opendns.com @resolver1.opendns.com
+
+$ type: echo -e 'A\nAAAA\nMX\nNS\nTXT\nCNAME\nSOA\nANY\nDNSKEY'

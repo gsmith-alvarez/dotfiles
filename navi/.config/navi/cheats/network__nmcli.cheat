@@ -1,0 +1,85 @@
+% nmcli, networkmanager, wifi
+
+# Show network device status
+nmcli device status
+
+# Show all connections
+nmcli connection show
+
+# Show active connections only
+nmcli connection show --active
+
+# Show connection details
+nmcli connection show <connection_name>
+
+# Connect to a WiFi network
+nmcli device wifi connect <ssid> --ask
+
+# Connect to a WiFi network with password inline
+nmcli device wifi connect <ssid> password <password>
+
+# Connect to hidden WiFi network
+nmcli device wifi connect <ssid> password <password> hidden yes
+
+# List available WiFi networks
+nmcli device wifi list
+
+# Rescan WiFi networks
+nmcli device wifi rescan
+
+# Disconnect WiFi
+nmcli device disconnect <interface>
+
+# Turn WiFi on/off
+nmcli radio wifi on
+
+# Turn WiFi off
+nmcli radio wifi off
+
+# Turn networking on/off
+nmcli networking on
+
+# Turn networking off
+nmcli networking off
+
+# Create a new static ethernet connection
+nmcli connection add type ethernet con-name <name> ifname <interface> ipv4.method manual ipv4.addresses <ip>/<mask> ipv4.gateway <gateway> ipv4.dns <dns>
+
+# Create DHCP ethernet connection
+nmcli connection add type ethernet con-name <name> ifname <interface> ipv4.method auto
+
+# Add a static IP to an existing connection
+nmcli connection modify <connection_name> ipv4.addresses <ip>/<mask>
+
+# Set DNS servers on a connection
+nmcli connection modify <connection_name> ipv4.dns <dns1> <dns2>
+
+# Set connection to auto-connect
+nmcli connection modify <connection_name> connection.autoconnect yes
+
+# Bring a connection up/down
+nmcli connection up <connection_name>
+
+# Take a connection down
+nmcli connection down <connection_name>
+
+# Delete a connection
+nmcli connection delete <connection_name>
+
+# Show network interface details (HW addr, speed, etc.)
+nmcli device show <interface>
+
+# Show general system hostname and networking state
+nmcli general status
+
+# Set hostname
+nmcli general hostname <new_hostname>
+
+# Show all properties of a connection (for scripting)
+nmcli -t -f ALL connection show <connection_name>
+
+# Monitor network events
+nmcli monitor
+
+$ connection_name: nmcli -t connection show | cut -d: -f1 | head -20
+$ interface: nmcli -t device status | awk -F: '$2 ~ /^(ethernet|wifi)$/ {print $1}'

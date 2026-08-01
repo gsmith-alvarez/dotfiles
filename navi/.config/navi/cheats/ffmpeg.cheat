@@ -1,0 +1,70 @@
+% ffmpeg, video, audio
+
+# Convert video format
+ffmpeg -i <input>.<ext1> <output>.<ext2>
+
+# Convert audio format
+ffmpeg -i <input>.mp3 <output>.ogg
+
+# Extract audio from video
+ffmpeg -i <input>.mp4 -vn <output>.mp3
+
+# Remove audio from video
+ffmpeg -i <input>.mp4 -an <output>.mp4
+
+# Compress video (h264, adjust CRF for quality: 18-28, lower = better)
+ffmpeg -i <input>.mp4 -vcodec libx264 -crf <crf> <output>.mp4
+
+# Compress video to target file size
+ffmpeg -i <input>.mp4 -vcodec libx264 -b:v <bitrate> <output>.mp4
+
+# Resize video (scale width:height, -1 preserves aspect ratio)
+ffmpeg -i <input>.mp4 -vf scale=<width>:-1 <output>.mp4
+
+# Crop video (crop=w:h:x:y)
+ffmpeg -i <input>.mp4 -vf crop=<width>:<height>:<x>:<y> <output>.mp4
+
+# Trim video (start, duration, or end)
+ffmpeg -i <input>.mp4 -ss <start_time> -t <duration> <output>.mp4
+
+# Trim video (start to end)
+ffmpeg -i <input>.mp4 -ss <start_time> -to <end_time> <output>.mp4
+
+# Loop a video N times
+ffmpeg -i <input>.mp4 -stream_loop <N> -c copy <output>.mp4
+
+# Concatenate videos (requires same codecs, use file list)
+ffmpeg -f concat -safe 0 -i <file_list>.txt -c copy <output>.mp4
+
+# Create video from images (frame rate)
+ffmpeg -framerate <fps> -i <frame_%04d>.png -c:v libx264 <output>.mp4
+
+# Create GIF from video
+ffmpeg -i <input>.mp4 -vf fps=<fps>,scale=<width>:-1 <output>.gif
+
+# Extract frames as images
+ffmpeg -i <input>.mp4 -vf fps=1 <frame_%04d>.png
+
+# Speed up / slow down video (setpts)
+ffmpeg -i <input>.mp4 -filter:v "setpts=<factor>*PTS" <output>.mp4
+
+# Speed up / slow down audio (atempo)
+ffmpeg -i <input>.mp4 -filter:a "atempo=<factor>" <output>.mp4
+
+# Add subtitles (burn-in)
+ffmpeg -i <input>.mp4 -vf subtitles=<subs>.srt <output>.mp4
+
+# Add audio track to video
+ffmpeg -i <input>.mp4 -i <audio>.mp3 -c:v copy -c:a aac <output>.mp4
+
+# Normalize audio volume
+ffmpeg -i <input>.mp4 -af loudnorm <output>.mp4
+
+# Show media file info
+ffmpeg -i <input>.mp4 2>&1 | grep -E 'Stream|Duration'
+
+# Extract a segment as GIF with palette (better quality)
+ffmpeg -i <input>.mp4 -vf "fps=<fps>,scale=<width>:-1:flags=lanczos,palettegen=max_colors=256" -t <duration> <palette>.png && ffmpeg -i <input>.mp4 -i <palette>.png -filter_complex "fps=<fps>,scale=<width>:-1:flags=lanczos[x];[x][1:v]paletteuse" -t <duration> <output>.gif
+
+$ ext1: echo -e 'mp4\nmkv\navi\nmov\nwebm'
+$ ext2: echo -e 'mp4\nmkv\navi\nmov\nwebm\ngif'

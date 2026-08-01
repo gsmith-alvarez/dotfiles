@@ -1,0 +1,31 @@
+% fd
+
+# Find files matching a pattern
+fd <pattern>
+
+# Find files case-insensitively
+fd --ignore-case <pattern>
+
+# Find directories only
+fd --type d <pattern>
+
+# Find files with a specific extension
+fd --extension <ext> <pattern>
+
+# Find hidden files (respects .gitignore by default)
+fd --hidden <pattern>
+
+# Find files ignoring .gitignore
+fd --no-ignore <pattern>
+
+# Run a command on each result
+fd <pattern> --exec <command> {}
+
+# Search in a specific directory
+fd <pattern> <directory>
+
+# Find files modified within the last N minutes
+fd --changed-within <N>min <pattern>
+
+# Show results with absolute paths
+fd --absolute-path <pattern>

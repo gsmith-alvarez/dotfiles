@@ -1,0 +1,22 @@
+% yazi
+
+# Open yazi in current directory
+yazi
+
+# Open yazi in a specific directory
+yazi <directory>
+
+# Print current dir on quit (use in cd wrapper)
+yazi --cwd-file=<temp_file>
+
+# Key: Open file preview / enter directory
+# Key: Back to parent directory
+# Key: Toggle hidden files
+# Key: Search for files
+# Key: Rename selected
+# Key: Copy selected
+# Key: Cut selected
+# Key: Paste
+# Key: Create new file or directory
+# Key: Delete selected
+# Key: Show help

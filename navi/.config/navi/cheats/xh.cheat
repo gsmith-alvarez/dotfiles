@@ -1,0 +1,31 @@
+% xh
+
+# GET request
+xh <url>
+
+# POST with JSON body
+xh POST <url> <key>=<value>
+
+# Send JSON data (implicitly sets Content-Type)
+xh POST <url> name=hello age:=30
+
+# Set a header
+xh GET <url> Authorization:"Bearer <token>"
+
+# Download a file
+xh --download <url>
+
+# Follow redirects
+xh --follow <url>
+
+# Show only response headers
+xh --headers <url>
+
+# Send form data
+xh --form POST <url> <field>=<value>
+
+# Use with a specific HTTP method
+xh DELETE <url>
+
+# Pretty-print JSON response
+xh <url> | jq .

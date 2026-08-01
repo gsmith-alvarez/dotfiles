@@ -1,0 +1,28 @@
+% oxlint
+
+# Lint the current directory
+oxlint
+
+# Lint with fix suggestions
+oxlint --fix
+
+# Lint a specific file or directory
+oxlint <path>
+
+# Run only a specific rule category
+oxlint --deny <category>
+
+# Lint with JSON output for tools
+oxlint --format json
+
+# Lint using a specific config file
+oxlint -c <oxlintrc.json>
+
+# Format JavaScript/TypeScript file
+oxfmt <file.js> --write
+
+# Check formatting without modifying
+oxfmt <file.js> --check
+
+# Format a directory recursively
+oxfmt <directory> --write

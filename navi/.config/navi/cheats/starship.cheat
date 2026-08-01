@@ -1,0 +1,31 @@
+% starship
+
+# Print the current prompt config for debugging
+starship prompt
+
+# Print starship session config
+starship session
+
+# List all modules and their status
+starship module --list
+
+# Print the current starship version
+starship --version
+
+# Explain the current prompt (debugging)
+starship explain
+
+# Generate shell init script
+starship init <shell>
+
+# Print a specific module
+starship module <module_name>
+
+# List available presets
+starship preset --list
+
+# Apply a preset
+starship preset <preset_name> --output > ~/.config/starship.toml
+
+# Toggle a module on/off for the current session
+# (edit ~/.config/starship.toml for permanent)

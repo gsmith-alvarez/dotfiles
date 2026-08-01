@@ -1,0 +1,22 @@
+% bat
+
+# View file with line numbers
+bat --number <file>
+
+# View file, show all non-printable chars
+bat --show-all <file>
+
+# View file with a specific theme
+bat --theme=<theme> <file>
+
+# Diff two files with syntax highlighting
+bat --diff <file_a> <file_b>
+
+# List all available themes
+bat --list-themes
+
+# List all supported languages
+bat --list-languages
+
+# Concatenate files, strip line numbers for piping
+bat --number <file> --plain | <piped_command>

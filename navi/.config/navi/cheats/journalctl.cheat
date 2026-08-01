@@ -1,0 +1,73 @@
+% journalctl, journald, systemd-journald
+
+# Show all logs
+journalctl
+
+# Follow logs (tail -f equivalent)
+journalctl -f
+
+# Show logs for a specific unit
+journalctl -u <unit_name>
+
+# Show logs for a unit, following
+journalctl -u <unit_name> -f
+
+# Show logs since boot
+journalctl -b
+
+# Show logs from N boots ago
+journalctl -b -<N>
+
+# Show logs since a specific time
+journalctl --since "<datetime>"
+
+# Show logs between two times
+journalctl --since "<start>" --until "<end>"
+
+# Show logs for a specific priority and above (0=emerg, 1=alert, 2=crit, 3=err, 4=warning, 5=notice, 6=info, 7=debug)
+journalctl -p <priority>
+
+# Show kernel messages
+journalctl -k
+
+# Show logs for a specific PID
+journalctl _PID=<pid>
+
+# Show logs from the current boot, errors only
+journalctl -b -p err
+
+# Show logs for a specific executable path
+journalctl _EXE=</path/to/binary>
+
+# Show last N lines
+journalctl -n <N>
+
+# Show logs without pager (for piping)
+journalctl --no-pager
+
+# Show logs with human-readable timestamps
+journalctl -o short-full
+
+# Show logs in JSON format
+journalctl -o json-pretty
+
+# Show disk usage of journal logs
+journalctl --disk-usage
+
+# Vacuum logs to a specific size
+journalctl --vacuum-size=<size>
+
+# Vacuum logs older than a specific time
+journalctl --vacuum-time=<N>days
+
+# List all available boots
+journalctl --list-boots
+
+# Show logs for a user session
+journalctl --user
+
+# Flush runtime journal to persistent storage
+sudo journalctl --flush
+
+$ unit_name: systemctl list-units --type=service --all | awk '/\.service/ {print $1}' | sed 's/\.service$//'
+$ priority: echo -e '0\n1\n2\n3\n4\n5\n6\n7'

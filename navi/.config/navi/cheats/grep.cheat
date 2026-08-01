@@ -1,0 +1,67 @@
+% grep
+
+# Recursive search in current directory
+grep -r <pattern> .
+
+# Recursive, case-insensitive search
+grep -ri <pattern> .
+
+# Search for whole words only
+grep -w <pattern> <file>
+
+# Show N lines of context around matches
+grep -C <N> <pattern> <file>
+
+# Show N lines after each match
+grep -A <N> <pattern> <file>
+
+# Show N lines before each match
+grep -B <N> <pattern> <file>
+
+# Invert match (lines NOT matching)
+grep -v <pattern> <file>
+
+# Show only filenames containing matches
+grep -rl <pattern> .
+
+# Show only matching filenames (one per line)
+grep -r --files-with-matches <pattern> .
+
+# Count matches per file
+grep -rc <pattern> .
+
+# Show only the matched text, not the whole line
+grep -o <pattern> <file>
+
+# Search with extended regex (egrep)
+grep -E '<extended_regex>' <file>
+
+# Search with fixed strings (no regex)
+grep -F <literal_string> <file>
+
+# Search binary files as text
+grep -a <pattern> <binary_file>
+
+# Show line numbers
+grep -n <pattern> <file>
+
+# Search recursively, only in files matching a glob
+grep -r --include='*.<ext>' <pattern> .
+
+# Search recursively, excluding files matching a glob
+grep -r --exclude='*.<ext>' <pattern> .
+
+# Search recursively, excluding a directory
+grep -r --exclude-dir=<dir_name> <pattern> .
+
+# Use perl-compatible regex (PCRE)
+grep -P <pattern> <file>
+
+# Colorize matches
+grep --color=auto <pattern> <file>
+
+# Stop after N matches per file
+grep -m <N> <pattern> <file>
+
+# Search stdin (pipe)
+<command> | grep <pattern>

@@ -1,0 +1,19 @@
+% sd
+
+# Find and replace in a string (echo)
+echo "<text>" | sd <pattern> <replacement>
+
+# Find and replace in a file (in-place)
+sd <pattern> <replacement> <file>
+
+# Replace using regex capture groups
+sd '(\w+)@(\w+)' 'user: $1, domain: $2' <file>
+
+# Replace in multiple files at once
+sd <pattern> <replacement> <glob_pattern>
+
+# Case-insensitive replacement
+sd --flags i <pattern> <replacement> <file>
+
+# Replace only first match per line
+sd --flags g <pattern> <replacement> <file>

@@ -1,0 +1,25 @@
+% fzf
+
+# Basic fuzzy search over file list
+<file_source> | fzf
+
+# Search with preview (bat for files, eza for dirs)
+fzf --preview 'if test -d {}; eza --tree --color=always {} | head -200; else; bat -n --color=always --line-range :500 {}; end'
+
+# Multi-select with TAB
+fzf --multi
+
+# Search through command history
+history | fzf
+
+# Search with custom prompt
+fzf --prompt="<prompt_text> "
+
+# Use with fd for file search
+fd --type f --hidden --exclude .git | fzf
+
+# Bind ctrl-y to copy selection
+fzf --bind 'ctrl-y:execute-silent(echo -n {} | wl-copy)+abort'
+
+# Popup layout
+fzf --height=50% --layout=reverse --border=rounded

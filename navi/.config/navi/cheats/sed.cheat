@@ -1,0 +1,73 @@
+% sed, stream-editor
+
+# Replace first occurrence on each line
+sed 's/<pattern>/<replacement>/' <file>
+
+# Replace all occurrences on each line
+sed 's/<pattern>/<replacement>/g' <file>
+
+# Replace on a specific line number
+sed '<N>s/<pattern>/<replacement>/' <file>
+
+# Replace on a range of lines
+sed '<start>,<end>s/<pattern>/<replacement>/' <file>
+
+# Edit file in place (no backup)
+sed -i 's/<pattern>/<replacement>/g' <file>
+
+# Edit file in place with backup
+sed -i.bak 's/<pattern>/<replacement>/g' <file>
+
+# Delete lines matching a pattern
+sed '/<pattern>/d' <file>
+
+# Delete a specific line number
+sed '<N>d' <file>
+
+# Delete from line N to end
+sed '<N>,$d' <file>
+
+# Delete empty lines
+sed '/^$/d' <file>
+
+# Print only lines matching a pattern
+sed -n '/<pattern>/p' <file>
+
+# Print lines N through M
+sed -n '<N>,<M>p' <file>
+
+# Insert a line before a pattern
+sed '/<pattern>/i\<new_line>' <file>
+
+# Insert a line after a pattern
+sed '/<pattern>/a\<new_line>' <file>
+
+# Replace the whole line matching a pattern
+sed '/<pattern>/c\<new_line>' <file>
+
+# Substitute case-insensitive
+sed 's/<pattern>/<replacement>/gi' <file>
+
+# Substitute only on lines NOT matching a pattern
+sed '/<exclude_pattern>/!s/<pattern>/<replacement>/' <file>
+
+# Join all lines
+sed ':a;N;$!ba;s/\n/ /g' <file>
+
+# Remove trailing whitespace
+sed -i 's/[[:space:]]*$//' <file>
+
+# Remove leading whitespace
+sed -i 's/^[[:space:]]*//' <file>
+
+# Print first N lines (like head)
+sed -n '1,<N>p' <file>
+
+# Print last line
+sed -n '$p' <file>
+
+# Replace multiple patterns in one pass
+sed -e 's/<pat1>/<rep1>/g' -e 's/<pat2>/<rep2>/g' <file>
+
+# Execute sed script from file
+sed -f <script_file> <input_file>

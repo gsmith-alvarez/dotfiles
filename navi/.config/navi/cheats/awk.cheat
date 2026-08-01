@@ -1,0 +1,64 @@
+% awk
+
+# Print a specific column
+awk '{print $<N>}' <file>
+
+# Print multiple columns with a separator
+awk '{print $<N>, $<M>}' <file>
+
+# Print lines matching a pattern
+awk '/<pattern>/' <file>
+
+# Print lines where a column matches a pattern
+awk '$<N> ~ /<pattern>/' <file>
+
+# Use a custom field separator (e.g., comma for CSV)
+awk -F ',' '{print $<N>}' <file>
+
+# Print lines where a column equals a value
+awk '$<N> == "<value>"' <file>
+
+# Print lines where a column is greater than a number
+awk '$<N> > <number>' <file>
+
+# Sum values in a column
+awk '{sum += $<N>} END {print sum}' <file>
+
+# Average of values in a column
+awk '{sum += $<N>; count++} END {print sum/count}' <file>
+
+# Count lines matching a pattern
+awk '/<pattern>/{count++} END {print count}' <file>
+
+# Print with line numbers
+awk '{print NR, $0}' <file>
+
+# Print header (first line) then specific rows
+awk 'NR==1 || /<pattern>/' <file>
+
+# Skip first N lines
+awk 'NR><N>' <file>
+
+# Combine fields with custom output separator
+awk 'BEGIN {OFS=","} {print $<N>, $<M>}' <file>
+
+# Calculate sum per group
+awk '{a[$<N>] += $<M>} END {for (k in a) print k, a[k]}' <file>
+
+# Print length of each line
+awk '{print length, $0}' <file>
+
+# Print lines longer than N characters
+awk 'length > <N>' <file>
+
+# Format output with printf
+awk '{printf "%-<N>s %<M>d\n", $1, $2}' <file>
+
+# Use multiple field separators
+awk -F '[,:]' '{print $<N>}' <file>
+
+# Process from specific line to end
+awk 'NR>=<N> {print}' <file>
+
+# Find max value in a column
+awk 'max=="" || $<N> > max {max=$<N>; line=$0} END {print line}' <file>

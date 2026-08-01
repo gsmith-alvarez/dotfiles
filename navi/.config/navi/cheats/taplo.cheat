@@ -1,0 +1,25 @@
+% taplo
+
+# Format a TOML file in-place
+taplo format <file.toml>
+
+# Check formatting without modifying
+taplo format --check <file.toml>
+
+# Format all TOML files in a directory
+taplo format <directory>
+
+# Validate TOML syntax
+taplo validate <file.toml>
+
+# Lint a TOML file with rules
+taplo lint <file.toml>
+
+# Get a value from a TOML file
+taplo get <key> <file.toml>
+
+# Set a value in a TOML file
+taplo set <key> <value> <file.toml>
+
+# Format with specific config
+taplo format --config <taplo.toml> <file.toml>

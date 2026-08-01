@@ -1,0 +1,34 @@
+% ruff
+
+# Lint the current directory
+ruff check
+
+# Lint and fix all auto-fixable issues
+ruff check --fix
+
+# Format all files
+ruff format
+
+# Check formatting without modifying (CI mode)
+ruff format --check
+
+# Lint a specific file or directory
+ruff check <path>
+
+# Lint with a specific rule enabled
+ruff check --select <RULE_CODE> <path>
+
+# Ignore a specific rule
+ruff check --ignore <RULE_CODE> <path>
+
+# Show the rule source for a lint error
+ruff check --explain <RULE_CODE>
+
+# Export a config file
+ruff config
+
+# Upgrade to latest rule set
+ruff check --preview
+
+# Show statistics of lint violations
+ruff check --statistics

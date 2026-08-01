@@ -1,0 +1,43 @@
+% uv
+
+# Add a dependency to project
+uv add <package>
+
+# Remove a dependency
+uv remove <package>
+
+# Run a script or command in project venv
+uv run <command>
+
+# Sync environment from lockfile
+uv sync
+
+# Install a tool globally (isolated)
+uv tool install <package>
+
+# List installed tools
+uv tool list
+
+# Run a tool without installing
+uvx <tool>
+
+# Create a new project
+uv init <project_name>
+
+# Build distribution packages
+uv build
+
+# Publish to PyPI
+uv publish
+
+# Update lockfile and sync
+uv lock && uv sync
+
+# Show dependency tree
+uv tree
+
+# Pin Python version for project
+uv python pin <version>
+
+# Upgrade all tools
+uv tool upgrade --all

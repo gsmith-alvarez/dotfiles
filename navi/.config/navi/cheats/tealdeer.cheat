@@ -1,0 +1,22 @@
+% tealdeer
+
+# View a tldr page for a command
+tldr <command>
+
+# Update the local cache
+tldr --update
+
+# List all available commands in cache
+tldr --list
+
+# Show a command from a specific platform
+tldr --platform <linux|osx|windows> <command>
+
+# Search for a command (fuzzy)
+tldr --search <query>
+
+# Clear the local cache
+tldr --clear-cache
+
+# Show raw markdown (no formatting)
+tldr --raw <command>

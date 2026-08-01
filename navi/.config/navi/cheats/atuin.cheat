@@ -1,0 +1,31 @@
+% atuin
+
+# Search history interactively
+atuin search
+
+# Search for a specific command
+atuin search <query>
+
+# Sync history across machines
+atuin sync
+
+# Import shell history
+atuin import <shell>
+
+# List last N commands
+atuin history list --length <N>
+
+# Show stats about command usage
+atuin stats
+
+# Remove a specific history entry
+atuin history delete <id>
+
+# Login to sync server
+atuin login
+
+# Register for sync
+atuin register
+
+# Open interactive search (bound to Ctrl-R)
+# (already configured in fish)

@@ -1,0 +1,28 @@
+% watchexec
+
+# Run a command when any file changes
+watchexec <command>
+
+# Watch a specific directory
+watchexec --watch <directory> <command>
+
+# Watch files matching a glob pattern
+watchexec --exts <ext1,ext2> <command>
+
+# Debounce changes (wait N ms before running)
+watchexec --debounce <N>ms <command>
+
+# Restart process on changes (like --restart)
+watchexec --restart <long_running_command>
+
+# Run once initially, then on changes
+watchexec --postpone <command>
+
+# Clear screen before each run
+watchexec --clear <command>
+
+# Only run when specific files change
+watchexec --filter '<glob>' <command>
+
+# Exclude files from watching
+watchexec --ignore '<glob>' <command>

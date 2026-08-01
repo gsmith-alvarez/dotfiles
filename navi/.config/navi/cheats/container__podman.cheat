@@ -1,0 +1,104 @@
+% podman
+
+# Pull an image from a registry
+podman pull <image>:<tag>
+
+# List images
+podman images
+
+# Remove an image
+podman rmi <image_id>
+
+# Run a container interactively
+podman run -it --rm <image> <command>
+
+# Run container in background
+podman run -d --name <name> <image>
+
+# Run container with port mapping
+podman run -d -p <host_port>:<container_port> <image>
+
+# Run container with volume mount
+podman run -v <host_dir>:<container_dir> <image>
+
+# Run container with env vars
+podman run -e <VAR>=<value> <image>
+
+# List running containers
+podman ps
+
+# List all containers (including stopped)
+podman ps -a
+
+# Stop a container
+podman stop <container>
+
+# Remove a container
+podman rm <container>
+
+# Remove all stopped containers
+podman container prune
+
+# Execute command in running container
+podman exec -it <container> <command>
+
+# View container logs
+podman logs <container>
+
+# Follow container logs
+podman logs -f <container>
+
+# Build image from Dockerfile
+podman build -t <name>:<tag> .
+
+# Build with custom Dockerfile
+podman build -f <dockerfile> -t <name>:<tag> .
+
+# Push image to registry
+podman push <image>:<tag>
+
+# Save image to tar archive
+podman save -o <file>.tar <image>
+
+# Load image from tar archive
+podman load -i <file>.tar
+
+# Show container resource usage
+podman stats
+
+# Show running container network info
+podman inspect <container> | jq '.[].NetworkSettings'
+
+# Generate systemd unit for container
+podman generate systemd --new --name <container> > ~/.config/systemd/user/<container>.service
+
+# Enable container as user service
+systemctl --user enable --now <container>.service
+
+# Podman machine: init (macOS/Windows)
+podman machine init
+
+# Podman machine: start VM
+podman machine start
+
+# List pods
+podman pod ls
+
+# Create a pod
+podman pod create --name <pod_name>
+
+# Run container in a pod
+podman run -d --pod <pod_name> <image>
+
+# Login to registry
+podman login <registry>
+
+# Tag an image
+podman tag <source_image> <target_tag>
+
+# Prune unused volumes
+podman volume prune
+
+$ image: podman images --format '{{.Repository}}:{{.Tag}}' 2>/dev/null | grep -v '<none>'
+$ container: podman ps -a --format '{{.Names}}' 2>/dev/null
+$ image_id: podman images --format '{{.ID}} {{.Repository}}' 2>/dev/null

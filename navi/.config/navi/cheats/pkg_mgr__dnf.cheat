@@ -1,0 +1,88 @@
+% dnf, dnf5, package-manager
+
+# Install a package
+dnf install <package>
+
+# Install a package from a specific repo
+dnf install --repo <repo_name> <package>
+
+# Remove a package
+dnf remove <package>
+
+# Remove a package and its unused dependencies
+dnf remove --remove-leaves <package>
+
+# Remove orphaned packages (no repo, no dependents)
+dnf remove --setopt=clean_requirements_on_remove=true $(dnf list extras -q 2>/dev/null)
+
+# Search for a package
+dnf search <query>
+
+# Search package that provides a file
+dnf provides </path/to/file>
+
+# List installed packages
+dnf list installed
+
+# List available packages matching a name
+dnf list available <pattern>
+
+# List packages from a specific repo
+dnf repoquery --repoid <repo_name>
+
+# Show package info
+dnf info <package>
+
+# Show package dependencies
+dnf deplist <package>
+
+# Update all packages
+dnf upgrade
+
+# Update specific package
+dnf upgrade <package>
+
+# Check for available updates (no install)
+dnf check-update
+
+# List enabled repositories
+dnf repolist
+
+# List all repositories (including disabled)
+dnf repolist --all
+
+# Add a copr repository
+dnf copr enable <user>/<project>
+
+# Clean cache
+dnf clean all
+
+# Rebuild cache
+dnf makecache
+
+# Download a package without installing
+dnf download <package>
+
+# Download package with all dependencies
+dnf download --resolve --alldeps <package>
+
+# Show transaction history
+dnf history
+
+# Rollback to a specific transaction
+dnf history undo <transaction_id>
+
+# Install group of packages
+dnf groupinstall <group_name>
+
+# List available groups
+dnf group list
+
+# Reinstall a package
+dnf reinstall <package>
+
+# List packages that provide a command
+dnf provides '*/<binary_name>'
+
+$ package: dnf list available 2>/dev/null | tail -n +2 | awk '{print $1}' | head -40
+$ installed_package: dnf list installed 2>/dev/null | tail -n +2 | awk '{print $1}'

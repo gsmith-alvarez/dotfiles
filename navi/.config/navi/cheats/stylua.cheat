@@ -1,0 +1,19 @@
+% stylua
+
+# Format a Lua file in-place
+stylua <file.lua>
+
+# Format all .lua files in a directory
+stylua <directory>
+
+# Check formatting without modifying
+stylua --check <file.lua>
+
+# Format with a specific config path
+stylua --config-path <stylua.toml> <file.lua>
+
+# Format stdin and write to stdout
+stylua - < <input.lua> > <output.lua>
+
+# Format a glob pattern
+stylua <glob_pattern>

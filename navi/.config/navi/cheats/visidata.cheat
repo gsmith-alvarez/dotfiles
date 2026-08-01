@@ -1,0 +1,28 @@
+% visidata
+
+# Open a CSV file
+visidata <file.csv>
+
+# Open a TSV file
+visidata <file.tsv>
+
+# Open a JSON file
+visidata <file.json>
+
+# Open an Excel file
+visidata <file.xlsx>
+
+# Open multiple files (merge sheets)
+visidata <file1.csv> <file2.csv>
+
+# Key: Quit / Close
+# Key: Open command line
+# Key: Sort ascending on column
+# Key: Sort descending on column
+# Key: Select rows matching expression
+# Key: Unselect all rows
+# Key: Delete selected rows
+# Key: Copy selected cells
+# Key: Open new sheet from selected rows
+# Key: Set column type
+Key: <expr> - evaluate Python expression on data

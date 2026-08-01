@@ -1,0 +1,91 @@
+% systemd-timers, timers, systemd
+
+# List all timers (active and next run time)
+systemctl list-timers --all
+
+# List only active timers
+systemctl list-timers
+
+# Show a timer's unit file
+systemctl cat <timer_name>.timer
+
+# Show timer status (next/last trigger)
+systemctl status <timer_name>.timer
+
+# Enable and start a timer
+sudo systemctl enable --now <timer_name>.timer
+
+# Disable and stop a timer
+sudo systemctl disable --now <timer_name>.timer
+
+# Manually trigger a timer's associated service
+sudo systemctl start <timer_name>.service
+
+# List user timers
+systemctl --user list-timers
+
+# Enable/start a user timer
+systemctl --user enable --now <timer_name>.timer
+
+# Stop user timer
+systemctl --user stop <timer_name>.timer
+
+# Check timer's next trigger with calendar spec
+systemd-analyze calendar <calendar_spec>
+
+# Show all calendar events for a spec
+systemd-analyze calendar --iterations=<N> <calendar_spec>
+
+# Verify timer file syntax
+systemd-analyze verify <timer_file>.timer
+
+# View timer journal logs
+journalctl -u <timer_name>.timer
+
+# View the service's logs (what the timer ran)
+journalctl -u <timer_name>.service
+
+# Reload timer after editing unit file
+sudo systemctl daemon-reload && sudo systemctl restart <timer_name>.timer
+
+# Create timer that runs daily at specific time
+$ cat <<'EOF' | sudo tee /etc/systemd/system/<name>.timer
+[Unit]
+Description=<description>
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
+
+# Create timer that runs every N minutes
+$ cat <<'EOF' | sudo tee /etc/systemd/system/<name>.timer
+[Unit]
+Description=<description>
+
+[Timer]
+OnCalendar=*:0/<N>
+Persistent=false
+
+[Install]
+WantedBy=timers.target
+EOF
+
+# Create timer that runs on boot with delay
+$ cat <<'EOF' | sudo tee /etc/systemd/system/<name>.timer
+[Unit]
+Description=<description>
+
+[Timer]
+OnBootSec=<N>min
+OnUnitActiveSec=<N>h
+
+[Install]
+WantedBy=timers.target
+EOF
+
+$ timer_name: systemctl list-timers --all --no-legend | awk '{print $NF}' | sed 's/\.timer$//' | sort -u
+$ N: echo -e '5\n10\n15\n30\n60'

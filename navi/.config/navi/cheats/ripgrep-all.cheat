@@ -1,0 +1,25 @@
+% ripgrep-all
+
+# Search file contents across all file types
+rga <pattern>
+
+# Search with preview context lines
+rga --context <N> <pattern>
+
+# Search only for files with specific extensions
+rga --type <ext> <pattern>
+
+# Search PDFs and other binary docs
+rga --rga-adapters=+pdf,pandoc <pattern>
+
+# List supported adapters (what file types are searchable)
+rga --rga-list-adapters
+
+# Limit search to text files only (skip binary)
+rga --rga-accurate <pattern>
+
+# Search hidden files too
+rga --hidden <pattern>
+
+# Output only matching filenames
+rga --files-with-matches <pattern>

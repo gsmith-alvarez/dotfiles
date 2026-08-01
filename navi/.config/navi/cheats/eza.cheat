@@ -1,0 +1,28 @@
+% eza
+
+# List files in grid view (default)
+eza
+
+# List with details (permissions, size, date)
+eza --long
+
+# Tree view with N levels of depth
+eza --tree --level=<depth>
+
+# Show hidden files
+eza --all
+
+# Show inode, blocks, and filesystem info
+eza --inode --blocks --long
+
+# Sort by newest first
+eza --long --sort=modified --reverse
+
+# Show only directories
+eza --only-dirs
+
+# Group directories first
+eza --group-directories-first --long
+
+# Git status per file
+eza --long --git

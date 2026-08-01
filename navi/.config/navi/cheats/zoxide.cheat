@@ -1,0 +1,25 @@
+% zoxide
+
+# Jump to directory that matches best
+z <query>
+
+# Jump to child of a directory
+z <parent> <child>
+
+# List all directories in database
+zoxide query --list
+
+# Add a directory manually (rarely needed, automatic on cd)
+zoxide add <directory>
+
+# Remove a directory from database
+zoxide remove <directory>
+
+# Interactive search with fzf
+zoxide query --interactive
+
+# Show score for a directory
+zoxide query --score <query>
+
+# List the top N most used directories
+zoxide query --list | head -<N>

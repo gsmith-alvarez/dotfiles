@@ -1,0 +1,16 @@
+% delta
+
+# View diff with syntax highlighting and side-by-side
+git diff | delta
+
+# Show staged diff
+git diff --cached | delta
+
+# Side-by-side view
+git diff | delta --side-by-side
+
+# Show line numbers
+git diff | delta --line-numbers
+
+# Navigate hunks with n/N
+git diff | delta --navigate

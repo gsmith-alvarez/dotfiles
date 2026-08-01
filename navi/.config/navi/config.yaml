@@ -1,0 +1,27 @@
+# Custom cheatsheet sources for mise-managed tools
+# See also: ~/.local/share/navi/cheats/ (default repo)
+cheats:
+  paths:
+    - ~/.config/navi/cheats
+
+style:
+  tag:
+    color: cyan
+    width_percentage: 26
+    min_width: 20
+  comment:
+    color: blue
+    width_percentage: 42
+    min_width: 45
+  snippet:
+    color: white
+
+finder:
+  command: fzf
+
+client:
+  tealdeer: true
+
+shell:
+  command: fish
+

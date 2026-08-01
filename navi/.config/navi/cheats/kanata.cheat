@@ -1,0 +1,17 @@
+% kanata
+
+# Test keyboard config without running
+kanata --check <config.kbd>
+
+# Run kanata with specific config
+kanata --cfg <config.kbd>
+
+# Run in background (daemon mode)
+kanata --daemon --cfg <config.kbd>
+
+# Quit kanata (send SIGINT/SIGTERM to process)
+# Reload config (SIGHUP to kanata process)
+kill -HUP <kanata_pid>
+
+# List all available devices
+kanata --list-devices

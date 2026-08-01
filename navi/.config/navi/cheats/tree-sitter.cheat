@@ -1,0 +1,25 @@
+% tree-sitter
+
+# Parse a file and print the AST
+tree-sitter parse <file>
+
+# Highlight a file with syntax colors
+tree-sitter highlight <file>
+
+# Run the test suite for a grammar
+tree-sitter test
+
+# Generate parser from grammar.js
+tree-sitter generate
+
+# Build the parser as a shared library
+tree-sitter build
+
+# Start an interactive playground (browser)
+tree-sitter playground
+
+# Find tags / symbol names in a file
+tree-sitter tags <file>
+
+# Query a file with a S-expression pattern
+tree-sitter query <query.scm> <file>

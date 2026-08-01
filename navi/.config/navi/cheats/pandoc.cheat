@@ -1,0 +1,68 @@
+% pandoc, document-convert
+
+# Convert markdown to PDF
+pandoc <input>.md -o <output>.pdf
+
+# Convert markdown to HTML
+pandoc <input>.md -o <output>.html
+
+# Convert markdown to docx
+pandoc <input>.md -o <output>.docx
+
+# Convert markdown to EPUB
+pandoc <input>.md -o <output>.epub
+
+# Convert markdown to reveal.js slides
+pandoc <input>.md -o <output>.html -t revealjs
+
+# Convert markdown with a reference docx for styling
+pandoc <input>.md --reference-doc=<template>.docx -o <output>.docx
+
+# Convert LaTeX to markdown
+pandoc <input>.tex -o <output>.md
+
+# Convert HTML to markdown
+pandoc <input>.html -o <output>.md
+
+# Convert markdown to plain text (strip formatting)
+pandoc <input>.md -t plain -o <output>.txt
+
+# Specify input format explicitly
+pandoc -f <from_format> -t <to_format> <input> -o <output>
+
+# Add table of contents
+pandoc <input>.md --toc -o <output>.pdf
+
+# Set document metadata (title, author, date)
+pandoc <input>.md --metadata title="<Title>" --metadata author="<Author>" -o <output>.pdf
+
+# Use a CSS file for HTML output
+pandoc <input>.md -c <style>.css -o <output>.html
+
+# Convert multiple markdown files, concatenated
+pandoc <input1>.md <input2>.md -o <output>.pdf
+
+# Enable math rendering (mathjax for HTML)
+pandoc <input>.md --mathjax -o <output>.html
+
+# List supported input formats
+pandoc --list-input-formats
+
+# List supported output formats
+pandoc --list-output-formats
+
+# Set PDF engine (xelatex for Unicode)
+pandoc <input>.md --pdf-engine=xelatex -o <output>.pdf
+
+# Extract embedded media from docx/epub
+pandoc <input>.docx --extract-media=<output_dir> -t markdown -o <output>.md
+
+# Syntax-highlighted code blocks with a specific style
+pandoc <input>.md --highlight-style=<style> -o <output>.html
+
+# Convert with a filter (e.g., diagram filters)
+pandoc <input>.md --filter <filter_name> -o <output>.pdf
+
+$ from_format: echo -e 'markdown\nlatex\nhtml\ndocx\nepub\nrst\norg'
+$ to_format: echo -e 'markdown\nlatex\npdf\nhtml\ndocx\nepub\nrevealjs\nplain'
+$ style: pandoc --list-highlight-styles 2>/dev/null

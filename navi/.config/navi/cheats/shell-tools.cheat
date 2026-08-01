@@ -1,0 +1,31 @@
+% shell-tools
+
+# Check shell script for issues
+shellcheck <file.sh>
+
+# Check syntax only, no warnings
+shellcheck --shell=bash --severity=error <file.sh>
+
+# Format shell script
+shfmt -w <file.sh>
+
+# Format for a specific shell dialect
+shfmt -w -l <file.sh>
+
+# Check shell formatting without writing
+shfmt -d <file.sh>
+
+# Find typos in source code
+typos
+
+# Find typos in a specific directory
+typos <directory>
+
+# Fix typos automatically
+typos --write-changes
+
+# Check for typos without changing files (CI)
+typos
+
+# Check file names for typos
+typos --check-filenames

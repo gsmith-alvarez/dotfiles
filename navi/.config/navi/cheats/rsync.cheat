@@ -1,0 +1,57 @@
+% rsync, sync
+
+# Copy local file/directory to remote
+rsync -avz <source_path> <user>@<host>:<dest_path>
+
+# Copy remote file/directory to local
+rsync -avz <user>@<host>:<source_path> <dest_path>
+
+# Copy local directory (trailing slash = contents only)
+rsync -avz <source_dir>/ <dest_dir>/
+
+# Dry-run (see what would be transferred)
+rsync -avz --dry-run <source> <dest>
+
+# Archive mode with progress (preserves symlinks, perms, times, owner, group)
+rsync -avzP <source> <dest>
+
+# Mirror: delete files at dest not present at source
+rsync -avz --delete <source> <dest>
+
+# Exclude files matching a pattern
+rsync -avz --exclude='*.log' <source> <dest>
+
+# Exclude multiple patterns
+rsync -avz --exclude='*.tmp' --exclude='node_modules' <source> <dest>
+
+# Include only specific patterns (exclude everything else)
+rsync -avz --include='*.txt' --exclude='*' <source> <dest>
+
+# Skip files that are newer at dest (no clobber)
+rsync -avu <source> <dest>
+
+# Limit bandwidth (in KB/s)
+rsync -avz --bwlimit=<KBps> <source> <dest>
+
+# Compress during transfer
+rsync -avz --compress <source> <dest>
+
+# Use ssh with a specific port
+rsync -avz -e 'ssh -p <port>' <source> <dest>
+
+# Use ssh with a specific identity file
+rsync -avz -e 'ssh -i <key_file>' <source> <dest>
+
+# Copy with sparse files (efficient for disk images)
+rsync -avzS <source> <dest>
+
+# Keep partial transfers (resume interrupted transfers)
+rsync -avzP --partial <source> <dest>
+
+# Transfer files newer than a specific file
+rsync -avz --files-from=<file_list> <source> <dest>
+
+# Show changes only (no actual transfer)
+rsync -avz --itemize-changes <source> <dest>
+
+$ host: awk '/^Host [^*]/ {print $2}' ~/.ssh/config 2>/dev/null || echo "hostname"

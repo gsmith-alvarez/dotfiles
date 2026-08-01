@@ -1,0 +1,70 @@
+% ssh, ssh-client
+
+# Connect to a remote host
+ssh <user>@<host>
+
+# Connect with a specific identity file
+ssh -i <key_file> <user>@<host>
+
+# Connect on a non-default port
+ssh -p <port> <user>@<host>
+
+# Connect with X11 forwarding
+ssh -X <user>@<host>
+
+# Run a single command on remote host
+ssh <user>@<host> '<command>'
+
+# Run a command with pseudo-tty (for interactive commands)
+ssh -t <user>@<host> '<command>'
+
+# Copy local file to remote host (scp)
+scp <local_file> <user>@<host>:<remote_path>
+
+# Copy remote file to local
+scp <user>@<host>:<remote_path> <local_file>
+
+# Copy directory recursively to remote
+scp -r <local_dir> <user>@<host>:<remote_path>
+
+# Copy file with ssh key
+scp -i <key_file> <local_file> <user>@<host>:<remote_path>
+
+# Create an SSH tunnel (local port forwarding)
+ssh -L <local_port>:<target_host>:<target_port> <user>@<host>
+
+# Create a reverse SSH tunnel (remote port forwarding)
+ssh -R <remote_port>:localhost:<local_port> <user>@<host>
+
+# Create a SOCKS proxy on localhost:1080
+ssh -D <port> <user>@<host>
+
+# Forward agent connection
+ssh -A <user>@<host>
+
+# Verbose (debug connection issues)
+ssh -vvv <user>@<host>
+
+# Maintain connection with keepalive
+ssh -o ServerAliveInterval=<N> <user>@<host>
+
+# Compress data during transfer
+ssh -C <user>@<host>
+
+# List hosts from ssh config
+ssh -G <hostname> 2>/dev/null | grep '^hostname ' | awk '{print $2}'
+
+# Generate ssh key pair
+ssh-keygen -t ed25519 -C "<comment>"
+
+# Copy public key to remote host
+ssh-copy-id <user>@<host>
+
+# Start ssh-agent and add key
+eval "$(ssh-agent -s)" && ssh-add
+
+# Show fingerprint of a host key
+ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub
+
+$ host: awk '/^Host [^*]/ {print $2}' ~/.ssh/config 2>/dev/null || echo "hostname"
+$ key_file: ls ~/.ssh/*.pub ~/.ssh/id_* 2>/dev/null | sed 's/\.pub$//' | sort -u

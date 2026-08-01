@@ -1,0 +1,16 @@
+% bat-extras
+
+# Search files with bat-powered preview
+batgrep <pattern> <file_or_dir>
+
+# View diff with syntax highlighting
+batdiff <file_before> <file_after>
+
+# Watch a command, show output with bat
+batwatch <command>
+
+# View man pages with bat
+batman <command_name>
+
+# Pipe output through bat cache
+batpipe

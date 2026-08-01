@@ -1,0 +1,34 @@
+% duckdb
+
+# Open a database file (or create one)
+duckdb <database.db>
+
+# Run a query and exit
+duckdb <database.db> -c "<sql_query>"
+
+# Query a CSV file directly (no import)
+duckdb -c "SELECT * FROM read_csv_auto('<file.csv>')"
+
+# Query a Parquet file directly
+duckdb -c "SELECT * FROM read_parquet('<file.parquet>')"
+
+# Query a JSON file directly
+duckdb -c "SELECT * FROM read_json_auto('<file.json>')"
+
+# Export query results to CSV
+duckdb <database.db> -c "<sql_query>" -csv > <output.csv>
+
+# List all tables in database
+duckdb <database.db> -c ".tables"
+
+# Describe table schema
+duckdb <database.db> -c "DESCRIBE <table>"
+
+# Run queries from a file
+duckdb <database.db> -f <query.sql>
+
+# In-memory query (no database file)
+duckdb -c "<sql_query>"
+
+# Install and load an extension
+duckdb -c "INSTALL <extension>; LOAD <extension>;"
