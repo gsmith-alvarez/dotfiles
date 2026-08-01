@@ -1,8 +1,7 @@
 set -l paths \
     ~/.local/bin \
     ~/.cargo/bin \
-    ~/.local/share/mise/shims \
-    ~/.opencode/bin
+    ~/.local/share/mise/shims
 
 for path in $paths
     if test -d $path
