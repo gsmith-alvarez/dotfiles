@@ -101,6 +101,15 @@ Catppuccin Mocha inspired:
 - `~/.config/DankMaterialShell/settings.json` — DMS settings (fonts, theme, behavior)
 - `~/.config/DankMaterialShell/.firstlaunch` — first-launch marker (remove to re-trigger greeter)
 
+## Audio
+
+**Discord pausing Spotify on call join:** WirePlumber's `linking.pause-playback` pauses MPRIS players when an audio sink is removed (triggered by Discord's voice engine). Fixed with:
+```
+wpctl settings linking.pause-playback false
+wpctl settings --save linking.pause-playback
+```
+Persisted in `~/.local/state/wireplumber/sm-settings`.
+
 ## Future Options
 
 **khal** — CLI calendar backend for DMS (shows events in clock popup):
