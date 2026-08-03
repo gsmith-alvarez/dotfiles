@@ -228,7 +228,7 @@ include "dms/windowrules.kdl"
 
 // --- Autostart: DMS session ---
 spawn-at-startup "dms" "run" "--session"
-spawn-at-startup "dcal" "daemon"
+spawn-at-startup "dcal" "run" "-d"
 spawn-at-startup "easyeffects" "-w"
 
 // --- Layout overrides (from backup; overrides dms/layout.kdl + dms/colors.kdl) ---

@@ -1,3 +1,10 @@
 nvim-pack-lock.json
 yazi/.config/yazi/plugins/
 yazi/.config/yazi/flavors/
+ghostty/dankthemes
+ghostty/.config/ghostty/themes/dankcolors
+
+niri/dms/*
+!niri/dms/scripts/
+niri/.config/niri/dms/*
+!niri/.config/niri/dms/scripts/
