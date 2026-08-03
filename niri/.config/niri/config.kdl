@@ -274,7 +274,7 @@ layout {
 // spawn-at-startup "waybar"
 
 // Quickshell desktop shell (top bar, wallpaper, notifications, idle, polkit, lock)
-spawn-at-startup "dms" "run" "--session"
+spawn-at-startup "sg" "i2c" "-c" "dms run --session"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
