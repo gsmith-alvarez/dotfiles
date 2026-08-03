@@ -160,7 +160,7 @@ main() {
 			sudo groupadd i2c
 		fi
 		sudo usermod -aG i2c "$USER"
-		cat <<'EOF' | sudo tee /etc/udev/rules.d/99-i2c-permissions.rules > /dev/null
+		cat <<'EOF' | sudo tee /etc/udev/rules.d/99-i2c-permissions.rules >/dev/null
 # Give i2c group access to /dev/i2c-* devices for DDC/CI monitor control
 KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
 EOF
@@ -251,6 +251,12 @@ Comment=A scrollable-tiling Wayland compositor
 Exec=niri-session
 Type=Application
 DesktopNames=niri
+EOF
+
+			cat <<'EOF' >"$HOME/.config/xdg-desktop-portal/niri-portals.conf"
+            [preferred]
+default=cosmic;gtk;
+org.freedesktop.impl.portal.Secret=gnome-keyring;
 EOF
 		fi
 
