@@ -48,12 +48,21 @@ main() {
 	# 2. Git Identity & Dotfiles Configuration
 	log "=== Configuring Git identity ==="
 
-	if [ -t 0 ]; then
-		read -r -p "Enter Git User Name: " input_name
-		USER_NAME="${input_name}"
+	CURRENT_GIT_NAME="$(git config --global user.name 2>/dev/null || true)"
+	CURRENT_GIT_EMAIL="$(git config --global user.email 2>/dev/null || true)"
 
-		read -r -p "Enter Git User Email: " input_email
-		USER_EMAIL="${input_email}"
+	if [ -n "$CURRENT_GIT_NAME" ] && [ -n "$CURRENT_GIT_EMAIL" ]; then
+		log "Git identity already configured: $CURRENT_GIT_NAME <$CURRENT_GIT_EMAIL>"
+		USER_NAME="$CURRENT_GIT_NAME"
+		USER_EMAIL="$CURRENT_GIT_EMAIL"
+	else
+		if [ -t 0 ]; then
+			read -r -p "Enter Git User Name: " input_name
+			USER_NAME="${input_name}"
+
+			read -r -p "Enter Git User Email: " input_email
+			USER_EMAIL="${input_email}"
+		fi
 	fi
 
 	# Fallback: if no TTY or user skipped, use a safe default marker
@@ -76,10 +85,12 @@ main() {
 	# Set git identity after stow (into the stowed .gitconfig)
 	if [ -z "$USER_NAME" ] || [ -z "$USER_EMAIL" ]; then
 		echo "WARNING: Git identity not set. Set later with: git config --global user.name ..." >&2
-	else
+	elif [ "$USER_NAME" != "$CURRENT_GIT_NAME" ] || [ "$USER_EMAIL" != "$CURRENT_GIT_EMAIL" ]; then
 		git config --global user.name "$USER_NAME"
 		git config --global user.email "$USER_EMAIL"
 		log "Git identity set to: $USER_NAME <$USER_EMAIL>"
+	else
+		log "Git identity retained: $USER_NAME <$USER_EMAIL>"
 	fi
 
 	# 3. Third-Party Repositories (Terra, RPM Fusion)
@@ -106,10 +117,13 @@ main() {
 		log "=== Configuring Hardware Accelerated Video Decoding ==="
 		sudo dnf install -y mesa-va-drivers-freeworld --best --allowerasing
 
-		# Adding Terra repository.
-		# --nogpgcheck is intentional here: bootstrapping before terra-gpg-keys are present.
+		# Adding Terra repository safely (skip if already installed)
 		log "=== Adding Terra repository ==="
-		sudo dnf install -y --nogpgcheck --repofrompath "terra,https://repos.fyralabs.com/terra\$releasever" terra-release terra-gpg-keys
+		if ! rpm -q terra-release &>/dev/null; then
+			sudo dnf install -y --nogpgcheck --repofrompath "terra,https://repos.fyralabs.com/terra\$releasever" terra-release terra-gpg-keys || true
+		else
+			log "Terra repository is already installed."
+		fi
 	fi
 
 	# 4. Monolithic Package Installation
@@ -122,15 +136,21 @@ main() {
 			libxkbcommon-devel cairo-gobject-devel pandoc fuzzel
 
 		# Niri compositor and DMS desktop shell (Copr)
-		log "=== Enabling danklinux Copr for DMS (Material Shell) ===="
-		sudo dnf copr enable -y avengemedia/danklinux
-
-		# Ensure quickshell from Copr is used, not Terra's noctalia-qs
-		if rpm -q noctalia-qs &>/dev/null; then
-			sudo dnf remove -y noctalia-qs
+		log "=== Enabling danklinux Copr for DMS (Material Shell) ==="
+		if ! dnf repolist | grep -q -i "avengemedia.*danklinux\|danklinux"; then
+			sudo dnf copr enable -y avengemedia/danklinux
+		else
+			log "danklinux Copr repository is already enabled."
 		fi
-		sudo dnf install -y --allowerasing niri dms xdg-desktop-portal-wlr dankcalendar-git
+		# Ensure conflicting Noctalia packages are removed before installing DMS & quickshell
+		if rpm -q noctalia-qs &>/dev/null || rpm -q noctulia-qs &>/dev/null || rpm -q noctalia &>/dev/null; then
+			log "=== Removing conflicting noctalia package(s) ==="
+			sudo dnf remove -y noctalia-qs noctulia-qs noctalia 2>/dev/null || true
+		fi
 
+		# Explicitly install quickshell alongside dms and exclude noctalia/noctulia-qs
+		sudo dnf install -y --allowerasing --exclude=noctalia-qs,noctulia-qs,noctalia \
+			niri dms quickshell xdg-desktop-portal-wlr dankcalendar-git
 		# Add niri to wlr portal UseIn list
 		sudo sed -i 's/UseIn=wlroots;sway;Wayfire;river;phosh;Hyprland;/UseIn=wlroots;sway;Wayfire;river;phosh;Hyprland;niri;/' /usr/share/xdg-desktop-portal/portals/wlr.portal 2>/dev/null || true
 
@@ -152,7 +172,7 @@ EOF
 	if [ "$SKIP_RUST" = false ]; then
 		log "=== Installing Cargo binaries ==="
 		# cargo-update provides cargo install-update; use it to skip already-current installs
-		cargo install --locked cargo-cache cargo-update binstall
+		cargo install --locked cargo-cache cargo-update cargo-binstall
 		cargo install-update -i spotify_player fsel kanata topgrade
 	fi
 
@@ -167,19 +187,31 @@ EOF
 	# 6. Flatpak Setup
 	if [ "$SKIP_FLATPAK" = false ]; then
 		log "=== Provisioning Flatpak applications ==="
-		flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-		flatpak install -y --or-update --system flathub \
-			org.blender.Blender \
-			com.calibre_ebook.calibre \
-			it.mior.GearLever \
-			org.keepassxc.KeePassXC \
-			org.kde.krita \
-			org.kde.kdenlive \
-			com.obsproject.Studio \
-			org.qbittorrent.qBittorrent \
-			com.github.wwmm.easyeffects \
-			com.github.tchx84.Flatseal \
+		flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo || true
+
+		FLATPAK_APPS=(
+			org.blender.Blender
+			com.calibre_ebook.calibre
+			it.mijorus.gearlever
+			org.keepassxc.KeePassXC
+			org.kde.krita
+			org.kde.kdenlive
+			com.obsproject.Studio
+			org.qbittorrent.qBittorrent
+			com.github.wwmm.easyeffects
+			com.github.tchx84.Flatseal
 			org.freecad.FreeCAD
+		)
+
+		for app in "${FLATPAK_APPS[@]}"; do
+			if flatpak info "$app" &>/dev/null; then
+				log "Flatpak $app is already installed; updating..."
+				flatpak update -y --system "$app" || log "Warning: Failed to update $app, continuing..."
+			else
+				log "Installing Flatpak $app..."
+				flatpak install -y --or-update --system "$app" || log "Warning: Failed to install $app, continuing..."
+			fi
+		done
 	fi
 
 	# 7. Neovim Build Sourcing
@@ -233,6 +265,7 @@ EOF
 		log "=== Enabling user-space daemons ===="
 		systemctl --user enable --now wayscriber.service 2>/dev/null || true
 		systemctl --user enable --now syncthing.service
+		systemctl --user enable --now dsearch
 
 		# Stop swaync if running (DMS handles notifications)
 		systemctl --user stop swaync.service 2>/dev/null || true
