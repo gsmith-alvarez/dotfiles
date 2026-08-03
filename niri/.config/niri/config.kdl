@@ -372,7 +372,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return hotkey-overlay-title="Open a Terminal: Ghostty" { spawn "ghostty"; }
     Super+D hotkey-overlay-title="Toggle Screen Annotation: wayscriber" { spawn "wayscriber" "--daemon-toggle"; }
-    Super+Space hotkey-overlay-title="Run an Application" { spawn "fuzzel"; }
+    Super+Space hotkey-overlay-title="Application Launcher" { spawn "dms" "ipc" "call" "launcher" "toggle"; }
     Super+Alt+L hotkey-overlay-title="Lock Screen" { spawn "dms" "ipc" "call" "lock" "lockAndOutputsOff"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.

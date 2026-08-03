@@ -18,17 +18,18 @@
 
 ## Launcher Setup
 
-**App launcher** (Super+Space): Opens `fsel` inside a borderless Ghostty window
-```
-Super+Space → ghostty --window-decoration=none --title=fsel -e fsel --detach
-```
-Window rule in `config.kdl` makes it float at natural size.
+**App launcher** (Super+Space): Opens the DMS full launcher — a floating GUI with:
+- **Apps** — search and launch applications
+- **Files** — search file contents via `dsearch` (8,624 files indexed)
+- **Plugins** — search DMS plugin content
+- **Actions** — select an app and press Tab to see desktop actions (New Window, Private Window, etc.)
 
-Also available via `Mod+D` (kept as fallback).
+Press `Ctrl+1/2/3/4` to switch modes (all/apps/files/plugins). Select an app and press `Tab` to show desktop actions (New Window, Private Window, etc.), then `Enter` to execute the selected action.
 
 **Screenshot mode picker:** Uses `fuzzel` (Wayland-native layer-shell popup)
 - fsel is terminal-only (no Wayland rendering) — can't do popup overlays
-- fuzzel is actively maintained (last commit July 25, 2026, codeberg.org/dnkl/fuzzel)
+- DMS spotlight handles app/file search natively in a floating GUI
+- fuzzel is actively maintained for dmenu-style popups (last commit July 25, 2026, codeberg.org/dnkl/fuzzel)
 
 ## Desktop Shell & Notifications
 
@@ -66,13 +67,12 @@ Catppuccin Mocha inspired:
 
 | Key | Action |
 |---|---|
-| Super+Space | App launcher (fsel in ghostty) |
+| Super+Space | App launcher (DMS full launcher — apps, files/dsearch, plugins, actions) |
 | Super+Return | Terminal (ghostty) |
 | Super+D | Screen annotation (wayscriber toggle) |
 | Super+Shift+S | Screenshot menu (region/monitor/all) |
 | Super+Shift+F | Quick full screen capture |
 | Super+Alt+L | Lock screen (DMS) |
-| Mod+D | App launcher fallback (fsel) |
 
 ## Niri Config Details
 
