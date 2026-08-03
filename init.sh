@@ -123,13 +123,13 @@ main() {
 
 		# Niri compositor and DMS desktop shell (Copr)
 		log "=== Enabling danklinux Copr for DMS (Material Shell) ===="
-		sudo dnf copr enable -y avengemedia/dms
+		sudo dnf copr enable -y avengemedia/danklinux
 
 		# Ensure quickshell from Copr is used, not Terra's noctalia-qs
 		if rpm -q noctalia-qs &>/dev/null; then
 			sudo dnf remove -y noctalia-qs
 		fi
-		sudo dnf install -y --allowerasing niri dms xdg-desktop-portal-wlr
+		sudo dnf install -y --allowerasing niri dms xdg-desktop-portal-wlr dankcalendar-git
 
 		# Add niri to wlr portal UseIn list
 		sudo sed -i 's/UseIn=wlroots;sway;Wayfire;river;phosh;Hyprland;/UseIn=wlroots;sway;Wayfire;river;phosh;Hyprland;niri;/' /usr/share/xdg-desktop-portal/portals/wlr.portal 2>/dev/null || true
@@ -199,7 +199,7 @@ main() {
 		# Create the niri session file if not present
 		if [ ! -f "/usr/share/wayland-sessions/niri.desktop" ]; then
 			sudo mkdir -p /usr/share/wayland-sessions
-			cat <<'EOF' | sudo tee /usr/share/wayland-sessions/niri.desktop > /dev/null
+			cat <<'EOF' | sudo tee /usr/share/wayland-sessions/niri.desktop >/dev/null
 [Desktop Entry]
 Name=Niri
 Comment=A scrollable-tiling Wayland compositor
