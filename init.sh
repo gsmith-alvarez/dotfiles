@@ -114,12 +114,20 @@ main() {
 
 	# 4. Monolithic Package Installation
 	if [ "$SKIP_PACKAGES" = false ]; then
-		log "=== Installing applications and development libraries ==="
+		log "=== Installing applications and development libraries ===="
 		sudo dnf install -y \
 			mise fish ghostty starship wl-clipboard cliphist syncthing cargo opentabletdriver \
 			gcc gcc-c++ make pkgconf-pkg-config cairo-devel wayland-devel pango-devel \
 			wayscriber wayscriber-configurator lazygit hw-probe btop sqlite-devel \
-			libxkbcommon-devel cairo-gobject-devel pandoc
+			libxkbcommon-devel cairo-gobject-devel pandoc fuzzel
+
+		# Niri compositor and DMS desktop shell (Copr)
+		log "=== Enabling danklinux Copr for quickshell & dms-cli ===="
+		sudo dnf copr enable -y avengemedia/quickshell
+		sudo dnf install -y niri quickshell dms-cli xdg-desktop-portal-wlr
+
+		# Add niri to wlr portal UseIn list
+		sudo sed -i 's/UseIn=wlroots;sway;Wayfire;river;phosh;Hyprland;/UseIn=wlroots;sway;Wayfire;river;phosh;Hyprland;niri;/' /usr/share/xdg-desktop-portal/portals/wlr.portal 2>/dev/null || true
 	fi
 
 	# 5. Rust Ecosystem & Language Runtime Tooling
@@ -177,43 +185,40 @@ main() {
 		bash "$HOME/dotfiles/neovim_source.sh"
 	fi
 
-	# 8. User Desktop Entries & Autostart Configuration
+	# 9. Desktop Setup (Niri + DMS)
 	if [ "$SKIP_DESKTOP" = false ]; then
-		log "=== Setting up local desktop entries and autostart hooks ==="
-		mkdir -p "$HOME/.local/share/applications" "$HOME/.config/autostart"
+		log "=== Setting up desktop entries, niri DM entry ===="
+		# Ensure default.target prefers niri for the display-manager
+		mkdir -p "$HOME/.config/systemd/user/niri.service.wants"
 
-		# Cliphist Text Daemon
-		cat <<'EOF' >"$HOME/.local/share/applications/cliphist-text.desktop"
+		# Create the niri session file if not present
+		if [ ! -f "/usr/share/wayland-sessions/niri.desktop" ]; then
+			sudo mkdir -p /usr/share/wayland-sessions
+			cat <<'EOF' | sudo tee /usr/share/wayland-sessions/niri.desktop > /dev/null
 [Desktop Entry]
+Name=Niri
+Comment=A scrollable-tiling Wayland compositor
+Exec=niri-session
 Type=Application
-Name=Cliphist Text Daemon
-Comment=Watch and store text clipboard history
-Exec=wl-paste --type text --watch cliphist store
-Terminal=false
-X-COSMIC-Autostart-enabled=true
+DesktopNames=niri
 EOF
+		fi
 
-		# Cliphist Image Daemon
-		cat <<'EOF' >"$HOME/.local/share/applications/cliphist-image.desktop"
-[Desktop Entry]
-Type=Application
-Name=Cliphist Image Daemon
-Comment=Watch and store image clipboard history
-Exec=wl-paste --type image --watch cliphist store
-Terminal=false
-X-COSMIC-Autostart-enabled=true
-EOF
+		# DMS first-launch will initialize the config; trigger it by removing marker
+		rm -f "$HOME/.config/DankMaterialShell/.firstlaunch" 2>/dev/null || true
 
-		# Create symlinks for session autostart
-		ln -sf "$HOME/.local/share/applications/cliphist-text.desktop" "$HOME/.config/autostart/cliphist-text.desktop"
-		ln -sf "$HOME/.local/share/applications/cliphist-image.desktop" "$HOME/.config/autostart/cliphist-image.desktop"
+		log "=== DMS greeter will show on first Niri login ===="
 	fi
 
-	# 9. Services Activation
+	# 10. Services Activation
 	if [ "$SKIP_SERVICES" = false ]; then
-		log "=== Enabling user-space daemons ==="
-		systemctl --user enable --now wayscriber.service
+		log "=== Enabling user-space daemons ===="
+		systemctl --user enable --now wayscriber.service 2>/dev/null || true
 		systemctl --user enable --now syncthing.service
+
+		# Stop swaync if running (DMS handles notifications)
+		systemctl --user stop swaync.service 2>/dev/null || true
+		systemctl --user disable swaync.service 2>/dev/null || true
 
 		sudo firewall-cmd --zone=public --add-service=syncthing --permanent
 		sudo firewall-cmd --reload
