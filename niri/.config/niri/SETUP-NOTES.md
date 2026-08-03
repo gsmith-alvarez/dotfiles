@@ -60,6 +60,7 @@ All in `config.kdl` spawn-at-startup (in order):
 Catppuccin Mocha inspired:
 - Focus ring: Mauve `#cba6f7`, width 2px
 - Rounded corners: 12px on all windows via geometry-corner-radius
+- Fuzzel: Catppuccin Mocha theme (`~/.config/fuzzel/fuzzel.ini`)
 
 ## Keybindings Summary
 
