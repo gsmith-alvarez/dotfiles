@@ -133,6 +133,19 @@ main() {
 
 		# Add niri to wlr portal UseIn list
 		sudo sed -i 's/UseIn=wlroots;sway;Wayfire;river;phosh;Hyprland;/UseIn=wlroots;sway;Wayfire;river;phosh;Hyprland;niri;/' /usr/share/xdg-desktop-portal/portals/wlr.portal 2>/dev/null || true
+
+		# I2C group for DDC/CI monitor brightness control
+		log "=== Setting up i2c group for monitor brightness ===="
+		if ! getent group i2c >/dev/null 2>&1; then
+			sudo groupadd i2c
+		fi
+		sudo usermod -aG i2c "$USER"
+		cat <<'EOF' | sudo tee /etc/udev/rules.d/99-i2c-permissions.rules > /dev/null
+# Give i2c group access to /dev/i2c-* devices for DDC/CI monitor control
+KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
+EOF
+		sudo udevadm control --reload-rules 2>/dev/null || true
+		log "=== i2c group created. Re-login required for brightness to work. ===="
 	fi
 
 	# 5. Rust Ecosystem & Language Runtime Tooling
