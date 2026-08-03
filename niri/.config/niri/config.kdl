@@ -332,13 +332,6 @@ window-rule {
     open-floating true
 }
 
-// fsel app launcher: float and use natural size
-window-rule {
-    match app-id=r#"^com\.mitchellh\.ghostty$"# title="^fsel$"
-    open-floating true
-    default-column-width {}
-}
-
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
 /-window-rule {
@@ -379,8 +372,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return hotkey-overlay-title="Open a Terminal: Ghostty" { spawn "ghostty"; }
     Super+D hotkey-overlay-title="Toggle Screen Annotation: wayscriber" { spawn "wayscriber" "--daemon-toggle"; }
-    Mod+D hotkey-overlay-title=null { spawn "ghostty" "--window-decoration=none" "--title=fsel" "-e" "fsel"; }
-    Super+Space hotkey-overlay-title="Run an Application: fsel" { spawn "ghostty" "--window-decoration=none" "--title=fsel" "-e" "fsel" "--detach"; }
+    Super+Space hotkey-overlay-title="Run an Application" { spawn "fuzzel"; }
     Super+Alt+L hotkey-overlay-title="Lock Screen" { spawn "dms" "ipc" "call" "lock" "lockAndOutputsOff"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
@@ -418,12 +410,12 @@ binds {
     Mod+Q repeat=false { close-window; }
 
     Mod+Left  { focus-column-left; }
-    Mod+Down  { focus-window-down; }
-    Mod+Up    { focus-window-up; }
+    Mod+Down  { focus-workspace-down; }
+    Mod+Up    { focus-workspace-up; }
     Mod+Right { focus-column-right; }
     Mod+H     { focus-column-left; }
-    Mod+J     { focus-window-down; }
-    Mod+K     { focus-window-up; }
+    Mod+J     { focus-workspace-down; }
+    Mod+K     { focus-workspace-up; }
     Mod+L     { focus-column-right; }
 
     Mod+Ctrl+Left  { move-column-left; }
@@ -434,6 +426,12 @@ binds {
     Mod+Ctrl+J     { move-window-down; }
     Mod+Ctrl+K     { move-window-up; }
     Mod+Ctrl+L     { move-column-right; }
+
+    // Move focused window between workspaces
+    Mod+Alt+Shift+Down { move-window-to-workspace-down; }
+    Mod+Alt+Shift+Up   { move-window-to-workspace-up; }
+    Mod+Alt+Shift+J    { move-window-to-workspace-down; }
+    Mod+Alt+Shift+K    { move-window-to-workspace-up; }
 
     // Alternative commands that move across workspaces when reaching
     // the first or last window in a column.
@@ -628,8 +626,8 @@ binds {
     // Interactive screenshot (Windows Snipping Tool style):
     //   Super+Shift+S  — fuzzel menu: Region / Active Monitor / All Monitors
     //   Super+Shift+F  — full screen (all monitors), save + clipboard
-    Super+Shift+S { spawn "bash" "-c" "~/.local/bin/niri-screenshot.sh"; }
-    Super+Shift+F { spawn "dms" "screenshot" "all"; }
+    Super+Shift+S hotkey-overlay-title="Screenshot" { spawn "bash" "-c" "~/.local/bin/niri-screenshot.sh"; }
+    Super+Shift+F hotkey-overlay-title="Screenshot All Monitors" { spawn "dms" "screenshot" "all"; }
 
     Shift+Ctrl+S { screenshot; }
     Ctrl+Print { screenshot-screen; }
