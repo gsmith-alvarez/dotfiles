@@ -122,9 +122,14 @@ main() {
 			libxkbcommon-devel cairo-gobject-devel pandoc fuzzel
 
 		# Niri compositor and DMS desktop shell (Copr)
-		log "=== Enabling danklinux Copr for quickshell & dms-cli ===="
-		sudo dnf copr enable -y avengemedia/quickshell
-		sudo dnf install -y niri quickshell dms-cli xdg-desktop-portal-wlr
+		log "=== Enabling danklinux Copr for DMS (Material Shell) ===="
+		sudo dnf copr enable -y avengemedia/dms
+
+		# Ensure quickshell from Copr is used, not Terra's noctalia-qs
+		if rpm -q noctalia-qs &>/dev/null; then
+			sudo dnf remove -y noctalia-qs
+		fi
+		sudo dnf install -y --allowerasing niri dms xdg-desktop-portal-wlr
 
 		# Add niri to wlr portal UseIn list
 		sudo sed -i 's/UseIn=wlroots;sway;Wayfire;river;phosh;Hyprland;/UseIn=wlroots;sway;Wayfire;river;phosh;Hyprland;niri;/' /usr/share/xdg-desktop-portal/portals/wlr.portal 2>/dev/null || true
