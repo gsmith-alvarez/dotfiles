@@ -226,7 +226,7 @@ include "dms/windowrules.kdl"
 // section may be lost.  Keep it in git for easy re-application.
 // ============================================================================
 
-// --- Autostart: DMS session (from backup; was missing from DMS-rewritten config) ---
+// --- Autostart: DMS session in i2c group (for DDC/CI brightness access) ---
 spawn-at-startup "sg" "i2c" "-c" "dms run --session"
 
 // --- Layout overrides (from backup; overrides dms/layout.kdl + dms/colors.kdl) ---
