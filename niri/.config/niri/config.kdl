@@ -235,6 +235,7 @@ spawn-at-startup "dcal" "run" "-d"
 layout {
     // DMS base settings
     center-focused-column "never"
+    always-center-single-column
     preset-column-widths {
         proportion 0.33333
         proportion 0.5
@@ -334,6 +335,12 @@ binds {
     Super+Ctrl+7 { move-column-to-workspace 7; }
     Super+Ctrl+8 { move-column-to-workspace 8; }
     Super+Ctrl+9 { move-column-to-workspace 9; }
+    Super+0       { focus-workspace 10; }
+    Super+Ctrl+0  { move-column-to-workspace 10; }
+    Super+Shift+0 { move-window-to-workspace 10; }
+
+    // Workspace navigation ergonomics
+    Super+grave     { focus-workspace-previous; }
 
     // Sizing: backup used Super+Shift+R to cycle presets backward
     Super+Shift+R { switch-preset-column-width-back; }
@@ -348,6 +355,13 @@ binds {
 
     // Maximize window to edges (no gaps/borders)
     Super+Shift+M { maximize-window-to-edges; }
+
+    // Layout and window ergonomics
+    Super+Alt+Left  { consume-or-expel-window-left; }
+    Super+Alt+Right { consume-or-expel-window-right; }
+    Super+C         { center-column; }
+    Super+Ctrl+C    { center-visible-columns; }
+    Super+Shift+C   { expand-column-to-available-width; }
 
     // Quit (backup) instead of DMS task manager on Ctrl+Alt+Delete
     Ctrl+Alt+Delete { quit; }
