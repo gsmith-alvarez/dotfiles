@@ -136,11 +136,11 @@ main() {
 			libxkbcommon-devel cairo-gobject-devel pandoc fuzzel
 
 		# Niri compositor and DMS desktop shell (Copr)
-		log "=== Enabling danklinux Copr for DMS (Material Shell) ==="
-		if ! dnf repolist | grep -q -i "avengemedia.*danklinux\|danklinux"; then
-			sudo dnf copr enable -y avengemedia/danklinux
+		log "=== Enabling DMS Copr repository ==="
+		if ! dnf repolist 2>/dev/null | grep -q "avengemedia.*dms"; then
+			sudo dnf copr enable -y avengemedia/dms
 		else
-			log "danklinux Copr repository is already enabled."
+			log "DMS Copr repository is already enabled."
 		fi
 		# Ensure conflicting Noctalia packages are removed before installing DMS & quickshell
 		if rpm -q noctalia-qs &>/dev/null || rpm -q noctulia-qs &>/dev/null || rpm -q noctalia &>/dev/null; then
