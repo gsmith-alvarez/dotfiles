@@ -92,6 +92,12 @@ vim.lsp.config("ty", {
 	},
 })
 
+-- Bash
+vim.lsp.config("bashls", {
+	cmd = { "bash-language-server", "start" },
+	filetypes = { "sh", "bash" },
+})
+
 vim.lsp.config("ruff", {
 	settings = {},
 })
