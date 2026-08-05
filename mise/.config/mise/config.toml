@@ -36,6 +36,7 @@ atuin = "latest"
 duckdb = "latest"
 navi = "latest"
 usage = "latest"
+"cargo:ouch" = "latest"
 
 # --- Core Runtimes ---
 node = "latest"
