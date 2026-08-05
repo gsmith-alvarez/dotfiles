@@ -1,7 +1,6 @@
 git:
-  pagers:
-    - pager: delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
-
+  diffRenderers:
+    - command: delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
 gui:
   theme:
     activeBorderColor:
@@ -29,6 +28,5 @@ gui:
       - '#f38ba8'
     defaultFgColor:
       - '#cdd6f4'
-
 authorColors:
   '*': '#b4befe'

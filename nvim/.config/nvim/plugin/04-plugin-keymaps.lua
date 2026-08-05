@@ -4,13 +4,19 @@ local u = Config.safe_require("core.utils")
 local toggle_file_tree = function()
 	local mf = Config.safe_require("mini.files")
 	if not mf.close() then
+		local cwd = vim.fn.getcwd()
 		local path = vim.api.nvim_buf_get_name(0)
 		if path == "" or path:match("^minifiles://") then
-			path = vim.fn.getcwd()
-		elseif vim.fn.filereadable(path) == 0 and vim.fn.isdirectory(path) == 0 then
-			path = vim.fn.fnamemodify(path, ":p:h")
-			if vim.fn.isdirectory(path) == 0 then
-				path = vim.fn.getcwd()
+			path = cwd
+		else
+			local is_in_cwd = vim.fs.normalize(path):find(vim.fs.normalize(cwd), 1, true) == 1
+			if not is_in_cwd then
+				path = cwd
+			elseif vim.fn.filereadable(path) == 0 and vim.fn.isdirectory(path) == 0 then
+				path = vim.fn.fnamemodify(path, ":p:h")
+				if vim.fn.isdirectory(path) == 0 then
+					path = cwd
+				end
 			end
 		end
 		mf.open(path)
