@@ -13,7 +13,9 @@
   xdg.configFile = builtins.listToAttrs (
     map (name: {
       name = "nvim/${name}";
-      value = { source = ./nvim + "/${name}"; };
+      value = {
+        source = ./nvim + "/${name}";
+      };
     }) (builtins.filter (n: n != "init.lua") (builtins.attrNames (builtins.readDir ./nvim)))
   );
 

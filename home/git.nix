@@ -31,7 +31,7 @@
     settings = {
       user = {
         name = "Giovanni";
-        email = "gio@example.com";
+        email = "smith.alvarez.g@gmail.com";
       };
 
       alias = {
@@ -83,7 +83,10 @@
         };
         gui = {
           theme = {
-            activeBorderColor = [ "#89b4fa" "bold" ];
+            activeBorderColor = [
+              "#89b4fa"
+              "bold"
+            ];
             inactiveBorderColor = [ "#a6adc8" ];
             searchingActiveBorderColor = [ "#f9e2af" ];
             optionsTextColor = [ "#89b4fa" ];

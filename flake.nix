@@ -14,7 +14,13 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, neovim-nightly-overlay, ... }:
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      neovim-nightly-overlay,
+      ...
+    }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -22,7 +28,8 @@
         config.allowUnfree = true;
         overlays = [ neovim-nightly-overlay.overlays.default ];
       };
-    in {
+    in
+    {
       homeConfigurations."giovanni" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [ ./home.nix ];

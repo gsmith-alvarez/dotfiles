@@ -69,11 +69,6 @@
     enableFishIntegration = false; # Using custom y.fish wrapper with zoxide support
   };
 
-  programs.mise = {
-    enable = true;
-    enableFishIntegration = true;
-  };
-
   programs.bat = {
     enable = true;
     extraPackages = with pkgs.bat-extras; [
