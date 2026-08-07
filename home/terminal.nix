@@ -112,6 +112,9 @@
       v = "nvim";
       ch = "cliphist list | fzf | cliphist decode | wl-copy";
       cnavi = "navi --cheatsh";
+      hm = "home-manager";
+      hms = "home-manager --switch";
+      hmb = "home-manager --build";
 
       ls = "eza";
       ll = "eza -lh --grid";
