@@ -1,7 +1,10 @@
 set -l paths \
     ~/.local/bin \
     ~/.cargo/bin \
-    ~/.local/share/mise/shims
+    ~/.local/share/mise/shims \
+    ~/.nix-profile/bin \
+    ~/.local/state/nix/profiles/profile/bin \
+    /nix/var/nix/profiles/default/bin
 
 for path in $paths
     if test -d $path
