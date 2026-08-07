@@ -95,6 +95,7 @@
     ouch
     wl-clipboard
     cliphist
+    antigravity-cli
   ];
 
   programs.fish = {
