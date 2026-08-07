@@ -8,16 +8,16 @@ main() {
 		exit 1
 	fi
 
-	# 2. Match only directories natively using the trailing slash
-	# 3. Handle cases where no directories match cleanly without errors
+	# 3. Skip packages now managed by home-manager and non-stowable dirs
+	#    (easy-effects targets the app data dir, not ~/.config)
 	shopt -s nullglob
-
+	local SKIP=("easy-effects" "nvim" "git")
 	local dirs=()
 	for dir in */; do
 		# Strip trailing slash for string comparison and stow compatibility
 		dir="${dir%/}"
 
-		if [[ "$dir" != "easy-effects" ]]; then
+		if [[ ! " ${SKIP[*]} " =~ " ${dir} " ]]; then
 			dirs+=("$dir")
 		fi
 	done
