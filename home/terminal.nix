@@ -1,15 +1,23 @@
 { pkgs, ... }:
 
 {
+  xdg.configFile."fish/functions" = {
+    source = ./functions;
+    recursive = true;
+  };
+
   programs.zoxide = {
     enable = true;
     enableFishIntegration = true;
-    options = [ "--cmd cd"];
+    options = [ "--cmd cd" ];
   };
 
-programs.fzf = {
+  programs.fzf = {
     enable = true;
     enableFishIntegration = true;
+
+    # Let Atuin manage Ctrl-R
+    historyWidget.command = "";
 
     defaultOptions = [
       "--height=50%"
@@ -23,13 +31,13 @@ programs.fzf = {
       "--bind 'ctrl-b:preview-half-page-up,ctrl-d:preview-half-page-down'"
     ];
 
-    fileWidgetOptions = [
+    fileWidget.options = [
       "--preview 'if test -d {}; eza --tree --color=always {} | head -200; else; bat -n --color=always --line-range :500 {}; end'"
       "--bind '?:toggle-preview,ctrl-y:execute-silent(echo -n {} | wl-copy)+abort'"
       "--preview-window 'right:60%'"
     ];
 
-    changeDirWidgetOptions = [
+    changeDirWidget.options = [
       "--preview 'eza --tree --color=always {} | head -200'"
       "--bind 'ctrl-y:execute-silent(echo -n {} | wl-copy)+abort'"
       "--preview-window 'right:60%'"
@@ -49,10 +57,20 @@ programs.fzf = {
   programs.eza = {
     enable = true;
     enableFishIntegration = true;
+    git = true;
     icons = "auto";
+    extraOptions = [
+      "--hyperlink"
+      "--group-directories-first"
+    ];
   };
 
   programs.yazi = {
+    enable = true;
+    enableFishIntegration = false; # Using custom y.fish wrapper with zoxide support
+  };
+
+  programs.mise = {
     enable = true;
     enableFishIntegration = true;
   };
@@ -72,6 +90,7 @@ programs.fzf = {
     fd
     ripgrep
     ripgrep-all
+    rsync
     xh
     tealdeer
     sd
@@ -86,10 +105,6 @@ programs.fzf = {
 
   programs.fish = {
     enable = true;
-
-    shellAliases = {
-      eza = "eza --icons --hyperlink --group-directories-first";
-    };
 
     shellAbbrs = {
       cat = "bat";
@@ -126,10 +141,6 @@ programs.fzf = {
 
     interactiveShellInit = ''
       set -g fish_key_bindings fish_vi_key_bindings
-
-      if type -q mise
-        mise activate fish | source
-      end
     '';
 
     loginShellInit = ''

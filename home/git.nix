@@ -3,35 +3,23 @@
 {
   home.packages = with pkgs; [
     gitleaks
-    delta
   ];
+
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      navigate = true;
+      light = false;
+      side-by-side = true;
+      line-numbers = true;
+      hyperlink = true;
+    };
+  };
 
   programs.git = {
     enable = true;
-    userName = "Giovanni";
-    userEmail = "gio@example.com";
 
-    # [alias]
-    aliases = {
-      st = "status";
-      co = "checkout";
-      br = "branch";
-      lg = "log --oneline --graph --decorate";
-    };
-
-    # [delta] & [core] pager
-    delta = {
-      enable = true;
-      options = {
-        navigate = true;
-        light = false;
-        side-by-side = true;
-        line-numbers = true;
-        hyperlink = true;
-      };
-    };
-
-    # [include] & [includeIf]
     includes = [
       { path = "~/.gitconfig.local"; }
       {
@@ -40,18 +28,29 @@
       }
     ];
 
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Giovanni";
+        email = "gio@example.com";
+      };
+
+      alias = {
+        st = "status";
+        co = "checkout";
+        br = "branch";
+        lg = "log --oneline --graph --decorate";
+      };
+
       core = {
         editor = "nvim";
         untrackedCache = true;
         preloadIndex = true;
-        exludesfile = "${./gitignore_global}";
+        excludesfile = "${./gitignore_global}";
       };
       gc.auto = 0;
       pull.rebase = true;
       fetch.prune = true;
       init.defaultBranch = "main";
-      interactive.diffFilter = "delta --color-only";
       merge.conflictstyle = "zdiff3";
 
       credential."https://github.com" = {
