@@ -31,7 +31,7 @@
     # LSPs
     lua-language-server
     bash-language-server
-    pyright
+    ty
     vscode-langservers-extracted # Provides JSON & HTML LSPs
     yaml-language-server
     dockerfile-language-server
