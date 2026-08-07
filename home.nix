@@ -24,7 +24,14 @@ in
 
   home.sessionPath = [
   "$HOME/.local/bin"
+    "$HOME/.cargo/bin"
+    "$HOME/.local/share/mise/shims"
   ];
+
+  home.sessionVariables = {
+  EDITOR = "nvim";
+  VISUAL = "nvim";
+  };
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
