@@ -1,0 +1,1 @@
+/nix/store/kgljf6davn9cilcbygi6ja9qasnj7fli-home-manager-files/.config/fish/functions/nfzf.fish

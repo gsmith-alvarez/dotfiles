@@ -1,5 +1,4 @@
 # --- Shell & Command ---
-command = /home/giovanni/.nix-profile/bin/fish -l
 shell-integration = detect
 shell-integration-features = cursor,sudo,title,no-cursor
 
