@@ -274,7 +274,7 @@ window-rule {
 
 // --- Binds: backup wins over dms/binds.kdl on conflicts (from backup) ---
 binds {
-    // Terminal (backup used Mod+Return; DMS uses Mod+T — both kept)
+    // Terminal
     Mod+Return hotkey-overlay-title="Open a Terminal: Ghostty" { spawn "ghostty"; }
 
     // Screen annotation
@@ -286,7 +286,7 @@ binds {
     // Screen reader toggle
     Mod+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
-    // Media stop (backup; DMS only binds Pause/Play/Prev/Next, not Stop)
+    // Media stop
     XF86AudioStop allow-when-locked=true { spawn-sh "playerctl stop"; }
 
     // Focus navigation
@@ -295,10 +295,7 @@ binds {
     Mod+J     { focus-workspace-down; }
     Mod+K     { focus-workspace-up; }
 
-    // Window movement: Mod+Alt applied.
-    // Moved OFF bare Ctrl so Ctrl stays owned by the Neovim shell/editor layer —
-    // Niri intercepts bare Ctrl globally, which broke Ctrl+H/J/K/L window
-    // focus inside nvim. Keep the vim-dir H/J/K/L convention (mirrors focus nav).
+    // Window movement
     Mod+Alt+H     { move-column-left; }
     Mod+Alt+J     { move-window-down; }
     Mod+Alt+K     { move-window-up; }
@@ -314,8 +311,7 @@ binds {
     Mod+Shift+K     { focus-monitor-up; }
     Mod+Shift+L     { focus-monitor-right; }
 
-
-    // Move window between workspaces (all on Mod+Alt+Shift, no bare Ctrl)
+    // Move window between workspaces
     Mod+Alt+Shift+Down { move-window-to-workspace-down; }
     Mod+Alt+Shift+Up   { move-window-to-workspace-up; }
     Mod+Alt+Shift+J    { move-window-to-workspace-down; }
