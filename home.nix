@@ -9,6 +9,7 @@
     ./home/editor.nix
     ./home/git.nix
     ./home/terminal.nix
+    ./home/agents.nix
   ];
 
   home.sessionPath = [

@@ -1,6 +1,12 @@
 {
   description = "Giovanni's Home Manager Configuration";
 
+  # For llm-agents
+  nixConfig = {
+    extra-substituters = [ "https://cache.numtide.com" ];
+    extra-trusted-public-keys = [ "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=" ];
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
@@ -12,6 +18,10 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+    };
   };
 
   outputs =
@@ -19,8 +29,9 @@
       nixpkgs,
       home-manager,
       neovim-nightly-overlay,
+      llm-agents,
       ...
-    }:
+    }@inputs:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -32,6 +43,9 @@
     {
       homeConfigurations."giovanni" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
+
+        extraSpecialArgs = { inherit inputs; };
+
         modules = [ ./home.nix ];
       };
     };
