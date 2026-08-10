@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }:
 
 let
-  llmpkgs = inputs.llm-agents.packages.${pkgs.system};
+  llmpkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
 in
 
 {
