@@ -1,9 +1,7 @@
 { config, ... }:
 
 let
-  link = rel:
-    config.lib.file.mkOutOfStoreSymlink
-    "${config.home.homeDirectory}/dotfiles/${rel}";
+  link = rel: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/${rel}";
 in
 {
   xdg.configFile = {

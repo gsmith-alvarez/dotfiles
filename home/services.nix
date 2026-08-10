@@ -41,8 +41,14 @@
         ExecStart = "/usr/bin/syncthing serve --no-browser --no-restart";
         Restart = "on-failure";
         RestartSec = 1;
-        SuccessExitStatus = [ "3" "4" ];
-        RestartForceExitStatus = [ "3" "4" ];
+        SuccessExitStatus = [
+          "3"
+          "4"
+        ];
+        RestartForceExitStatus = [
+          "3"
+          "4"
+        ];
         SystemCallArchitectures = "native";
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
