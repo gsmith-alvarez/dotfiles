@@ -3,6 +3,10 @@
 # No "Welcome to fish" banner
 set -g fish_greeting ''
 
+# Default editor (yazi etc. read $EDITOR)
+set -gx EDITOR nvim
+set -gx VISUAL nvim
+
 # Vi key bindings
 set -g fish_key_bindings fish_vi_key_bindings
 
