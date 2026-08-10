@@ -122,7 +122,7 @@ pre_sudo = true
 # When set to autodetect: use nh when available, fall back to vanilla
 # Allowed values:
 #   autodetect, nh, vanilla
-# nix_handler = "autodetect"
+nix_handler = "autodetect"
 
 
 # Commands to run before anything
@@ -238,12 +238,12 @@ pre_sudo = true
 # (default: false)
 # bootc = false
 
-# nix_arguments = "--flake"
+nix_arguments = "--flake"
 
 # nix_env_arguments = "--prebuilt-only"
 
 # Extra Home Manager arguments
-# home_manager_arguments = ["--flake", "file"]
+home_manager_arguments = ["--flake", "file"]
 
 
 [mandb]

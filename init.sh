@@ -11,9 +11,7 @@ main() {
 	SKIP_REPOS=false
 	SKIP_PACKAGES=false
 	SKIP_RUST=false
-	SKIP_MISE=false
 	SKIP_FLATPAK=false
-	SKIP_NEOVIM=false
 	SKIP_DESKTOP=false
 	SKIP_SERVICES=false
 
@@ -22,9 +20,7 @@ main() {
 		--skip-repos) SKIP_REPOS=true ;;
 		--skip-packages) SKIP_PACKAGES=true ;;
 		--skip-rust) SKIP_RUST=true ;;
-		--skip-mise) SKIP_MISE=true ;;
 		--skip-flatpak) SKIP_FLATPAK=true ;;
-		--skip-neovim) SKIP_NEOVIM=true ;;
 		--skip-desktop) SKIP_DESKTOP=true ;;
 		--skip-services) SKIP_SERVICES=true ;;
 		*)
@@ -45,53 +41,12 @@ main() {
 	log "=== Installing development environment groups ==="
 	sudo dnf install -y @development-tools @c-development
 
-	# 2. Git Identity & Dotfiles Configuration
-	log "=== Configuring Git identity ==="
-
-	CURRENT_GIT_NAME="$(git config --global user.name 2>/dev/null || true)"
-	CURRENT_GIT_EMAIL="$(git config --global user.email 2>/dev/null || true)"
-
-	if [ -n "$CURRENT_GIT_NAME" ] && [ -n "$CURRENT_GIT_EMAIL" ]; then
-		log "Git identity already configured: $CURRENT_GIT_NAME <$CURRENT_GIT_EMAIL>"
-		USER_NAME="$CURRENT_GIT_NAME"
-		USER_EMAIL="$CURRENT_GIT_EMAIL"
-	else
-		if [ -t 0 ]; then
-			read -r -p "Enter Git User Name: " input_name
-			USER_NAME="${input_name}"
-
-			read -r -p "Enter Git User Email: " input_email
-			USER_EMAIL="${input_email}"
-		fi
-	fi
-
-	# Fallback: if no TTY or user skipped, use a safe default marker
-	USER_NAME="${USER_NAME:-}"
-	USER_EMAIL="${USER_EMAIL:-}"
-
+	# 2. Dotfiles Configuration
 	log "=== Deploying dotfiles ==="
 	if [ ! -d "$HOME/dotfiles" ]; then
 		git clone https://github.com/gsmith-alvarez/dotfiles "$HOME/dotfiles"
 	fi
 	cd "$HOME/dotfiles"
-
-	[[ -x "$HOME/dotfiles/stow.sh" ]] || {
-		echo "ERROR: stow.sh missing or not executable"
-		exit 1
-	}
-
-	./stow.sh
-
-	# Set git identity after stow (into the stowed .gitconfig)
-	if [ -z "$USER_NAME" ] || [ -z "$USER_EMAIL" ]; then
-		echo "WARNING: Git identity not set. Set later with: git config --global user.name ..." >&2
-	elif [ "$USER_NAME" != "$CURRENT_GIT_NAME" ] || [ "$USER_EMAIL" != "$CURRENT_GIT_EMAIL" ]; then
-		git config --global user.name "$USER_NAME"
-		git config --global user.email "$USER_EMAIL"
-		log "Git identity set to: $USER_NAME <$USER_EMAIL>"
-	else
-		log "Git identity retained: $USER_NAME <$USER_EMAIL>"
-	fi
 
 	# 3. Third-Party Repositories (Terra, RPM Fusion)
 	if [ "$SKIP_REPOS" = false ]; then
@@ -130,10 +85,10 @@ main() {
 	if [ "$SKIP_PACKAGES" = false ]; then
 		log "=== Installing applications and development libraries ===="
 		sudo dnf install -y \
-			mise fish ghostty starship wl-clipboard cliphist syncthing cargo opentabletdriver \
+			syncthing cargo opentabletdriver \
 			gcc gcc-c++ make pkgconf-pkg-config cairo-devel wayland-devel pango-devel \
-			wayscriber wayscriber-configurator lazygit hw-probe btop sqlite-devel \
-			libxkbcommon-devel cairo-gobject-devel pandoc fuzzel easyeffects
+			wayscriber wayscriber-configurator hw-probe sqlite-devel \
+			libxkbcommon-devel cairo-gobject-devel pandoc easyeffects
 
 		# Niri compositor and DMS desktop shell (Copr)
 		log "=== Enabling DMS Copr repository ==="
@@ -173,15 +128,7 @@ EOF
 		log "=== Installing Cargo binaries ==="
 		# cargo-update provides cargo install-update; use it to skip already-current installs
 		cargo install --locked cargo-cache cargo-update cargo-binstall
-		cargo install-update -i spotify_player fsel kanata topgrade
-	fi
-
-	if [ "$SKIP_MISE" = false ]; then
-		log "=== Initializing mise tools ==="
-		mise install -y
-
-		log "=== Installing Yazi packages ==="
-		mise exec -- ya pkg install --discard
+		cargo install-update -i kanata
 	fi
 
 	# 6. Flatpak Setup
@@ -211,27 +158,6 @@ EOF
 				flatpak install -y --or-update --system "$app" || log "Warning: Failed to install $app, continuing..."
 			fi
 		done
-	fi
-
-	# 7. Neovim Build Sourcing
-	if [ "$SKIP_NEOVIM" = false ]; then
-		log "=== Fetching and preparing Neovim source ==="
-		mkdir -p "$HOME/source"
-		if [ ! -d "$HOME/source/neovim" ]; then
-			git clone https://github.com/neovim/neovim "$HOME/source/neovim"
-		else
-			# cd into neovim dir for git operations, then back
-			cd "$HOME/source/neovim"
-			git fetch origin
-			git reset --hard origin/master
-			cd "$HOME/dotfiles"
-		fi
-
-		[[ -x "$HOME/dotfiles/neovim_source.sh" ]] || {
-			echo "ERROR: neovim_source.sh missing or not executable"
-			exit 1
-		}
-		bash "$HOME/dotfiles/neovim_source.sh"
 	fi
 
 	# 9. Desktop Setup (Niri + DMS)
@@ -265,17 +191,9 @@ EOF
 		log "=== DMS greeter will show on first Niri login ===="
 	fi
 
-	# 10. Services Activation
+	# 10. Firewall (user daemons are managed by home-manager systemd.user)
 	if [ "$SKIP_SERVICES" = false ]; then
-		log "=== Enabling user-space daemons ===="
-		systemctl --user enable --now wayscriber.service 2>/dev/null || true
-		systemctl --user enable --now syncthing.service
-		systemctl --user enable --now dsearch
-
-		# Stop swaync if running (DMS handles notifications)
-		systemctl --user stop swaync.service 2>/dev/null || true
-		systemctl --user disable swaync.service 2>/dev/null || true
-
+		log "=== Opening Syncthing firewall port ===="
 		sudo firewall-cmd --zone=public --add-service=syncthing --permanent
 		sudo firewall-cmd --reload
 	fi

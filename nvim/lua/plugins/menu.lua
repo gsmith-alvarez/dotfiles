@@ -1,0 +1,207 @@
+-- menu.lua
+local M = {}
+
+vim.opt.mousemodel = "popup"
+
+-- Disable default nvim.popupmenu (0.11+) to avoid conflict.
+pcall(vim.api.nvim_del_augroup_by_name, "nvim.popupmenu")
+
+-- Helpers
+
+local function has_lsp()
+	return next(vim.lsp.get_clients({ bufnr = 0 })) ~= nil
+end
+
+local function notify(msg)
+	vim.notify(msg, vim.log.levels.INFO, { title = "Popup Menu" })
+end
+
+local function open_url_under_cursor()
+	local word = vim.fn.expand("<cfile>")
+	if not word or word == "" or not word:match("^https?://") then
+		notify("No URL under cursor")
+		return
+	end
+	vim.ui.open(word)
+end
+
+--- @param action fun()
+--- @param fallback_msg? string
+local function with_lsp(action, fallback_msg)
+	if not has_lsp() then
+		notify(fallback_msg or "No LSP client attached")
+		return
+	end
+	action()
+end
+
+local function current_file_path()
+	local path = vim.api.nvim_buf_get_name(0)
+	if path == "" then
+		return nil
+	end
+	return vim.fn.fnamemodify(path, ":p")
+end
+
+local function copy_file_path()
+	local path = current_file_path()
+	if not path then
+		notify("No file path to copy")
+		return
+	end
+	vim.fn.setreg("+", path)
+	notify("Copied file path")
+end
+
+local function menu(cmd)
+	vim.cmd("silent! " .. cmd)
+end
+
+-- Menu definitions
+
+local items = {
+	"Go\\ to\\ definition",
+	"References",
+	"Implementation",
+	"Hover",
+	"Code\\ Action",
+	"Rename",
+	"Copy\\ File\\ Path",
+	"Open\\ in\\ web\\ browser",
+	"Git\\ Browse",
+}
+for _, item in ipairs(items) do
+	menu("aunmenu PopUp." .. item)
+end
+
+menu([[aunmenu   PopUp]])
+menu([[anoremenu PopUp.Inspect <Cmd>Inspect<CR>]])
+menu([[amenu     PopUp.-1- <Nop>]])
+menu([[anoremenu PopUp.Go\ to\ definition <Cmd>lua require('plugins.menu').go_to_definition()<CR>]])
+menu([[anoremenu PopUp.References         <Cmd>lua require('plugins.menu').references()<CR>]])
+menu([[anoremenu PopUp.Implementation     <Cmd>lua require('plugins.menu').implementation()<CR>]])
+menu([[anoremenu PopUp.Hover              <Cmd>lua require('plugins.menu').hover()<CR>]])
+menu([[amenu     PopUp.-2- <Nop>]])
+menu([[anoremenu PopUp.Code\ Action       <Cmd>lua require('plugins.menu').code_actions()<CR>]])
+menu([[anoremenu PopUp.Rename             <Cmd>lua require('plugins.menu').rename()<CR>]])
+menu([[amenu     PopUp.-3- <Nop>]])
+menu([[nnoremenu PopUp.Back               <C-t>]])
+menu([[anoremenu PopUp.Copy\ File\ Path   <Cmd>lua require('plugins.menu').copy_file_path()<CR>]])
+menu([[anoremenu PopUp.Open\ in\ web\ browser <Cmd>lua require('plugins.menu').open_url()<CR>]])
+menu([[amenu     PopUp.-4- <Nop>]])
+menu([[anoremenu PopUp.Git\ Browse        <Cmd>lua require('plugins.menu').git_browse()<CR>]])
+
+-- Context-aware enable/disable
+
+local group = vim.api.nvim_create_augroup("user_popupmenu", { clear = true })
+
+vim.api.nvim_create_autocmd("MenuPopup", {
+	pattern = "*",
+	group = group,
+	desc = "Context-aware popup menu",
+	callback = function()
+		local toggleable = {
+			"Go\\ to\\ definition",
+			"References",
+			"Implementation",
+			"Hover",
+			"Code\\ Action",
+			"Rename",
+			"Open\\ in\\ web\\ browser",
+			"Copy\\ File\\ Path",
+			"Git\\ Browse",
+		}
+		for _, item in ipairs(toggleable) do
+			menu("amenu disable PopUp." .. item)
+		end
+
+		if has_lsp() then
+			for _, item in ipairs({
+				"Go\\ to\\ definition",
+				"References",
+				"Implementation",
+				"Hover",
+				"Code\\ Action",
+				"Rename",
+			}) do
+				menu("amenu enable PopUp." .. item)
+			end
+		end
+		if vim.fn.expand("<cfile>"):match("^https?://") then
+			menu([[amenu enable PopUp.Open\ in\ web\ browser]])
+		end
+		if current_file_path() then
+			menu([[amenu enable PopUp.Copy\ File\ Path]])
+		end
+		if vim.fs.root(0, ".git") then
+			menu([[amenu enable PopUp.Git\ Browse]])
+		end
+	end,
+})
+
+-- Exposed actions
+-- Lambdas keep LuaLS happy (avoids fun() inference issues).
+
+--- Trigger LSP definition from popup menu.
+function M.go_to_definition()
+	with_lsp(function()
+		vim.lsp.buf.definition()
+	end, "No LSP definition available")
+end
+
+--- Trigger LSP references from popup menu.
+function M.references()
+	with_lsp(function()
+		vim.lsp.buf.references()
+	end, "No LSP references available")
+end
+
+--- Trigger LSP implementation from popup menu.
+function M.implementation()
+	with_lsp(function()
+		vim.lsp.buf.implementation()
+	end, "No LSP implementation available")
+end
+
+--- Trigger LSP code actions from popup menu.
+function M.code_actions()
+	with_lsp(function()
+		vim.lsp.buf.code_action()
+	end, "No code actions available")
+end
+
+--- Trigger LSP hover from popup menu.
+function M.hover()
+	with_lsp(function()
+		vim.lsp.buf.hover()
+	end, "No hover available")
+end
+
+--- Trigger LSP rename from popup menu.
+function M.rename()
+	with_lsp(function()
+		vim.lsp.buf.rename()
+	end, "No rename action available")
+end
+
+--- Open URL under cursor from popup menu.
+function M.open_url()
+	open_url_under_cursor()
+end
+
+--- Copy current file path to system clipboard.
+function M.copy_file_path()
+	copy_file_path()
+end
+
+--- Open current location in Git browser via Snacks.
+function M.git_browse()
+	local snacks = Config.safe_require("snacks")
+	if snacks and snacks.gitbrowse then
+		snacks.gitbrowse()
+	else
+		notify("Snacks gitbrowse is unavailable")
+	end
+end
+
+return M

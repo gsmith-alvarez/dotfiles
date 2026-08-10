@@ -11,7 +11,7 @@ main() {
 	# 3. Skip packages now managed by home-manager and non-stowable dirs
 	#    (easy-effects targets the app data dir, not ~/.config)
 	shopt -s nullglob
-	local SKIP=("easy-effects" "nvim" "git")
+	local SKIP=("easy-effects" "nvim" "git" "atuin" "bash" "bat" "btop" "fish" "fuzzel" "ghostty" "lazygit" "navi" "niri" "OpenTabletDriver" "spotify-player" "starship" "topgrade" "yazi")
 	local dirs=()
 	for dir in */; do
 		# Strip trailing slash for string comparison and stow compatibility

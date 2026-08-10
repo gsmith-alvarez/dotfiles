@@ -1,0 +1,213 @@
+-- snacks.nvim
+
+local M = {}
+
+-- 1. Initialization
+-- Load early so helpers are ready for LSP/BufRead events.
+local snacks = Config.safe_require("snacks")
+
+local youtube_cache_dir = vim.fn.stdpath("state") .. "/youtube_thumbnails"
+
+--- Resolve a YouTube thumbnail URL to a cached local file when possible.
+--- @param video_id string YouTube video identifier.
+--- @return string path_or_url Local cached file path or remote fallback URL.
+M.resolve_youtube = function(video_id)
+	local cached = youtube_cache_dir .. "/" .. video_id .. ".jpg"
+	if vim.fn.filereadable(cached) == 1 then
+		return cached
+	end
+
+	local max_url = "https://img.youtube.com/vi/" .. video_id .. "/maxresdefault.jpg"
+	local hq_url = "https://img.youtube.com/vi/" .. video_id .. "/hqdefault.jpg"
+
+	if vim.net and vim.net.request then
+		vim.net.request(max_url, {
+			method = "HEAD",
+			callback = function(err, res)
+				local target = (not err and res and res.status == 200) and max_url or hq_url
+				vim.net.request(target, {
+					method = "GET",
+					callback = function(get_err, get_res)
+						if get_err or not get_res or not get_res.body then
+							return
+						end
+						vim.fn.mkdir(youtube_cache_dir, "p")
+						local f = io.open(cached, "wb")
+						if f then
+							f:write(get_res.body)
+							f:close()
+						end
+					end,
+				})
+			end,
+		})
+	end
+
+	return max_url
+end
+
+--- Resolve Obsidian attachments to absolute local paths for image rendering.
+--- @param path string Current buffer file path.
+--- @param src string Raw markdown image/link source.
+--- @return string|nil resolved_path Absolute resolved attachment path.
+M.resolve_obsidian = function(path, src)
+	local obsidian = Config.safe_require("obsidian")
+	if not obsidian then
+		return
+	end
+
+	local api = obsidian.api
+	if api.path_is_note(path) then
+		return api.resolve_attachment_path(src)
+	end
+end
+
+-- GLOBAL DEBUG HELPERS
+--- Debug helper that proxies to snacks.debug.inspect.
+_G.dd = function(...)
+	snacks.debug.inspect(...)
+end
+--- Debug helper that proxies to snacks.debug.backtrace.
+_G.bt = function()
+	snacks.debug.backtrace()
+end
+
+---@diagnostic disable-next-line: duplicate-set-field
+vim._print = function(...)
+	_G.dd(...)
+end
+
+-- 2. Consolidated setup
+snacks.setup({
+	-- A. UI & VISUALS (Logic runs on buffer events)
+	bigfile = { enabled = true },
+	indent = {
+		enabled = true,
+		char = "│",
+		scope = {
+			enabled = true,
+			char = "│",
+			edge = true,
+		},
+		chunk = {
+			enabled = true,
+		},
+	},
+	scroll = { enabled = true },
+	statuscolumn = { enabled = true },
+	notifier = {
+		enabled = true,
+		timeout = 3000,
+	},
+	words = { enabled = true },
+	quickfile = { enabled = true },
+
+	-- B. TOOLS & UTILITIES (Lazy-loaded on demand)
+	animate = { enabled = true },
+	bufdelete = { enabled = true },
+	dashboard = { enabled = false },
+	debug = { enabled = true },
+	dim = { enabled = true },
+	gh = { enabled = true },
+	git = { enabled = true },
+	image = {
+		enabled = true,
+		resolve = function(file, src)
+			local video_id = src:match("youtube%.com/embed/([%w_%-]+)")
+			if video_id then
+				return M.resolve_youtube(video_id)
+			end
+
+			return M.resolve_obsidian(file, src)
+		end,
+	},
+	lazygit = { enabled = true },
+	picker = {
+		enabled = true,
+		layout = "custom",
+		layouts = {
+			custom = {
+				layout = {
+					box = "vertical",
+					backdrop = false,
+					row = -1,
+					width = 0,
+					height = 0.4,
+					border = "none",
+					title = " {title} {live} {flags}",
+					title_pos = "left",
+					{
+						box = "horizontal",
+						{ win = "list", border = "rounded" },
+						{ win = "preview", title = "{preview}", width = 0.6, border = "rounded" },
+					},
+					{ win = "input", height = 1, border = "none" },
+				},
+			},
+		},
+	},
+	scope = { enabled = true },
+	terminal = {
+		win = {
+			border = "rounded",
+			winblend = 3,
+			keys = { q = "hide" },
+			style = {
+				statusline = " %{fnamemodify(getcwd(), ':~')} ",
+			},
+		},
+	},
+	scratch = { enabled = true },
+	profiler = { enabled = true },
+	toggle = { enabled = true },
+	zen = { enabled = true },
+})
+
+-- 3. Toggles
+local mini = Config.safe_require("plugins.mini")
+mini.later(function()
+	Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+	Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
+	Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
+	Snacks.toggle.diagnostics():map("<leader>ud")
+	Snacks.toggle.line_number():map("<leader>ul")
+	Snacks.toggle
+		.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+		:map("<leader>uc")
+	Snacks.toggle.treesitter():map("<leader>uT")
+	Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
+	Snacks.toggle.inlay_hints():map("<leader>uh")
+	Snacks.toggle.indent():map("<leader>ug")
+	Snacks.toggle.dim():map("<leader>uD")
+	Snacks.toggle.profiler():map("<leader>pp")
+	Snacks.toggle
+		.new({
+			id = "profiler_highlights",
+			name = "Profiler Highlights",
+			get = function()
+				return Snacks.profiler.ui.enabled
+			end,
+			set = function(state)
+				if state then
+					if not Snacks.profiler.running() then
+						Snacks.profiler.start()
+					end
+					vim.schedule(function()
+						pcall(Snacks.profiler.highlight, true)
+					end)
+					return
+				end
+				pcall(Snacks.profiler.highlight, false)
+			end,
+		})
+		:map("<leader>ph")
+	Snacks.toggle.zen():map("<leader>uz")
+	Snacks.toggle.zoom():map("<leader>uZ")
+end)
+
+-- 4. Dropbar
+mini.later(function()
+	Config.safe_require("dropbar").setup()
+end)
+
+return M
