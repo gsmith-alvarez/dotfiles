@@ -106,6 +106,13 @@ vim.lsp.config("ruff", {
 vim.lsp.config("nixd", {
 	cmd = { "nixd" },
 	filetypes = { "nix" },
+	settings = {
+		nixd = {
+			formatting = {
+				command = { "nixfmt" },
+			},
+		},
+	},
 })
 -- blink.cmp doesn't auto-inject capabilities; advertise via wildcard when present.
 local blink = Config.safe_require("blink.cmp")

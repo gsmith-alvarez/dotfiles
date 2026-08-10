@@ -76,3 +76,4 @@ if not autocmds then
 end
 autocmds.register("lsp")
 autocmds.register("format")
+autocmds.register("nix")

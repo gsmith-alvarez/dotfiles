@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
+
+let
+  dotfilesPath = "${config.home.homeDirectory}/dotfiles";
+in
 
 {
   programs.neovim = {
@@ -6,18 +10,9 @@
     defaultEditor = true;
     withPython3 = true;
     withNodeJs = true;
-    initLua = builtins.readFile ./nvim/init.lua;
   };
 
-  # Automatically symlink all files and directories in ./nvim except init.lua
-  xdg.configFile = builtins.listToAttrs (
-    map (name: {
-      name = "nvim/${name}";
-      value = {
-        source = ./nvim + "/${name}";
-      };
-    }) (builtins.filter (n: n != "init.lua") (builtins.attrNames (builtins.readDir ./nvim)))
-  );
+  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/nvim";
 
   home.packages = with pkgs; [
     # Runtimes
@@ -32,7 +27,7 @@
     lua-language-server
     bash-language-server
     ty
-    vscode-langservers-extracted # Provides JSON & HTML LSPs
+    vscode-langservers-extracted
     yaml-language-server
     dockerfile-language-server
     nixd
@@ -48,7 +43,9 @@
     oxlint
     taplo
     yamllint
-    nixfmt
+    nixfmt-rfc-style
+    statix
+    deadnix
 
     # Graphics & Typesetting
     mermaid-cli

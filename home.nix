@@ -1,4 +1,4 @@
-{ config, ... }:
+{ pkgs, config, ... }:
 
 {
   home.username = "giovanni";
@@ -17,6 +17,15 @@
     "${config.home.homeDirectory}/.cargo/bin"
     "${config.home.homeDirectory}/.local/share/mise/shims"
     "${config.home.homeDirectory}/.bun/bin"
+  ];
+
+  home.packages = with pkgs; [
+    nh
+    nix-search-cli
+    direnv
+    nix-direnv
+    flake-checker
+    flake-edit
   ];
 
   programs.home-manager.enable = true;
