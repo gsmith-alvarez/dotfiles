@@ -15,6 +15,7 @@
     "${config.home.homeDirectory}/.local/bin"
     "${config.home.homeDirectory}/.cargo/bin"
     "${config.home.homeDirectory}/.local/share/mise/shims"
+    "${config.home.homeDirectory}/.bun/bin"
   ];
 
   programs.home-manager.enable = true;
