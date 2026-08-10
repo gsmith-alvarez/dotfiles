@@ -1,11 +1,6 @@
 { pkgs, ... }:
 
 {
-  xdg.configFile."fish/functions" = {
-    source = ./functions;
-    recursive = true;
-  };
-
   programs.zoxide = {
     enable = true;
     enableFishIntegration = true;
@@ -81,6 +76,7 @@
   };
 
   home.packages = with pkgs; [
+    fish
     fd
     ripgrep
     ripgrep-all
@@ -96,56 +92,15 @@
     wl-clipboard
     cliphist
     antigravity-cli
+    btop
+    fuzzel
+    fsel
+    ghostty
+    spotify-player
+    topgrade
   ];
 
-  programs.fish = {
-    enable = true;
-
-    shellAbbrs = {
-      cat = "bat";
-      man = "batman";
-      find = "fd";
-      cp = "rsync -avh --info-progress2";
-      rm = "rm -i";
-      mv = "mv -i";
-      mkdir = "mkdir -p";
-      v = "nvim";
-      ch = "cliphist list | fzf | cliphist decode | wl-copy";
-      cnavi = "navi --cheatsh";
-      hm = "home-manager";
-      hms = "home-manager switch";
-      hmb = "home-manager build";
-
-      ls = "eza";
-      ll = "eza -lh --grid";
-      la = "eza -a";
-      tree = "eza --tree";
-
-      u = "fnav up";
-      d = "fnav down";
-      z = "fnav zoxide";
-      sg = "sgrep";
-
-      copy = "wl-copy";
-      paste = "wl-paste";
-
-      rg = "batgrep";
-      diff = "batdiff";
-      watch = "batwatch";
-
-      uvr = "uv run";
-      pytest = "uv run pytest";
-    };
-
-    interactiveShellInit = ''
-      set -g fish_key_bindings fish_vi_key_bindings
-    '';
-
-    loginShellInit = ''
-      if not pgrep -x wl-paste >/dev/null
-        wl-paste --type text --watch cliphist store &
-        wl-paste --type image --watch cliphist store &
-      end
-    '';
-  };
+  # Ghostty terminfo: env var + .terminfo symlink so ncurses finds xterm-ghostty.
+  home.sessionVariables.TERMINFO_DIRS = "${pkgs.ghostty}/share/terminfo";
+  home.file.".terminfo".source = "${pkgs.ghostty}/share/terminfo";
 }

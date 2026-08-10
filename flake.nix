@@ -37,7 +37,10 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-        overlays = [ neovim-nightly-overlay.overlays.default ];
+        overlays = [
+          neovim-nightly-overlay.overlays.default
+          (final: prev: import ./packages final)
+        ];
       };
     in
     {

@@ -1,21 +1,15 @@
-{ pkgs, config, ... }:
-
-let
-  dotfilesPath = "${config.home.homeDirectory}/dotfiles";
-in
+{ pkgs, ... }:
 
 {
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    withPython3 = true;
-    withNodeJs = true;
+  # Editor everywhere so tools don't fall back to vi.
+  home.sessionVariables = {
+    EDITOR = "${pkgs.neovim}/bin/nvim";
+    VISUAL = "${pkgs.neovim}/bin/nvim";
   };
-
-  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/nvim";
 
   home.packages = with pkgs; [
     # Runtimes
+    neovim
     nodejs_22
     bun
     zig
@@ -31,6 +25,7 @@ in
     yaml-language-server
     dockerfile-language-server
     nixd
+    pyright
 
     # Linters, Formatters & Checkers
     tree-sitter
@@ -41,9 +36,10 @@ in
     shellcheck
     shfmt
     oxlint
+    oxfmt
     taplo
     yamllint
-    nixfmt-rfc-style
+    nixfmt
     statix
     deadnix
 
