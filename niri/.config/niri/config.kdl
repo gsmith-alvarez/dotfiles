@@ -311,16 +311,22 @@ binds {
     Mod+Shift+K     { focus-monitor-up; }
     Mod+Shift+L     { focus-monitor-right; }
 
+
     // Move window between workspaces
     Mod+Alt+Shift+Down { move-window-to-workspace-down; }
     Mod+Alt+Shift+Up   { move-window-to-workspace-up; }
     Mod+Alt+Shift+J    { move-window-to-workspace-down; }
     Mod+Alt+Shift+K    { move-window-to-workspace-up; }
-    // Move column to workspace (backup used Page keys; missing from DMS binds)
+
+    // Move window between monitiors
+    Mod+Alt+Shift+H    { move-window-to-monitor-left; }
+    Mod+Alt+Shift+L    { move-window-to-monitor-right; }
+
+    // Move column to workspace
     Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
     Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
 
-    // Move column to numbered workspace (backup; missing from DMS binds)
+    // Move column to numbered workspace
     Mod+Ctrl+1 { move-column-to-workspace 1; }
     Mod+Ctrl+2 { move-column-to-workspace 2; }
     Mod+Ctrl+3 { move-column-to-workspace 3; }
@@ -340,7 +346,7 @@ binds {
     // Sizing: backup used Mod+Shift+R to cycle presets backward
     Mod+Shift+R { switch-preset-column-width-back; }
 
-    // Window height preset cycling (backup; DMS only binds plain Ctrl+Shift+R for rename)
+    // Window height preset cycling
     Mod+Ctrl+Shift+R { switch-preset-window-height; }
 
     // Screenshots (backup)
