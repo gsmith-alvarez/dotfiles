@@ -95,12 +95,16 @@
     btop
     fuzzel
     fsel
-    ghostty
+    # ghostty — installed from system package manager (dnf) instead of Nix
+    # because Nix's libglvnd can't find the system Mesa EGL driver on Fedora,
+    # causing "Failed to create EGL display" on launch.
+    #ghostty
     spotify-player
     topgrade
   ];
 
-  # Ghostty terminfo: env var + .terminfo symlink so ncurses finds xterm-ghostty.
-  home.sessionVariables.TERMINFO_DIRS = "${pkgs.ghostty}/share/terminfo";
-  home.file.".terminfo".source = "${pkgs.ghostty}/share/terminfo";
+  # Ghostty terminfo -- kept for reference if reinstalling via Nix later.
+  # The system package (dnf) installs its own terminfo.
+  #home.sessionVariables.TERMINFO_DIRS = "${pkgs.ghostty}/share/terminfo";
+    #home.file."terminfo".source = "${pkgs.ghostty}/share/terminfo";
 }

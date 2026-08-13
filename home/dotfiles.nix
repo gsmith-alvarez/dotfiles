@@ -10,7 +10,9 @@ in
     btop.source = link "btop/.config/btop";
     fish.source = link "fish";
     fuzzel.source = link "fuzzel/.config/fuzzel";
-    ghostty.source = link "ghostty/.config/ghostty";
+    # ghostty -- commented out: installed from dnf instead of Nix.
+    # Config is linked manually: ln -sf ~/dotfiles/ghostty/.config/ghostty ~/.config/ghostty
+    #ghostty.source = link "ghostty/.config/ghostty";
     lazygit.source = link "lazygit/.config/lazygit";
     navi.source = link "navi/.config/navi";
     niri.source = link "niri/.config/niri";
