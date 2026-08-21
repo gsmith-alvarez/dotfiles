@@ -220,10 +220,8 @@ include "dms/wpblur.kdl"
 include "dms/windowrules.kdl"
 
 // ============================================================================
-// USER OVERRIDES — restored from config.kdl.backup.2026-08-03_02-26-14
-// Backup takes precedence over DMS-managed settings on conflicts.
-// NOTE: If DMS rewrites config.kdl when settings change in the DMS UI, this
-// section may be lost.  Keep it in git for easy re-application.
+// USER OVERRIDES
+// Takes precedence over DMS-managed settings on conflicts.
 // ============================================================================
 
 // --- Autostart: DMS session ---
@@ -231,7 +229,6 @@ spawn-at-startup "dms" "run" "--session"
 spawn-at-startup "easyeffects" "-w"
 spawn-at-startup "dcal" "run" "-d"
 
-// --- Layout overrides (from backup; overrides dms/layout.kdl + dms/colors.kdl) ---
 layout {
     // DMS base settings
     center-focused-column "never"

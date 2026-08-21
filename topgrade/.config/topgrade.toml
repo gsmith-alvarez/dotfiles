@@ -243,7 +243,7 @@ nix_arguments = "--flake"
 # nix_env_arguments = "--prebuilt-only"
 
 # Extra Home Manager arguments
-home_manager_arguments = ["--flake", "file"]
+home_manager_arguments = ["--flake", "/home/giovanni/.config/home-manager#giovanni"]
 
 
 [mandb]
