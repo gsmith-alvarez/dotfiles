@@ -37,7 +37,7 @@ config-notification {
     position x=1280 y=0
 }
 
-output "DP-3" {
+output "DP-2" {
     position x=0 y=0
 }
 
@@ -220,18 +220,32 @@ include "dms/wpblur.kdl"
 include "dms/windowrules.kdl"
 
 // ============================================================================
-// USER OVERRIDES — restored from config.kdl.backup.2026-08-03_02-26-14
-// Backup takes precedence over DMS-managed settings on conflicts.
-// NOTE: If DMS rewrites config.kdl when settings change in the DMS UI, this
-// section may be lost.  Keep it in git for easy re-application.
-// ============================================================================
+// USER OVERRIDES
 
 // --- Autostart: DMS session ---
 spawn-at-startup "dms" "run" "--session"
 spawn-at-startup "easyeffects" "-w"
 spawn-at-startup "dcal" "run" "-d"
 
-// --- Layout overrides (from backup; overrides dms/layout.kdl + dms/colors.kdl) ---
+workspace "study" {
+    open-on-output "DP-2"
+}
+
+window-rule {
+    match at-startup=true app-id=r#"^(zen|md\.obsidian\.Obsidian)$"#
+    open-on-workspace "study"
+}
+
+workspace "utils" {
+    open-on-output "HDMI-A-1"
+}
+
+window-rule {
+    match at-startup=true app-id=r#"^(org\.keepassxc\.KeePassXC|net\.thunderbird\.Thunderbird|com\.mitchellh\.ghostty)$"#
+    open-on-workspace "utils"
+}
+
+// --- Layout overrides
 layout {
     // DMS base settings
     center-focused-column "never"
@@ -262,7 +276,6 @@ layout {
     }
 }
 
-// --- Window rule: restore blur + opacity for all windows (from backup) ---
 window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
@@ -272,10 +285,19 @@ window-rule {
     }
 }
 
-// --- Binds: backup wins over dms/binds.kdl on conflicts (from backup) ---
 binds {
     // Terminal
     Mod+Return hotkey-overlay-title="Open a Terminal: Ghostty" { spawn "ghostty"; }
+    // Browser
+    Mod+Alt+B hotkey-overlay-title="Open a Browser: Zen" { spawn "zen"; }
+    // Note Taking
+    Mod+Alt+O hotkey-overlay-title="Open Notes: Obsidian" { spawn "flatpak" "run" "md.obsidian.Obsidian"; }
+    // Editor
+    Mod+Alt+N hotkey-overlay-title="Open Editor: Nvim" { spawn "ghostty" "-e" "nvim"; }
+    //KeePassXC
+    Mod+Alt+K hotkey-overlay-title="Open Password Manager: Keepassxc" { spawn "keepassxc"; }
+    //Email
+    Mod+Alt+M hotkey-overlay-title="Open Email: Thunderbird" {spawn "thunderbird";}
 
     // Screen annotation
     Mod+D hotkey-overlay-title="Toggle Screen Annotation: wayscriber" { spawn "wayscriber" "--daemon-toggle"; }
@@ -296,10 +318,10 @@ binds {
     Mod+K     { focus-workspace-up; }
 
     // Window movement
-    Mod+Alt+H     { move-column-left; }
-    Mod+Alt+J     { move-window-down; }
-    Mod+Alt+K     { move-window-up; }
-    Mod+Alt+L     { move-column-right; }
+    Mod+Ctrl+H     { move-column-left; }
+    Mod+Ctrl+J     { move-window-down; }
+    Mod+Ctrl+K     { move-window-up; }
+    Mod+Ctrl+L     { move-column-right; }
 
     // Monitor focus
     Mod+Shift+Left  { focus-monitor-left; }
@@ -313,14 +335,14 @@ binds {
 
 
     // Move window between workspaces
-    Mod+Alt+Shift+Down { move-window-to-workspace-down; }
-    Mod+Alt+Shift+Up   { move-window-to-workspace-up; }
-    Mod+Alt+Shift+J    { move-window-to-workspace-down; }
-    Mod+Alt+Shift+K    { move-window-to-workspace-up; }
+    Mod+Ctrl+Shift+Down { move-window-to-workspace-down; }
+    Mod+Ctrl+Shift+Up   { move-window-to-workspace-up; }
+    Mod+Ctrl+Shift+J    { move-window-to-workspace-down; }
+    Mod+Ctrl+Shift+K    { move-window-to-workspace-up; }
 
-    // Move window between monitiors
-    Mod+Alt+Shift+H    { move-window-to-monitor-left; }
-    Mod+Alt+Shift+L    { move-window-to-monitor-right; }
+    // Move window between monitors
+    Mod+Ctrl+Shift+H    { move-window-to-monitor-left; }
+    Mod+Ctrl+Shift+L    { move-window-to-monitor-right; }
 
     // Move column to workspace
     Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
@@ -358,8 +380,8 @@ binds {
     Mod+Shift+M { maximize-window-to-edges; }
 
     // Layout and window ergonomics
-    Mod+Alt+Left  { consume-or-expel-window-left; }
-    Mod+Alt+Right { consume-or-expel-window-right; }
+    Mod+Ctrl+Left  { consume-or-expel-window-left; }
+    Mod+Ctrl+Right { consume-or-expel-window-right; }
     Mod+C         { center-column; }
     Mod+Ctrl+C    { center-visible-columns; }
     Mod+Shift+C   { expand-column-to-available-width; }

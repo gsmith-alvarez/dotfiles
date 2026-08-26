@@ -239,7 +239,18 @@ u.nmap("<leader>sj", function()
 	picker.jumps()
 end, "Search: Jumps")
 
--- 4. UI & toggles (leader u)
+-- 4. Yank / Registers
+u.nmap("<leader>oy", function()
+	require("snacks").picker.registers()
+end, "Yank: Pick Register")
+
+-- 5. Open link at cursor
+u.nmap("<leader>oo", "gx", "Open: Link at Cursor", { remap = true })
+
+-- 6. Undo tree
+u.nmap("<leader>ou", "<cmd>Undotree<CR>", "Undo: Toggle Tree")
+
+-- 7. UI & toggles (leader u)
 local toggle_qf = function()
 	vim.cmd(vim.fn.getqflist({ winid = true }).winid ~= 0 and "cclose" or "copen")
 end

@@ -17,7 +17,6 @@ NIRI_FILES=(
 )
 GHOSTTY_FILES=(
   "$REPO/ghostty/.config/ghostty/config"
-  "$REPO/ghostty/.config/ghostty/config.ghostty"
 )
 
 violations=0

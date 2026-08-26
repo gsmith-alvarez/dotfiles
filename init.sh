@@ -133,7 +133,7 @@ main() {
 			mise fish ghostty starship wl-clipboard cliphist syncthing cargo opentabletdriver \
 			gcc gcc-c++ make pkgconf-pkg-config cairo-devel wayland-devel pango-devel \
 			wayscriber wayscriber-configurator lazygit hw-probe btop sqlite-devel \
-			libxkbcommon-devel cairo-gobject-devel pandoc fuzzel easyeffects
+			libxkbcommon-devel cairo-gobject-devel pandoc fuzzel easyeffects entr
 
 		# Niri compositor and DMS desktop shell (Copr)
 		log "=== Enabling DMS Copr repository ==="

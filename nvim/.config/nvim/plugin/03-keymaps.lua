@@ -41,6 +41,14 @@ u.map("n", "n", "'Nn'[v:searchforward] . 'zv'", "Search: Next Result", { expr = 
 u.map("n", "N", "'nN'[v:searchforward] . 'zv'", "Search: Prev Result", { expr = true })
 u.map({ "x", "o" }, "n", "'Nn'[v:searchforward]", "Search: Next Result", { expr = true })
 u.map({ "x", "o" }, "N", "'nN'[v:searchforward]", "Search: Prev Result", { expr = true })
+u.nmap("<leader>fz", function()
+    local word = vim.fn.expand("<cword>")
+    if word ~= "" then
+        vim.cmd("%s/" .. word .. "//gc")
+    else
+        vim.cmd("%s//gc")
+    end
+end, "Search: Search & Replace")
 
 -- 6. Visual mode indentation
 u.map("x", "<", "<gv", "Edit: Indent Left (keep selected)")
@@ -61,7 +69,8 @@ u.nmap("<leader>`", "<cmd>e #<CR>", "Buffer: Switch to Alternate")
 u.map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", "File: Save")
 u.nmap("<leader>bn", "<cmd>enew<CR>", "Buffer: Create New")
 u.nmap("<leader>qq", "<cmd>qa<CR>", "Session: Exit Neovim")
-u.nmap("<A-u>", "<cmd>Undotree<CR>", "Tool: Open Undotree")
+u.nmap("<A-j>", "<cmd>m .+1<cr>==", "Edit: Move Line Down")
+u.nmap("<A-k>", "<cmd>m .-2<cr>==", "Edit: Move Line Up")
 
 u.imap("<A-j>", "<esc><cmd>m .+1<cr>==gi", "Edit: Move Line Down")
 u.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", "Edit: Move Line Up")
@@ -69,7 +78,13 @@ u.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", "Edit: Move Line Up")
 u.nmap("<C-d>", "<C-d>zz", "Scroll: Down and Center")
 u.nmap("<C-u>", "<C-u>zz", "Scroll: Up and Center")
 
--- 10. Inspect / diagnostics
+-- 10. UI toggles / inspect
+u.nmap("<leader>uS", function()
+    local cur = vim.opt.signcolumn:get()
+    vim.opt.signcolumn = cur == "no" and "auto" or "no"
+    vim.notify("Sign column: " .. vim.opt.signcolumn:get())
+end, "UI: Toggle Sign Column")
+
 u.nmap("<leader>ui", vim.show_pos, "Inspect: Show Highlights")
 u.nmap("<leader>uI", function()
 	vim.treesitter.inspect_tree()

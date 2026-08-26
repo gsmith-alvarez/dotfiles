@@ -37,6 +37,8 @@ duckdb = "latest"
 navi = "latest"
 usage = "latest"
 "cargo:ouch" = "latest"
+grex = "latest"
+doggo = "latest"
 
 # --- Core Runtimes ---
 node = "latest"

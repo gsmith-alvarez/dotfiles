@@ -28,7 +28,7 @@ keybinding change to verify conformance.
 | Layer     | File(s)                                        |
 |-----------|------------------------------------------------|
 | Compositor | `niri/.config/niri/config.kdl` (authoritative, post-include) + `niri/.config/niri/dms/binds.kdl` (DMS-managed) |
-| Terminal  | `ghostty/.config/ghostty/config` + `config.ghostty` |
+| Terminal  | `ghostty/.config/ghostty/config`               |
 | Editor    | `nvim/.config/nvim/plugin/03-keymaps.lua`, `04-plugin-keymaps.lua` |
 | Shell     | `fish/.config/fish/config.fish` (vi-bindings; Ctrl = line-editing) |
 
@@ -44,7 +44,6 @@ keybinding change to verify conformance.
 | `Ctrl+H/J/K/L` | **Neovim** | window focus (editor/shell layer) | ✅ (Niri freed it) |
 | `Ctrl+Shift+H/L` | Ghostty | previous/next tab | ✅ |
 | `Ctrl+Alt+J/K/H/L` | Ghostty | split navigation | ✅ |
-| `Alt+grave` | Ghostty | toggle quick terminal (moved from Super) | ✅ |
 | `<leader>` = ` ` | Neovim | leader prefix | ✅ |
 | `Mod+grave` | Compositor | focus previous workspace | ✅ |
 

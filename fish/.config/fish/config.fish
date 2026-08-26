@@ -64,13 +64,15 @@ if status is-interactive
     abbr -a cat bat
     abbr -a man batman
     abbr -a find fd
-    abbr -a cp "rsync -avh --info-progress2"
+    abbr -a cp "rsync -avh --info=progress2"
     abbr -a rm "rm -i"
+    abbr -a rmd "rm -rf"
     abbr -a mv "mv -i"
     abbr -a mkdir "mkdir -p"
     abbr -a v nvim
     abbr -a ch "cliphist list | fzf | cliphist decode | wl-copy"
     abbr -a cnavi "navi --cheatsh"
+    abbr -a gd 'git diff'
 
     # eza - ls
     if type -q eza
