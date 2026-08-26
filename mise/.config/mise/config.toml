@@ -41,7 +41,7 @@ grex = "latest"
 doggo = "latest"
 
 # --- Core Runtimes ---
-node = "latest"
+node = "lts"
 bun = "latest"
 zig = "latest"
 watchexec = "latest"

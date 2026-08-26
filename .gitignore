@@ -8,3 +8,4 @@ niri/dms/*
 !niri/dms/scripts/
 niri/.config/niri/dms/*
 !niri/.config/niri/dms/scripts/
+.aider*
