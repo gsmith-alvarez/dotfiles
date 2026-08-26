@@ -3,8 +3,10 @@
 abbr --add cat bat
 abbr --add man batman
 abbr --add find fd
-abbr --add cp 'rsync -avh --info-progress2'
+abbr --add cp 'rsync -avh --info=progress2'
 abbr --add rm 'rm -i'
+abbr --add rmd 'rm -rf'
+abbr --add gd 'git diff'
 abbr --add mv 'mv -i'
 abbr --add mkdir 'mkdir -p'
 abbr --add v nvim

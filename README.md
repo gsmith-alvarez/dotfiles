@@ -63,3 +63,22 @@ stow -vt ~ package_name
 | `copy` | `wl-copy` | Copy to clipboard |
 | `paste` | `wl-paste` | Paste from clipboard |
 | `u`/`d`/`z` | `fnav ...` | Navigate directories |
+
+## Modifier Layer Pattern
+
+So due to the layers of operation there are 3 layers that conflict that need to play well.
+
+1. Compositior (Niri)
+2. Terminal (Ghostty)
+3. Editor (Neovim)
+
+To manage my shortcuts while keeping the muslce memory between them their is a leader key that defines each region
+
+- Super (or Mod) Is for the Compositor
+- Alt Is for the Terminal
+- Leader (Space) for Nvim
+- Ctrl for Neovim Shell with tabs etc
+
+> **Register:** See [KEYBINDING-REGISTER.md](KEYBINDING-REGISTER.md) for the
+> authoritative modifier-layer table, sanctioned exceptions, and enforcement
+> (`./scripts/check-layers.sh`).

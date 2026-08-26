@@ -22,7 +22,7 @@ mini.now(function()
 		{ "<leader>d", group = "Debug", icon = icons.get("lsp", "event") },
 		{ "<leader>f", group = "Find (Files/Buffers)", icon = icons.get("lsp", "reference") },
 		{ "<leader>g", group = "Git", icon = icons.get("filetype", "git") },
-		{ "<leader>o", group = "Obsidian", icon = icons.get("filetype", "markdown") },
+		{ "<leader>o", group = "options", icon = icons.get("lsp", "symbols") },
 		{ "<leader>q", group = "Quit/Session", icon = icons.get("os", "exit") },
 		{ "<leader>p", group = "Profiler", icon = icons.get("lsp", "event") },
 		{ "<leader>s", group = "Search (Content/System)", icon = icons.get("lsp", "snippet") },

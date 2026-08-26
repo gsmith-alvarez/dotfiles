@@ -83,7 +83,7 @@ M.later(function()
 	Config.safe_require("mini.input").setup()
 	Config.safe_require("mini.jump2d").setup({
 		mappings = {
-			start_jumping = "<S-CR>",
+			start = "<S-CR>",
 		},
 	})
 	Config.safe_require("mini.jump").setup()

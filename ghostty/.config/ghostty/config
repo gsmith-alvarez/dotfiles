@@ -1,21 +1,16 @@
-# --- Shell & Command ---
-shell-integration = detect
-shell-integration-features = cursor,sudo,title,no-cursor
-
-# --- Appearance & Theme ---
+# --- Appearance ---
 theme = Catppuccin Mocha
 background-opacity = 0.85
-# Blur handled by niri window-rule (background-effect); removing Ghostty's
-# own blur request to avoid GL context init race on Wayland/niri.
-#background-blur = 32
+background-blur = true
 unfocused-split-opacity = 0.7
 unfocused-split-fill = #44464f
 
-# --- Font Configuration ---
+# --- Font ---
 font-family = "Monaspace Krypton NF"
 font-size = 12
-
 # Enable Ligatures and Texture Healing
+# calt: Contextual Alternates (Texture Healing)
+# liga: Standard Ligatures (==, >=, !=)
 font-feature = calt
 font-feature = liga
 font-feature = ss01
@@ -27,44 +22,34 @@ font-feature = ss06
 font-feature = ss07
 font-feature = ss08
 
-# --- Window & Layout ---
+# --- Window ---
 window-decoration = none
 window-padding-x = 12
 window-padding-y = 12
+window-show-tab-bar = auto
+notify-on-command-finish = unfocused
 quit-after-last-window-closed = true
-
-# --- GTK UI ---
-gtk-single-instance = true
 gtk-titlebar = true
 gtk-titlebar-style = native
 gtk-wide-tabs = true
 gtk-toolbar-style = flat
 gtk-tabs-location = top
-window-show-tab-bar = auto
+gtk-single-instance = true
 
-# --- Cursor Configuration ---
+# --- Terminal Features ---
 cursor-style = block
 cursor-style-blink = true
-
-# --- Scrollback ---
 scrollback-limit = 3023
-
-# --- General Terminal Features ---
 mouse-hide-while-typing = true
 copy-on-select = true
 confirm-close-surface = false
 app-notifications = no-clipboard-copy,no-config-reload
-notify-on-command-finish = unfocused
+
+# --- Shell Integration ---
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
 
 # --- Keybindings ---
-# General
-keybind = shift+enter=text:\n
-keybind = ctrl+shift+n=new_window
-keybind = ctrl+t=new_tab
-keybind = ctrl+plus=increase_font_size:1
-keybind = ctrl+minus=decrease_font_size:1
-keybind = ctrl+zero=reset_font_size
-
 # Split Navigation
 keybind = ctrl+alt+j=goto_split:down
 keybind = ctrl+alt+k=goto_split:up
@@ -74,10 +59,17 @@ keybind = ctrl+alt+l=goto_split:right
 # Tab Navigation
 keybind = ctrl+shift+h=previous_tab
 keybind = ctrl+shift+l=next_tab
+keybind = ctrl+t=new_tab
 
-# Workspace Management
+# Window / Workspace Management
+keybind = ctrl+shift+n=new_window
 keybind = ctrl+shift+w=close_surface
 keybind = ctrl+shift+==equalize_splits
 
-# Global Actions
-keybind = global:super+`=toggle_quick_terminal
+# Font Sizing
+keybind = ctrl+plus=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+zero=reset_font_size
+
+# Text Helpers
+keybind = shift+enter=text:\n
