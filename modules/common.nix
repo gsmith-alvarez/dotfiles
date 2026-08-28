@@ -1,5 +1,5 @@
 # Shared Home-Manager module — used by every host.
-# Native configs live in the repo root (e.g. nvim/.config/nvim) and are
+# Native configs live in configs/ (flat, no stow nesting) and are
 # symlinked out-of-store, so live edits apply without `home-manager switch`.
 {
   config,
@@ -31,24 +31,24 @@ in
   ];
 
   xdg.configFile = {
-    atuin.source = link "atuin/.config";
-    bat.source = link "bat/.config/bat";
-    btop.source = link "btop/.config/btop";
-    fish.source = link "fish";
-    fuzzel.source = link "fuzzel/.config/fuzzel";
+    atuin.source = link "configs/atuin";
+    bat.source = link "configs/bat";
+    btop.source = link "configs/btop";
+    fish.source = link "configs/fish";
+    fuzzel.source = link "configs/fuzzel";
     # ghostty — installed from dnf instead of Nix (EGL issue with Nix build).
-    # Ghostty config is linked manually: ln -sf ~/dotfiles/ghostty/.config/ghostty ~/.config/ghostty
-    #ghostty.source = link "ghostty/.config/ghostty";
-    lazygit.source = link "lazygit/.config/lazygit";
-    navi.source = link "navi/.config/navi";
-    niri.source = link "niri/.config/niri";
-    nvim.source = link "nvim";
-    "spotify-player".source = link "spotify-player/.config/spotify-player";
-    "starship.toml".source = link "starship/.config/starship.toml";
-    "topgrade.toml".source = link "topgrade/.config/topgrade.toml";
-    yazi.source = link "yazi/.config/yazi";
+    # Ghostty config is linked manually: ln -sfn ~/dotfiles/configs/ghostty ~/.config/ghostty
+    #ghostty.source = link "configs/ghostty";
+    lazygit.source = link "configs/lazygit";
+    navi.source = link "configs/navi";
+    niri.source = link "configs/niri";
+    nvim.source = link "configs/nvim";
+    "spotify-player".source = link "configs/spotify-player";
+    "starship.toml".source = link "configs/starship/starship.toml";
+    "topgrade.toml".source = link "configs/topgrade/topgrade.toml";
+    yazi.source = link "configs/yazi";
     "OpenTabletDriver/settings.json".source =
-      link "OpenTabletDriver/.config/OpenTabletDriver/settings.json";
+      link "configs/OpenTabletDriver/settings.json";
   };
-  home.file.".bashrc".source = link "bash/.bashrc";
+  home.file.".bashrc".source = link "configs/bash/bashrc";
 }

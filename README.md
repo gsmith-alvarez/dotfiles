@@ -1,15 +1,54 @@
 # Dotfiles
 
-Personal Fedora configuration featuring Cosmic DE and the Catppuccin Mocha theme.
+Personal Fedora configuration featuring [niri](https://github.com/YaLTeR/niri) + DMS and the Catppuccin Mocha theme, managed with [Home Manager](https://nix-community.github.io/home-manager/).
 
 ## Core Stack
 
-- **Desktop Environment:** [Cosmic DE](https://github.com/pop-os/cosmic-epoch)
+- **Desktop:** [niri](https://github.com/YaLTeR/niri) + [DMS](https://github.com/AvengeMedia/DankMaterialShell)
 - **Shell:** [Fish Shell](https://fishshell.com/)
 - **Theme:** [Catppuccin Mocha](https://catppuccin.com/)
-- **Terminal:** [Ghostty](https://ghostty.org/) (Monaspace Krypton NF font, background blur)
+- **Terminal:** [Ghostty](https://ghostty.org/)
 - **Prompt:** [Starship](https://starship.rs/)
-- **System Provisioner:** [init.sh](init.sh) (updates, DNF/Flatpak packages, systemd services)
+- **Config management:** Home Manager flake (this repo is the source of truth)
+- **System Provisioner:** [scripts/init.sh](scripts/init.sh) (updates, DNF/Flatpak packages, systemd services)
+
+## Structure
+
+```
+dotfiles/
+├── flake.nix            # HM entry point — homeConfigurations.laptop / .desktop
+├── hosts/               # Machine-specific HM modules + niri outputs
+│   ├── laptop/          #   eDP-1 (built-in panel)
+│   └── desktop/         #   DP-3 + HDMI-A-1, study/utils workspaces
+├── modules/             # Shared HM modules (editor, git, terminal, services, agents)
+├── packages/            # Custom Nix packages / overlay
+├── configs/             # Native config files (flat, no stow nesting)
+│   ├── fish/  nvim/  niri/  ghostty/  yazi/  ...
+│   └── ...
+└── scripts/             # init.sh provisioner, cleanup.sh
+```
+
+Configs stay in their **native formats** (`.kdl`, `.lua`, `.toml`) and are
+symlinked **out-of-store** by Home Manager — edit a file in `configs/` and the
+change applies live, no `home-manager switch` needed.
+
+Machine-specific niri settings (outputs, workspaces) live in
+`hosts/<host>/niri-outputs.kdl` and are included last by
+`configs/niri/config.kdl` (`include "outputs.kdl"`), so they win over the
+DMS-generated includes.
+
+## Deploying
+
+```bash
+# Laptop
+home-manager switch --flake .#laptop
+
+# Desktop
+home-manager switch --flake .#desktop
+```
+
+Daily updates run via topgrade (`nix flake update` in this repo, then
+`home-manager switch --flake ~/dotfiles#laptop`).
 
 ## Highlights
 
@@ -35,20 +74,6 @@ Fuzzy directory navigator combining [fd](https://github.com/sharkdp/fd), [fzf](h
 ### System & Audio
 - **Graphics Tablet:** OpenTabletDriver and wayscriber.
 - **Media:** spotify-player and Easy Effects.
-
-## Installation
-
-Deploy configurations using the stow script:
-
-```bash
-./stow.sh
-```
-
-Or manually:
-
-```bash
-stow -vt ~ package_name
-```
 
 ## Fish Abbreviations
 
@@ -78,7 +103,3 @@ To manage my shortcuts while keeping the muslce memory between them their is a l
 - Alt Is for the Terminal
 - Leader (Space) for Nvim
 - Ctrl for Neovim Shell with tabs etc
-
-> **Register:** See [KEYBINDING-REGISTER.md](KEYBINDING-REGISTER.md) for the
-> authoritative modifier-layer table, sanctioned exceptions, and enforcement
-> (`./scripts/check-layers.sh`).

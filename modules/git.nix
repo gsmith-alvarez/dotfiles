@@ -46,7 +46,7 @@
         editor = "nvim";
         untrackedCache = true;
         preloadIndex = true;
-        excludesfile = "${./gitignore_global}";
+        excludesfile = "${../configs/git/gitignore_global}";
       };
       gc.auto = 0;
       pull.rebase = true;

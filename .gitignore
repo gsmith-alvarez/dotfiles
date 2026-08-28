@@ -2,13 +2,11 @@
 result
 result-*
 
-nvim-pack-lock.json
-yazi/.config/yazi/plugins/
-yazi/.config/yazi/flavors/
-ghostty/dankthemes
-ghostty/.config/ghostty/themes/dankcolors
+configs/nvim/nvim-pack-lock.json
+configs/yazi/plugins/
+configs/yazi/flavors/
+configs/ghostty/themes/dankcolors
 
-niri/dms/*
-!niri/dms/scripts/
-niri/.config/niri/dms/*
-!niri/.config/niri/dms/scripts/
+# DMS regenerates these when settings change — keep in git only the scripts patch
+configs/niri/dms/*
+!configs/niri/dms/scripts/
