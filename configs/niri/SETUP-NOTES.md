@@ -11,7 +11,7 @@
 - Copies to clipboard automatically
 - Shows notification via DMS notification daemon (all handled by DMS)
 
-**Script:** `~/dotfiles/niri/.config/niri/dms/scripts/screenshot.sh` (stowed to `~/.config/niri/dms/scripts/screenshot.sh`, symlinked from `~/.local/bin/niri-screenshot.sh`)
+**Script:** `~/dotfiles/configs/niri/dms/scripts/screenshot.sh` (live at `~/.config/niri/dms/scripts/screenshot.sh` via the HM out-of-store symlink, invoked as `~/.local/bin/niri-screenshot.sh`)
 - Uses `dms screenshot` commands — DMS's built-in screenshot module (region, full, all)
 - Handles clipboard + notification automatically
 - No external dependencies (no grim, slurp, or wl-copy)
