@@ -36,9 +36,9 @@ in
     btop.source = link "configs/btop";
     fish.source = link "configs/fish";
     fuzzel.source = link "configs/fuzzel";
-    # ghostty — installed from dnf instead of Nix (EGL issue with Nix build).
-    # Ghostty config is linked manually: ln -sfn ~/dotfiles/configs/ghostty ~/.config/ghostty
-    #ghostty.source = link "configs/ghostty";
+    # ghostty — installed from dnf instead of Nix (EGL issue with Nix build),
+    # but its config is still managed here out-of-store.
+    ghostty.source = link "configs/ghostty";
     lazygit.source = link "configs/lazygit";
     navi.source = link "configs/navi";
     niri.source = link "configs/niri";
@@ -51,4 +51,10 @@ in
       link "configs/OpenTabletDriver/settings.json";
   };
   home.file.".bashrc".source = link "configs/bash/bashrc";
+
+  # easy-effects presets (Shure SM7B mic chain etc.) target the app data dir
+  xdg.dataFile."easyeffects/output/easyeffectpreset.json".source =
+    link "configs/easy-effects/easyeffectpreset.json";
+  xdg.dataFile."easyeffects/input/Shure SM7B.json".source =
+    link "configs/easy-effects/Shure SM7B.json";
 }

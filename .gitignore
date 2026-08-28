@@ -10,3 +10,4 @@ configs/ghostty/themes/dankcolors
 # DMS regenerates these when settings change — keep in git only the scripts patch
 configs/niri/dms/*
 !configs/niri/dms/scripts/
+outputs.kdl
