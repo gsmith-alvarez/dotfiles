@@ -41,6 +41,9 @@
       spotify-player
       topgrade
 
+      # marimo notebook (nixpkgs ships 0.23.16 = our fork's pinned version)
+      marimo
+
       # Shell tooling (configured natively, see configs/fish + configs/*)
       zoxide
       fzf

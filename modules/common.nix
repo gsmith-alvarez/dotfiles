@@ -18,6 +18,9 @@ in
     ./terminal.nix
     ./services.nix
     ./agents.nix
+    ./flatpak.nix
+    ./python-uv.nix
+    ./rust-cargo2nix.nix
   ];
 
   home.username = "giovanni";
