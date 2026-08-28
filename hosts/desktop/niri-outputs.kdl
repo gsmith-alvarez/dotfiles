@@ -1,0 +1,31 @@
+// Desktop-specific niri config (hostname spec from the development branch).
+// Outputs: DP-3 (primary, x=0) + HDMI-A-1 (x=1920), plus study/utils workspaces.
+// Included from config.kdl AFTER the DMS includes, so these win on conflicts.
+
+output "DP-3" {
+    position x=0 y=0
+}
+
+output "HDMI-A-1" {
+    position x=1920 y=0
+}
+
+// --- Desktop workspaces & window placement (from USER OVERRIDES) ---
+
+workspace "study" {
+    open-on-output "DP-3"
+}
+
+window-rule {
+    match at-startup=true app-id=r#"^(zen|md\.obsidian\.Obsidian)$"#
+    open-on-workspace "study"
+}
+
+workspace "utils" {
+    open-on-output "HDMI-A-1"
+}
+
+window-rule {
+    match at-startup=true app-id=r#"^(org\.keepassxc\.KeePassXC|net\.thunderbird\.Thunderbird|com\.mitchellh\.ghostty)$"#
+    open-on-workspace "utils"
+}

@@ -37,13 +37,7 @@ config-notification {
     position x=1280 y=0
 }
 
-output "DP-2" {
-    position x=0 y=0
-}
-
-output "HDMI-A-1" {
-    position x=1920 y=0
-}
+// Host-specific outputs are included at the end of this file (outputs.kdl).
 
 
 gestures {
@@ -227,24 +221,6 @@ spawn-at-startup "dms" "run" "--session"
 spawn-at-startup "easyeffects" "-w"
 spawn-at-startup "dcal" "run" "-d"
 
-workspace "study" {
-    open-on-output "DP-2"
-}
-
-window-rule {
-    match at-startup=true app-id=r#"^(zen|md\.obsidian\.Obsidian)$"#
-    open-on-workspace "study"
-}
-
-workspace "utils" {
-    open-on-output "HDMI-A-1"
-}
-
-window-rule {
-    match at-startup=true app-id=r#"^(org\.keepassxc\.KeePassXC|net\.thunderbird\.Thunderbird|com\.mitchellh\.ghostty)$"#
-    open-on-workspace "utils"
-}
-
 // --- Layout overrides
 layout {
     // DMS base settings
@@ -389,3 +365,10 @@ binds {
     // Quit (backup) instead of DMS task manager on Ctrl+Alt+Delete
     Ctrl+Alt+Delete { quit; }
 }
+
+// ============================================================================
+// HOST-SPECIFIC OUTPUTS
+// Included last so the machine's outputs.kdl wins over dms/outputs.kdl.
+// Symlinked per-host by home-manager (hosts/<host>/niri-outputs.kdl).
+// ============================================================================
+include "outputs.kdl"

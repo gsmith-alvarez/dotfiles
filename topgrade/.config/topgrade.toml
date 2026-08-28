@@ -247,7 +247,7 @@ nix_arguments = "--flake"
 # Extra Home Manager arguments
 home_manager_arguments = [
     "--flake",
-    "/home/giovanni/.config/home-manager#giovanni",
+    "/home/giovanni/dotfiles#laptop",
 ]
 
 

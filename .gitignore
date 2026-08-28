@@ -1,3 +1,7 @@
+# Home-Manager flake lives here now (source of truth)
+result
+result-*
+
 nvim-pack-lock.json
 yazi/.config/yazi/plugins/
 yazi/.config/yazi/flavors/

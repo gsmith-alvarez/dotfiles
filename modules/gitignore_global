@@ -1,0 +1,43 @@
+# Common Linux
+
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Neovim
+
+*.swp
+*.swo
+*~
+
+# Local Enviroment Varibles
+
+.env
+.env.local
+.env.*.local
+
+# python
+
+.venv/
+venv/
+ENV/
+
+# direnv layouts
+.direnv/
+
+# mise
+.mise.local.toml
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Log files
+*.log
+
+# Node
+node_modules
+package.json
+package-lock.json
+bun.lock

@@ -1,0 +1,7 @@
+// Laptop-specific niri config (this machine: single built-in panel).
+// Included from config.kdl AFTER the DMS includes, so these win on conflicts.
+
+output "eDP-1" {
+    scale 1.0
+}
+
