@@ -128,7 +128,7 @@ nix_handler = "autodetect"
 # Commands to run before anything
 [pre_commands]
 # "Emacs Snapshot" = "rm -rf ~/.emacs.d/elpa.bak && cp -rl ~/.emacs.d/elpa ~/.emacs.d/elpa.bak"
-"Nix Flakes" = "cd ~/.config/home-manager && nix flake update"
+"Nix Flakes" = "cd ~/dotfiles && nix flake update"
 
 # Commands to run after anything
 [post_commands]
