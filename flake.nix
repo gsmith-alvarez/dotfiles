@@ -25,23 +25,6 @@
 
     # Declarative Flatpak management (HM service)
     nix-flatpak.url = "github:gmodena/nix-flatpak";
-
-    # uv2nix: build Python venvs from uv.lock (pyproject-nix ecosystem)
-    pyproject-nix.url = "github:pyproject-nix/pyproject.nix";
-    uv2nix = {
-      url = "github:pyproject-nix/uv2nix";
-      inputs.pyproject-nix.follows = "pyproject-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    pyproject-build-systems = {
-      url = "github:pyproject-nix/build-system-pkgs";
-      inputs.pyproject-nix.follows = "pyproject-nix";
-      inputs.uv2nix.follows = "uv2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # cargo2nix: build Rust workspaces from Cargo.nix
-    cargo2nix.url = "github:cargo2nix/cargo2nix";
   };
 
   outputs =
@@ -51,10 +34,6 @@
       home-manager,
       neovim-nightly-overlay,
       llm-agents,
-      cargo2nix,
-      uv2nix,
-      pyproject-nix,
-      pyproject-build-systems,
       ...
     }@inputs:
     let
