@@ -37,12 +37,18 @@ config-notification {
     position x=1280 y=0
 }
 
-output "DP-2" {
+output "DP-1" {
+    mode "3840x2160@144.001"
+    scale 1.5
     position x=0 y=0
+    variable-refresh-rate on-demand=true
 }
 
-output "HDMI-A-1" {
-    position x=1920 y=0
+output "DP-2" {
+    mode "3840x2160@144.001"
+    scale 1.5
+    position x=2560 y=0
+    variable-refresh-rate on-demand=true
 }
 
 
@@ -228,7 +234,7 @@ spawn-at-startup "easyeffects" "-w"
 spawn-at-startup "dcal" "run" "-d"
 
 workspace "study" {
-    open-on-output "DP-2"
+    open-on-output "DP-1"
 }
 
 window-rule {
@@ -237,7 +243,7 @@ window-rule {
 }
 
 workspace "utils" {
-    open-on-output "HDMI-A-1"
+    open-on-output "DP-2"
 }
 
 window-rule {
