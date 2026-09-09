@@ -61,6 +61,7 @@ in
       # Applications
       keepassxc
       github-cli
+      easyeffects
 
       # VM
       podman

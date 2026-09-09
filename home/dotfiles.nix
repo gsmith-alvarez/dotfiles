@@ -108,14 +108,15 @@ in
     ".gitconfig".source = link ".gitconfig";
     ".gitignore_global".source = link ".gitignore_global";
 
-    ".local/bin/check-layers.sh" = {
-      source = link "scripts/check-layers.sh";
-    };
-
     ".local/bin/niri-screenshot.sh" = {
       source = link "scripts/niri-screenshot.sh";
     };
   };
+
+  xdg.dataFile."easyeffects/output/easyeffectpreset.json".source =
+    link "easy-effects/easyeffectpreset.json";
+  xdg.dataFile."easyeffects/input/Shure SM7B.json".source =
+    link "easy-effects/Shure SM7B.json";
 
   home.sessionPath = [
     "$HOME/.local/bin"
