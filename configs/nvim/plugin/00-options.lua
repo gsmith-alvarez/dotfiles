@@ -106,6 +106,7 @@ set.listchars = {
 set.laststatus = 3
 set.showcmd = true
 set.showcmdloc = "statusline"
+set.report = 0 -- Report line changes and yanks even for a single line
 
 -- 15. Project-specific config
 set.exrc = true
