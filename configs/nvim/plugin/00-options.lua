@@ -52,7 +52,7 @@ set.jumpoptions = "view" -- Preserve view when jumping
 set.splitkeep = "screen" -- Keep screen stable on split changes
 set.smoothscroll = true
 set.scrolloff = 10
-set.scrolloffpad = 1 -- Allow the cursor to stay centered at end-of-file
+-- set.scrolloffpad = 1 -- Allow the cursor to stay centered at end-of-file
 set.switchbuf = "usetab"
 
 -- Nvim enables filetype detection & syntax at startup.

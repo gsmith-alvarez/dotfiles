@@ -21,7 +21,6 @@ mini.now(function()
 		"regex",
 		"html",
 		"yaml",
-		"nix",
 	})
 	Config.safe_require("nvim-treesitter-textobjects").setup()
 end)
@@ -102,18 +101,6 @@ vim.lsp.config("bashls", {
 vim.lsp.config("ruff", {
 	settings = {},
 })
-
-vim.lsp.config("nixd", {
-	cmd = { "nixd" },
-	filetypes = { "nix" },
-	settings = {
-		nixd = {
-			formatting = {
-				command = { "nixfmt" },
-			},
-		},
-	},
-})
 -- blink.cmp doesn't auto-inject capabilities; advertise via wildcard when present.
 local blink = Config.safe_require("blink.cmp")
 if blink then
@@ -131,7 +118,8 @@ vim.lsp.enable({
 	"yamlls", -- YAML
 	"dockerls", -- Docker
 	"taplo", -- TOML
-	"nixd", -- Nix
+	"fish_lsp", -- Fish
+	"nil_ls", -- Nix
 })
 
 return M

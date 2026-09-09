@@ -1,16 +1,20 @@
-# ~/.config/fish/config.fish - Native Fish Shell Configuration
+set -l paths \
+    ~/.local/bin \
+    ~/.cargo/bin \
+    ~/.nix-profile/bin \
+    ~/.local/state/nix/profiles/profile/bin \
+    /nix/var/nix/profiles/default/bin
 
-# No "Welcome to fish" banner
-set -g fish_greeting ''
+for path in $paths
+    if test -d $path
+        fish_add_path -g $path
+    end
+end
 
-# Default editor (yazi etc. read $EDITOR)
 set -gx EDITOR nvim
 set -gx VISUAL nvim
+set fish_greeting ""
 
-# Vi key bindings
-set -g fish_key_bindings fish_vi_key_bindings
-
-# Clipboard history watcher (login shell)
 if status is-login
     if not pgrep -x wl-paste >/dev/null
         wl-paste --type text --watch cliphist store &
@@ -19,9 +23,12 @@ if status is-login
 end
 
 if status is-interactive
-type -q starship; and starship init fish | source
+    set -g fish_key_bindings fish_vi_key_bindings
+
+    type -q starship; and starship init fish | source
     if type -q fzf
         fzf --fish | source
+        # Global fzf default options (UI/UX updates)
         set -gx FZF_DEFAULT_OPTS "
           --height=50%
           --layout=reverse
@@ -34,12 +41,14 @@ type -q starship; and starship init fish | source
           --bind 'ctrl-b:preview-half-page-up,ctrl-d:preview-half-page-down'
         "
 
+        # Ctrl-T (Files search) preview & copy binding
         set -gx FZF_CTRL_T_OPTS "
           --preview 'if test -d {}; eza --tree --color=always {} | head -200; else; bat -n --color=always --line-range :500 {}; end'
           --bind '?:toggle-preview,ctrl-y:execute-silent(echo -n {} | wl-copy)+abort'
           --preview-window 'right:60%'
         "
 
+        # Alt-C (Directory switcher) preview & copy binding
         set -gx FZF_ALT_C_OPTS "
           --preview 'eza --tree --color=always {} | head -200'
           --bind 'ctrl-y:execute-silent(echo -n {} | wl-copy)+abort'
@@ -49,4 +58,54 @@ type -q starship; and starship init fish | source
 
     type -q zoxide; and zoxide init fish --cmd cd | source
     type -q atuin; and atuin init fish | source
+    type -q direnv; and direnv hook fish | source
+
+    ### Abbreviations
+    abbr -a cat bat
+    abbr -a man batman
+    abbr -a find fd
+    abbr -a cp "rsync -avh --info=progress2"
+    abbr -a rm "rm -i"
+    abbr -a rmd "rm -rf"
+    abbr -a mv "mv -i"
+    abbr -a mkdir "mkdir -p"
+    abbr -a v nvim
+    abbr -a ch "cliphist list | fzf | cliphist decode | wl-copy"
+    abbr -a cnavi "navi --cheatsh"
+    abbr -a gd 'git diff'
+
+    # Nix
+    abbr -a nsw 'nh os switch'
+    abbr -a nrb 'nh os boot'
+    abbr -a ncu 'nix flake update --flake ~/dotfiles'
+    abbr -a ncl 'nh clean all'
+    abbr -a nq 'nix-shell -p'
+
+    # eza - ls
+    if type -q eza
+        alias eza 'eza --icons --hyperlink --group-directories-first'
+        abbr -a ls eza
+        abbr -a ll 'eza -lh --grid'
+        abbr -a la 'eza -a'
+        abbr -a tree 'eza --tree'
+    end
+
+    # Functions
+    abbr -a u 'fnav up'
+    abbr -a d 'fnav down'
+    abbr -a z 'fnav zoxide'
+    abbr -a sg sgrep
+
+    # Clipboard
+    abbr -a copy wl-copy
+    abbr -a paste wl-paste
+
+    # bat-extas
+    abbr -a rg batgrep
+    abbr -a diff batdiff
+    abbr -a watch batwatch
+
+    #python
+    abbr -a uvr 'uv run'
+    abbr -a pytest 'uv run pytest'
 end

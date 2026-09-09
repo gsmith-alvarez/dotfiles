@@ -16,7 +16,7 @@ u.autocmd("FileType", "*", treesitter_attach, "Start Treesitter highlighting")
 local highlight_yank = function()
 	vim.hl.hl_op({ higroup = "Visual", timeout = 200 })
 end
-u.autocmd({ "TextYankPost", "TextPutPost" }, "*", highlight_yank, "Highlight yanked/put text")
+-- u.autocmd({ "TextYankPost", "TextPutPost" }, "*", highlight_yank, "Highlight yanked/put text")
 -- 3. Cursor persistence
 --- @param args table Autocmd callback args.
 local cursor_persist = function(args)
@@ -76,4 +76,3 @@ if not autocmds then
 end
 autocmds.register("lsp")
 autocmds.register("format")
-autocmds.register("nix")

@@ -1,0 +1,27 @@
+# Settings
+box=1
+label_color=magenta
+
+# Hardware
+host
+cpu
+gpu
+memory
+disk
+battery
+
+# Software
+os
+kernel
+packages
+shell
+wm
+displaymanager
+theme
+terminal
+
+# Uptime
+uptime
+
+# Colors
+colors

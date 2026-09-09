@@ -1,0 +1,146 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "color": {
+            "1": "38;2;137;180;250",
+            "2": "38;2;116;199;236"
+        },
+        "padding": {
+            "top": 1,
+            "left": 2,
+            "right": 2
+        }
+    },
+    "display": {
+        "separator": ": "
+    },
+    "modules": [
+        "break",
+        {
+            "type": "custom",
+            "format": "\u001b[38;2;203;166;247m┌─────────────────────────┤\u001b[38;2;245;224;220mHardware\u001b[38;2;203;166;247m├─────────────────────────┐\u001b[0m"
+        },
+        {
+            "type": "host",
+            "key": " PC",
+            "keyColor": "38;2;148;226;213"
+        },
+        {
+            "type": "cpu",
+            "key": "├ ",
+            "showPeCoreCount": true,
+            "keyColor": "38;2;148;226;213"
+        },
+        {
+            "type": "gpu",
+            "key": "├ ",
+            "keyColor": "38;2;148;226;213"
+        },
+        {
+            "type": "memory",
+            "key": "├ ",
+            "keyColor": "38;2;148;226;213"
+        },
+        {
+            "type": "disk",
+            "key": "├󰋊 ",
+            "keyColor": "38;2;148;226;213"
+        },
+        {
+            "type": "battery",
+            "key": "└ ",
+            "keyColor": "38;2;148;226;213"
+        },
+        {
+            "type": "custom",
+            "format": "\u001b[38;2;203;166;247m└────────────────────────────────────────────────────────────┘\u001b[0m"
+        },
+        "break",
+        {
+            "type": "custom",
+            "format": "\u001b[38;2;203;166;247m┌─────────────────────────┤\u001b[38;2;245;224;220mSoftware\u001b[38;2;203;166;247m├─────────────────────────┐\u001b[0m"
+        },
+        {
+            "type": "os",
+            "key": " OS",
+            "keyColor": "38;2;137;180;250"
+        },
+        {
+            "type": "kernel",
+            "key": "├ ",
+            "keyColor": "38;2;137;180;250"
+        },
+        {
+            "type": "packages",
+            "key": "├󰏖 ",
+            "keyColor": "38;2;137;180;250"
+        },
+        {
+            "type": "shell",
+            "key": "└ ",
+            "keyColor": "38;2;137;180;250"
+        },
+        "break",
+        {
+            "type": "wm",
+            "key": "󰍹 WM",
+            "keyColor": "38;2;245;194;231"
+        },
+        {
+            "type": "lm",
+            "key": "├󱄄 ",
+            "keyColor": "38;2;245;194;231"
+        },
+        {
+            "type": "terminal",
+            "key": "├ ",
+            "keyColor": "38;2;245;194;231"
+        },
+        {
+            "type": "gpu",
+            "key": "├ ",
+            "format": "{3}",
+            "keyColor": "38;2;245;194;231"
+        },
+        {
+            "type": "theme",
+            "key": "└󰉼 ",
+            "keyColor": "38;2;245;194;231"
+        },
+        {
+            "type": "custom",
+            "format": "\u001b[38;2;203;166;247m└────────────────────────────────────────────────────────────┘\u001b[0m"
+        },
+        "break",
+        {
+            "type": "custom",
+            "format": "\u001b[38;2;203;166;247m┌───────────────────────┤\u001b[38;2;245;224;220mUptime / Age\u001b[38;2;203;166;247m├───────────────────────┐\u001b[0m"
+        },
+        {
+            "type": "command",
+            "key": "  OS Age ",
+            "keyColor": "38;2;250;179;135",
+            "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
+        },
+        {
+            "type": "uptime",
+            "key": "  Uptime ",
+            "keyColor": "38;2;250;179;135"
+        },
+        {
+            "type": "datetime",
+            "key": "  Date & Time ",
+            "keyColor": "38;2;250;179;135"
+        },
+        {
+            "type": "custom",
+            "format": "\u001b[38;2;203;166;247m└────────────────────────────────────────────────────────────┘\u001b[0m"
+        },
+        "break",
+        {
+            "type": "colors",
+            "symbol": "circle"
+        },
+        "break"
+    ]
+}

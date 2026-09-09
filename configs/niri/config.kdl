@@ -1,43 +1,26 @@
-// This config is in the KDL format: https://kdl.dev
-// "/-" comments out the following node.
-// Check the wiki for a full description of the configuration:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction
 config-notification {
     disable-failed
 }
-// Outputs from existing configuration
 /-output "eDP-1" {
-    // Uncomment this line to disable this output.
-    // off
-
-    // Resolution and, optionally, refresh rate of the output.
-    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
-    // If the refresh rate is omitted, niri will pick the highest refresh rate
-    // for the resolution.
-    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
-    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
     mode "1920x1080@120.030"
-
-    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
-    scale 2
-
-    // Transform allows to rotate the output counter-clockwise, valid values are:
-    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    scale 1
     transform "normal"
-
-    // Position of the output in the global coordinate space.
-    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
-    // The cursor can only move between directly adjacent outputs.
-    // Output scale and rotation has to be taken into account for positioning:
-    // outputs are sized in logical, or scaled, pixels.
-    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
-    // so to put another output directly adjacent to it on the right, set its x to 1920.
-    // If the position is unset or results in an overlap, the output is instead placed
-    // automatically.
     position x=1280 y=0
 }
 
-// Host-specific outputs are included at the end of this file (outputs.kdl).
+output "DP-1" {
+    mode "3840x2160@144.001"
+    scale 1.5
+    position x=0 y=0
+    variable-refresh-rate on-demand=true
+}
+
+output "DP-2" {
+    mode "3840x2160@144.001"
+    scale 1.5
+    position x=2560 y=0
+    variable-refresh-rate on-demand=true
+}
 
 
 gestures {
@@ -46,12 +29,10 @@ gestures {
     }
 }
 
-// Input device configuration
 input {
     keyboard {
         xkb {
             layout "us"
-            options "caps:swapescape"
         }
         numlock
         repeat-delay 600
@@ -67,19 +48,8 @@ input {
     }
     focus-follows-mouse max-scroll-amount="0%"
 }
-// You can configure outputs by their name, which you can find
-// by running `niri msg outputs` while inside a niri instance.
-// The built-in laptop monitor is usually called "eDP-1".
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
-// Remember to uncomment the node by removing "/-"!
-
-// Settings that influence how windows are positioned and sized.
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
-
 layer-rule {
-    match namespace="^quickshell$"
+    match namespace="^noctalia-backdrop"
     place-within-backdrop true
 }
 overview {
@@ -87,18 +57,15 @@ overview {
         off
     }
 }
-// Add lines like this to spawn processes at startup.
-// Note that running niri as a session supports xdg-desktop-autostart,
-// which may be more convenient to use.
-// See the binds section below for more spawn examples.
-// This line starts waybar, a commonly used bar for Wayland compositors.
-environment {
-  XDG_CURRENT_DESKTOP "niri"
-}
 hotkey-overlay {
     skip-at-startup
 }
 prefer-no-csd
+
+cursor {
+    xcursor-theme "adwaita-icon-theme"
+    xcursor-size 24
+}
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 animations {
     workspace-switch {
@@ -132,15 +99,7 @@ animations {
         spring damping-ratio=0.85 stiffness=800 epsilon=0.0001
     }
 }
-// Window rules let you adjust behavior for individual windows.
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
-// Work around WezTerm's initial configure bug
-// by setting an empty default-column-width.
 window-rule {
-    // This regular expression is intentionally made as specific as possible,
-    // since this is the default config, and we want no false positives.
-    // You can get away with just app-id="wezterm" if you want.
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
 }
@@ -183,17 +142,16 @@ window-rule {
     match app-id="zoom"
     open-floating true
 }
-// Open dms windows as floating by default
 window-rule {
-    match app-id=r#"org.quickshell$"#
-    match app-id=r#"com.danklinux.dms$"#
+    match app-id="dev.noctalia.Noctalia"
     open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
 }
 debug {
     honor-xdg-activation-with-invalid-serial
 }
 
-// Override to disable super+tab
 recent-windows {
     binds {
         Alt+Tab         { next-window scope="output"; }
@@ -203,27 +161,29 @@ recent-windows {
     }
 }
 
-// Include dms files
-include "dms/colors.kdl"
-include "dms/layout.kdl"
-include "dms/alttab.kdl"
-include "dms/binds.kdl"
-include "dms/outputs.kdl"
-include "dms/cursor.kdl"
-include "dms/wpblur.kdl"
-include "dms/windowrules.kdl"
-
-// ============================================================================
-// USER OVERRIDES
-
-// --- Autostart: DMS session ---
-spawn-at-startup "dms" "run" "--session"
+spawn-at-startup "noctalia"
+spawn-at-startup "nm-applet"
 spawn-at-startup "easyeffects" "-w"
-spawn-at-startup "dcal" "run" "-d"
 
-// --- Layout overrides
+workspace "study" {
+    open-on-output "DP-1"
+}
+
+window-rule {
+    match at-startup=true app-id=r#"^(zen|md\.obsidian\.Obsidian)$"#
+    open-on-workspace "study"
+}
+
+workspace "utils" {
+    open-on-output "DP-2"
+}
+
+window-rule {
+    match at-startup=true app-id=r#"^(org\.keepassxc\.KeePassXC|net\.thunderbird\.Thunderbird|com\.mitchellh\.ghostty)$"#
+    open-on-workspace "utils"
+}
+
 layout {
-    // DMS base settings
     center-focused-column "never"
     always-center-single-column
     preset-column-widths {
@@ -235,9 +195,9 @@ layout {
     struts {
     }
 
-    // Backup overrides
     gaps 8
     focus-ring {
+        width 2
         active-color   "#cba6f7"
         inactive-color "#505050"
     }
@@ -255,6 +215,7 @@ layout {
 window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
+    draw-border-with-background false
     opacity 0.85
     background-effect {
         blur true
@@ -265,11 +226,13 @@ binds {
     // Terminal
     Mod+Return hotkey-overlay-title="Open a Terminal: Ghostty" { spawn "ghostty"; }
     // Browser
-    Mod+Alt+B hotkey-overlay-title="Open a Browser: Zen" { spawn "zen"; }
+    Mod+Alt+B hotkey-overlay-title="Open a Browser: Zen" { spawn "flatpak" "run" "app.zen_browser.zen"; }
     // Note Taking
     Mod+Alt+O hotkey-overlay-title="Open Notes: Obsidian" { spawn "flatpak" "run" "md.obsidian.Obsidian"; }
     // Editor
     Mod+Alt+N hotkey-overlay-title="Open Editor: Nvim" { spawn "ghostty" "-e" "nvim"; }
+    // Zed
+    Mod+Alt+Z hotkey-overlay-title="Open Zed" { spawn "zed"; }
     //KeePassXC
     Mod+Alt+K hotkey-overlay-title="Open Password Manager: Keepassxc" { spawn "keepassxc"; }
     //Email
@@ -279,19 +242,39 @@ binds {
     Mod+D hotkey-overlay-title="Toggle Screen Annotation: wayscriber" { spawn "wayscriber" "--daemon-toggle"; }
 
     // Lock screen: also turn outputs off
-    Mod+Escape hotkey-overlay-title="Lock Screen" { spawn "dms" "ipc" "call" "lock" "lockAndOutputsOff"; }
+    Mod+Escape hotkey-overlay-title="Lock Screen" { spawn-sh "noctalia msg session lock"; }
+
+    // Noctalia shell
+    Mod+Space hotkey-overlay-title="App Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Mod+A hotkey-overlay-title="Control Center" { spawn-sh "noctalia msg panel-toggle control-center"; }
 
     // Screen reader toggle
     Mod+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
-    // Media stop
+    // Media keys
+    XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioPause allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioNext allow-when-locked=true { spawn-sh "playerctl next"; }
+    XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl previous"; }
     XF86AudioStop allow-when-locked=true { spawn-sh "playerctl stop"; }
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "noctalia msg volume-down"; }
+    XF86AudioMute allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
+    XF86MonBrightnessUp allow-when-locked=true { spawn-sh "noctalia msg brightness-up"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "noctalia msg brightness-down"; }
+
+    Mod+Q {close-window;}
 
     // Focus navigation
     Mod+Down  { focus-workspace-down; }
     Mod+Up    { focus-workspace-up; }
     Mod+J     { focus-workspace-down; }
     Mod+K     { focus-workspace-up; }
+    Mod+H {focus-column-left;}
+    Mod+Left {focus-column-left;}
+    Mod+L {focus-column-right;}
+    Mod+Right {focus-column-right;}
+
 
     // Window movement
     Mod+Ctrl+H     { move-column-left; }
@@ -344,31 +327,19 @@ binds {
     // Sizing: backup used Mod+Shift+R to cycle presets backward
     Mod+Shift+R { switch-preset-column-width-back; }
 
-    // Window height preset cycling
     Mod+Ctrl+Shift+R { switch-preset-window-height; }
 
-    // Screenshots (backup)
     Mod+Shift+S hotkey-overlay-title="Screenshot" { spawn "bash" "-c" "~/.local/bin/niri-screenshot.sh"; }
-    Mod+Shift+F hotkey-overlay-title="Screenshot All Monitors" { spawn "dms" "screenshot" "all"; }
+    Mod+Shift+F hotkey-overlay-title="Screenshot All Monitors" { spawn-sh "noctalia msg screenshot-fullscreen"; }
     Shift+Ctrl+S { screenshot; }
 
-    // Maximize window to edges (no gaps/borders)
     Mod+Shift+M { maximize-window-to-edges; }
 
-    // Layout and window ergonomics
     Mod+Ctrl+Left  { consume-or-expel-window-left; }
     Mod+Ctrl+Right { consume-or-expel-window-right; }
     Mod+C         { center-column; }
     Mod+Ctrl+C    { center-visible-columns; }
     Mod+Shift+C   { expand-column-to-available-width; }
 
-    // Quit (backup) instead of DMS task manager on Ctrl+Alt+Delete
     Ctrl+Alt+Delete { quit; }
 }
-
-// ============================================================================
-// HOST-SPECIFIC OUTPUTS
-// Included last so the machine's outputs.kdl wins over dms/outputs.kdl.
-// Symlinked per-host by home-manager (hosts/<host>/niri-outputs.kdl).
-// ============================================================================
-include "outputs.kdl"

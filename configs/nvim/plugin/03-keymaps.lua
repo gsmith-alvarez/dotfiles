@@ -48,8 +48,7 @@ u.nmap("<leader>fz", function()
     else
         vim.cmd("%s//gc")
     end
-end, "Search: Replace Current Word in File")
-
+end, "Search: Search & Replace")
 
 -- 6. Visual mode indentation
 u.map("x", "<", "<gv", "Edit: Indent Left (keep selected)")
@@ -79,13 +78,6 @@ u.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", "Edit: Move Line Up")
 u.nmap("<C-d>", "<C-d>zz", "Scroll: Down and Center")
 u.nmap("<C-u>", "<C-u>zz", "Scroll: Up and Center")
 
--- 10. Inspect / diagnostics
-u.nmap("<leader>ui", vim.show_pos, "Inspect: Show Highlights")
-u.nmap("<leader>uI", function()
-	vim.treesitter.inspect_tree()
-	vim.api.nvim_input("I")
-end, "Inspect: Show Treesitter Tree (Full)")
-
 -- 10. UI toggles / inspect
 u.nmap("<leader>uS", function()
     local cur = vim.opt.signcolumn:get()
@@ -93,9 +85,10 @@ u.nmap("<leader>uS", function()
     vim.notify("Sign column: " .. vim.opt.signcolumn:get())
 end, "UI: Toggle Sign Column")
 
-u.nmap("<leader>uL", function()
-    vim.opt.relativenumber = not vim.opt.relativenumber:get()
-    vim.notify("Relative numbers: " .. (vim.opt.relativenumber:get() and "on" or "off"))
-end, "UI: Toggle Relative Numbers")
+u.nmap("<leader>ui", vim.show_pos, "Inspect: Show Highlights")
+u.nmap("<leader>uI", function()
+	vim.treesitter.inspect_tree()
+	vim.api.nvim_input("I")
+end, "Inspect: Show Treesitter Tree (Full)")
 
 return M

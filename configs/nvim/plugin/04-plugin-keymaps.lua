@@ -245,26 +245,12 @@ u.nmap("<leader>oy", function()
 end, "Yank: Pick Register")
 
 -- 5. Open link at cursor
-u.nmap("<leader>ox", function()
-	local line = vim.fn.getline(".")
-	local col = vim.fn.col(".")
-	local pattern = "https?://[%w-_%.%?%.:/%+=&]+"
-	for url in line:gmatch(pattern) do
-		local s, e = line:find(url, 1, true)
-		if s and e and col >= s and col <= e then
-			vim.ui.open(url)
-			return
-		end
-	end
-	local url = line:match(pattern)
-	if url then
-		vim.ui.open(url)
-	else
-		vim.notify("No URL found under cursor", vim.log.levels.WARN)
-	end
-end, "Open: Link Under Cursor")
+u.nmap("<leader>oo", "gx", "Open: Link at Cursor", { remap = true })
 
--- 4. UI & toggles (leader u)
+-- 6. Undo tree
+u.nmap("<leader>ou", "<cmd>Undotree<CR>", "Undo: Toggle Tree")
+
+-- 7. UI & toggles (leader u)
 local toggle_qf = function()
 	vim.cmd(vim.fn.getqflist({ winid = true }).winid ~= 0 and "cclose" or "copen")
 end

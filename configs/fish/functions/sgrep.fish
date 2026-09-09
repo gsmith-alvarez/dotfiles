@@ -28,5 +28,5 @@ function sgrep -d "Interactive Ripgrep (dynamic reloading engine)"
         --delimiter : \
         --preview 'bat --color=always {1} --highlight-line {2}' \
         --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-        --bind "enter:become($fzf_editor +{2} {1})"
+        --bind "enter:become($EDITOR +{2} {1})"
 end

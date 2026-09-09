@@ -1,6 +1,7 @@
-# Home-Manager flake lives here now (source of truth)
+# Nix build artifacts
 result
 result-*
+.direnv/
 
 configs/nvim/nvim-pack-lock.json
 configs/yazi/plugins/

@@ -5,9 +5,6 @@ local M = {}
 -- 1. Environment setup
 local path = vim.env.PATH
 
-local mise_shim = vim.fn.expand("~/.local/share/mise/shims")
-path = mise_shim .. ":" .. path
-
 -- 2. Virtual env detection & sourcing
 local venv = vim.env.VIRTUAL_ENV
 if not venv then
@@ -25,11 +22,5 @@ if venv then
 end
 
 vim.env.PATH = path
-
--- 3. Mise integration
-local ok, mise = pcall(require, "mise")
-if ok then
-	mise.setup({})
-end
 
 return M
