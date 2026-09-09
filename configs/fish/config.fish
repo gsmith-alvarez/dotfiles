@@ -14,6 +14,7 @@ end
 set -gx EDITOR nvim
 set -gx VISUAL nvim
 set fish_greeting ""
+set -gx NH_FLAKE ~/dotfiles
 
 if status is-login
     if not pgrep -x wl-paste >/dev/null
