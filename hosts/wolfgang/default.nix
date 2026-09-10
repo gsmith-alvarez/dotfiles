@@ -10,10 +10,10 @@
   # Hostname & Networking
   networking = {
     hostName = "wolfgang";
-    wireless.enable = false;
+    wireless.enable = true;
     networkmanager = {
       enable = true;
-      wifi.backend = "iwd";
+      # wifi.backend = "iwd";
     };
   };
 

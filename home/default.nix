@@ -24,6 +24,8 @@ in
 
     packages =
       (with pkgs; [
+
+        anki
         # Editor / Git
         neovim
         git
@@ -154,6 +156,7 @@ in
     packages = [
       "md.obsidian.Obsidian"
       "app.zen_browser.zen"
+      # "net.ankiweb.Anki"
     ];
   };
 }

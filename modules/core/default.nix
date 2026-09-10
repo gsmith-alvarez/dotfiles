@@ -91,6 +91,7 @@
     };
     flatpak.enable = true;
     openssh.enable = true;
+    tailscale.enable = true;
   };
 
   # User accounts
