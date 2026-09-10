@@ -48,6 +48,7 @@
       nix-direnv.enable = true;
     };
     fish.enable = true;
+    thunderbird.enable = true;
   };
 
   # Time & Locale
@@ -105,6 +106,7 @@
     packages = with pkgs; [
       zed-editor
       nautilus
+      wayscriber
     ];
     shell = pkgs.fish;
   };
