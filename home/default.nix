@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   inputs,
   llm-agents ? inputs.llm-agents,
@@ -14,119 +13,142 @@ in
     ./dotfiles.nix
   ];
 
-  home.username = "giovanni";
-  home.homeDirectory = "/home/giovanni";
-
-  home.stateVersion = "26.05";
-
   news.display = "show";
 
   programs.home-manager.enable = true;
 
-  home.packages =
-    (with pkgs; [
-      # Editor / Git
-      neovim
-      git
-      wget
+  home = {
+    username = "giovanni";
+    homeDirectory = "/home/giovanni";
+    stateVersion = "26.05";
 
-      # Monitoring
-      btop
-      iotop
+    packages =
+      (with pkgs; [
+        # Editor / Git
+        neovim
+        git
+        wget
 
-      # Nix
-      nix-tree
-      nix-index
-      nvd
-      nix-diff
-      nix-output-monitor
-      nh
+        # Monitoring & Storage Inspection
+        btop
+        iotop
+        procs
+        hyperfine
+        dust
+        duf
 
-      # Terminal
-      ghostty
-      fzf
-      fd
-      ripgrep
-      ripgrep-all
-      eza
-      bat
-      bat-extras.batgrep
-      bat-extras.batman
-      bat-extras.batwatch
-      bat-extras.batdiff
-      zoxide
-      yazi
-      sd
+        # Nix
+        nix-tree
+        nix-index
+        nvd
+        nix-diff
+        nix-output-monitor
+        nh
+        comma
+        nixfmt-rfc-style
+        statix
+        deadnix
 
-      # Applications
-      keepassxc
-      github-cli
-      easyeffects
+        # Terminal
+        ghostty
+        fzf
+        fd
+        ripgrep
+        ripgrep-all
+        eza
+        bat
+        bat-extras.batgrep
+        bat-extras.batman
+        bat-extras.batwatch
+        bat-extras.batdiff
+        zoxide
+        yazi
+        sd
 
-      # VM
-      podman
-      distrobox
+        # Applications
+        keepassxc
+        github-cli
+        easyeffects
 
-      # CLI Tools
-      xh
-      delta
-      tealdeer
-      ouch
-      grex
-      doggo
-      duckdb
-      visidata
-      usage
-      watchexec
-      fetch
-      fastfetch
-      impala
+        # VM
+        podman
+        distrobox
 
-      # Languages
-      luajit
-      zig
-      nodejs
-      bun
+        # CLI Tools
+        xh
+        delta
+        tealdeer
+        ouch
+        grex
+        doggo
+        duckdb
+        visidata
+        usage
+        watchexec
+        fetch
+        fastfetch
+        impala
 
-      # Language Servers
-      lua-language-server
-      bash-language-server
-      vscode-json-languageserver
-      yaml-language-server
-      dockerfile-language-server
-      clang-tools
-      fish-lsp
-      nil
+        # Structured Data & Docs
+        jless
+        yq-go
+        glow
 
-      # Linters & Formatters
-      ty
-      typos
-      stylua
-      selene
-      ruff
-      shellcheck
-      shfmt
-      oxlint
-      oxfmt
-      taplo
-      yamllint
+        # Networking
+        gping
+        trippy
 
-      # Graphics & Typesetting
-      mermaid-cli
-      tectonic
+        # Safe Removal & Utilities
+        rm-improved
+        rsync
+        uv
 
-      # Neovim plugin build toolchain
-      rustc
-      cargo
-      tree-sitter
-      gcc
-      gnumake
-    ])
-    ++ (with llmpkgs; [
-      hermes-agent
-      hermes-desktop
-      omp
-    ]);
+        # Languages
+        luajit
+        zig
+        nodejs
+        bun
+
+        # Language Servers
+        lua-language-server
+        bash-language-server
+        vscode-json-languageserver
+        yaml-language-server
+        dockerfile-language-server
+        clang-tools
+        fish-lsp
+        nil
+
+        # Linters & Formatters
+        ty
+        typos
+        stylua
+        selene
+        ruff
+        shellcheck
+        shfmt
+        oxlint
+        oxfmt
+        taplo
+        yamllint
+
+        # Graphics & Typesetting
+        mermaid-cli
+        tectonic
+
+        # Neovim plugin build toolchain
+        rustc
+        cargo
+        tree-sitter
+        gcc
+        gnumake
+      ])
+      ++ (with llmpkgs; [
+        hermes-agent
+        hermes-desktop
+        omp
+      ]);
+  };
 
   services.flatpak = {
     packages = [

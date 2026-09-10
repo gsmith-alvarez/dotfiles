@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -7,20 +7,27 @@
     ../../modules/desktop
   ];
 
-  # Hostname
-  networking.hostName = "wolfgang";
-
-  # Networking
-  networking.wireless.enable = false;
-  networking.networkmanager.wifi.backend = "iwd";
-  networking.networkmanager.enable = true;
+  # Hostname & Networking
+  networking = {
+    hostName = "wolfgang";
+    wireless.enable = false;
+    networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
+  };
 
   # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.loader.systemd-boot.configurationLimit = 10;
-
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+    loader = {
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 10;
+      };
+      efi.canTouchEfiVariables = true;
+    };
+  };
   # Graphics
   hardware.graphics.enable32Bit = true;
 

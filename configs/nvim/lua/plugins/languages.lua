@@ -101,6 +101,17 @@ vim.lsp.config("bashls", {
 vim.lsp.config("ruff", {
 	settings = {},
 })
+
+-- NIX (nil_ls)
+vim.lsp.config("nil_ls", {
+	settings = {
+		["nil"] = {
+			formatting = {
+				command = { "nixfmt" },
+			},
+		},
+	},
+})
 -- blink.cmp doesn't auto-inject capabilities; advertise via wildcard when present.
 local blink = Config.safe_require("blink.cmp")
 if blink then

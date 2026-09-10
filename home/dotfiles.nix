@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  lib,
   inputs,
   yazi-flavors ? inputs.yazi-flavors,
   ...
@@ -14,33 +13,92 @@ let
 
   fr-yazi = pkgs.runCommand "fr.yazi-0-unstable-2026-09-09" { } ''
     mkdir -p $out
-    cp ${pkgs.fetchzip {
-      url = "tarball+https://codeload.github.com/lpnh/fr.yazi/tar.gz/refs/heads/main";
-      hash = "sha256-3D1mIQpEDik0ppPQo+/NIhCxEu/XEnJMJ0HiAFxlOE4=";
-    }}/* $out/
+    cp ${
+      pkgs.fetchzip {
+        url = "tarball+https://codeload.github.com/lpnh/fr.yazi/tar.gz/refs/heads/main";
+        hash = "sha256-3D1mIQpEDik0ppPQo+/NIhCxEu/XEnJMJ0HiAFxlOE4=";
+      }
+    }/* $out/
   '';
 in
 {
-  home.packages = with pkgs; [
-    fish
-    starship
-    atuin
-    lazygit
-    navi
-    fuzzel
-    zed-editor
-    cliphist
-    wl-clipboard
-    grim
-    slurp
-    satty
-    jq
-    spotify-player
-    topgrade
-    monaspace
-    jetbrains-mono
-  ];
+  home = {
+    packages = with pkgs; [
+      fish
+      starship
+      atuin
+      lazygit
+      navi
+      fuzzel
+      zed-editor
+      cliphist
+      wl-clipboard
+      grim
+      slurp
+      satty
+      jq
+      spotify-player
+      topgrade
+      monaspace
+      jetbrains-mono
+    ];
 
+    file = {
+      ".config/fish/config.fish" = {
+        source = link "fish/config.fish";
+        force = true;
+      };
+      ".config/fish/conf.d".source = link "fish/conf.d";
+      ".config/fish/functions".source = link "fish/functions";
+      ".config/fish/completions".source = link "fish/completions";
+
+      ".config/ghostty/config".source = link "ghostty/config";
+      ".config/ghostty/themes".source = link "ghostty/themes";
+
+      ".config/nvim".source = link "nvim";
+
+      ".config/starship.toml".source = link "starship.toml";
+
+      ".config/atuin/config.toml".source = link "atuin/config.toml";
+      ".config/atuin/themes".source = link "atuin/themes";
+
+      ".config/bat/config".source = link "bat/config";
+      ".config/bat/themes".source = link "bat/themes";
+
+      ".config/btop/btop.conf".source = link "btop/btop.conf";
+      ".config/btop/themes".source = link "btop/themes";
+
+      ".config/lazygit/config.yml".source = link "lazygit/config.yml";
+      ".config/lazygit/themes".source = link "lazygit/themes";
+
+      ".config/navi/config.yaml".source = link "navi/config.yaml";
+      ".config/navi/cheats".source = link "navi/cheats";
+
+      ".config/niri/config.kdl".source = link "niri/config.kdl";
+
+      ".config/spotify-player/app.toml".source = link "spotify-player/app.toml";
+      ".config/spotify-player/theme.toml".source = link "spotify-player/theme.toml";
+
+      ".config/fuzzel/fuzzel.ini".source = link "fuzzel/fuzzel.ini";
+
+      ".config/OpenTabletDriver".source = link "OpenTabletDriver";
+
+      ".config/fastfetch".source = link "fastfetch";
+      ".config/fetch".source = link "fetch";
+
+      ".gitconfig".source = link ".gitconfig";
+      ".gitignore_global".source = link ".gitignore_global";
+
+      ".local/bin/niri-screenshot.sh" = {
+        source = link "scripts/niri-screenshot.sh";
+      };
+    };
+
+    sessionPath = [
+      "$HOME/.local/bin"
+      "$HOME/.cargo/bin"
+    ];
+  };
   programs.yazi = {
     enable = true;
     enableFishIntegration = false;
@@ -65,70 +123,19 @@ in
     };
   };
 
-  home.file = {
-    ".config/fish/config.fish" = { source = link "fish/config.fish"; force = true; };
-    ".config/fish/conf.d".source = link "fish/conf.d";
-    ".config/fish/functions".source = link "fish/functions";
-    ".config/fish/completions".source = link "fish/completions";
-
-    ".config/ghostty/config".source = link "ghostty/config";
-    ".config/ghostty/themes".source = link "ghostty/themes";
-
-    ".config/nvim".source = link "nvim";
-
-    ".config/starship.toml".source = link "starship.toml";
-
-    ".config/atuin/config.toml".source = link "atuin/config.toml";
-    ".config/atuin/themes".source = link "atuin/themes";
-
-    ".config/bat/config".source = link "bat/config";
-    ".config/bat/themes".source = link "bat/themes";
-
-    ".config/btop/btop.conf".source = link "btop/btop.conf";
-    ".config/btop/themes".source = link "btop/themes";
-
-    ".config/lazygit/config.yml".source = link "lazygit/config.yml";
-    ".config/lazygit/themes".source = link "lazygit/themes";
-
-    ".config/navi/config.yaml".source = link "navi/config.yaml";
-    ".config/navi/cheats".source = link "navi/cheats";
-
-    ".config/niri/config.kdl".source = link "niri/config.kdl";
-
-    ".config/spotify-player/app.toml".source = link "spotify-player/app.toml";
-    ".config/spotify-player/theme.toml".source = link "spotify-player/theme.toml";
-
-    ".config/fuzzel/fuzzel.ini".source = link "fuzzel/fuzzel.ini";
-
-    ".config/OpenTabletDriver".source = link "OpenTabletDriver";
-
-    ".config/fastfetch".source = link "fastfetch";
-    ".config/fetch".source = link "fetch";
-
-    ".gitconfig".source = link ".gitconfig";
-    ".gitignore_global".source = link ".gitignore_global";
-
-    ".local/bin/niri-screenshot.sh" = {
-      source = link "scripts/niri-screenshot.sh";
-    };
+  xdg.dataFile = {
+    "easyeffects/output/easyeffectpreset.json".source = link "easy-effects/easyeffectpreset.json";
+    "easyeffects/input/Shure SM7B.json".source = link "easy-effects/Shure SM7B.json";
   };
 
-  xdg.dataFile."easyeffects/output/easyeffectpreset.json".source =
-    link "easy-effects/easyeffectpreset.json";
-  xdg.dataFile."easyeffects/input/Shure SM7B.json".source =
-    link "easy-effects/Shure SM7B.json";
-
-  home.sessionPath = [
-    "$HOME/.local/bin"
-    "$HOME/.cargo/bin"
-  ];
-
-  gtk.enable = true;
-  gtk.theme.name = "adw-gtk3-dark";
-  gtk.iconTheme.name = "adwaita-icon-theme";
-  gtk.cursorTheme.name = "adwaita-icon-theme";
-  gtk.gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
-  gtk.gtk4.extraConfig.gtk-application-prefer-dark-theme = true;
+  gtk = {
+    enable = true;
+    theme.name = "adw-gtk3-dark";
+    iconTheme.name = "adwaita-icon-theme";
+    cursorTheme.name = "adwaita-icon-theme";
+    gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
+    gtk4.extraConfig.gtk-application-prefer-dark-theme = true;
+  };
   dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
 
   fonts.fontconfig.enable = true;

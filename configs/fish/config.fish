@@ -66,8 +66,10 @@ if status is-interactive
     abbr -a man batman
     abbr -a find fd
     abbr -a cp "rsync -avh --info=progress2"
-    abbr -a rm "rm -i"
+    abbr -a rm rip
     abbr -a rmd "rm -rf"
+    abbr -a df duf
+    abbr -a du dust
     abbr -a mv "mv -i"
     abbr -a mkdir "mkdir -p"
     abbr -a v nvim
@@ -102,8 +104,7 @@ if status is-interactive
     abbr -a paste wl-paste
 
     # bat-extas
-    abbr -a rg batgrep
-    abbr -a diff batdiff
+    abbr -a bdiff batdiff
     abbr -a watch batwatch
 
     #python

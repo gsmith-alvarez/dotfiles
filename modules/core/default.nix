@@ -1,4 +1,8 @@
-{ config, pkgs, inputs, ... }:
+{
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   # Nix settings
@@ -27,59 +31,66 @@
     inputs.neovim-nightly-overlay.overlays.default
   ];
 
-  # nh CLI helper
-  programs.nh = {
-    enable = true;
-    clean = {
-      extraArgs = "--keep 10";
-      dates = "weekly";
+  # Programs
+  programs = {
+    nh = {
+      enable = true;
+      clean = {
+        extraArgs = "--keep 10";
+        dates = "weekly";
+      };
+      flake = "/home/giovanni/dotfiles";
     };
-    flake = "/home/giovanni/dotfiles";
+    nix-ld.enable = true;
+    command-not-found.enable = false;
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+    fish.enable = true;
   };
-
-  # Core environment & programs
-  programs.nix-ld.enable = true;
-  programs.command-not-found.enable = true;
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
-  programs.fish.enable = true;
 
   # Time & Locale
   time.timeZone = "America/Toronto";
   i18n.defaultLocale = "en_CA.UTF-8";
 
   # Sound
-  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
-  # Printing
-  services.printing.enable = true;
-
-  # Power management
-  services.upower.enable = true;
-  services.power-profiles-daemon.enable = true;
-
-  # Input & Keyboard remapping
-  services.libinput.enable = true;
-  services.keyd = {
-    enable = true;
-    keyboards.default = {
-      ids = [ "*" ];
-      settings = {
-        main = {
-          capslock = "esc";
-          esc = "capslock";
+  # Services
+  services = {
+    pulseaudio.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+    printing.enable = true;
+    upower.enable = true;
+    power-profiles-daemon.enable = true;
+    libinput.enable = true;
+    keyd = {
+      enable = true;
+      keyboards.default = {
+        ids = [ "*" ];
+        settings = {
+          main = {
+            capslock = "esc";
+            esc = "capslock";
+          };
         };
       };
     };
+    syncthing = {
+      enable = true;
+      openDefaultPorts = true;
+      user = "giovanni";
+      dataDir = "/home/giovanni/Documents/Obsidian";
+      configDir = "/home/giovanni/.config/syncthing";
+    };
+    flatpak.enable = true;
+    openssh.enable = true;
   };
 
   # User accounts
@@ -96,18 +107,6 @@
     ];
     shell = pkgs.fish;
   };
-
-  # Services
-  services.syncthing = {
-    enable = true;
-    openDefaultPorts = true;
-    user = "giovanni";
-    dataDir = "/home/giovanni/Documents/Obsidian";
-    configDir = "/home/giovanni/.config/syncthing";
-  };
-
-  services.flatpak.enable = true;
-  services.openssh.enable = true;
 
   # System packages
   environment.systemPackages = with pkgs; [

@@ -47,36 +47,39 @@
     yazi-flavors.url = "github:aguirre-matteo/nix-yazi-flavors";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    ...
-  } @ inputs: {
-    nixosConfigurations.wolfgang = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    {
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
 
-      modules = [
-        ./hosts/wolfgang
+      nixosConfigurations.wolfgang = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
 
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
+        modules = [
+          ./hosts/wolfgang
 
-            extraSpecialArgs = {
-              inherit inputs;
-              inherit (inputs) llm-agents yazi-flavors;
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+
+              extraSpecialArgs = {
+                inherit inputs;
+                inherit (inputs) llm-agents yazi-flavors;
+              };
+
+              users.giovanni = import ./home;
+
+              backupFileExtension = "backup";
             };
-
-            users.giovanni = import ./home;
-
-            backupFileExtension = "backup";
-          };
-        }
-      ];
+          }
+        ];
+      };
     };
-  };
 }
