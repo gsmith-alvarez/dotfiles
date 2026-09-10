@@ -26,4 +26,7 @@
 
   # State version
   system.stateVersion = "26.05";
+
+  # Lix Package Manager
+  # nix.package = pkgs.lixPackageSets.stable.lix;
 }
