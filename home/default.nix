@@ -45,7 +45,7 @@ in
         nix-output-monitor
         nh
         comma
-        nixfmt-rfc-style
+        nixfmt
         statix
         deadnix
 
