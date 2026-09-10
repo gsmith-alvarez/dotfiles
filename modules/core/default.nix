@@ -25,6 +25,9 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  # permittedInsevurePackages = [
+  #   "electron-41.10.6"
+  # ];
 
   # Neovim nightly overlay
   nixpkgs.overlays = [
@@ -90,6 +93,9 @@
       dataDir = "/home/giovanni/Documents/Obsidian";
       configDir = "/home/giovanni/.config/syncthing";
     };
+    # auto-mount USB drives / expose to file managers
+    udisks2.enable = true;
+    gvfs.enable = true;
     flatpak.enable = true;
     openssh.enable = true;
     tailscale.enable = true;

@@ -164,6 +164,7 @@ recent-windows {
 spawn-at-startup "noctalia"
 spawn-at-startup "nm-applet"
 spawn-at-startup "easyeffects" "-w"
+spawn-at-startup "wayscriber" "-d"
 
 workspace "study" {
     open-on-output "DP-1"

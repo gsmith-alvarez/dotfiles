@@ -11,6 +11,7 @@ in
   imports = [
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
     ./dotfiles.nix
+    ./stats.nix
   ];
 
   news.display = "show";

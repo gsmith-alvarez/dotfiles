@@ -20,6 +20,8 @@
   # Bootloader
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
+    # Load exfat at boot so USBs can be mounted
+    kernelModules = [ "exfat" ];
     loader = {
       systemd-boot = {
         enable = true;
