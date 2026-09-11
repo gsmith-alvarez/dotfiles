@@ -13,6 +13,8 @@
     ];
     trusted-users = [ "giovanni" ];
     accept-flake-config = true;
+    keep-outputs = true;
+    http-connections = 50;
     extra-substituters = [
       "https://cache.numtide.com"
       "https://noctalia.cachix.org"
