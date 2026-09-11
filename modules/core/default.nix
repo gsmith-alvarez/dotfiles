@@ -23,11 +23,12 @@
     ];
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  permittedInsevurePackages = [
-    "electron-41.10.6"
-  ];
+  nixpkgs.config = {
+    allowUnfree = true;
+    permittedInsecurePackages = [
+      "electron-41.10.6"
+    ];
+  };
 
   # Neovim nightly overlay
   nixpkgs.overlays = [

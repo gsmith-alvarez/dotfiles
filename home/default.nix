@@ -12,6 +12,7 @@ in
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
     ./dotfiles.nix
     ./stats.nix
+    ./anki.nix
   ];
 
   news.display = "show";
@@ -25,8 +26,6 @@ in
 
     packages =
       (with pkgs; [
-
-        anki
         # Editor / Git
         neovim
         git
