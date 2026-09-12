@@ -114,12 +114,15 @@ in
         # Language Servers
         lua-language-server
         bash-language-server
-        vscode-json-languageserver
+        vscode-langservers-extracted
         yaml-language-server
         dockerfile-language-server
         clang-tools
         fish-lsp
         nil
+        rust-analyzer
+        zls
+        typos-lsp
 
         # Linters & Formatters
         ty

@@ -13,14 +13,30 @@ mini.now(function()
 		"vimdoc",
 		"markdown",
 		"markdown_inline",
-		"python",
-		"cpp",
 		"bash",
 		"fish",
-		"latex",
 		"regex",
+		"nix",
+		"python",
+		"rust",
+		"zig",
+		"cpp",
+		"javascript",
+		"typescript",
+		"tsx",
 		"html",
+		"css",
+		"json",
 		"yaml",
+		"toml",
+		"kdl",
+		"sql",
+		"dockerfile",
+		"latex",
+		"r",
+		"rnoweb",
+		"gitcommit",
+		"gitignore",
 	})
 	Config.safe_require("nvim-treesitter-textobjects").setup()
 end)
@@ -131,6 +147,12 @@ vim.lsp.enable({
 	"taplo", -- TOML
 	"fish_lsp", -- Fish
 	"nil_ls", -- Nix
+	"r_language_server", -- R
+	"rust_analyzer", -- Rust
+	"zls", -- Zig
+	"html", -- HTML
+	"cssls", -- CSS
+	"typos_lsp", -- Spell / Typo Checker
 })
 
 return M
