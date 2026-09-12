@@ -58,4 +58,15 @@
     enable = true;
     extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
   };
+  # Polkit authentication agent so privileged GUI dialogs get a password prompt
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    description = "polkit-gnome-authentication-agent-1";
+    wantedBy = [ "graphical-session.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+  };
 }

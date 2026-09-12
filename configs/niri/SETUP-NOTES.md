@@ -1,122 +1,125 @@
 # Niri Setup Notes
 
-## Screenshot Setup (Windows Snipping Tool style)
+## System
+
+- **NixOS 26.11** (nixos-unstable), managed by the flake at `~/dotfiles` (`flake.nix`, `home/`, `modules/`, `hosts/`, `configs/`)
+- Home-manager symlinks configs with `mkOutOfStoreSymlink` → they resolve to `~/dotfiles/configs/...`, so **edits apply instantly without a rebuild**
+- Rebuild with `sudo nixos-rebuild switch --flake ~/dotfiles#<host>` when packages/modules change
+
+## Screenshot Setup
 
 **Keybindings** (in `config.kdl`):
-- `Super+Shift+S` → Screenshot mode picker (fuzzel menu: Region / Active Monitor / All Monitors)
-- `Super+Shift+F` → Quick full screen capture (no menu)
+- `Super+Shift+S` → `~/.local/bin/niri-screenshot.sh` (smart mode: slurp overlay with rects for the focused output + every visible window; a tiny drag = click, which expands to the rect under the cursor)
+- `Super+Shift+F` → Noctalia fullscreen screenshot (`noctalia msg screenshot-fullscreen`)
+- `Ctrl+Shift+S` → Niri's built-in screenshot UI
 
-**Every capture:**
-- Saves to `~/Pictures/Screenshots/`
-- Copies to clipboard automatically
-- Shows notification via DMS notification daemon (all handled by DMS)
+**Script:** `~/dotfiles/configs/scripts/niri-screenshot.sh` (symlinked to `~/.local/bin/niri-screenshot.sh`)
+- Modes: `smart` (default), `region`, `fullscreen`, `window`
+- Saves to `~/Pictures/Screenshots/screenshot-<timestamp>.png`, copies to clipboard (`wl-copy`)
+- Saves + copies, then sends a notification — clicking it opens the shot in **satty** for annotation
+- Uses `grim` + `slurp` + `satty` + `wl-copy`
 
-**Script:** `~/dotfiles/niri/.config/niri/dms/scripts/screenshot.sh` (stowed to `~/.config/niri/dms/scripts/screenshot.sh`, symlinked from `~/.local/bin/niri-screenshot.sh`)
-- Uses `dms screenshot` commands — DMS's built-in screenshot module (region, full, all)
-- Handles clipboard + notification automatically
-- No external dependencies (no grim, slurp, or wl-copy)
+## Desktop Shell: Noctalia
 
-## Launcher Setup
+**Noctalia** (`noctalia` v5.1.0, installed via the flake's `noctalia` GitHub input + cachix):
+- QtQuick desktop shell: floating top bar (compact), system tray, clock, workspace indicator, widgets
+- App launcher (`Super+Space`), control center (`Super+A`), settings UI (`Super+Comma`) via `noctalia msg panel-toggle ...`
+- Notification daemon with history, toasts (battery, keyboard layout)
+- Own lock screen: `Super+Escape` → `noctalia msg session lock`; locks on suspend
+- Wallpaper: directory `~/Pictures/Wallpapers` (wallpaper rendering disabled — plain background)
+- Volume/brightness media keys route through `noctalia msg volume-up` etc.
 
-**App launcher** (Super+Space): Opens the DMS full launcher — a floating GUI with:
-- **Apps** — search and launch applications
-- **Files** — search file contents via `dsearch` (8,624 files indexed)
-- **Plugins** — search DMS plugin content
-- **Actions** — select an app and press Tab to see desktop actions (New Window, Private Window, etc.)
+**Noctalia greeter** (login screen, NixOS module `noctalia-greeter`):
+- Default user `giovanni`, default session `Niri`, per-output scales (`DP-1`/`DP-2`: 1.5, `eDP-1`: 1.25)
+- Settings in `~/dotfiles/modules/desktop/default.nix`
 
-Press `Ctrl+1/2/3/4` to switch modes (all/apps/files/plugins). Select an app and press `Tab` to show desktop actions (New Window, Private Window, etc.), then `Enter` to execute the selected action.
-
-**Screenshot mode picker:** Uses `fuzzel` (Wayland-native layer-shell popup)
-- fsel is terminal-only (no Wayland rendering) — can't do popup overlays
-- DMS spotlight handles app/file search natively in a floating GUI
-- fuzzel is actively maintained for dmenu-style popups (last commit July 25, 2026, codeberg.org/dnkl/fuzzel)
-
-## Desktop Shell & Notifications
-
-**quickshell DMS** (`dms run --session`):
-- QtQuick-based desktop shell from the `danklinux` Copr repo
-- Provides top bar with system tray, clock, workspace indicator, interactive widgets
-- Built-in notification center (bell icon), control center (volume/network/bluetooth), calendar popup
-- Handles wallpaper via `dms ipc call wallpaper set <path>` or `dms screenshot` for capture
-- Manages idle/suspend (AC: 5min→10min→30min, Battery: 3min→5min→15min)
-- Provides its own PolKit agent for admin prompts
-- Provides its own lock screen (DMS themed)
-- Owns `org.freedesktop.Notifications` on D-Bus
-
-**DMS first-launch greeter** — shows setup wizard + config doctor on first run:
-- To re-trigger: `rm ~/.config/DankMaterialShell/.firstlaunch` then restart DMS
-- Or run `dms doctor` in terminal for config health check
-
-**DMS fonts** (set in `~/.config/DankMaterialShell/settings.json`):
-- UI font: Inter
-- Monospace font: Monaspace Krypton NF (matches COSMIC)
+**Noctalia settings:** `~/.config/noctalia/settings.json` (bar, launcher, notifications, idle, lock screen)
 
 ## Autostart Programs
 
-All in `config.kdl` spawn-at-startup (in order):
-1. `dms run --session` — quickshell DMS (top bar, wallpaper, notifications, idle, polkit, lock screen, system tray)
+All in `config.kdl` spawn-at-startup:
+1. `noctalia` — desktop shell
+2. `easyeffects -w` — audio DSP
+3. `wayscriber -d` — screen annotation daemon
 
 ## Theme
-
-Catppuccin Mocha inspired:
-- Focus ring: Mauve `#cba6f7`, width 2px
-- Rounded corners: 12px on all windows via geometry-corner-radius
-- Fuzzel: Catppuccin Mocha theme (`~/.config/fuzzel/fuzzel.ini`)
+- Focus ring: Mauve `#cba6f7` (active), `#505050` (inactive), width 2px
+- Rounded corners 12px, window opacity 0.85, background blur, soft shadows
 
 ## Keybindings Summary
 
 | Key | Action |
 |---|---|
-| Super+Space | App launcher (DMS full launcher — apps, files/dsearch, plugins, actions) |
+| Super+Space | App launcher (Noctalia) |
+| Super+A | Control center (Noctalia) |
+| Super+Comma | Noctalia settings |
 | Super+Return | Terminal (ghostty) |
 | Super+D | Screen annotation (wayscriber toggle) |
-| Super+Shift+S | Screenshot menu (region/monitor/all) |
-| Super+Shift+F | Quick full screen capture |
-| Super+Alt+L | Lock screen (DMS) |
+| Super+Shift+S | Screenshot (smart mode: window/region snapping) |
+| Super+Shift+F | Fullscreen screenshot (Noctalia) |
+| Ctrl+Shift+S | Niri built-in screenshot UI |
+| Super+Escape | Lock screen (Noctalia) |
+| Super+Alt+B | Zen browser |
+| Super+Alt+O | Obsidian |
+| Super+Alt+Z | Zed |
+| Super+Alt+K | KeePassXC |
+| Super+Alt+M | Thunderbird |
+| Super+Alt+S | Toggle screen reader (orca) |
+| Alt+Tab / Alt+Shift+Tab | Recent windows (per output) |
+| Alt+` / Alt+Shift+` | Recent windows, same app |
+| Super+Q | Close window |
+| Super+J/K, Super+Up/Down | Focus workspace |
+| Super+H/L, Super+Left/Right | Focus column |
+| Super+Shift+H/J/K/L | Focus monitor |
+| Super+M | Maximize window to edges |
+| Super+C | Center column |
+| Super+Shift+R | Cycle preset column widths |
+| Ctrl+Alt+Delete | Quit niri |
+
+Full list in `config.kdl` `binds {}` or the niri hotkey overlay (Skipped at startup; check niri's hotkey overlay).
 
 ## Niri Config Details
 
-**File:** `~/.config/niri/config.kdl`
+**File:** `~/dotfiles/configs/niri/config.kdl` (→ `~/.config/niri/config.kdl`)
 
-**Keyboard:** US layout, caps:swapescape, repeat delay 600ms, rate 25hz
+**Keyboard:** US layout, numlock on, repeat delay 600ms, rate 25hz
 
-**Window behavior:** focus-follows-mouse, gaps 8, rounded corners 12px
+**Outputs:**
+- `DP-1`, `DP-2`: 3840x2160@144, scale 1.5, VRR on-demand — `DP-1` at x=0, `DP-2` at x=2560
+- `eDP-1`: disabled (commented out)
 
-**Window rules:**
-- Ghostty with title "fsel" → floating, natural size
-- All windows → geometry-corner-radius 12, clip-to-geometry
+**Workspaces:**
+- `study` on `DP-1` — zen, Obsidian open there at startup
+- `utils` on `DP-2` — KeePassXC, Thunderbird, ghostty open there at startup
 
-## Packages Installed
+**Window behavior:** focus-follows-mouse (max-scroll 0%), gaps 8, rounded corners 12px, always-center-single-column, preset widths ⅓/½/⅔ (default ½)
 
-- `xdg-desktop-portal-wlr` — wlroots portal backend (niri added to UseIn)
-- `quickshell` 0.3.0 — QtQuick desktop shell (from danklinux Copr)
-- `dms-cli` 1.5.3 — DMS management CLI (from danklinux Copr)
+**Window rules:** terminals get border-without-background; settings apps (pavucontrol, nm-connection-editor...) open tiled at ½ width; calculators/Nautilus/portal float; Firefox PiP and zoom float; Noctalia window floats at 1080x920; all windows get radius 12 + opacity 0.85 + blur
+
+## Packages of Note
+
+Installed via the flake (`~/dotfiles/home/dotfiles.nix`, `~/dotfiles/modules/`):
+- `noctalia`, `noctalia-greeter` — desktop shell + login greeter (GitHub inputs, cachix)
+- `niri` — compositor (NixOS module `programs.niri`)
+- `grim`, `slurp`, `satty`, `wl-clipboard`, `cliphist` — screenshot tooling
+- `wayscriber`, `easyeffects`, `ghostty`, `zed-editor`, `spotify-player`, `jq`
+- Portal: `xdg-desktop-portal-gtk`; Polkit agent: `polkit_gnome` (systemd user service)
 
 ## Files / Config Locations
 
-- `~/.config/niri/config.kdl` — main Niri config (keybindings, window rules, autostarts)
-- `~/.config/niri/dms/scripts/screenshot.sh` — screenshot menu script (symlinked to ~/.local/bin/)
-- `~/.config/niri/SETUP-NOTES.md` — this file
-- `~/.config/niri/dms/` — DMS compositor configs (binds.kdl, colors.kdl, layout.kdl, etc.)
-- `~/.config/DankMaterialShell/settings.json` — DMS settings (fonts, theme, behavior)
-- `~/.config/DankMaterialShell/.firstlaunch` — first-launch marker (remove to re-trigger greeter)
+- `~/dotfiles/configs/niri/config.kdl` — main Niri config (→ `~/.config/niri/config.kdl`, instant-apply symlink)
+- `~/dotfiles/configs/scripts/niri-screenshot.sh` — screenshot script (→ `~/.local/bin/niri-screenshot.sh`)
+- `~/dotfiles/configs/niri/SETUP-NOTES.md` — this file
+- `~/dotfiles/home/dotfiles.nix` — home-manager packages + config symlinks
+- `~/dotfiles/modules/desktop/default.nix` — NixOS desktop module (noctalia, greeter, niri, portals, polkit)
+- `~/.config/noctalia/settings.json` — Noctalia shell settings
 
 ## Audio
 
-**Discord pausing Spotify on call join:** WirePlumber's `linking.pause-playback` pauses MPRIS players when an audio sink is removed (triggered by Discord's voice engine). Fixed with:
-```
-wpctl settings linking.pause-playback false
-wpctl settings --save linking.pause-playback
-```
-Persisted in `~/.local/state/wireplumber/sm-settings`.
-
-## Future Options
-
-**khal** — CLI calendar backend for DMS (shows events in clock popup):
-- `sudo dnf install khal`
-- DMS auto-detects it as a calendar backend
-
-**walker** (v2.17.0, Terra repo) could replace fuzzel eventually:
-- Wayland-native layer-shell popup with `--dmenu` mode
-- Built-in modules: web search, calculator, clipboard history, emoji picker
-- Decision: wait for it to mature
+- **EasyEffects** autostarts with `-w` (windowed daemon); presets in `~/dotfiles/configs/easy-effects/`
+- **Discord pausing Spotify on call join:** WirePlumber's `linking.pause-playback` pauses MPRIS players when an audio sink is removed (triggered by Discord's voice engine). Currently still at its default `true` on this machine. If it bites, fix with:
+  ```
+  wpctl settings linking.pause-playback false
+  wpctl settings --save linking.pause-playback
+  ```
+  Persisted in `~/.local/state/wireplumber/sm-settings`.

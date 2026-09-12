@@ -133,6 +133,5 @@
     psmisc
     ethtool
     tcpdump
-    networkmanagerapplet
   ];
 }

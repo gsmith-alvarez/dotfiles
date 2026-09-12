@@ -10,11 +10,8 @@
   # Hostname & Networking
   networking = {
     hostName = "wolfgang";
-    wireless.enable = true;
-    networkmanager = {
-      enable = true;
-      # wifi.backend = "iwd";
-    };
+    # NetworkManager manages wifi through its default wpa_supplicant backend
+    networkmanager.enable = true;
   };
 
   # Bootloader
@@ -32,6 +29,9 @@
   };
   # Graphics
   hardware.graphics.enable32Bit = true;
+
+  # Bluetooth
+  hardware.bluetooth.enable = true;
 
   # State version
   system.stateVersion = "26.05";

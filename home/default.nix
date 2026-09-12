@@ -71,6 +71,7 @@ in
         keepassxc
         github-cli
         easyeffects
+        playerctl
 
         # VM
         podman
@@ -89,7 +90,6 @@ in
         watchexec
         fetch
         fastfetch
-        impala
 
         # Structured Data & Docs
         jless
@@ -149,6 +149,7 @@ in
         hermes-agent
         hermes-desktop
         omp
+        antigravity-cli
       ]);
   };
 

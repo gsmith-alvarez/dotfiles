@@ -29,13 +29,9 @@ in
       atuin
       lazygit
       navi
-      fuzzel
       zed-editor
       cliphist
       wl-clipboard
-      grim
-      slurp
-      satty
       jq
       spotify-player
       topgrade
@@ -79,8 +75,6 @@ in
       ".config/spotify-player/app.toml".source = link "spotify-player/app.toml";
       ".config/spotify-player/theme.toml".source = link "spotify-player/theme.toml";
 
-      ".config/fuzzel/fuzzel.ini".source = link "fuzzel/fuzzel.ini";
-
       ".config/OpenTabletDriver".source = link "OpenTabletDriver";
 
       ".config/fastfetch".source = link "fastfetch";
@@ -88,10 +82,6 @@ in
 
       ".gitconfig".source = link ".gitconfig";
       ".gitignore_global".source = link ".gitignore_global";
-
-      ".local/bin/niri-screenshot.sh" = {
-        source = link "scripts/niri-screenshot.sh";
-      };
     };
 
     sessionPath = [

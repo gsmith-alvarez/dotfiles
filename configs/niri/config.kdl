@@ -162,7 +162,6 @@ recent-windows {
 }
 
 spawn-at-startup "noctalia"
-spawn-at-startup "nm-applet"
 spawn-at-startup "easyeffects" "-w"
 spawn-at-startup "wayscriber" "-d"
 
@@ -248,6 +247,7 @@ binds {
     // Noctalia shell
     Mod+Space hotkey-overlay-title="App Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+A hotkey-overlay-title="Control Center" { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Comma hotkey-overlay-title="Noctalia Settings" { spawn-sh "noctalia msg settings-toggle"; }
 
     // Screen reader toggle
     Mod+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
@@ -330,9 +330,8 @@ binds {
 
     Mod+Ctrl+Shift+R { switch-preset-window-height; }
 
-    Mod+Shift+S hotkey-overlay-title="Screenshot" { spawn "bash" "-c" "~/.local/bin/niri-screenshot.sh"; }
+    Mod+Shift+S hotkey-overlay-title="Screenshot Area" { spawn-sh "noctalia msg screenshot-region"; }
     Mod+Shift+F hotkey-overlay-title="Screenshot All Monitors" { spawn-sh "noctalia msg screenshot-fullscreen"; }
-    Shift+Ctrl+S { screenshot; }
 
     Mod+Shift+M { maximize-window-to-edges; }
 
