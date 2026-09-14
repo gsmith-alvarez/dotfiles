@@ -56,6 +56,21 @@
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
 
+      # Standalone home-manager config so read-only commands
+      # (e.g. `home-manager news --flake .`) work.
+      # NOTE: use `nh os switch` for actual activation — the NixOS module owns this.
+      homeConfigurations.giovanni = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        modules = [
+          ./home
+        ];
+
+        extraSpecialArgs = {
+          inherit inputs;
+          inherit (inputs) llm-agents yazi-flavors;
+        };
+      };
+
       nixosConfigurations.wolfgang = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };

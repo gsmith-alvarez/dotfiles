@@ -42,7 +42,7 @@
     nh = {
       enable = true;
       clean = {
-        extraArgs = "--keep 10";
+        extraArgs = "--keep 5";
         dates = "weekly";
       };
       flake = "/home/giovanni/dotfiles";
@@ -114,7 +114,6 @@
       "wheel"
     ];
     packages = with pkgs; [
-      zed-editor
       nautilus
       wayscriber
     ];

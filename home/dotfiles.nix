@@ -15,7 +15,8 @@ let
     mkdir -p $out
     cp ${
       pkgs.fetchzip {
-        url = "tarball+https://codeload.github.com/lpnh/fr.yazi/tar.gz/refs/heads/main";
+        url = "https://codeload.github.com/lpnh/fr.yazi/tar.gz/refs/heads/main";
+        extension = "tar.gz";
         hash = "sha256-3D1mIQpEDik0ppPQo+/NIhCxEu/XEnJMJ0HiAFxlOE4=";
       }
     }/* $out/
@@ -24,7 +25,6 @@ in
 {
   home = {
     packages = with pkgs; [
-      fish
       starship
       atuin
       lazygit

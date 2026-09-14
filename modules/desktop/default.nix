@@ -20,28 +20,28 @@
 
   # Programs
   programs = {
-    noctalia-greeter = {
-      enable = true;
-      passwordless-sync-users = [ "giovanni" ];
-      settings = {
-        user.default = "giovanni";
-        session.default = "Niri";
-        output = {
-          scale = 1.25;
-          scales = "eDP-1:1.25; DP-1:1.5; DP-2:1.5";
-        };
-        cursor = {
-          theme = "adwaita-icon-theme";
-          size = 24;
-        };
-      };
-    };
-
     noctalia = {
       enable = true;
     };
 
     niri.enable = true;
+  };
+
+  services.displayManager.noctalia-greeter = {
+    enable = true;
+    passwordless-sync-users = [ "giovanni" ];
+    settings = {
+      user.default = "giovanni";
+      session.default = "Niri";
+      output = {
+        scale = 1.25;
+        scales = "eDP-1:1.25; DP-1:1.5; DP-2:1.5";
+      };
+      cursor = {
+        theme = "adwaita-icon-theme";
+        size = 24;
+      };
+    };
   };
 
   # X11 / Xwayland / Keyboard

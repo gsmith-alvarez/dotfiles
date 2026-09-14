@@ -14,6 +14,25 @@
     networkmanager.enable = true;
   };
 
+  # so resolv.conf doesn't get clobbered on every connect (NM rc-manager=resolvconf).
+  environment.etc."NetworkManager/dispatcher.d/99-AirYorkPLUS-dns" = {
+    mode = "0755";
+    text = ''
+      #!/run/current-system/sw/bin/bash
+      if [ "$2" != "up" ]; then exit 0; fi
+      case "$CONNECTION_ID" in
+        *AirYorkPLUS*) ;;
+        *) exit 0 ;;
+      esac
+      cur=$(${pkgs.networkmanager}/bin/nmcli -g ipv4.dns connection show "$CONNECTION_ID" 2>/dev/null)
+      if [ "$cur" != "1.1.1.1" ]; then
+        ${pkgs.networkmanager}/bin/nmcli connection modify "$CONNECTION_ID" \
+          ipv4.dns 1.1.1.1 ipv4.ignore-auto-dns yes
+        ${pkgs.networkmanager}/bin/nmcli device reapply "$1"
+      fi
+    '';
+  };
+
   # Bootloader
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;

@@ -45,7 +45,6 @@ in
         nvd
         nix-diff
         nix-output-monitor
-        nh
         comma
         nixfmt
         statix
