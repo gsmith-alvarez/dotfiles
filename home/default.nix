@@ -159,7 +159,8 @@ in
     packages = [
       "md.obsidian.Obsidian"
       "app.zen_browser.zen"
-      # "net.ankiweb.Anki"
+      "com.super_productivity.SuperProductivity"
+      "com.bitwig.BitwigStudio"
     ];
   };
 }
