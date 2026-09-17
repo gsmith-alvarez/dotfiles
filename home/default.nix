@@ -1,11 +1,10 @@
 {
   pkgs,
   inputs,
-  llm-agents ? inputs.llm-agents,
   ...
 }:
 let
-  llmpkgs = (inputs.llm-agents or llm-agents).packages.${pkgs.stdenv.hostPlatform.system};
+  llmpkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   imports = [

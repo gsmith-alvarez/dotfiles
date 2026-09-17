@@ -3,7 +3,9 @@
   inputs,
   ...
 }:
-
+let
+  caches = import ../../lib/caches.nix;
+in
 {
   # Nix settings
   nix.settings = {
@@ -15,14 +17,8 @@
     accept-flake-config = true;
     keep-outputs = true;
     http-connections = 50;
-    extra-substituters = [
-      "https://cache.numtide.com"
-      "https://noctalia.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
-    ];
+    extra-substituters = caches.substituters;
+    extra-trusted-public-keys = caches.trusted-public-keys;
   };
 
   nixpkgs.config = {

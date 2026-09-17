@@ -1,6 +1,8 @@
 {
   description = "NixOS configuration";
 
+  # Literal set required here: the flake schema rejects computed nixConfig values.
+  # Keep in sync with lib/caches.nix (consumed by modules/core).
   nixConfig = {
     extra-substituters = [
       "https://cache.numtide.com"
@@ -65,10 +67,7 @@
           ./home
         ];
 
-        extraSpecialArgs = {
-          inherit inputs;
-          inherit (inputs) llm-agents yazi-flavors;
-        };
+        extraSpecialArgs = { inherit inputs; };
       };
 
       nixosConfigurations.wolfgang = nixpkgs.lib.nixosSystem {
@@ -84,10 +83,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
 
-              extraSpecialArgs = {
-                inherit inputs;
-                inherit (inputs) llm-agents yazi-flavors;
-              };
+              extraSpecialArgs = { inherit inputs; };
 
               users.giovanni = import ./home;
 

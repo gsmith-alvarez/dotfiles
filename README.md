@@ -19,35 +19,40 @@ Modular NixOS and Home Manager configuration for `wolfgang`. Runs [niri](https:/
 dotfiles/
 ├── flake.nix               # Flake entry point (nixosConfigurations.wolfgang)
 ├── flake.lock              # Pinned input locks
+├── lib/                    # Shared nix data / helpers
+│   ├── caches.nix          # Substituters + keys, used by flake.nix and modules/core
+│   └── out-of-store.nix    # mkOutOfStoreSymlink helper with per-target overrides
 ├── hosts/
 │   └── wolfgang/           # Host-specific settings & hardware-configuration.nix
 ├── modules/
-│   ├── core/               # System baseline: PipeWire, fonts, nh, fish, nix-ld
+│   ├── core/               # System baseline: nix settings, PipeWire, nh, fish, keyd
 │   └── desktop/            # Desktop stack: Niri, Noctalia shell/greeter, XDG portals
-├── home/
-│   ├── default.nix         # User packages, Flatpaks, Home Manager integration
-│   └── dotfiles.nix        # Out-of-store symlink mappings into configs/
-├── configs/                # Live application configurations (symlinked out of store)
-│   ├── atuin/              # Shell history sync
+├── home/                   # Home Manager
+│   ├── default.nix         # User packages, Flatpaks, module imports
+│   ├── dotfiles.nix        # Out-of-store symlink manifest into configs/
+│   ├── shell.nix           # Shell/tool packages
+│   ├── yazi.nix            # Yazi program module (plugins, flavors, TOML)
+│   ├── appearance.nix      # GTK/dconf/fontconfig theming
+│   ├── anki.nix            # Anki addons + SynapsePro theme
+│   └── stats.nix           # R / RStudio for coursework
+├── configs/                # Live application configs (symlinked out of store)
 │   ├── fish/               # Fish config, abbrs, custom functions (fnav, ndiff)
-│   ├── ghostty/            # Ghostty terminal config and themes
-│   ├── lazygit/            # Git TUI config with delta integration
 │   ├── niri/               # Niri compositor config (config.kdl)
 │   ├── nvim/               # Lua-based Neovim configuration
-│   ├── yazi/               # Yazi file manager configuration and keymaps
-│   ├── .gitconfig          # Git base config and credential helpers
-│   └── starship.toml       # Prompt configuration
-└── assets/                 # Wallpaper and media assets
+│   └── ...                 # ghostty, atuin, bat, btop, lazygit, navi, yazi, git
+└── tests/                  # Pure-eval checks for lib/ helpers
 ```
 
 ## Out-of-Store Symlink Pattern
 
-Application configs inside `configs/` are linked via `config.lib.file.mkOutOfStoreSymlink` in `home/dotfiles.nix`:
+Application configs inside `configs/` are linked via `mkOutOfStoreSymlink` (helper in `lib/out-of-store.nix`, declarations in `home/dotfiles.nix`):
 
 - Target: `${config.home.homeDirectory}/dotfiles/configs/<path>`
 - Destination: `~/.config/<path>` (and `~/.gitconfig`)
 
 Edits made to files in `configs/` take effect immediately without requiring `nh os switch` or Home Manager rebuilds.
+
+Exception: Yazi is configured through its Home Manager program module (`home/yazi.nix`), which reads the TOML files in `configs/yazi/` and generates its own files — changes there need a switch.
 
 ## Workflow & Commands
 
@@ -56,15 +61,17 @@ Edits made to files in `configs/` take effect immediately without requiring `nh 
 System deployments use `nh` targeting `nixosConfigurations.wolfgang`:
 
 ```bash
+# Build without activating (verification; catches eval errors, needs no sudo)
+nixos-rebuild build --flake .#wolfgang
+
 # Switch to current configuration
 nh os switch .
-
-# Dry-run / test build without activating
-nh os test .
 
 # Update all flake inputs and switch
 nh os switch -u .
 ```
+
+`nh os test` is **not** a dry run — it activates a test system generation.
 
 ### Useful Fish Abbreviations
 
@@ -74,6 +81,7 @@ nh os switch -u .
 | `nrb` | `nh os boot` | Rebuild system and configure for next boot |
 | `ncu` | `nix flake update --flake ~/dotfiles` | Update flake inputs |
 | `ncl` | `nh clean all` | Garbage collect old generations |
+| `nq` | `nix-shell -p` | Shell with a package |
 | `v` | `nvim` | Launch Neovim |
 | `gd` | `git diff` | Git diff |
 | `cnavi` | `navi --cheatsh` | Interactive cheat sheets |
@@ -84,5 +92,5 @@ nh os switch -u .
 Shortcut layers are segregated across tools to prevent chord collisions:
 
 - `Super` (`Mod`): Window manager / compositor ([niri](configs/niri/config.kdl))
-- `Alt`: Terminal emulator ([Ghostty](configs/ghostty/config))
+- `Ctrl+Alt`: Terminal emulator ([Ghostty](configs/ghostty/config))
 - `Space` (`<leader>`): Editor commands ([Neovim](configs/nvim/plugin/03-keymaps.lua))
