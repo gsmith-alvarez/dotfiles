@@ -1,7 +1,9 @@
 { pkgs, ... }:
 
 let
-  catppuccinCss = builtins.readFile ../configs/anki/catppuccin_mocha.css;
+  catppuccinCss = pkgs.writeText "catppuccin_mocha.css" (
+    builtins.readFile ../configs/anki/catppuccin_mocha.css
+  );
 
   synapsePro = pkgs.anki-utils.buildAnkiAddon {
     pname = "synapse-pro";
