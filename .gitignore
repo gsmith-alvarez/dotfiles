@@ -1,6 +1,10 @@
 # Nix build artifacts
 result
 result-*
+__pycache__/
+*.pyc
+secrets/*.plain.*
+secrets/keys.txt
 .direnv/
 
 configs/nvim/nvim-pack-lock.json

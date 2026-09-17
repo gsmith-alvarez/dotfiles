@@ -52,6 +52,6 @@
   # Bluetooth
   hardware.bluetooth.enable = true;
 
-  # State version
+  # Pins compatibility defaults for stateful data and migrations; do not bump on system updates.
   system.stateVersion = "26.05";
 }

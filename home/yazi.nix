@@ -15,6 +15,8 @@ in
   programs.yazi = {
     enable = true;
     enableFishIntegration = false;
+    # Configs are read into the store at build time to compose plugins and flavors hermetically.
+    # Unlike live out-of-store symlinks, modifying files in configs/yazi/ requires a rebuild.
     initLua = ../configs/yazi/init.lua;
     keymap = builtins.fromTOML (builtins.readFile ../configs/yazi/keymap.toml);
     settings = builtins.fromTOML (builtins.readFile ../configs/yazi/yazi.toml);

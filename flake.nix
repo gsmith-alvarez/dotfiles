@@ -46,23 +46,50 @@
       inputs.pyproject-nix.follows = "pyproject-nix";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     yazi-flavors.url = "github:aguirre-matteo/nix-yazi-flavors";
   };
 
   outputs =
     {
+      self,
       nixpkgs,
       home-manager,
       ...
     }@inputs:
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
+      checks.x86_64-linux = import ./checks {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        inherit (nixpkgs) lib;
+        home = self.nixosConfigurations.wolfgang.config.home-manager.users.giovanni;
+        nixos = self.nixosConfigurations.wolfgang;
+        inherit (import ./flake.nix) nixConfig;
+      };
+      devShells.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.mkShell {
+        packages = with nixpkgs.legacyPackages.x86_64-linux; [
+          nixfmt
+          statix
+          deadnix
+          python3
+          fish
+          luajit
+          niri
+          sops
+          age
+          ssh-to-age
+        ];
+      };
 
       # Standalone home-manager config so read-only commands
       # (e.g. `home-manager news --flake .`) work.
       # NOTE: use `nh os switch` for actual activation — the NixOS module owns this.
       homeConfigurations.giovanni = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        pkgs = self.nixosConfigurations.wolfgang.pkgs;
         modules = [
           ./home
         ];
@@ -76,17 +103,21 @@
 
         modules = [
           ./hosts/wolfgang
+          ./modules/secrets.nix
 
           home-manager.nixosModules.home-manager
           {
             home-manager = {
+              # Share the system nixpkgs evaluation rather than instantiating a duplicate package set.
               useGlobalPkgs = true;
+              # Install user packages directly to /etc/profiles/per-user to integrate with system search paths.
               useUserPackages = true;
 
               extraSpecialArgs = { inherit inputs; };
 
               users.giovanni = import ./home;
 
+              # Back up unmanaged conflicting files to .backup instead of aborting activation.
               backupFileExtension = "backup";
             };
           }

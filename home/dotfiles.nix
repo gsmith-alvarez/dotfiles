@@ -3,6 +3,7 @@ let
   links = import ../lib/out-of-store.nix {
     root = "${config.home.homeDirectory}/dotfiles/configs";
     inherit (config.lib.file) mkOutOfStoreSymlink;
+    # Replace an existing unmanaged file; this does not resolve competing module definitions.
     overrides."fish/config.fish".force = true;
   };
 in

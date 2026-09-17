@@ -398,6 +398,7 @@
         "noctalia": "noctalia",
         "noctalia-greeter": "noctalia-greeter",
         "pyproject-nix": "pyproject-nix",
+        "sops-nix": "sops-nix",
         "uv2nix": "uv2nix",
         "yazi-flavors": "yazi-flavors"
       }
@@ -420,6 +421,26 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "sops-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789623319,
+        "narHash": "sha256-kmlp8rPrvrXn58YiaANHKSWUijtUc7pwgerIywosOIM=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "16954c1c360c3dc4d4b3b3e64df59f7e89452cb1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "sops-nix",
         "type": "github"
       }
     },
