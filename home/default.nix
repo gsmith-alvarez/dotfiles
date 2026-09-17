@@ -11,6 +11,9 @@ in
   imports = [
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
     ./dotfiles.nix
+    ./shell.nix
+    ./yazi.nix
+    ./appearance.nix
     ./stats.nix
     ./anki.nix
   ];
@@ -160,7 +163,6 @@ in
       "md.obsidian.Obsidian"
       "app.zen_browser.zen"
       "com.super_productivity.SuperProductivity"
-      "com.bitwig.BitwigStudio"
     ];
   };
 }

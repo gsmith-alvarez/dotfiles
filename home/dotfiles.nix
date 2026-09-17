@@ -1,132 +1,58 @@
-{
-  config,
-  pkgs,
-  inputs,
-  yazi-flavors ? inputs.yazi-flavors,
-  ...
-}:
+{ config, ... }:
 let
-  # Symlinks point directly at this directory, NOT the nix store —
-  # edits here apply instantly (apps watch their config paths); no rebuild needed.
-  cfg = "${config.home.homeDirectory}/dotfiles/configs";
-  link = path: config.lib.file.mkOutOfStoreSymlink "${cfg}/${path}";
-
-  fr-yazi = pkgs.runCommand "fr.yazi-0-unstable-2026-09-09" { } ''
-    mkdir -p $out
-    cp ${
-      pkgs.fetchzip {
-        url = "https://codeload.github.com/lpnh/fr.yazi/tar.gz/refs/heads/main";
-        extension = "tar.gz";
-        hash = "sha256-3D1mIQpEDik0ppPQo+/NIhCxEu/XEnJMJ0HiAFxlOE4=";
-      }
-    }/* $out/
-  '';
+  links = import ../lib/out-of-store.nix {
+    root = "${config.home.homeDirectory}/dotfiles/configs";
+    inherit (config.lib.file) mkOutOfStoreSymlink;
+    overrides."fish/config.fish".force = true;
+  };
 in
 {
-  home = {
-    packages = with pkgs; [
-      starship
-      atuin
-      lazygit
-      navi
-      zed-editor
-      cliphist
-      wl-clipboard
-      jq
-      spotify-player
-      topgrade
-      monaspace
-      jetbrains-mono
-    ];
+  xdg.configFile = links {
+    "fish/config.fish" = "fish/config.fish";
+    "fish/conf.d" = "fish/conf.d";
+    "fish/functions" = "fish/functions";
+    "fish/completions" = "fish/completions";
 
-    file = {
-      ".config/fish/config.fish" = {
-        source = link "fish/config.fish";
-        force = true;
-      };
-      ".config/fish/conf.d".source = link "fish/conf.d";
-      ".config/fish/functions".source = link "fish/functions";
-      ".config/fish/completions".source = link "fish/completions";
+    "ghostty/config" = "ghostty/config";
+    "ghostty/themes" = "ghostty/themes";
 
-      ".config/ghostty/config".source = link "ghostty/config";
-      ".config/ghostty/themes".source = link "ghostty/themes";
+    "nvim" = "nvim";
 
-      ".config/nvim".source = link "nvim";
+    "starship.toml" = "starship.toml";
 
-      ".config/starship.toml".source = link "starship.toml";
+    "atuin/config.toml" = "atuin/config.toml";
+    "atuin/themes" = "atuin/themes";
 
-      ".config/atuin/config.toml".source = link "atuin/config.toml";
-      ".config/atuin/themes".source = link "atuin/themes";
+    "bat/config" = "bat/config";
+    "bat/themes" = "bat/themes";
 
-      ".config/bat/config".source = link "bat/config";
-      ".config/bat/themes".source = link "bat/themes";
+    "btop/btop.conf" = "btop/btop.conf";
+    "btop/themes" = "btop/themes";
 
-      ".config/btop/btop.conf".source = link "btop/btop.conf";
-      ".config/btop/themes".source = link "btop/themes";
+    "lazygit/config.yml" = "lazygit/config.yml";
+    "lazygit/themes" = "lazygit/themes";
 
-      ".config/lazygit/config.yml".source = link "lazygit/config.yml";
-      ".config/lazygit/themes".source = link "lazygit/themes";
+    "navi/config.yaml" = "navi/config.yaml";
+    "navi/cheats" = "navi/cheats";
 
-      ".config/navi/config.yaml".source = link "navi/config.yaml";
-      ".config/navi/cheats".source = link "navi/cheats";
+    "niri/config.kdl" = "niri/config.kdl";
 
-      ".config/niri/config.kdl".source = link "niri/config.kdl";
+    "spotify-player/app.toml" = "spotify-player/app.toml";
+    "spotify-player/theme.toml" = "spotify-player/theme.toml";
 
-      ".config/spotify-player/app.toml".source = link "spotify-player/app.toml";
-      ".config/spotify-player/theme.toml".source = link "spotify-player/theme.toml";
+    "OpenTabletDriver" = "OpenTabletDriver";
 
-      ".config/OpenTabletDriver".source = link "OpenTabletDriver";
-
-      ".config/fastfetch".source = link "fastfetch";
-      ".config/fetch".source = link "fetch";
-
-      ".gitconfig".source = link ".gitconfig";
-      ".gitignore_global".source = link ".gitignore_global";
-    };
-
-    sessionPath = [
-      "$HOME/.local/bin"
-      "$HOME/.cargo/bin"
-    ];
-  };
-  programs.yazi = {
-    enable = true;
-    enableFishIntegration = false;
-    initLua = ../configs/yazi/init.lua;
-    keymap = builtins.fromTOML (builtins.readFile ../configs/yazi/keymap.toml);
-    settings = builtins.fromTOML (builtins.readFile ../configs/yazi/yazi.toml);
-    theme = builtins.fromTOML (builtins.readFile ../configs/yazi/theme.toml);
-    vfs = builtins.fromTOML (builtins.readFile ../configs/yazi/vfs.toml);
-    plugins = {
-      git = pkgs.yaziPlugins.git;
-      chmod = pkgs.yaziPlugins.chmod;
-      smart-filter = pkgs.yaziPlugins.smart-filter;
-      mount = pkgs.yaziPlugins.mount;
-      full-border = pkgs.yaziPlugins.full-border;
-      jump-to-char = pkgs.yaziPlugins.jump-to-char;
-      ouch = pkgs.yaziPlugins.ouch;
-      starship = pkgs.yaziPlugins.starship;
-      fr = fr-yazi;
-    };
-    flavors = {
-      catppuccin-mocha = yazi-flavors.packages.${pkgs.stdenv.hostPlatform.system}.catppuccin-mocha;
-    };
+    "fastfetch" = "fastfetch";
+    "fetch" = "fetch";
   };
 
-  xdg.dataFile = {
-    "easyeffects/output/easyeffectpreset.json".source = link "easy-effects/easyeffectpreset.json";
-    "easyeffects/input/Shure SM7B.json".source = link "easy-effects/Shure SM7B.json";
+  home.file = links {
+    ".gitconfig" = ".gitconfig";
+    ".gitignore_global" = ".gitignore_global";
   };
 
-  gtk = {
-    enable = true;
-    theme.name = "adw-gtk3-dark";
-    iconTheme.name = "adwaita-icon-theme";
-    cursorTheme.name = "adwaita-icon-theme";
-    gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
-    gtk4.extraConfig.gtk-application-prefer-dark-theme = true;
+  xdg.dataFile = links {
+    "easyeffects/output/easyeffectpreset.json" = "easy-effects/easyeffectpreset.json";
+    "easyeffects/input/Shure SM7B.json" = "easy-effects/Shure SM7B.json";
   };
-  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
-
-  fonts.fontconfig.enable = true;
 }
