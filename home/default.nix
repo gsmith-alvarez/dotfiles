@@ -11,6 +11,7 @@
     ./development.nix
     ./tools.nix
     ./applications.nix
+    ./comp_org.nix
   ];
 
   news.display = "show";
