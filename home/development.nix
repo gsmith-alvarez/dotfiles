@@ -15,7 +15,6 @@ in
       lazygit
       neovim
       zed-editor
-      libreoffice
 
       # Containers
       distrobox

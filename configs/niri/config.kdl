@@ -25,7 +25,6 @@ output "DP-2" {
 
 gestures {
     hot-corners {
-        off
     }
 }
 
@@ -100,28 +99,8 @@ animations {
     }
 }
 window-rule {
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    default-column-width {}
-}
-window-rule {
-    match app-id=r#"^org\.gnome\."#
-    draw-border-with-background false
-    geometry-corner-radius 12
-    clip-to-geometry true
-}
-window-rule {
-    match app-id=r#"^gnome-control-center$"#
-    match app-id=r#"^pavucontrol$"#
-    match app-id=r#"^nm-connection-editor$"#
-    default-column-width { proportion 0.5; }
-    open-floating false
-}
-window-rule {
-    match app-id=r#"^gnome-calculator$"#
-    match app-id=r#"^galculator$"#
-    match app-id=r#"^blueman-manager$"#
     match app-id=r#"^org\.gnome\.Nautilus$"#
-    match app-id=r#"^xdg-desktop-portal$"#
+    match app-id=r#"^xdg-desktop-portal"#
     open-floating true
 }
 window-rule {
@@ -130,16 +109,7 @@ window-rule {
     open-focused false
 }
 window-rule {
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    match app-id="Alacritty"
-    match app-id="zen"
-    match app-id="com.mitchellh.ghostty"
-    match app-id="kitty"
-    draw-border-with-background false
-}
-window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    match app-id="zoom"
+    match app-id=r#"app\.zen_browser\.zen$"# title="^Picture-in-Picture$"
     open-floating true
 }
 window-rule {
@@ -170,7 +140,7 @@ workspace "study" {
 }
 
 window-rule {
-    match at-startup=true app-id=r#"^(zen|md\.obsidian\.Obsidian)$"#
+    match at-startup=true app-id=r#"^(app\.zen_browser\.zen|zen|md\.obsidian\.Obsidian)$"#
     open-on-workspace "study"
 }
 

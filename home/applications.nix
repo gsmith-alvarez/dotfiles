@@ -9,6 +9,7 @@
     playerctl
     spotify-player
     wl-clipboard
+    libreoffice
 
     # Fonts
     jetbrains-mono

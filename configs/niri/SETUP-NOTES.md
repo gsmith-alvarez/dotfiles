@@ -94,7 +94,7 @@ Full list in `config.kdl` `binds {}` or the niri hotkey overlay (Skipped at star
 
 **Window behavior:** focus-follows-mouse (max-scroll 0%), gaps 8, rounded corners 12px, always-center-single-column, preset widths ⅓/½/⅔ (default ½)
 
-**Window rules:** terminals get border-without-background; settings apps (pavucontrol, nm-connection-editor...) open tiled at ½ width; calculators/Nautilus/portal float; Firefox PiP and zoom float; Noctalia window floats at 1080x920; all windows get radius 12 + opacity 0.85 + blur
+**Window rules:** Nautilus and desktop portals float; Steam notification toasts float bottom-right; Zen PiP floats; Noctalia window floats at 1080x920; all windows get radius 12 + opacity 0.85 + blur
 
 ## Packages of Note
 
