@@ -17,6 +17,8 @@
     };
     fish.enable = true;
     thunderbird.enable = true;
+    appimage.enable = true;
+    appimage.binfmt = true;
   };
 
   environment.systemPackages = with pkgs; [
