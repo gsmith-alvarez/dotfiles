@@ -110,4 +110,10 @@ if status is-interactive
     #python
     abbr -a uvr 'uv run'
     abbr -a pytest 'uv run pytest'
+
+    #riscV
+    abbr -a rv-as riscv64-unknown-linux-gnu-as
+    abbr -a rv-ld riscv64-unknown-linux-gnu-ld
+    abbr -a rv-gcc riscv64-unknown-linux-gnu-gcc
+    abbr -a rv-dump 'riscv64-unknown-linux-gnu-objdump -d'
 end

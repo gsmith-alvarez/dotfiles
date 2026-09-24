@@ -32,5 +32,12 @@
     psmisc
     ethtool
     tcpdump
+
+    # Full cross-toolchain: as, ld, gcc, objdump, nm, readelf
+    pkgsCross.riscv64.buildPackages.gcc
+    # Multi-architecture debugger (supports connecting to QEMU gdbserver)
+    gdb
+    # User-space emulator (provides qemu-riscv64)
+    qemu
   ];
 }

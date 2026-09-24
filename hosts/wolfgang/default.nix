@@ -45,6 +45,9 @@
       };
       efi.canTouchEfiVariables = true;
     };
+    binfmt = {
+      emulatedSystems = [ "riscv64-linux" ];
+    };
   };
   # Graphics
   hardware.graphics.enable32Bit = true;
