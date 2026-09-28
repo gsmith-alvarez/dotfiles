@@ -29,6 +29,7 @@
 
   services.displayManager.noctalia-greeter = {
     enable = true;
+    cursorTheme.package = pkgs.adwaita-icon-theme;
     passwordless-sync-users = [ "giovanni" ];
     settings = {
       user.default = "giovanni";
@@ -38,11 +39,15 @@
         scales = "eDP-1:1.25; DP-1:1.5; DP-2:1.5";
       };
       cursor = {
-        theme = "adwaita-icon-theme";
+        theme = "Adwaita";
         size = 24;
       };
     };
   };
+
+  environment.systemPackages = [
+    pkgs.adwaita-icon-theme
+  ];
 
   # X11 / Xwayland / Keyboard
   services.xserver = {
@@ -62,6 +67,8 @@
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     description = "polkit-gnome-authentication-agent-1";
     wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
     serviceConfig = {
       ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
       Restart = "on-failure";
