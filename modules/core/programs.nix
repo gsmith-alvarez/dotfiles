@@ -19,6 +19,8 @@
     thunderbird.enable = true;
     appimage.enable = true;
     appimage.binfmt = true;
+    compsize.enable = true;
+    btrfs-heatmap.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
@@ -32,6 +34,11 @@
     psmisc
     ethtool
     tcpdump
+
+    # Compatibility shim: routes Snacks.picker.cliphist() in Neovim to stash-clipboard
+    (writeShellScriptBin "cliphist" ''
+      exec ${stash-clipboard}/bin/stash "$@"
+    '')
 
     # Full cross-toolchain: as, ld, gcc, objdump, nm, readelf
     pkgsCross.riscv64.buildPackages.gcc

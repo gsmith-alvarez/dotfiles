@@ -2,7 +2,6 @@
 {
   home.packages = with pkgs; [
     # Desktop applications
-    cliphist
     easyeffects
     ghostty
     keepassxc

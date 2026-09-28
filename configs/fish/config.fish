@@ -16,13 +16,6 @@ set -gx VISUAL nvim
 set fish_greeting ""
 set -gx NH_FLAKE ~/dotfiles
 
-if status is-login
-    if not pgrep -x wl-paste >/dev/null
-        wl-paste --type text --watch cliphist store &
-        wl-paste --type image --watch cliphist store &
-    end
-end
-
 if status is-interactive
     set -g fish_key_bindings fish_vi_key_bindings
 
@@ -73,7 +66,7 @@ if status is-interactive
     abbr -a mv "mv -i"
     abbr -a mkdir "mkdir -p"
     abbr -a v nvim
-    abbr -a ch "cliphist list | fzf | cliphist decode | wl-copy"
+    abbr -a ch "stash list | fzf | stash decode | wl-copy"
     abbr -a cnavi "navi --cheatsh"
     abbr -a gd 'git diff'
 

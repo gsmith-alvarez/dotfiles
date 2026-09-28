@@ -30,5 +30,18 @@
     openssh.enable = true;
     tailscale.enable = true;
     fwupd.enable = true;
+    stash-clipboard = {
+      enable = true;
+      excludedApps = [
+        "KeePassXC"
+        "org.keepassxc.KeePassXC"
+      ];
+    };
+    scx-loader = {
+      enable = true;
+      config = {
+        default_sched = "scx_bpfland";
+      };
+    };
   };
 }

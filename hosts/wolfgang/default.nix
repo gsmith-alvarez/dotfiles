@@ -42,6 +42,7 @@
       systemd-boot = {
         enable = true;
         configurationLimit = 10;
+        bootCounting.enable = true;
       };
       efi.canTouchEfiVariables = true;
     };
