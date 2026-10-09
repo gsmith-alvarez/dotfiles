@@ -4,6 +4,10 @@ local M = {}
 
 -- 1. Mini.misc & pacer setup
 local misc = Config.safe_require("mini.misc")
+if package.loaded["mini.misc"] then
+	misc.setup_restore_cursor()
+end
+
 
 local function pacer_logic(mode, f)
 	if package.loaded["mini.misc"] then
@@ -51,11 +55,14 @@ M.now(function()
 	local catppuccin = Config.safe_require("catppuccin")
 	if catppuccin then
 		catppuccin.setup({
-			color_overrides = {
-				mocha = {
-					base = "#230817",
-				},
-			},
+			custom_highlights = function(colors)
+				return {
+					MiniJump = { fg = colors.base, bg = colors.yellow, bold = true },
+					MiniJump2dSpot = { fg = colors.base, bg = colors.peach, bold = true },
+					MiniJump2dSpotAhead = { fg = colors.base, bg = colors.teal, bold = true },
+					MiniJump2dSpotUnique = { fg = colors.base, bg = colors.sapphire, bold = true },
+				}
+			end,
 		})
 		vim.cmd.colorscheme("catppuccin")
 	end
