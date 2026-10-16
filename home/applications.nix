@@ -9,6 +9,7 @@
     spotify-player
     wl-clipboard
     libreoffice
+    koreader
 
     # Fonts
     jetbrains-mono
