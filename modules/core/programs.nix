@@ -10,7 +10,6 @@
       flake = "/home/giovanni/dotfiles";
     };
     nix-ld.enable = true;
-    command-not-found.enable = false;
     direnv = {
       enable = true;
       nix-direnv.enable = true;
@@ -20,10 +19,11 @@
     appimage.enable = true;
     appimage.binfmt = true;
     compsize.enable = true;
-    btrfs-heatmap.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
+    # no setcap wrapper (non-ELF script rejected by ensure-wrapper-integrity); use sudo
+    btrfs-heatmap
     vesktop
     xwayland-satellite
     pciutils

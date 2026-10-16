@@ -1,5 +1,7 @@
-{ inputs, ... }:
 {
+  inputs,
+  ...
+}: {
   nixpkgs.config = {
     allowUnfree = true;
     # Required by dependencies (e.g. Obsidian/Vesktop) until upstream packages update runtime.
@@ -8,7 +10,7 @@
     ];
   };
 
-  # Applied at system level; propagates across both system and Home Manager via useGlobalPkgs.
+  # Nightly Neovim (config uses scrolloffpad + TextPutPost, nightly-only)
   nixpkgs.overlays = [
     inputs.neovim-nightly-overlay.overlays.default
   ];
