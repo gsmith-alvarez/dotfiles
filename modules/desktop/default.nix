@@ -29,7 +29,6 @@
 
   services.displayManager.noctalia-greeter = {
     enable = true;
-    cursorTheme.package = pkgs.adwaita-icon-theme;
     passwordless-sync-users = [ "giovanni" ];
     settings = {
       user.default = "giovanni";
@@ -39,6 +38,7 @@
         scales = "eDP-1:1.25; DP-1:1.5; DP-2:1.5";
       };
       cursor = {
+        path = pkgs.adwaita-icon-theme;
         theme = "Adwaita";
         size = 24;
       };
@@ -48,15 +48,6 @@
   environment.systemPackages = [
     pkgs.adwaita-icon-theme
   ];
-
-  # X11 / Xwayland / Keyboard
-  services.xserver = {
-    enable = false;
-    xkb = {
-      layout = "us";
-      variant = "";
-    };
-  };
 
   # Portals
   xdg.portal = {
