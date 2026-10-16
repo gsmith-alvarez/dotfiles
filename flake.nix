@@ -23,13 +23,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+    };
+
+    # Nightly Neovim: config uses scrolloffpad + TextPutPost (nightly-only)
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    llm-agents = {
-      url = "github:numtide/llm-agents.nix";
     };
 
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
