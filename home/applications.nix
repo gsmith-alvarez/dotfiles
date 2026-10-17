@@ -10,6 +10,7 @@
     wl-clipboard
     libreoffice
     koreader
+    gnome-calculator
 
     # Fonts
     jetbrains-mono
