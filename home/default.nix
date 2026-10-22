@@ -12,6 +12,7 @@
     ./tools.nix
     ./applications.nix
     ./comp_org.nix
+    ./ssh.nix
   ];
 
   news.display = "show";

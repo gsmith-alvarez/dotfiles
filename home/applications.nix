@@ -11,6 +11,9 @@
     libreoffice
     koreader
     gnome-calculator
+    kicad
+    gtkwave
+    verilator
 
     # Fonts
     jetbrains-mono
