@@ -38,6 +38,3 @@ __pycache__/
 
 # Node
 node_modules
-package.json
-package-lock.json
-bun.lock

@@ -1,6 +1,5 @@
 function ndiff --description 'Diff current NixOS generation against a previous one (default: last)'
-    set -l cur (/nix/var/nix/profiles/system/bin/switch-to-configuration 2>/dev/null; readlink /nix/var/nix/profiles/system)
-    set cur /nix/var/nix/profiles/system
+    set -l cur /nix/var/nix/profiles/system
 
     set -l old_gen (math $argv[1] 2>/dev/null)
     set -l prev
@@ -8,7 +7,7 @@ function ndiff --description 'Diff current NixOS generation against a previous o
         set prev /nix/var/nix/profiles/system-$argv[1]-link
     else
         # find the newest generation link that isn't the current one
-        for l in (ls -d /nix/var/nix/profiles/system-*-link 2>/dev/null | string match -v (readlink -f $cur))
+        for l in (ls -d /nix/var/nix/profiles/system-*-link 2>/dev/null | sort -V | string match -v (readlink -f $cur))
             set prev $l
         end
     end

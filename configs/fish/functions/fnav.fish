@@ -50,7 +50,7 @@ function fnav --description "Fuzzy navigate directories (up/down/zoxide)"
         set -l dirs
         set -l current_dir (pwd)
         while test "$current_dir" != "/"
-            set current_dir (dirname "$current_dir")
+            set current_dir (path dirname "$current_dir")
             set -a dirs "$current_dir"
         end
 

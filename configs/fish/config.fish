@@ -1,15 +1,4 @@
-set -l paths \
-    ~/.local/bin \
-    ~/.cargo/bin \
-    ~/.nix-profile/bin \
-    ~/.local/state/nix/profiles/profile/bin \
-    /nix/var/nix/profiles/default/bin
-
-for path in $paths
-    if test -d $path
-        fish_add_path -g $path
-    end
-end
+fish_add_path -g ~/.local/bin ~/.cargo/bin
 
 set -gx EDITOR nvim
 set -gx VISUAL nvim
@@ -37,7 +26,7 @@ if status is-interactive
 
         # Ctrl-T (Files search) preview & copy binding
         set -gx FZF_CTRL_T_OPTS "
-          --preview 'if test -d {}; eza --tree --color=always {} | head -200; else; bat -n --color=always --line-range :500 {}; end'
+          --preview 'if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi'
           --bind '?:toggle-preview,ctrl-y:execute-silent(echo -n {} | wl-copy)+abort'
           --preview-window 'right:60%'
         "
