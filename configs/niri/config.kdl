@@ -192,6 +192,16 @@ window-rule {
     }
 }
 
+window-rule {
+    match app-id=r#"^(app\.zen_browser\.zen|libreoffice.*|gtkwave)$"#
+    opacity 1.0
+}
+
+window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    block-out-from "screen-capture"
+}
+
 binds {
     // Terminal
     Mod+Return hotkey-overlay-title="Open a Terminal: Ghostty" { spawn "ghostty"; }
@@ -237,10 +247,14 @@ binds {
     Mod+Q {close-window;}
 
     // Focus navigation
-    Mod+Down  { focus-workspace-down; }
-    Mod+Up    { focus-workspace-up; }
-    Mod+J     { focus-workspace-down; }
-    Mod+K     { focus-workspace-up; }
+    Mod+Down  { focus-window-down; }
+    Mod+Up    { focus-window-up; }
+    Mod+J     { focus-window-down; }
+    Mod+K     { focus-window-up; }
+    Mod+Page_Down { focus-workspace-down; }
+    Mod+Page_Up   { focus-workspace-up; }
+    Mod+U         { focus-workspace-down; }
+    Mod+I         { focus-workspace-up; }
     Mod+H {focus-column-left;}
     Mod+Left {focus-column-left;}
     Mod+L {focus-column-right;}
@@ -278,6 +292,17 @@ binds {
     Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
     Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
 
+    // Focus numbered workspace
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+
     // Move column to numbered workspace
     Mod+Ctrl+1 { move-column-to-workspace 1; }
     Mod+Ctrl+2 { move-column-to-workspace 2; }
@@ -296,6 +321,7 @@ binds {
     Mod+grave     { focus-workspace-previous; }
 
     // Sizing: backup used Mod+Shift+R to cycle presets backward
+    Mod+R { switch-preset-column-width; }
     Mod+Shift+R { switch-preset-column-width-back; }
 
     Mod+Ctrl+Shift+R { switch-preset-window-height; }
