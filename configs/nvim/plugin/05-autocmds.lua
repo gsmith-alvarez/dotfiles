@@ -28,13 +28,6 @@ u.autocmd({ "BufRead", "BufNewFile" }, { ".env", ".env.*" }, function()
 	vim.bo.filetype = "dosini"
 end, "Syntax highlighting for secret files")
 -- 5. Whitespace management
--- Skip make/go/just and noexpandtab buffers.
-local retab_skip = { make = true, go = true, just = true }
-u.autocmd("BufWritePre", "*", function()
-	if vim.bo.expandtab and not retab_skip[vim.bo.filetype] then
-		vim.cmd("silent! %retab!")
-	end
-end, "Convert tabs to spaces on save")
 u.autocmd("BufWritePre", "*", function()
 	Config.safe_require("mini.trailspace").trim()
 end, "Trims Trailing Whitesapce")
