@@ -12,10 +12,17 @@
     preloadIndex = true
 
 [gc]
-    auto = 0
+    auto = 6700
 
 [pull]
     rebase = true
+
+[push]
+    autoSetupRemote = true
+
+[rebase]
+    autoSquash = true
+    autoStash = true
 
 [fetch]
     prune = true
@@ -39,8 +46,12 @@
     line-numbers = true
     hyperlink = true
 
+[diff]
+    algorithm = histogram
+    colorMoved = default
+
 [merge]
-    conflictstyle = zdiff3
+    conflictStyle = zdiff3
 
 [credential "https://github.com"]
     helper =

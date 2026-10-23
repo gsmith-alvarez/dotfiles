@@ -29,8 +29,6 @@ window-padding-y = 12
 window-show-tab-bar = auto
 notify-on-command-finish = unfocused
 quit-after-last-window-closed = true
-gtk-titlebar = true
-gtk-titlebar-style = native
 gtk-wide-tabs = true
 gtk-toolbar-style = flat
 gtk-tabs-location = top
@@ -39,7 +37,7 @@ gtk-single-instance = true
 # --- Terminal Features ---
 cursor-style = block
 cursor-style-blink = true
-scrollback-limit = 3023
+scrollback-limit = 50000
 mouse-hide-while-typing = true
 copy-on-select = true
 confirm-close-surface = false
@@ -59,7 +57,7 @@ keybind = ctrl+alt+l=goto_split:right
 # Tab Navigation
 keybind = ctrl+shift+h=previous_tab
 keybind = ctrl+shift+l=next_tab
-keybind = ctrl+t=new_tab
+keybind = ctrl+shift+t=new_tab
 
 # Window / Workspace Management
 keybind = ctrl+shift+n=new_window
