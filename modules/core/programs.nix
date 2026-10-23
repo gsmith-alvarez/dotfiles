@@ -47,4 +47,6 @@
     # User-space emulator (provides qemu-riscv64)
     qemu
   ];
+  boot.supportedFilesystems = [ "fuse" ];
+  programs.fuse.userAllowOther = true;
 }

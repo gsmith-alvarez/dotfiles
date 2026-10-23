@@ -1,4 +1,10 @@
-_: {
+{ pkgs, ... }:
+{
+  home.packages = with pkgs; [
+    rclone
+    sshfs
+  ];
+
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
