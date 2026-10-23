@@ -1,7 +1,8 @@
 {
   inputs,
   ...
-}: {
+}:
+{
   nixpkgs.config = {
     allowUnfree = true;
     # Required by dependencies (e.g. Obsidian/Vesktop) until upstream packages update runtime.

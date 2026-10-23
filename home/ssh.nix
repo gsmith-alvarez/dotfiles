@@ -1,14 +1,12 @@
-{
-  ...
-}:
-{
-  home.programs.ssh = {
+_: {
+  programs.ssh = {
     enable = true;
-    matchBlocks = {
-      "yorku_labs" = {
-        hostname = "red.eecs.yorku.ca";
-        user = "gsmitha";
-        identityFile = "~/.ssh/york_lab_keys";
+    enableDefaultConfig = false;
+    settings = {
+      yorku_labs = {
+        HostName = "red.eecs.yorku.ca";
+        User = "gsmitha";
+        IdentityFile = "~/.ssh/york_lab_keys";
       };
     };
   };
