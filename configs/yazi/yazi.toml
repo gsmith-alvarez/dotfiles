@@ -41,7 +41,7 @@ shell_origin = "top-center"
 shell_title = ["Shell:", "Shell (block):"]
 
 [mgr]
-ind-app-title = "Yazi: {cwd}"
+title_format = "Yazi: {cwd}"
 linemode = "none"
 marker_symbol = "●"
 mouse_events = ["click", "scroll"]
