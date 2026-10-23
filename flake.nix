@@ -37,16 +37,6 @@
     noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
     noctalia.url = "github:noctalia-dev/noctalia";
 
-    cargo2nix.url = "github:cargo2nix/cargo2nix";
-
-    pyproject-nix.url = "github:pyproject-nix/pyproject.nix";
-
-    uv2nix = {
-      url = "github:pyproject-nix/uv2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.pyproject-nix.follows = "pyproject-nix";
-    };
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -68,8 +58,6 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         inherit (nixpkgs) lib;
         home = self.nixosConfigurations.wolfgang.config.home-manager.users.giovanni;
-        nixos = self.nixosConfigurations.wolfgang;
-        inherit (import ./flake.nix) nixConfig;
       };
       devShells.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.mkShell {
         packages = with nixpkgs.legacyPackages.x86_64-linux; [

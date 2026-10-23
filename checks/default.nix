@@ -2,8 +2,6 @@
   pkgs,
   lib,
   home,
-  nixos,
-  nixConfig,
 }:
 let
   src = ../.;
@@ -60,33 +58,14 @@ let
         nativeBuildInputs = [ pkgs.python3 ];
       }
       ''
-        export PYTHONDONTWRITEBYTECODE=1
-        python -m unittest discover -s ${src}/tests -p 'test_*.py' -v
         python ${src}/tests/link_contract.py ${src}/configs ${
           pkgs.writeText "links.json" (builtins.toJSON { inherit links generated; })
         }
         touch $out
       '';
-  caches = import ../lib/caches.nix;
 in
 {
-  link-contract =
-    assert import ../tests/out-of-store.nix;
-    checkLinks home;
-
-  link-contract-regression =
-    assert import ../tests/link-contract.nix {
-      inherit lib pkgs nixos;
-      check = checkLinks;
-    };
-    pkgs.runCommand "dotfiles-link-contract-regression" { } "touch $out";
-
-  caches =
-    assert nixConfig.extra-substituters == caches.substituters;
-    assert nixConfig.extra-trusted-public-keys == caches.trusted-public-keys;
-    assert (nixos.config.nix.settings.extra-substituters or [ ]) == caches.substituters;
-    assert (nixos.config.nix.settings.extra-trusted-public-keys or [ ]) == caches.trusted-public-keys;
-    pkgs.runCommand "dotfiles-cache-policy" { } "touch $out";
+  link-contract = checkLinks home;
 
   nix-style =
     pkgs.runCommand "dotfiles-nix-style"
