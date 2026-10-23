@@ -8,50 +8,34 @@ let
   };
 in
 {
-  xdg.configFile = links {
-    "fish/config.fish" = "fish/config.fish";
-    "fish/conf.d" = "fish/conf.d";
-    "fish/functions" = "fish/functions";
-    "fish/completions" = "fish/completions";
+  xdg.configFile =
+    (links [
+      "ghostty"
+      "nvim"
+      "atuin"
+      "bat"
+      "btop"
+      "lazygit"
+      "navi"
+      "niri"
+      "spotify-player"
+      "starship.toml"
+      "fastfetch"
+      "fetch"
+      "OpenTabletDriver"
+    ])
+    // (links {
+      # Sub-paths split because fish writes runtime state (e.g. fish_variables) into ~/.config/fish
+      "fish/config.fish" = "fish/config.fish";
+      "fish/conf.d" = "fish/conf.d";
+      "fish/functions" = "fish/functions";
+      "fish/completions" = "fish/completions";
+    });
 
-    "ghostty/config" = "ghostty/config";
-    "ghostty/themes" = "ghostty/themes";
-
-    "nvim" = "nvim";
-
-    "starship.toml" = "starship.toml";
-
-    "atuin/config.toml" = "atuin/config.toml";
-    "atuin/themes" = "atuin/themes";
-
-    "bat/config" = "bat/config";
-    "bat/themes" = "bat/themes";
-
-    "btop/btop.conf" = "btop/btop.conf";
-    "btop/themes" = "btop/themes";
-
-    "lazygit/config.yml" = "lazygit/config.yml";
-    "lazygit/themes" = "lazygit/themes";
-
-    "navi/config.yaml" = "navi/config.yaml";
-    "navi/cheats" = "navi/cheats";
-
-    "niri/config.kdl" = "niri/config.kdl";
-
-    "spotify-player/app.toml" = "spotify-player/app.toml";
-    "spotify-player/theme.toml" = "spotify-player/theme.toml";
-
-    "OpenTabletDriver" = "OpenTabletDriver";
-
-    "fastfetch" = "fastfetch";
-    "fetch" = "fetch";
-  };
-
-  home.file = links {
-    ".gitconfig" = ".gitconfig";
-    ".gitignore_global" = ".gitignore_global";
-  };
-
+  home.file = links [
+    ".gitconfig"
+    ".gitignore_global"
+  ];
   xdg.dataFile = links {
     "easyeffects/output/easyeffectpreset.json" = "easy-effects/easyeffectpreset.json";
     "easyeffects/input/Shure SM7B.json" = "easy-effects/Shure SM7B.json";

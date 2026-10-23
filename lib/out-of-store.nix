@@ -8,10 +8,23 @@
   mkOutOfStoreSymlink,
   overrides ? { },
 }:
+entries:
+let
+  attrs =
+    if builtins.isList entries then
+      builtins.listToAttrs (
+        map (name: {
+          inherit name;
+          value = name;
+        }) entries
+      )
+    else
+      entries;
+in
 builtins.mapAttrs (
   target: path:
   {
     source = mkOutOfStoreSymlink "${root}/${path}";
   }
   // (overrides.${target} or { })
-)
+) attrs
