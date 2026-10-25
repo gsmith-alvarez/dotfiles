@@ -2,6 +2,16 @@ let
   caches = import ../../lib/caches.nix;
 in
 {
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+  nix.optimise = {
+    automatic = true;
+    dates = [ "weekly" ];
+  };
   nix.settings = {
     experimental-features = [
       "nix-command"
