@@ -94,6 +94,5 @@ u.imap("<C-b>", "****<Left><Left>", "Markdown: Bolding")
 u.imap("<C-i>", "__<Left>", "Markdown: italics")
 
 -- Prose wrapping: hard-wrap at 120 and show the wrap-point marker.
-vim.opt_local.textwidth = 120
 vim.opt_local.colorcolumn = "+1"
 vim.opt_local.formatoptions:append({ "t" }) -- wrap at textwidth while typing
