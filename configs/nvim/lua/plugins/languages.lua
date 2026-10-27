@@ -125,6 +125,15 @@ vim.lsp.config("nil_ls", {
 			formatting = {
 				command = { "nixfmt" },
 			},
+			nix = {
+				binary = "nix",
+				maxMemoryMB = 2048,
+				flake = {
+					autoArchive = true,
+					autoEvalInputs = true,
+					nixpkgsInputName = "nixpkgs",
+				},
+			},
 		},
 	},
 })
