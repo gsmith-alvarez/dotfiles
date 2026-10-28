@@ -1,0 +1,17 @@
+{
+    "better-bibtex": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "better-bibtex",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-v2GhaQ3IorerCb6d4siZhvT7bUlcgkB9ibECsm+6qdU=",
+            "type": "url",
+            "url": "https://github.com/retorquere/zotero-better-bibtex/releases/download/v9.0.71/zotero-better-bibtex-9.0.71.xpi"
+        },
+        "version": "9.0.71"
+    }
+}

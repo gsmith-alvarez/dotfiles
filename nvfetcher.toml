@@ -1,0 +1,6 @@
+# nvfetcher configuration for dotfiles
+
+[better-bibtex]
+src.github = "retorquere/zotero-better-bibtex"
+src.prefix = "v"
+fetch.url = "https://github.com/retorquere/zotero-better-bibtex/releases/download/v$ver/zotero-better-bibtex-$ver.xpi"

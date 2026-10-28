@@ -292,7 +292,8 @@
         "noctalia": "noctalia",
         "noctalia-greeter": "noctalia-greeter",
         "sops-nix": "sops-nix",
-        "yazi-flavors": "yazi-flavors"
+        "yazi-flavors": "yazi-flavors",
+        "zotero-pkg": "zotero-pkg"
       }
     },
     "sops-nix": {
@@ -382,6 +383,26 @@
       "original": {
         "owner": "aguirre-matteo",
         "repo": "nix-yazi-flavors",
+        "type": "github"
+      }
+    },
+    "zotero-pkg": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793084501,
+        "narHash": "sha256-D3C2TJaL7qz3/AHRI83lEsqtBsAsTIGqAQ9UJY/WEeA=",
+        "owner": "retorquere",
+        "repo": "zotero-pkg",
+        "rev": "4230439b770eddd67c067351bba626a3e74912ae",
+        "type": "github"
+      },
+      "original": {
+        "owner": "retorquere",
+        "repo": "zotero-pkg",
         "type": "github"
       }
     }

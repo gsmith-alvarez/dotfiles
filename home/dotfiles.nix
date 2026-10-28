@@ -23,6 +23,7 @@ in
       "fastfetch"
       "fetch"
       "OpenTabletDriver"
+      "topgrade.toml"
     ])
     // (links {
       # Sub-paths split because fish writes runtime state (e.g. fish_variables) into ~/.config/fish
