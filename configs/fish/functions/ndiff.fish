@@ -7,7 +7,8 @@ function ndiff --description 'Diff current NixOS generation against a previous o
         set prev /nix/var/nix/profiles/system-$argv[1]-link
     else
         # find the newest generation link that isn't the current one
-        for l in (ls -d /nix/var/nix/profiles/system-*-link 2>/dev/null | sort -V | string match -v (readlink -f $cur))
+        set -l cur_link (path dirname $cur)/(readlink $cur)
+        for l in (ls -d /nix/var/nix/profiles/system-*-link 2>/dev/null | sort -V | string match -v $cur_link)
             set prev $l
         end
     end
