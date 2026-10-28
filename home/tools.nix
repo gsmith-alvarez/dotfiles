@@ -3,10 +3,8 @@
   home.packages = with pkgs; [
     # Nix
     comma
-    nix-diff
     nix-index
     nix-output-monitor
-    nix-tree
     nvd
 
     # Terminal & search
@@ -27,29 +25,22 @@
     btop
     duf
     dust
-    hyperfine
     iotop
     procs
 
-    # Docs & data
-    duckdb
     glow
     jless
     jq
-    visidata
     yq-go
 
     # Networking
     doggo
-    gping
-    trippy
     wget
     xh
 
     # Utilities
     fastfetch
     fetch
-    grex
     ouch
     rm-improved
     rsync

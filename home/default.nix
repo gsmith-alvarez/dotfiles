@@ -6,12 +6,10 @@
     ./shell.nix
     ./yazi.nix
     ./appearance.nix
-    ./stats.nix
     ./anki.nix
     ./development.nix
     ./tools.nix
     ./applications.nix
-    ./comp_org.nix
     ./ssh.nix
   ];
 

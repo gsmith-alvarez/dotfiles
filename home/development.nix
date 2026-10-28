@@ -32,9 +32,7 @@ in
       # Languages & runtimes
       bun
       luajit
-      nodejs
       uv
-      zig
 
       # Language servers
       bash-language-server
@@ -47,7 +45,6 @@ in
       typos-lsp
       vscode-langservers-extracted
       yaml-language-server
-      zls
 
       # Linters & formatters
       oxlint
@@ -63,7 +60,6 @@ in
       yamllint
 
       # Docs & diagrams
-      mermaid-cli
       tectonic
 
       # Neovim plugin build toolchain

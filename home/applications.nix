@@ -15,9 +15,6 @@ in
     libreoffice
     koreader
     gnome-calculator
-    kicad
-    gtkwave
-    verilator
     (inputs.zotero-pkg.packages.${pkgs.stdenv.hostPlatform.system}.zotero.overrideAttrs (old: {
       postInstall = (old.postInstall or "") + ''
         sed -i "s|^Exec=.*|Exec=$out/bin/zotero --url %u|" $out/share/applications/zotero.desktop
