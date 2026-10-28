@@ -15,11 +15,7 @@ in
     libreoffice
     koreader
     gnome-calculator
-    (inputs.zotero-pkg.packages.${pkgs.stdenv.hostPlatform.system}.zotero.overrideAttrs (old: {
-      postInstall = (old.postInstall or "") + ''
-        sed -i "s|^Exec=.*|Exec=$out/bin/zotero --url %u|" $out/share/applications/zotero.desktop
-      '';
-    }))
+    inputs.zotero-pkg.packages.${pkgs.stdenv.hostPlatform.system}.zotero
 
     # Fonts
     jetbrains-mono

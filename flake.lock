@@ -393,11 +393,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793084501,
-        "narHash": "sha256-D3C2TJaL7qz3/AHRI83lEsqtBsAsTIGqAQ9UJY/WEeA=",
+        "lastModified": 1793171346,
+        "narHash": "sha256-qdD2UHPOmGZkc44mpEGbYBsVhDpt0y/y6NQOahcgmws=",
         "owner": "retorquere",
         "repo": "zotero-pkg",
-        "rev": "4230439b770eddd67c067351bba626a3e74912ae",
+        "rev": "3dafe7caabd9463963523cd6b7a9bf36f2bbef1a",
         "type": "github"
       },
       "original": {
