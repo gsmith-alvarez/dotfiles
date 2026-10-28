@@ -34,7 +34,15 @@ in
       fr = fr-yazi;
     };
     flavors = {
-      catppuccin-mocha = inputs.yazi-flavors.packages.${pkgs.stdenv.hostPlatform.system}.catppuccin-mocha;
+      catppuccin-mocha =
+        inputs.yazi-flavors.packages.${pkgs.stdenv.hostPlatform.system}.catppuccin-mocha.overrideAttrs
+          (old: {
+            installPhase = ''
+              mkdir -p $out
+              cp $src/catppuccin-mocha.yazi/* $out/
+              sed -i '/name = "\*/d' $out/flavor.toml
+            '';
+          });
     };
   };
 

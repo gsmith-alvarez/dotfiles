@@ -33,15 +33,11 @@ find_title = ["Find next:", "Find previous:"]
 rename_offset = [0, 1, 50, 3]
 rename_origin = "hovered"
 rename_title = "Rename:"
-search_offset = [0, 2, 50, 3]
-search_origin = "top-center"
-search_title = "Search via {n}:"
 shell_offset = [0, 2, 50, 3]
 shell_origin = "top-center"
 shell_title = ["Shell:", "Shell (block):"]
 
 [mgr]
-title_format = "Yazi: {cwd}"
 linemode = "none"
 marker_symbol = "●"
 mouse_events = ["click", "scroll"]
@@ -215,21 +211,18 @@ open_title = "Open with:"
 
 [[plugin.fetchers]]
 group = "mime"
-id = "mime"
 prio = "high"
 run = "mime.dir"
 url = "*/"
 
 [[plugin.fetchers]]
 group = "mime"
-id = "mime"
 prio = "high"
 run = "mime.local"
 url = "local://*"
 
 [[plugin.fetchers]]
 group = "mime"
-id = "mime"
 prio = "high"
 run = "mime.remote"
 url = "remote://*"
@@ -264,13 +257,11 @@ run = "font"
 
 [[plugin.prepend_fetchers]]
 group = "git"
-id = "git"
 run = "git"
 url = "*"
 
 [[plugin.prepend_fetchers]]
 group = "git"
-id = "git"
 run = "git"
 url = "*/"
 
@@ -416,11 +407,8 @@ ueberzug_scale = 1
 wrap = "no"
 
 [tasks]
-bizarre_retry = 3
 image_alloc = 536870912
 image_bound = [10000, 10000]
-macro_workers = 10
-micro_workers = 10
 suppress_preload = false
 
 [which]
