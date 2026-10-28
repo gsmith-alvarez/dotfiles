@@ -81,7 +81,7 @@ vim.lsp.config("lua_ls", {
 
 -- C/C++ (clangd)
 vim.lsp.config("clangd", {
-	filetypes = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
+	filetypes = { "c", "cpp", "objc", "objcpp" },
 	settings = {
 		clangd = {
 			InlayHints = {

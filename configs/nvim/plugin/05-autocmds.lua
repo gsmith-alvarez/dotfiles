@@ -28,9 +28,11 @@ u.autocmd({ "BufRead", "BufNewFile" }, { ".env", ".env.*" }, function()
 	vim.bo.filetype = "dosini"
 end, "Syntax highlighting for secret files")
 -- 5. Whitespace management
-u.autocmd("BufWritePre", "*", function()
-	Config.safe_require("mini.trailspace").trim()
-end, "Trims Trailing Whitesapce")
+u.autocmd("BufWritePre", "*", function(event)
+	if vim.bo[event.buf].modifiable then
+		Config.safe_require("mini.trailspace").trim()
+	end
+end, "Trims Trailing Whitespace")
 -- 6. Filesystem helpers
 u.autocmd("BufWritePre", "*", function(event)
 	local name = vim.api.nvim_buf_get_name(event.buf)
