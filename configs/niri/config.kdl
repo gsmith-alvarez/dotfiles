@@ -215,8 +215,6 @@ binds {
     Mod+Alt+Z hotkey-overlay-title="Open Zed" { spawn "zed"; }
     //KeePassXC
     Mod+Alt+K hotkey-overlay-title="Open Password Manager: Keepassxc" { spawn "keepassxc"; }
-    //Email
-    Mod+Alt+M hotkey-overlay-title="Open Email: Thunderbird" {spawn "thunderbird";}
 
     // Screen annotation
     Mod+D hotkey-overlay-title="Toggle Screen Annotation: wayscriber" { spawn "wayscriber" "--daemon-toggle"; }

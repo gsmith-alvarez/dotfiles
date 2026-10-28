@@ -15,7 +15,6 @@
       nix-direnv.enable = true;
     };
     fish.enable = true;
-    thunderbird.enable = true;
     appimage.enable = true;
     appimage.binfmt = true;
     compsize.enable = true;
