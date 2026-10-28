@@ -65,6 +65,7 @@ All in `config.kdl` spawn-at-startup:
 | Super+Alt+K | KeePassXC |
 | Super+Alt+M | Thunderbird |
 | Super+Alt+S | Toggle screen reader (orca) |
+| Super+Tab | Global fuzzy window switcher (Noctalia `/win`) |
 | Alt+Tab / Alt+Shift+Tab | Recent windows (per output) |
 | Alt+` / Alt+Shift+` | Recent windows, same app |
 | Super+Q | Close window |
