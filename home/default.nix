@@ -2,6 +2,7 @@
 {
   imports = [
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
+    inputs.rex.homeManagerModules.default
     ./dotfiles.nix
     ./shell.nix
     ./yazi.nix

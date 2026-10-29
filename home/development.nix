@@ -75,4 +75,7 @@ in
       hermes-desktop
       omp
     ]);
+
+  programs.rex.enable = true;
+  services.rex.enable = true;
 }

@@ -300,6 +300,43 @@
         "type": "github"
       }
     },
+    "openbot": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793227322,
+        "narHash": "sha256-EGv1pbAnSQv2+33vEiX1ZGdZYL7nH3K+VQPCb6fWOzM=",
+        "owner": "nightly-labs",
+        "repo": "openbot",
+        "rev": "c389f4404256e754214b6982503381778d80ed35",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nightly-labs",
+        "repo": "openbot",
+        "type": "github"
+      }
+    },
+    "rex": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793231964,
+        "narHash": "sha256-nQpelICT/XbtIxeEbh6Gl8OhWAgg0ELojVc/MZ+9nqA=",
+        "type": "tarball",
+        "url": "https://pkgs.superlogical.com/rex/nix/snapshot/0.0.1793231964-ga3e149.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://pkgs.superlogical.com/rex/nix/snapshot.tar.gz"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
@@ -309,6 +346,8 @@
         "nixpkgs": "nixpkgs_2",
         "noctalia": "noctalia",
         "noctalia-greeter": "noctalia-greeter",
+        "openbot": "openbot",
+        "rex": "rex",
         "sops-nix": "sops-nix",
         "wayscriber": "wayscriber",
         "yazi-flavors": "yazi-flavors",
