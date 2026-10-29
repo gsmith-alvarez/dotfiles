@@ -9,16 +9,17 @@
 ## Screenshot Setup
 
 **Keybindings** (in `config.kdl`):
-- `Super+Shift+S` → `~/.local/bin/niri-screenshot.sh` (smart mode: slurp overlay with rects for the focused output + every visible window; a tiny drag = click, which expands to the rect under the cursor)
+- `Super+Shift+S` → Noctalia area screenshot (`noctalia msg screenshot-region`)
 - `Super+Shift+F` → Noctalia fullscreen screenshot (`noctalia msg screenshot-fullscreen`)
 - `Ctrl+Shift+S` → Niri's built-in screenshot UI
+- `Super+D` → Wayscriber live annotation toggle (`wayscriber --daemon-toggle`)
 
-**Script:** `~/dotfiles/configs/scripts/niri-screenshot.sh` (symlinked to `~/.local/bin/niri-screenshot.sh`)
-- Modes: `smart` (default), `region`, `fullscreen`, `window`
-- Saves to `~/Pictures/Screenshots/screenshot-<timestamp>.png`, copies to clipboard (`wl-copy`)
-- Saves + copies, then sends a notification — clicking it opens the shot in **satty** for annotation
-- Uses `grim` + `slurp` + `satty` + `wl-copy`
-
+**Wayscriber Screen Annotation & Capture:**
+- Toggle annotation overlay: `Super+D`
+- Configurator GUI: `wayscriber-configurator` or `F11` from overlay
+- Config location: `~/dotfiles/configs/wayscriber/config.toml` (→ `~/.config/wayscriber/config.toml`)
+- Screen OCR to clipboard: `Ctrl+Shift+X` (powered by `tesseract`)
+- Overlay screenshot capture: `Ctrl+Shift+P` (fullscreen), `Ctrl+Shift+I` (selection)
 ## Desktop Shell: Noctalia
 
 **Noctalia** (`noctalia` v5.1.0, installed via the flake's `noctalia` GitHub input + cachix):
@@ -55,7 +56,7 @@ All in `config.kdl` spawn-at-startup:
 | Super+Comma | Noctalia settings |
 | Super+Return | Terminal (ghostty) |
 | Super+D | Screen annotation (wayscriber toggle) |
-| Super+Shift+S | Screenshot (smart mode: window/region snapping) |
+| Super+Shift+S | Screenshot area (Noctalia) |
 | Super+Shift+F | Fullscreen screenshot (Noctalia) |
 | Ctrl+Shift+S | Niri built-in screenshot UI |
 | Super+Escape | Lock screen (Noctalia) |
@@ -101,14 +102,15 @@ Full list in `config.kdl` `binds {}` or the niri hotkey overlay (Skipped at star
 Installed via the flake (`~/dotfiles/home/dotfiles.nix`, `~/dotfiles/modules/`):
 - `noctalia`, `noctalia-greeter` — desktop shell + login greeter (GitHub inputs, cachix)
 - `niri` — compositor (NixOS module `programs.niri`)
-- `grim`, `slurp`, `satty`, `wl-clipboard`, `cliphist` — screenshot tooling
-- `wayscriber`, `easyeffects`, `ghostty`, `zed-editor`, `spotify-player`, `jq`
+- `grim`, `slurp`, `wl-clipboard`, `tesseract` — capture and OCR tooling
+- `wayscriber`, `wayscriber-configurator` — screen annotation & configurator GUI
+- `easyeffects`, `ghostty`, `zed-editor`, `spotify-player`, `jq`
 - Portal: `xdg-desktop-portal-gtk`; Polkit agent: `polkit_gnome` (systemd user service)
 
 ## Files / Config Locations
 
 - `~/dotfiles/configs/niri/config.kdl` — main Niri config (→ `~/.config/niri/config.kdl`, instant-apply symlink)
-- `~/dotfiles/configs/scripts/niri-screenshot.sh` — screenshot script (→ `~/.local/bin/niri-screenshot.sh`)
+- `~/dotfiles/configs/wayscriber/config.toml` — Wayscriber config (→ `~/.config/wayscriber/config.toml`)
 - `~/dotfiles/configs/niri/SETUP-NOTES.md` — this file
 - `~/dotfiles/home/dotfiles.nix` — home-manager packages + config symlinks
 - `~/dotfiles/modules/desktop/default.nix` — NixOS desktop module (noctalia, greeter, niri, portals, polkit)

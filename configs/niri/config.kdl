@@ -118,6 +118,12 @@ window-rule {
     default-column-width { fixed 1080; }
     default-window-height { fixed 920; }
 }
+window-rule {
+    match app-id=r#"^org\.wayscriber\.Configurator$"#
+    open-floating true
+    default-column-width { fixed 1000; }
+    default-window-height { fixed 800; }
+}
 debug {
     honor-xdg-activation-with-invalid-serial
 }
