@@ -1,0 +1,13 @@
+# Wayscriber configuration file
+# Location: ~/.config/wayscriber/config.toml
+#
+# Configured defaults for Wayscriber and wayscriber-configurator.
+# Two things write to this file:
+#   1. The graphical configurator (`wayscriber-configurator` or F11 in overlay)
+#   2. Narrow overlay editors (shortcut rebind, presets, quick colors)
+# Transient runtime UI state is saved separately in ~/.local/share/wayscriber/runtime-ui.toml.
+
+config_revision = 3
+
+[capture]
+enabled = true

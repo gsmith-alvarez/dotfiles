@@ -50,6 +50,11 @@
       url = "github:retorquere/zotero-pkg";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    wayscriber = {
+      url = "github:devmobasa/wayscriber";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

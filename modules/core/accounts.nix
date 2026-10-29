@@ -12,7 +12,6 @@
       with pkgs;
       [
         nautilus
-        wayscriber
       ]
     );
 

@@ -10,11 +10,18 @@
     inputs.noctalia.nixosModules.default
   ];
 
-  # Package overlays for noctalia components
+  # Package overlays for noctalia and wayscriber components
   nixpkgs.overlays = [
     (_final: prev: {
       noctalia = inputs.noctalia.packages.${prev.stdenv.hostPlatform.system}.default;
       noctalia-greeter = inputs.noctalia-greeter.packages.${prev.stdenv.hostPlatform.system}.default;
+      wayscriber =
+        inputs.wayscriber.packages.${prev.stdenv.hostPlatform.system}.wayscriber.overrideAttrs
+          (_old: {
+            doCheck = false;
+          });
+      wayscriber-configurator =
+        inputs.wayscriber.packages.${prev.stdenv.hostPlatform.system}.wayscriber-configurator;
     })
   ];
 
@@ -45,9 +52,16 @@
     };
   };
 
-  environment.systemPackages = [
-    pkgs.adwaita-icon-theme
+  environment.systemPackages = with pkgs; [
+    adwaita-icon-theme
+    wayscriber
+    wayscriber-configurator
+    grim
+    slurp
+    (tesseract.override { enableLanguages = [ "eng" ]; })
   ];
+
+  systemd.packages = [ pkgs.wayscriber ];
 
   # Portals
   xdg.portal = {

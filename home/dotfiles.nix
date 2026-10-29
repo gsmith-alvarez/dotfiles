@@ -24,6 +24,7 @@ in
       "fetch"
       "OpenTabletDriver"
       "topgrade.toml"
+      "wayscriber"
     ])
     // (links {
       # Sub-paths split because fish writes runtime state (e.g. fish_variables) into ~/.config/fish
