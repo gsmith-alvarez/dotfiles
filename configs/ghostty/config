@@ -48,6 +48,9 @@ shell-integration = detect
 shell-integration-features = cursor,sudo,title
 
 # --- Keybindings ---
+# Splits Creation
+keybind = ctrl+alt+h=new_split:down
+keybind = ctrl+alt+v=new_split:right
 # Split Navigation
 keybind = ctrl+alt+j=goto_split:down
 keybind = ctrl+alt+k=goto_split:up

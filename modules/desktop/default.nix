@@ -15,6 +15,11 @@
     (_final: prev: {
       noctalia = inputs.noctalia.packages.${prev.stdenv.hostPlatform.system}.default;
       noctalia-greeter = inputs.noctalia-greeter.packages.${prev.stdenv.hostPlatform.system}.default;
+      openbot = inputs.openbot.packages.${prev.stdenv.hostPlatform.system}.openbot.overrideAttrs (old: {
+        extraInstallCommands =
+          builtins.replaceStrings [ "Exec=AppRun --no-sandbox %U" ] [ "Exec=AppRun %U" ]
+            old.extraInstallCommands;
+      });
       wayscriber =
         inputs.wayscriber.packages.${prev.stdenv.hostPlatform.system}.wayscriber.overrideAttrs
           (_old: {

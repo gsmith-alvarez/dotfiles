@@ -9,6 +9,7 @@ in
     easyeffects
     ghostty
     keepassxc
+    openbot
     playerctl
     spotify-player
     wl-clipboard
