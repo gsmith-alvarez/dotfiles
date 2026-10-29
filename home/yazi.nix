@@ -36,7 +36,7 @@ in
     flavors = {
       catppuccin-mocha =
         inputs.yazi-flavors.packages.${pkgs.stdenv.hostPlatform.system}.catppuccin-mocha.overrideAttrs
-          (old: {
+          (_old: {
             installPhase = ''
               mkdir -p $out
               cp $src/catppuccin-mocha.yazi/* $out/

@@ -80,7 +80,7 @@ in
         cd ${src}
         find . -name '*.nix' -type f -exec nixfmt --check {} +
         statix check .
-        deadnix --fail .
+        deadnix --fail --exclude _sources .
         touch $out
       '';
 
