@@ -19,6 +19,9 @@ in
       # Containers
       distrobox
       podman
+      lazydocker
+      isd
+      systemctl-tui
 
       # Change inspection & automation
       delta
@@ -74,6 +77,7 @@ in
       hermes-agent
       hermes-desktop
       omp
+      t3code-desktop
     ]);
 
   programs.rex.enable = true;

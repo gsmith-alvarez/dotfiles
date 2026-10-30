@@ -98,4 +98,10 @@ if status is-interactive
     abbr -a rv-ld riscv64-unknown-linux-gnu-ld
     abbr -a rv-gcc riscv64-unknown-linux-gnu-gcc
     abbr -a rv-dump 'riscv64-unknown-linux-gnu-objdump -d'
+
+    #tuis
+    abbr -a lg lazygit
+    abbr -a ld lazydocker
+    abbr -a ll systemctl-tui
+    abbr -a li isd
 end
