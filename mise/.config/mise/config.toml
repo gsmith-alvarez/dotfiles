@@ -4,6 +4,7 @@ experimental = true
 all_compile = false
 activate_aggressive = true
 env_shell_expand = true
+registry_floating = true
 
 # UI/UX
 color_theme = "catppuccin"
@@ -39,6 +40,8 @@ usage = "latest"
 "cargo:ouch" = "latest"
 grex = "latest"
 doggo = "latest"
+pi = "latest"
+agy = "latest"
 
 # --- Core Runtimes ---
 node = "lts"

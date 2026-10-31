@@ -8,4 +8,4 @@ git reset --hard origin/master
 
 sudo rm -rf zig-cache .zig-cache zig-out
 
-sudo "$(which zig)" build install -Doptimize=ReleaseFast --prefix /usr/local
+sudo "$(mise which zig 2>/dev/null || which zig)" build install -Doptimize=ReleaseFast --prefix /usr/local

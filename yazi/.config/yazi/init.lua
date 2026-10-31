@@ -4,7 +4,7 @@ require("git"):setup({
 })
 
 require("full-border"):setup({
-	type = ui.Border.ROUNDED,
+	set = ui.Border.ROUNDED,
 })
 
 -- Add a clock component to the status bar
