@@ -67,6 +67,7 @@ in
 
       # Neovim plugin build toolchain
       cargo
+      cargo-update
       gcc
       gnumake
       rustc
@@ -74,8 +75,7 @@ in
     ])
     ++ (with llmpkgs; [
       antigravity-cli
-      hermes-agent
-      hermes-desktop
+      codex
       omp
       t3code-desktop
     ]);
