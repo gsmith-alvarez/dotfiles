@@ -11,6 +11,7 @@
     ./development.nix
     ./tools.nix
     ./applications.nix
+    ./firefox.nix
     ./ssh.nix
   ];
 

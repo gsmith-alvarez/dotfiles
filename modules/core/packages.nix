@@ -11,7 +11,6 @@
     ];
   };
 
-  # Nightly Neovim (config uses scrolloffpad + TextPutPost, nightly-only)
   nixpkgs.overlays = [
     inputs.neovim-nightly-overlay.overlays.default
   ];

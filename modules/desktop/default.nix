@@ -10,6 +10,12 @@
     inputs.noctalia.nixosModules.default
   ];
 
+  # Hardware video acceleration for Firefox and other desktop applications.
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [ libva-vdpau-driver ];
+  };
+
   # Package overlays for noctalia and wayscriber components
   nixpkgs.overlays = [
     (_final: prev: {

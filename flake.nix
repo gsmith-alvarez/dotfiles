@@ -65,6 +65,7 @@
       url = "https://pkgs.superlogical.com/rex/nix/snapshot.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
   };
 
   outputs =
@@ -147,5 +148,6 @@
         # Desktop host.
         easley = mkHost ./hosts/easley;
       };
+
     };
 }
