@@ -35,8 +35,9 @@ in
       # Languages & runtimes
       bun
       luajit
-      zig
+      python3
       uv
+      zig
 
       # Language servers
       bash-language-server
