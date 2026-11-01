@@ -106,4 +106,5 @@ if status is-interactive
     abbr -a ld lazydocker
     abbr -a ll systemctl-tui
     abbr -a li isd
+    abbr -a lt tailtui
 end
