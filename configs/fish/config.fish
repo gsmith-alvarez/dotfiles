@@ -48,6 +48,7 @@ if status is-interactive
     abbr -a man batman
     abbr -a find fd
     abbr -a cp "rsync -avhP --info=progress2"
+    abbr -a scp "rsync -avhzP --info=progress2"
     abbr -a rm rip
     abbr -a rmd "rm -rf"
     abbr -a df duf
