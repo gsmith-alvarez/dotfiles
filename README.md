@@ -56,7 +56,7 @@ Build or activate the desired host with `.#wolfgang` or `.#easley`. Shared modul
 
 ### Host-specific Home Manager configuration
 
-Shared user packages and configuration live under `home/`. Host-only Home Manager packages and data belong in `home/hosts/<host>.nix`, which each host imports from its NixOS definition. For example, Easley owns Steam in `home/hosts/easley.nix`; Wolfgang does not inherit it.
+- Shared user packages and configuration live under `home/`. Host-only Home Manager packages and data belong in `home/hosts/<host>.nix`, which each host imports from its NixOS definition. Steam uses Easley’s NixOS Steam module for system integration; Wolfgang does not enable it.
 
 
 ---

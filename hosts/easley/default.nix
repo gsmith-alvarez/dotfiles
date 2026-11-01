@@ -59,8 +59,26 @@
       emulatedSystems = [ "riscv64-linux" ];
     };
   };
-  # Graphics
-  hardware.graphics.enable32Bit = true;
+  # Gaming
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    extraCompatPackages = [ pkgs.proton-ge-bin ];
+  };
+  programs.gamemode.enable = true;
+  programs.gamescope = {
+    enable = true;
+    capSysNice = true;
+  };
+  environment.systemPackages = [ pkgs.mangohud ];
+  boot.kernel.sysctl."vm.max_map_count" = 2147483642;
+  zramSwap.enable = true;
+
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
 
   # Bluetooth
   hardware.bluetooth.enable = true;
