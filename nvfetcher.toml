@@ -4,3 +4,8 @@
 src.github = "retorquere/zotero-better-bibtex"
 src.prefix = "v"
 fetch.url = "https://github.com/retorquere/zotero-better-bibtex/releases/download/v$ver/zotero-better-bibtex-$ver.xpi"
+
+[tailtui]
+src.github = "Phundahl/tailtui"
+src.prefix = "v"
+fetch.url = "https://github.com/Phundahl/tailtui/releases/download/v$ver/tailtui_$ver_linux_amd64.tar.gz"

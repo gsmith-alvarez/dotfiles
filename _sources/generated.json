@@ -13,5 +13,20 @@
             "url": "https://github.com/retorquere/zotero-better-bibtex/releases/download/v9.0.74/zotero-better-bibtex-9.0.74.xpi"
         },
         "version": "9.0.74"
+    },
+    "tailtui": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tailtui",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-tK5cHlxSgv+pao3NkjmHIeZPahSBOo3EkZsgb7MyO4Y=",
+            "type": "url",
+            "url": "https://github.com/Phundahl/tailtui/releases/download/v1.5.0/tailtui_1.5.0_linux_amd64.tar.gz"
+        },
+        "version": "1.5.0"
     }
 }

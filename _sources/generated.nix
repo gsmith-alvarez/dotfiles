@@ -14,4 +14,12 @@
       sha256 = "sha256-kDksCDgUcIbQuKmHYmDkWL/s20z4u9c5opxCrWBtKp8=";
     };
   };
+  tailtui = {
+    pname = "tailtui";
+    version = "1.5.0";
+    src = fetchurl {
+      url = "https://github.com/Phundahl/tailtui/releases/download/v1.5.0/tailtui_1.5.0_linux_amd64.tar.gz";
+      sha256 = "sha256-tK5cHlxSgv+pao3NkjmHIeZPahSBOo3EkZsgb7MyO4Y=";
+    };
+  };
 }
