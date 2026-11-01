@@ -47,7 +47,7 @@ if status is-interactive
     abbr -a cat bat
     abbr -a man batman
     abbr -a find fd
-    abbr -a cp "rsync -avh --info=progress2"
+    abbr -a cp "rsync -avhP --info=progress2"
     abbr -a rm rip
     abbr -a rmd "rm -rf"
     abbr -a df duf
@@ -58,6 +58,7 @@ if status is-interactive
     abbr -a ch "stash list | fzf | stash decode | wl-copy"
     abbr -a cnavi "navi --cheatsh"
     abbr -a gd 'git diff'
+    abbr -a lsblk 'lsblk -e 7 -o NAME,FSTYPE,SIZE,LABEL,MOUNTPOINT,UUID'
 
     # Nix
     abbr -a nsw 'nh os switch'
