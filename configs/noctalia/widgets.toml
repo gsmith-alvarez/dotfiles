@@ -1,0 +1,49 @@
+[bar.main]
+start = ["launcher", "active-window", "media", "workspaces"]
+center = ["clock", "media", "wallpaper"]
+end = ["sysmon-cpu", "sysmon-ram", "sysmon-temp", "tray", "notifications", "battery", "volume", "brightness", "control-center"]
+
+[widget.clock]
+format = "%H:%M %a, %b %d"
+tooltip_format = "%H:%M %a, %b %d"
+
+[widget.active_window]
+max_length = 145
+title_scroll = "on_hover"
+
+[widget.workspaces]
+style = "focus_hint"
+show_icons = true
+
+
+[widget.media]
+max_length = 145
+artist_first = true
+title_scroll = "on_hover"
+
+[widget.sysmon-cpu]
+type = "sysmon"
+stat = "cpu_usage"
+
+[widget.sysmon-ram]
+type = "sysmon"
+stat = "ram_used"
+
+[widget.sysmon-temp]
+type = "sysmon"
+stat = "cpu_temp"
+
+[widget.tray]
+drawer = true
+
+[widget.notifications]
+hide_when_no_unread = false
+
+[widget.battery]
+display_mode = "graphic"
+
+[widget.volume]
+show_label = true
+
+[widget.brightness]
+show_label = true
