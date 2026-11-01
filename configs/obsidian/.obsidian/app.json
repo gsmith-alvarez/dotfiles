@@ -1,0 +1,21 @@
+{
+  "promptDelete": false,
+  "vimMode": false,
+  "alwaysUpdateLinks": true,
+  "newFileLocation": "current",
+  "attachmentFolderPath": "./attachments",
+  "showUnsupportedFiles": true,
+  "showLineNumber": true,
+  "autoPairMarkdown": true,
+  "pdfExportSettings": {
+    "includeName": true,
+    "pageSize": "Letter",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  },
+  "readableLineLength": false,
+  "showInlineTitle": true,
+  "spellcheck": true,
+  "strictLineBreaks": true
+}
