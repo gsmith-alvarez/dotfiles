@@ -74,6 +74,38 @@
       home-manager,
       ...
     }@inputs:
+    let
+      homeManagerModules = [
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            # Share each host's system nixpkgs evaluation rather than instantiating a duplicate package set.
+            useGlobalPkgs = true;
+            # Install user packages directly to /etc/profiles/per-user to integrate with system search paths.
+            useUserPackages = true;
+
+            extraSpecialArgs = { inherit inputs; };
+
+            users.giovanni = import ./home;
+
+            # Back up unmanaged conflicting files to .backup instead of aborting activation.
+            backupFileExtension = "backup";
+          };
+        }
+      ];
+
+      mkHost =
+        host:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            host
+            ./modules/secrets.nix
+          ]
+          ++ homeManagerModules;
+        };
+    in
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
       packages.x86_64-linux.openbot = self.nixosConfigurations.wolfgang.pkgs.openbot;
@@ -109,31 +141,11 @@
         extraSpecialArgs = { inherit inputs; };
       };
 
-      nixosConfigurations.wolfgang = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-
-        modules = [
-          ./hosts/wolfgang
-          ./modules/secrets.nix
-
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              # Share the system nixpkgs evaluation rather than instantiating a duplicate package set.
-              useGlobalPkgs = true;
-              # Install user packages directly to /etc/profiles/per-user to integrate with system search paths.
-              useUserPackages = true;
-
-              extraSpecialArgs = { inherit inputs; };
-
-              users.giovanni = import ./home;
-
-              # Back up unmanaged conflicting files to .backup instead of aborting activation.
-              backupFileExtension = "backup";
-            };
-          }
-        ];
+      nixosConfigurations = {
+        # Laptop host.
+        wolfgang = mkHost ./hosts/wolfgang;
+        # Desktop host.
+        easley = mkHost ./hosts/easley;
       };
     };
 }

@@ -1,0 +1,9 @@
+# Easley-specific Noctalia overrides. The base config remains shared with Wolfgang.
+[wallpaper]
+directory = "/home/giovanni/Pictures/wallpapers"
+
+[wallpaper.default]
+path = "/home/giovanni/Pictures/wallpapers/neptune.png"
+
+[wallpaper.last]
+path = "/home/giovanni/Pictures/wallpapers/neptune.png"

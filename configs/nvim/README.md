@@ -70,19 +70,16 @@ Following Neovim's native runtime engine:
 
 ## 📦 Dependencies
 
-Managed via `mise` (or your preferred tool manager):
+Dependencies are declared in `home/development.nix` and installed by Nix/Home Manager, so the same toolchain is reproducible on both `wolfgang` and `easley`.
 
-| Category | Tools |
-| :--- | :--- |
-| **Runtimes** | Node.js, Bun, Zig, Cargo |
-| **LSPs** | Lua, Bash, Pyright, JSON, YAML, Docker, clangd |
-| **Format/Lint** | Ruff, Stylua, Checkshell, Shfmt, Taplo, Oxlint |
-| **Typesetting** | Tectonic (LaTeX), Mermaid-CLI, dvisvgm |
-| **Utilities** | watchexec, tree-sitter-cli, typos |
+The Nix-managed development environment includes language runtimes, language servers, formatters, linters, compilers, and Neovim build tools. Add a package to `home/development.nix` when Neovim or a project needs another system tool.
 
 ## 🔧 Installation
 
 1. Ensure you are on **Neovim Nightly**.
-2. Install the required tools listed above via `mise install`.
-3. Clone into `~/.config/nvim`.
+2. Activate the matching host configuration:
+   ```bash
+   nh os switch .#<host>
+   ```
+3. Clone this configuration into `~/.config/nvim` or use the repository's Home Manager link.
 4. Neovim will automatically bootstrap the `vim.pack` system and build necessary binaries on first launch.

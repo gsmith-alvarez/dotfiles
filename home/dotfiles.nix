@@ -18,6 +18,7 @@ in
       "lazygit"
       "navi"
       "niri"
+      "noctalia/config.toml"
       "spotify-player"
       "starship.toml"
       "fastfetch"

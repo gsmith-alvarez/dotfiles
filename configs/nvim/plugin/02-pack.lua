@@ -71,7 +71,6 @@ vim.pack.add({
 	gh("Bekaboo/dropbar.nvim"),
 	gh("neovim/nvim-lspconfig"),
 	gh("folke/lazydev.nvim"),
-	gh("gsmith-alvarez/mise.nvim"),
 	gh("nvim-treesitter/nvim-treesitter"),
 	gh("nvim-treesitter/nvim-treesitter-textobjects"),
 	gh("rafamadriz/friendly-snippets"),

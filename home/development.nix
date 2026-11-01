@@ -35,6 +35,7 @@ in
       # Languages & runtimes
       bun
       luajit
+      zig
       uv
 
       # Language servers

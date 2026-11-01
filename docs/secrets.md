@@ -22,7 +22,7 @@ sops.secrets."my-service-token" = {
   owner = "myuser";          # defaults to root
   group = "mygroup";         # defaults to root
   mode = "0400";             # readable only by the owner
-  sopsFile = ../secrets/wolfgang.yaml;
+  sopsFile = ../secrets/<host>.yaml;
 };
 ```
 
@@ -37,6 +37,9 @@ services.<actual-service>.<its-secret-file-option> = config.sops.secrets."my-ser
 ## 2. Deferred Enrollment Workflow
 
 When you are ready to enroll encrypted secrets into this machine, follow this step-by-step procedure:
+
+Use `wolfgang` for the laptop or `easley` for the desktop when naming host-specific secret files and outputs below.
+
 
 ### Step 1: Generate an Admin Age Key (Local Workstation)
 Create a personal age identity outside this repository (never commit this key). If `keys.txt` already exists, stop and reuse/back up that identity rather than replacing it. Run these commands only when deliberately enrolling keys:
@@ -53,7 +56,7 @@ age-keygen -y ~/.config/sops/age/keys.txt
 Securely back up `keys.txt` to offline physical storage or your password manager.
 
 ### Step 2: Derive the Host Public Key
-On `wolfgang`, derive the host's public age key from its existing SSH host key:
+On either `wolfgang` or `easley`, derive that host's public age key from its existing SSH host key:
 ```bash
 ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub
 # Output: age1... (host recipient)
@@ -67,7 +70,7 @@ creation_rules:
     key_groups:
       - age:
           - <ADMIN_PUBLIC_AGE_KEY>
-          - <WOLFGANG_HOST_PUBLIC_AGE_KEY>
+          - <HOST_PUBLIC_AGE_KEY>
 ```
 > [!NOTE]
 > Placing both keys in the same `age` list allows *either* key to decrypt the file. Do not use multiple `key_groups` unless you deliberately intend to require multi-party threshold decryption.
@@ -76,12 +79,12 @@ creation_rules:
 Create or edit the encrypted secrets file:
 ```bash
 mkdir -p secrets
-sops secrets/wolfgang.yaml
+sops secrets/<host>.yaml
 ```
 `sops` opens your `$EDITOR`. Add your YAML key-value pairs (e.g., `api_key: supersecret`). Upon saving and exiting, `sops` encrypts the values and saves ciphertext. Verify that only ciphertext is staged in Git:
 ```bash
-git add -N secrets/wolfgang.yaml
-git diff -- secrets/wolfgang.yaml
+git add -N secrets/<host>.yaml
+git diff -- secrets/<host>.yaml
 ```
 
 ### Step 5: Configure the Host in NixOS
@@ -98,7 +101,7 @@ In [modules/secrets.nix](../modules/secrets.nix):
   ];
 
   sops = {
-    defaultSopsFile = ../secrets/wolfgang.yaml;
+    defaultSopsFile = ../secrets/<host>.yaml;
     defaultSopsFormat = "yaml";
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
@@ -115,12 +118,12 @@ In [modules/secrets.nix](../modules/secrets.nix):
 ## 3. Verification & Safety Guarantees
 
 - **Build vs. Runtime Separation**:
-  Running `nix build .#nixosConfigurations.wolfgang.config.system.build.toplevel --no-link` checks the syntax and schema of your secrets configuration. However, **a successful build does NOT verify that decryption succeeds at runtime**. Decryption requires access to `/etc/ssh/ssh_host_ed25519_key`, which is only available on the physical machine during activation.
+  Running `nix build .#nixosConfigurations.<host>.config.system.build.toplevel --no-link` checks the syntax and schema of your secrets configuration. However, **a successful build does NOT verify that decryption succeeds at runtime**. Decryption requires access to `/etc/ssh/ssh_host_ed25519_key`, which is only available on the physical machine during activation.
 - **Never Claim Decryption Verified Without Activation**:
   Only once `nh os switch .` (or `sudo nixos-rebuild switch`) completes on the live machine and `/run/secrets/<name>` exists with valid permissions can runtime decryption be considered verified.
 - **Key Rotation**:
   To rotate keys, update `.sops.yaml` with the new recipients and run:
   ```bash
-  sops updatekeys secrets/wolfgang.yaml
+  sops updatekeys secrets/<host>.yaml
   ```
   Always test decryption with the new key before discarding the old one.

@@ -1,6 +1,6 @@
-# Wolfgang's NixOS & Home Manager Dotfiles
+# Wolfgang & Easley's NixOS and Home Manager Dotfiles
 
-A modular, reproducible NixOS configuration for `wolfgang`, managed as a unified Nix Flake. It runs the [niri](https://github.com/YaLTeR/niri) scrollable-tiling Wayland compositor with [Noctalia](https://github.com/noctalia-dev/noctalia) shell and greeter, paired with an **out-of-store symlink pattern** for instant live editing of application configurations.
+A modular, reproducible NixOS configuration for `wolfgang` (laptop) and `easley` (desktop), managed as a unified Nix Flake. It runs the [niri](https://github.com/YaLTeR/niri) scrollable-tiling Wayland compositor with [Noctalia](https://github.com/noctalia-dev/noctalia) shell and greeter, paired with an **out-of-store symlink pattern** for instant live editing of application configurations.
 
 > [!NOTE]
 > **Who this guide is for**: Anyone with basic Nix knowledge looking to understand how this configuration works or how to build their own modular NixOS + Home Manager setup.
@@ -11,7 +11,7 @@ A modular, reproducible NixOS configuration for `wolfgang`, managed as a unified
 
 | Component | Choice | Configuration Location |
 | :--- | :--- | :--- |
-| **Operating System** | [NixOS Unstable](https://nixos.org/) (`linuxPackages_latest`) | [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix), [modules/core/](modules/core/) |
+| **Operating System** | [NixOS Unstable](https://nixos.org/) (`linuxPackages_latest`) | [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix), [hosts/easley/default.nix](hosts/easley/default.nix), [modules/core/](modules/core/) |
 | **Compositor** | [niri](https://github.com/YaLTeR/niri) (scrollable-tiling Wayland) | [configs/niri/config.kdl](configs/niri/config.kdl) (live link) |
 | **Desktop Shell** | [Noctalia](https://github.com/noctalia-dev/noctalia) + [Noctalia Greeter](https://github.com/noctalia-dev/noctalia-greeter) | [modules/desktop/default.nix](modules/desktop/default.nix) |
 | **Terminal** | [Ghostty](https://ghostty.org/) | [configs/ghostty/config](configs/ghostty/config) (live link) |
@@ -29,7 +29,7 @@ If you are exploring this codebase to learn how to structure a NixOS flake, foll
 
 ```mermaid
 flowchart TD
-    Step1["1. flake.nix<br/>(Entry point, inputs & outputs)"] --> Step2["2. hosts/wolfgang/<br/>(Machine hardware, bootloader, kernel)"]
+    Step1["1. flake.nix<br/>(Entry point, inputs & outputs)"] --> Step2["2. hosts/{wolfgang,easley}/<br/>(Machine hardware, bootloader, kernel)"]
     Step2 --> Step3["3. modules/core/ & modules/desktop/<br/>(System-level services, audio, packages)"]
     Step3 --> Step4["4. home/default.nix & feature suites<br/>(User packages, dev tools, theming)"]
     Step4 --> Step5["5. home/dotfiles.nix & lib/out-of-store.nix<br/>(Live symlinks into configs/)"]
@@ -38,12 +38,26 @@ flowchart TD
 ```
 
 1. **[flake.nix](flake.nix)**: Start here. Observe how external flake inputs are declared, pinned, and passed down to NixOS and Home Manager via `specialArgs` and `extraSpecialArgs`.
-2. **[hosts/wolfgang/default.nix](hosts/wolfgang/default.nix)**: The physical host definition. See how hardware configuration, bootloader (`systemd-boot`), kernel modules, networking, and `system.stateVersion` are declared for this specific machine.
+2. **Host definitions**: [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) describes the laptop and [hosts/easley/default.nix](hosts/easley/default.nix) describes the desktop; each host owns its hardware configuration, bootloader, kernel modules, networking, and `system.stateVersion`.
 3. **[modules/core/](modules/core/) & [modules/desktop/](modules/desktop/)**: System-level concerns. Notice how [modules/core/default.nix](modules/core/default.nix) bundles focused files ([nix.nix](modules/core/nix.nix), [packages.nix](modules/core/packages.nix), [programs.nix](modules/core/programs.nix), [services.nix](modules/core/services.nix), [audio.nix](modules/core/audio.nix), [locale.nix](modules/core/locale.nix), [accounts.nix](modules/core/accounts.nix)), while [modules/desktop/default.nix](modules/desktop/default.nix) configures Niri and Noctalia.
 4. **[home/default.nix](home/default.nix)**: Home Manager user configuration. See how user packages are organized into focused modules: [development.nix](home/development.nix) (editors, compilers, LSPs), [tools.nix](home/tools.nix) (CLI inspection and utilities), [applications.nix](home/applications.nix) (GUI apps, Flatpaks), and [appearance.nix](home/appearance.nix) (GTK themes and fonts).
 5. **[home/dotfiles.nix](home/dotfiles.nix)** and **[lib/out-of-store.nix](lib/out-of-store.nix)**: The live-link manifest. Learn how dotfiles inside [configs/](configs/) are symlinked directly to `~/.config/` without writing them to the immutable Nix store.
 6. **[checks/default.nix](checks/default.nix)** and **[tests/](tests/)**: Automated verification suite. See how `nix flake check -L` enforces link integrity ([link_contract.py](tests/link_contract.py)), configuration syntax ([config_syntax.py](tests/config_syntax.py)), cache policy, and Nix code style.
 7. **[modules/secrets.nix](modules/secrets.nix)** and **[docs/secrets.md](docs/secrets.md)**: Encrypted secrets management architecture. Understand why plaintext secrets must never be placed in `/nix/store` and how `sops-nix` handles deferred enrollment.
+
+## Host selection
+
+- `wolfgang`: laptop configuration.
+- `easley`: desktop configuration.
+
+Build or activate the desired host with `.#wolfgang` or `.#easley`. Shared modules and Home Manager configuration are reused by both hosts.
+
+`nh os switch .` uses the current machine hostname to select the matching flake output when `NH_FLAKE` points at this repository. Use the explicit `.#wolfgang` or `.#easley` selector when operating on a different host or when you want to avoid ambiguity.
+
+### Host-specific Home Manager configuration
+
+Shared user packages and configuration live under `home/`. Host-only Home Manager packages and data belong in `home/hosts/<host>.nix`, which each host imports from its NixOS definition. For example, Easley owns Steam in `home/hosts/easley.nix`; Wolfgang does not inherit it.
+
 
 ---
 
@@ -54,30 +68,27 @@ Every `.nix` file in this repository has an explicit owner and a clear position 
 ```
 flake.nix (outputs)
 ├── nixosConfigurations.wolfgang
-│   ├── hosts/wolfgang/default.nix
-│   │   ├── hosts/wolfgang/hardware-configuration.nix
-│   │   ├── modules/core/default.nix
-│   │   │   ├── modules/core/nix.nix
-│   │   │   ├── modules/core/packages.nix
-│   │   │   ├── modules/core/programs.nix
-│   │   │   ├── modules/core/locale.nix
-│   │   │   ├── modules/core/audio.nix
-│   │   │   ├── modules/core/services.nix
-│   │   │   └── modules/core/accounts.nix
-│   │   └── modules/desktop/default.nix
-│   ├── modules/secrets.nix
-│   └── home-manager.nixosModules.home-manager
-│       └── users.giovanni = import ./home (home/default.nix)
-│           ├── inputs.nix-flatpak.homeManagerModules.nix-flatpak
-│           ├── home/dotfiles.nix (imports lib/out-of-store.nix)
-│           ├── home/shell.nix
-│           ├── home/yazi.nix
-│           ├── home/appearance.nix
-│           ├── home/stats.nix
-│           ├── home/anki.nix
-│           ├── home/development.nix
-│           ├── home/tools.nix
-│           └── home/applications.nix
+│   └── hosts/wolfgang/
+│       ├── default.nix
+│       └── hardware-configuration.nix
+├── nixosConfigurations.easley
+│   └── hosts/easley/
+│       ├── default.nix
+│       └── hardware-configuration.nix
+├── modules/core/ & modules/desktop/ (shared system modules)
+├── modules/secrets.nix
+├── home-manager.nixosModules.home-manager
+│   └── users.giovanni = import ./home (home/default.nix)
+│       ├── inputs.nix-flatpak.homeManagerModules.nix-flatpak
+│       ├── home/dotfiles.nix (imports lib/out-of-store.nix)
+│       ├── home/shell.nix
+│       ├── home/yazi.nix
+│       ├── home/appearance.nix
+│       ├── home/stats.nix
+│       ├── home/anki.nix
+│       ├── home/development.nix
+│       ├── home/tools.nix
+│       └── home/applications.nix
 ├── homeConfigurations.giovanni (read-only query target; shares system pkgs)
 └── checks.x86_64-linux (checks/default.nix -> tests/)
 ```
@@ -86,9 +97,9 @@ flake.nix (outputs)
 
 | File / Component | Imported By | Privileges / Scope | Deployed Target | Activation / Reload |
 | :--- | :--- | :--- | :--- | :--- |
-| [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) | [flake.nix](flake.nix) | System (`root`) | `/nix/store`, `/etc` | `nh os switch .` (requires sudo) |
-| [modules/core/](modules/core/) | [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) | System (`root`) | `/nix/store`, `/etc` | `nh os switch .` (requires sudo) |
-| [modules/desktop/](modules/desktop/) | [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) | System (`root`) | `/nix/store`, `/etc` | `nh os switch .` (requires sudo) |
+| [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) | [flake.nix](flake.nix) | System (`root`) | `/nix/store`, `/etc` | `nh os switch .#wolfgang` (requires sudo) |
+| [hosts/easley/default.nix](hosts/easley/default.nix) | [flake.nix](flake.nix) | System (`root`) | `/nix/store`, `/etc` | `nh os switch .#easley` (requires sudo) |
+| [modules/core/](modules/core/) | Both host definitions | System (`root`) | `/nix/store`, `/etc` | `nh os switch .#<host>` (requires sudo) |
 | [modules/secrets.nix](modules/secrets.nix) | [flake.nix](flake.nix) | System (`root`) | `/run/secrets/` | `nh os switch .` (requires sudo) |
 | [home/default.nix](home/default.nix) | [flake.nix](flake.nix) (via Home Manager) | User (`giovanni`) | `/etc/profiles/per-user` | `nh os switch .` (switched together) |
 | [home/dotfiles.nix](home/dotfiles.nix) | [home/default.nix](home/default.nix) | User (`giovanni`) | `~/.config/`, `~/` | Instant symlink to [configs/](configs/) |
@@ -102,9 +113,9 @@ One of the biggest hurdles when starting with Nix on a workstation is understand
 
 ### Layer 1: NixOS System Configuration
 - **What it controls**: The Linux kernel, hardware drivers, disks/filesystems, bootloader, system-wide background daemons (e.g. `upower`, `tailscale`, `syncthing`, `keyd`), user account privileges (`wheel`, `networkmanager`), and system environment.
-- **Where it lives**: [hosts/wolfgang/](hosts/wolfgang/), [modules/core/](modules/core/), [modules/desktop/](modules/desktop/), [modules/secrets.nix](modules/secrets.nix).
-- **How it builds**: Evaluated as a single immutable system closure in `/nix/store/<hash>-nixos-system-wolfgang-...`.
-- **How it applies**: Activated via `nh os switch .` (which calls `nixos-rebuild switch` with `sudo`).
+- **Where it lives**: [hosts/wolfgang/](hosts/wolfgang/) and [hosts/easley/](hosts/easley/), plus [modules/core/](modules/core/), [modules/desktop/](modules/desktop/), and [modules/secrets.nix](modules/secrets.nix).
+- **How it builds**: Evaluated as a single immutable system closure in `/nix/store/<hash>-nixos-system-<host>-...`, where `<host>` is `wolfgang` or `easley`.
+- **How it applies**: Activated via `nh os switch .#<host>` (which calls `nixos-rebuild switch` with `sudo`).
 
 ### Layer 2: Home Manager User Configuration
 - **What it controls**: User-installed command-line utilities and graphical apps, user shell environment variables (`sessionPath`), GTK/desktop theming, Flatpak package lists, and user systemd services.
@@ -181,7 +192,7 @@ To resolve conflicting scalar values or control list placement, use priority hel
 - `lib.mkAfter [ ... ]`: Appends items to the end of a merged list.
 
 ### 4. `stateVersion` Demystified
-In [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) (`system.stateVersion = "26.05";`) and [home/default.nix](home/default.nix) (`home.stateVersion = "26.05";`):
+In [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) and [hosts/easley/default.nix](hosts/easley/default.nix) (`system.stateVersion = "26.05";`), plus [home/default.nix](home/default.nix) (`home.stateVersion = "26.05";`):
 
 > [!CAUTION]
 > **Do NOT bump `stateVersion` when updating NixOS!** `stateVersion` is not the version of NixOS or packages currently running. Package versions come from the pinned inputs and your package selections, overrides, and local derivations—not `stateVersion`.
@@ -190,7 +201,7 @@ In [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) (`system.stateVersio
 
 ### 5. Secrets Management Architecture
 - Normal Nix configurations are compiled into the world-readable `/nix/store` (`0755` directory permissions). Plaintext secrets (passwords, tokens, SSH private keys) must **never** be placed in `/nix/store` or committed to Git.
-- [sops-nix](https://github.com/Mic92/sops-nix) encrypts secrets with `age` public keys. Encrypted ciphertext files (`secrets/wolfgang.yaml`) are safely committed to Git.
+- [sops-nix](https://github.com/Mic92/sops-nix) encrypts secrets with age public keys. Encrypted ciphertext files (`secrets/<host>.yaml`) are safely committed to Git.
 - At system boot or switch, `sops-nix` runs an activation script as `root` to decrypt the secrets into a RAM-backed filesystem at `/run/secrets/`, with custom ownership and strict permissions (`0400`).
 - Consuming services reference the secret via `config.sops.secrets.<name>.path`.
 - **Status in this repo**: Tooling and module wiring are established in [modules/secrets.nix](modules/secrets.nix). Key generation and secret enrollment are deferred. See [docs/secrets.md](docs/secrets.md) for the operational runbook.
@@ -221,7 +232,7 @@ Here are four accurate, concrete workflows for common tasks on this repository.
    ```
 4. Build the system closure to ensure no package collisions:
    ```bash
-   nix build .#nixosConfigurations.wolfgang.config.system.build.toplevel --no-link
+   nix build .#nixosConfigurations.easley.config.system.build.toplevel --no-link
    ```
 5. Activate the change:
    ```bash
@@ -299,7 +310,7 @@ Suppose you want to enable periodic SSD TRIM on the host:
    ```
 4. **Verify evaluation and systemd unit generation without activating**:
    ```bash
-   nix build .#nixosConfigurations.wolfgang.config.system.build.toplevel --no-link
+   nix build .#nixosConfigurations.easley.config.system.build.toplevel --no-link
    ```
 5. **Activate the system service**:
    ```bash
@@ -336,9 +347,9 @@ Runs without root privileges. Checks:
 
 #### Stage 2: Full Build Without Activation
 ```bash
-nix build .#nixosConfigurations.wolfgang.config.system.build.toplevel --no-link
+nix build .#nixosConfigurations.easley.config.system.build.toplevel --no-link
 ```
-*(Or alternatively: `nixos-rebuild build --flake .#wolfgang`)*
+*(Or alternatively: `nixos-rebuild build --flake .#easley`)*
 - Fully evaluates the entire NixOS and Home Manager configuration graph.
 - Derives all packages, wrapper scripts, and systemd units into `/nix/store`.
 - Catches assertion errors, option type mismatches, and package name collisions.
@@ -362,7 +373,7 @@ nh os switch .
 | Goal | Command | Scope |
 | :--- | :--- | :--- |
 | **Run Fast Checks** | `nix flake check -L` | Syntax, link contracts, style |
-| **Build Without Activation** | `nix build .#nixosConfigurations.wolfgang.config.system.build.toplevel --no-link` | Full system compilation (no switch) |
+| **Build Without Activation** | `nix build .#nixosConfigurations.easley.config.system.build.toplevel --no-link` | Full system compilation (no switch) |
 | **Switch System** | `nh os switch .` | Switches NixOS + Home Manager |
 | **Switch on Next Boot** | `nh os boot .` | Builds system, sets default boot generation |
 | **Update Flake Inputs** | `nix flake update --flake ~/dotfiles` | Updates `flake.lock` |
@@ -397,7 +408,7 @@ Keybindings are segregated across layers to eliminate shortcut collisions:
 ## 9. Adapting This Repository to Another Machine
 
 Use this repository as a reading example, not an installation script. Do not switch
-another machine directly to Wolfgang's hardware configuration.
+another machine directly to either host's hardware configuration.
 
 - Generate hardware configuration for your own machine; review disks, mounts and bootloader settings.
 - Change the host output, account name, home directory, checkout path and host-specific services together.

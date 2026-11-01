@@ -1,127 +1,76 @@
 # Niri Setup Notes
 
-## System
+This file contains operational guidance only. The Nix flake and linked configuration files are the source of truth for host state; do not copy current monitor, workspace, wallpaper, package, or theme values into this document.
 
-- **NixOS 26.11** (nixos-unstable), managed by the flake at `~/dotfiles` (`flake.nix`, `home/`, `modules/`, `hosts/`, `configs/`)
-- Home-manager symlinks configs with `mkOutOfStoreSymlink` → they resolve to `~/dotfiles/configs/...`, so **edits apply instantly without a rebuild**
-- Rebuild with `sudo nixos-rebuild switch --flake ~/dotfiles#<host>` when packages/modules change
+## Source of truth
 
-## Screenshot Setup
+- `hosts/<host>/default.nix` — host-specific NixOS settings and activation overrides
+- `modules/` — shared NixOS modules
+- `home/` — Home Manager packages and link declarations
+- `configs/niri/config.kdl` — Niri compositor configuration
+- `configs/noctalia/config.toml` — shared Noctalia configuration
+- `hosts/<host>/noctalia.toml` — host-specific Noctalia overrides
+- `configs/wayscriber/config.toml` — Wayscriber configuration
+- `configs/easy-effects/` — EasyEffects presets
 
-**Keybindings** (in `config.kdl`):
-- `Super+Shift+S` → Noctalia area screenshot (`noctalia msg screenshot-region`)
-- `Super+Shift+F` → Noctalia fullscreen screenshot (`noctalia msg screenshot-fullscreen`)
-- `Ctrl+Shift+S` → Niri's built-in screenshot UI
-- `Super+D` → Wayscriber live annotation toggle (`wayscriber --daemon-toggle`)
+Noctalia host overlays are linked by the host's Home Manager activation. Keep per-host values there instead of modifying the shared Noctalia file for one machine.
 
-**Wayscriber Screen Annotation & Capture:**
-- Toggle annotation overlay: `Super+D`
-- Configurator GUI: `wayscriber-configurator` or `F11` from overlay
-- Config location: `~/dotfiles/configs/wayscriber/config.toml` (→ `~/.config/wayscriber/config.toml`)
-- Screen OCR to clipboard: `Ctrl+Shift+X` (powered by `tesseract`)
-- Overlay screenshot capture: `Ctrl+Shift+P` (fullscreen), `Ctrl+Shift+I` (selection)
-## Desktop Shell: Noctalia
+## Activation and validation
 
-**Noctalia** (`noctalia` v5.1.0, installed via the flake's `noctalia` GitHub input + cachix):
-- QtQuick desktop shell: floating top bar (compact), system tray, clock, workspace indicator, widgets
-- App launcher (`Super+Space`), control center (`Super+A`), settings UI (`Super+Comma`) via `noctalia msg panel-toggle ...`
-- Notification daemon with history, toasts (battery, keyboard layout)
-- Own lock screen: `Super+Escape` → `noctalia msg session lock`; locks on suspend
-- Wallpaper: directory `~/Pictures/Wallpapers` (wallpaper rendering disabled — plain background)
-- Volume/brightness media keys route through `noctalia msg volume-up` etc.
+Preview a host rebuild:
 
-**Noctalia greeter** (login screen, NixOS module `noctalia-greeter`):
-- Default user `giovanni`, default session `Niri`, per-output scales (`DP-1`/`DP-2`: 1.5, `eDP-1`: 1.25)
-- Settings in `~/dotfiles/modules/desktop/default.nix`
+```sh
+nixos-rebuild dry-build --flake ~/dotfiles#<host>
+```
 
-**Noctalia settings:** `~/.config/noctalia/settings.json` (bar, launcher, notifications, idle, lock screen)
+Activate a host:
 
-## Autostart Programs
+```sh
+nh os switch .#<host>
+```
 
-All in `config.kdl` spawn-at-startup:
-1. `noctalia` — desktop shell
-2. `easyeffects -w` — audio DSP
-3. `wayscriber -d` — screen annotation daemon
+The two configured host names are `wolfgang` and `easley`.
 
-## Theme
-- Focus ring: Mauve `#cba6f7` (active), `#505050` (inactive), width 2px
-- Rounded corners 12px, window opacity 0.85, background blur, soft shadows
+Validate the changed desktop configuration:
 
-## Keybindings Summary
+```sh
+niri validate -c ~/.config/niri/config.kdl
+noctalia config validate
+```
 
-| Key | Action |
-|---|---|
-| Super+Space | App launcher (Noctalia) |
-| Super+A | Control center (Noctalia) |
-| Super+Comma | Noctalia settings |
-| Super+Return | Terminal (ghostty) |
-| Super+D | Screen annotation (wayscriber toggle) |
-| Super+Shift+S | Screenshot area (Noctalia) |
-| Super+Shift+F | Fullscreen screenshot (Noctalia) |
-| Ctrl+Shift+S | Niri built-in screenshot UI |
-| Super+Escape | Lock screen (Noctalia) |
-| Super+Alt+B | Zen browser |
-| Super+Alt+O | Obsidian |
-| Super+Alt+Z | Zed |
-| Super+Alt+K | KeePassXC |
-| Super+Alt+S | Toggle screen reader (orca) |
-| Super+Tab | Global fuzzy window switcher (Noctalia `/win`) |
-| Alt+Tab / Alt+Shift+Tab | Recent windows (per output) |
-| Alt+` / Alt+Shift+` | Recent windows, same app |
-| Super+Q | Close window |
-| Super+J/K, Super+Up/Down | Focus workspace |
-| Super+H/L, Super+Left/Right | Focus column |
-| Super+Shift+H/J/K/L | Focus monitor |
-| Super+M | Maximize window to edges |
-| Super+C | Center column |
-| Super+Shift+R | Cycle preset column widths |
-| Ctrl+Alt+Delete | Quit niri |
+After changing Niri settings, reload the compositor configuration with:
 
-Full list in `config.kdl` `binds {}` or the niri hotkey overlay (Skipped at startup; check niri's hotkey overlay).
+```sh
+niri msg action load-config-file
+```
 
-## Niri Config Details
+After changing Noctalia settings, request a shell reload with:
 
-**File:** `~/dotfiles/configs/niri/config.kdl` (→ `~/.config/niri/config.kdl`)
+```sh
+noctalia msg config-reload
+```
 
-**Keyboard:** US layout, numlock on, repeat delay 600ms, rate 25hz
+Greeter display, wallpaper, and other system settings apply through the host switch and are used on the next greeter start. Restart greetd only when needed:
 
-**Outputs:**
-- `DP-1`, `DP-2`: 3840x2160@144, scale 1.5, VRR on-demand — `DP-1` at x=0, `DP-2` at x=2560
-- `eDP-1`: disabled (commented out)
+```sh
+sudo systemctl restart greetd
+```
 
-**Workspaces:**
-- `study` on `DP-1` — zen, Obsidian open there at startup
-- `utils` on `DP-2` — KeePassXC, Thunderbird, ghostty open there at startup
+## Configuration ownership
 
-**Window behavior:** focus-follows-mouse (max-scroll 0%), gaps 8, rounded corners 12px, always-center-single-column, preset widths ⅓/½/⅔ (default ½)
+Home Manager uses out-of-store links for user configuration, so edits to linked application files are visible immediately when the application supports reloads. Package, module, host, and greeter changes still require a Nix activation.
 
-**Window rules:** Nautilus and desktop portals float; Steam notification toasts float bottom-right; Zen PiP floats; Noctalia window floats at 1080x920; all windows get radius 12 + opacity 0.85 + blur
+Noctalia has two layers:
 
-## Packages of Note
+- `~/.config/noctalia/*.toml` — curated configuration managed by this repository
+- `~/.local/state/noctalia/settings.toml` — app-managed GUI overrides, loaded last
 
-Installed via the flake (`~/dotfiles/home/dotfiles.nix`, `~/dotfiles/modules/`):
-- `noctalia`, `noctalia-greeter` — desktop shell + login greeter (GitHub inputs, cachix)
-- `niri` — compositor (NixOS module `programs.niri`)
-- `grim`, `slurp`, `wl-clipboard`, `tesseract` — capture and OCR tooling
-- `wayscriber`, `wayscriber-configurator` — screen annotation & configurator GUI
-- `easyeffects`, `ghostty`, `zed-editor`, `spotify-player`, `jq`
-- Portal: `xdg-desktop-portal-gtk`; Polkit agent: `polkit_gnome` (systemd user service)
+Do not add the Noctalia state file to the repository. If a GUI override masks a curated value, inspect or remove the state override before debugging the curated configuration.
 
-## Files / Config Locations
+## Keybindings and runtime behavior
 
-- `~/dotfiles/configs/niri/config.kdl` — main Niri config (→ `~/.config/niri/config.kdl`, instant-apply symlink)
-- `~/dotfiles/configs/wayscriber/config.toml` — Wayscriber config (→ `~/.config/wayscriber/config.toml`)
-- `~/dotfiles/configs/niri/SETUP-NOTES.md` — this file
-- `~/dotfiles/home/dotfiles.nix` — home-manager packages + config symlinks
-- `~/dotfiles/modules/desktop/default.nix` — NixOS desktop module (noctalia, greeter, niri, portals, polkit)
-- `~/.config/noctalia/settings.json` — Noctalia shell settings
+The authoritative Niri bindings are in the `binds {}` block of `configs/niri/config.kdl`. Noctalia actions are invoked through `noctalia msg`; inspect the Niri config rather than maintaining a second keybinding list here.
 
-## Audio
+Niri startup commands, window rules, output layout, workspace placement, and display modes are all declared in `configs/niri/config.kdl`.
 
-- **EasyEffects** autostarts with `-w` (windowed daemon); presets in `~/dotfiles/configs/easy-effects/`
-- **Discord pausing Spotify on call join:** WirePlumber's `linking.pause-playback` pauses MPRIS players when an audio sink is removed (triggered by Discord's voice engine). Currently still at its default `true` on this machine. If it bites, fix with:
-  ```
-  wpctl settings linking.pause-playback false
-  wpctl settings --save linking.pause-playback
-  ```
-  Persisted in `~/.local/state/wireplumber/sm-settings`.
+Package and service ownership is declared in `home/` and `modules/`; do not document installed package snapshots here.

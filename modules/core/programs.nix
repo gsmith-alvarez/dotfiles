@@ -18,6 +18,7 @@
     appimage.enable = true;
     appimage.binfmt = true;
     compsize.enable = true;
+    dconf.enable = true;
   };
 
   environment.systemPackages = with pkgs; [

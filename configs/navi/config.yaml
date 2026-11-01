@@ -1,4 +1,4 @@
-# Custom cheatsheet sources for mise-managed tools
+# Custom cheatsheet sources for development tools
 # See also: ~/.local/share/navi/cheats/ (default repo)
 cheats:
   paths:

@@ -26,8 +26,6 @@ ENV/
 # direnv layouts
 .direnv/
 
-# mise
-.mise.local.toml
 
 # Python bytecode
 __pycache__/
