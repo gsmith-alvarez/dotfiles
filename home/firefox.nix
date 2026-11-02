@@ -61,8 +61,34 @@ let
     force = true;
     settings."uBlock0@raymondhill.net" = uBlockExtensionSettings;
   };
+
+  junction = pkgs.symlinkJoin {
+    name = "junction";
+    paths = [ pkgs.junction ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = "wrapProgram $out/bin/junction --prefix PATH : ${pkgs.junction}/bin";
+  };
+
+  firefoxProfileIcons =
+    pkgs.runCommand "firefox-profile-icons"
+      {
+        nativeBuildInputs = [ pkgs.imagemagick ];
+      }
+      ''
+        dir=$out/share/icons/hicolor/128x128/apps
+        mkdir -p "$dir"
+        src="${pkgs.firefox}/share/icons/hicolor/128x128/apps/firefox.png"
+        cp "$src" "$dir/firefox-personal.png"
+        magick "$src" -modulate 100,100,10 "$dir/firefox-school.png"
+        magick "$src" -modulate 100,100,55 "$dir/firefox-clubs.png"
+      '';
 in
 {
+  home.packages = [
+    junction
+    firefoxProfileIcons
+  ];
+
   programs.firefox = {
     enable = true;
     package = pkgs.firefox;
@@ -152,28 +178,120 @@ in
   };
 
   xdg.desktopEntries = {
-    firefox-school = {
-      name = "Firefox (School)";
-      exec = "firefox --no-remote -P school %U";
-      icon = "firefox";
+    firefox = {
+      name = "Firefox (Personal)";
+      exec = "firefox -P personal %U";
+      icon = "${firefoxProfileIcons}/share/icons/hicolor/128x128/apps/firefox-personal.png";
       terminal = false;
       categories = [
         "Network"
         "WebBrowser"
       ];
+      mimeType = [
+        "text/html"
+        "text/xml"
+        "application/xhtml+xml"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+      ];
+      actions = {
+        "new-private-window" = {
+          name = "New Private Window";
+          exec = "firefox -P personal --private-window %U";
+        };
+      };
+    };
+
+    firefox-school = {
+      name = "Firefox (School)";
+      exec = "firefox -P school %U";
+      icon = "${firefoxProfileIcons}/share/icons/hicolor/128x128/apps/firefox-school.png";
+      terminal = false;
+      categories = [
+        "Network"
+        "WebBrowser"
+      ];
+      mimeType = [
+        "text/html"
+        "text/xml"
+        "application/xhtml+xml"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+      ];
+      actions = {
+        "new-private-window" = {
+          name = "New Private Window";
+          exec = "firefox -P school --private-window %U";
+        };
+      };
     };
 
     firefox-clubs = {
       name = "Firefox (Clubs)";
-      exec = "firefox --no-remote -P clubs %U";
-      icon = "firefox";
+      exec = "firefox -P clubs %U";
+      icon = "${firefoxProfileIcons}/share/icons/hicolor/128x128/apps/firefox-clubs.png";
       terminal = false;
       categories = [
         "Network"
         "WebBrowser"
       ];
+      mimeType = [
+        "text/html"
+        "text/xml"
+        "application/xhtml+xml"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+      ];
+      actions = {
+        "new-private-window" = {
+          name = "New Private Window";
+          exec = "firefox -P clubs --private-window %U";
+        };
+      };
     };
   };
 
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = "re.sonny.Junction.desktop";
+      "text/xml" = "re.sonny.Junction.desktop";
+      "application/xhtml+xml" = "re.sonny.Junction.desktop";
+      "x-scheme-handler/http" = "re.sonny.Junction.desktop";
+      "x-scheme-handler/https" = "re.sonny.Junction.desktop";
+      "x-scheme-handler/hermes" = "hermes-desktop.desktop";
+      "x-scheme-handler/discord" = "vesktop.desktop";
+      "x-scheme-handler/mailto" = "userapp-Thunderbird-DTOZV3.desktop";
+      "x-scheme-handler/mid" = "userapp-Thunderbird-DTOZV3.desktop";
+      "message/rfc822" = "userapp-Thunderbird-DTOZV3.desktop";
+      "x-scheme-handler/net.thunderbird" = "userapp-Thunderbird-XVWYV3.desktop";
+      "x-scheme-handler/openbot" = "openbot.desktop";
+      "x-scheme-handler/t3code" = "com.t3tools.T3Code.desktop";
+      "x-scheme-handler/bitwarden" = "bitwarden.desktop";
+    };
+    associations.added = {
+      "x-scheme-handler/http" = [
+        "firefox.desktop"
+        "firefox-school.desktop"
+        "firefox-clubs.desktop"
+      ];
+      "x-scheme-handler/https" = [
+        "firefox.desktop"
+        "firefox-school.desktop"
+        "firefox-clubs.desktop"
+      ];
+      "text/html" = [
+        "firefox.desktop"
+        "firefox-school.desktop"
+        "firefox-clubs.desktop"
+      ];
+    };
+  };
+
+  dconf.settings = {
+    "re/sonny/Junction" = {
+      show-app-names = true;
+    };
+  };
   home.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
 }

@@ -101,6 +101,7 @@ animations {
 window-rule {
     match app-id=r#"^Thunar$"#
     match app-id=r#"^xdg-desktop-portal"#
+    match app-id=r#"^re\.sonny\.Junction$"#
     open-floating true
 }
 window-rule {
