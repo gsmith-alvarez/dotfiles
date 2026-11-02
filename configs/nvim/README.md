@@ -38,11 +38,10 @@ Modern, minimal interface with high-performance components:
 - **Notifications:** Sleek, non-blocking alerts via `snacks.notifier`.
 - **Picker:** Fast, unified search and discovery via `snacks.picker`.
 
-## 📓 Academic Stack & Obsidian
+## 📓 Academic Stack
 
-Optimized for engineering coursework and knowledge management:
+Optimized for engineering coursework and Markdown knowledge management:
 
-- **Obsidian Integration:** Seamless vault navigation and link management via `obsidian.nvim`.
 - **Image Rendering:** In-editor preview of local attachments and remote YouTube thumbnails.
 - **Math & LaTeX:** Smart rendering of math blocks in Markdown using the Tectonic engine.
 - **Automated Lists:** Smart list continuation and checkbox toggling for efficient note-taking.

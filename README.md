@@ -87,8 +87,8 @@ flake.nix (outputs)
 │       ├── home/stats.nix
 │       ├── home/anki.nix
 │       ├── home/development.nix
-│       ├── home/tools.nix
-│       └── home/applications.nix
+│       ├── home/applications.nix
+│       └── home/ssh.nix
 ├── homeConfigurations.giovanni (read-only query target; shares system pkgs)
 └── checks.x86_64-linux (checks/default.nix -> tests/)
 ```
@@ -103,7 +103,7 @@ flake.nix (outputs)
 | [modules/secrets.nix](modules/secrets.nix) | [flake.nix](flake.nix) | System (`root`) | `/run/secrets/` | `nh os switch .` (requires sudo) |
 | [home/default.nix](home/default.nix) | [flake.nix](flake.nix) (via Home Manager) | User (`giovanni`) | `/etc/profiles/per-user` | `nh os switch .` (switched together) |
 | [home/dotfiles.nix](home/dotfiles.nix) | [home/default.nix](home/default.nix) | User (`giovanni`) | `~/.config/`, `~/` | Instant symlink to [configs/](configs/) |
-| [configs/](configs/) (Live files) | Symlinked by [home/dotfiles.nix](home/dotfiles.nix) | User (`giovanni`) | Target apps | **Instant edit** (app reload / new shell) |
+| [configs/](configs/) (Live files) | Symlinked by [home/dotfiles.nix](home/dotfiles.nix) and feature modules | User (`giovanni`) | Target apps | **Instant edit** (app reload / new shell) |
 
 ---
 
@@ -125,7 +125,7 @@ One of the biggest hurdles when starting with Nix on a workstation is understand
 - **Read-only query target**: [flake.nix](flake.nix) also exports `homeConfigurations.giovanni`. This exists strictly for read-only inspection commands like `home-manager news --flake .`. **Never run `nh home switch` or activate this output independently.**
 
 ### Layer 3: Live Application Configs (Out-of-Store Symlinks)
-- **What it controls**: Fast-iterating application configurations (e.g., Neovim Lua plugins, Niri keybindings, Fish functions and abbreviations, Ghostty terminal settings, Starship prompt).
+- **What it controls**: Fast-iterating application configurations (e.g., Neovim Lua plugins, Niri keybindings, Fish functions and abbreviations, Ghostty terminal settings, and Starship prompt).
 - **How it works**: Defined in [home/dotfiles.nix](home/dotfiles.nix) using `lib.file.mkOutOfStoreSymlink` (via [lib/out-of-store.nix](lib/out-of-store.nix)). Instead of copying dotfiles into read-only `/nix/store` derivations, Home Manager creates symlinks pointing directly into `/home/giovanni/dotfiles/configs/...`.
 - **Why this matters**:
   - Editing `configs/niri/config.kdl` takes effect the moment you save (Niri hot-reloads).

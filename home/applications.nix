@@ -2,6 +2,16 @@
 let
   sources = pkgs.callPackage ../_sources/generated.nix { };
   zoteroProfile = "wr8e44xv.default";
+  # wrapGAppsHook4 renames the executable to `.wayscriber-wrapped`; allow that
+  # exact Nix wrapper name in Wayscriber's detached-launch helper broker.
+  wayscriber = pkgs.wayscriber.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace src/process_broker/manifest.rs \
+        --replace-fail \
+          'basename == "wayscriber" || basename.starts_with("wayscriber-")' \
+          'basename == "wayscriber" || basename.starts_with("wayscriber-") || basename == ".wayscriber-wrapped"'
+    '';
+  });
   tailtui = pkgs.stdenvNoCC.mkDerivation {
     pname = "tailtui";
     inherit (sources.tailtui) version src;
@@ -18,15 +28,14 @@ in
     tailtui
     # Desktop applications
     easyeffects
-    ghostty
-    keepassxc
+    wayscriber
+    obsidian
     openbot
     playerctl
     spotify-player
     wl-clipboard
     libreoffice
-    koreader
-    gnome-calculator
+    ghostty
     inputs.zotero-pkg.packages.${pkgs.stdenv.hostPlatform.system}.zotero
 
     # Fonts
@@ -37,8 +46,6 @@ in
   home.file.".zotero/zotero/${zoteroProfile}/extensions/better-bibtex@iris-advies.com.xpi".source =
     sources.better-bibtex.src;
   services.flatpak.packages = [
-    "md.obsidian.Obsidian"
-    "app.zen_browser.zen"
     "com.super_productivity.SuperProductivity"
   ];
 }

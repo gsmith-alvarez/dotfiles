@@ -46,21 +46,6 @@ M.resolve_youtube = function(video_id)
 	return max_url
 end
 
---- Resolve Obsidian attachments to absolute local paths for image rendering.
---- @param path string Current buffer file path.
---- @param src string Raw markdown image/link source.
---- @return string|nil resolved_path Absolute resolved attachment path.
-M.resolve_obsidian = function(path, src)
-	local obsidian = Config.safe_require("obsidian")
-	if not obsidian then
-		return
-	end
-
-	local api = obsidian.api
-	if api.path_is_note(path) then
-		return api.resolve_attachment_path(src)
-	end
-end
 
 -- GLOBAL DEBUG HELPERS
 --- Debug helper that proxies to snacks.debug.inspect.
@@ -112,13 +97,11 @@ snacks.setup({
 	git = { enabled = true },
 	image = {
 		enabled = true,
-		resolve = function(file, src)
+		resolve = function(_, src)
 			local video_id = src:match("youtube%.com/embed/([%w_%-]+)")
 			if video_id then
 				return M.resolve_youtube(video_id)
 			end
-
-			return M.resolve_obsidian(file, src)
 		end,
 	},
 	lazygit = { enabled = true },

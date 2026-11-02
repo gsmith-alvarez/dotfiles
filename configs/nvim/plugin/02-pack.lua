@@ -79,7 +79,6 @@ vim.pack.add({
 	gh("lewis6991/async.nvim"),
 	gh("theprimeagen/refactoring.nvim"),
 	gh("MeanderingProgrammer/render-markdown.nvim"),
-	gh("obsidian-nvim/obsidian.nvim"),
 	gh("gaoDean/autolist.nvim"),
 	gh("gsmith-alvarez/latex-tools.nvim"),
 	gh("L3MON4D3/LuaSnip"),

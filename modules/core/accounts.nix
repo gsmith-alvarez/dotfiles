@@ -11,7 +11,7 @@
     packages = lib.mkBefore (
       with pkgs;
       [
-        nautilus
+        thunar
       ]
     );
 

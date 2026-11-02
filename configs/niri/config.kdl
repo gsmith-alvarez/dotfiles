@@ -99,7 +99,7 @@ animations {
     }
 }
 window-rule {
-    match app-id=r#"^org\.gnome\.Nautilus$"#
+    match app-id=r#"^Thunar$"#
     match app-id=r#"^xdg-desktop-portal"#
     open-floating true
 }
@@ -107,10 +107,6 @@ window-rule {
     match app-id=r#"^steam$"# title=r#"^notificationtoasts_\d+_desktop$"#
     default-floating-position x=10 y=10 relative-to="bottom-right"
     open-focused false
-}
-window-rule {
-    match app-id=r#"app\.zen_browser\.zen$"# title="^Picture-in-Picture$"
-    open-floating true
 }
 window-rule {
     match app-id="dev.noctalia.Noctalia"
@@ -139,15 +135,10 @@ recent-windows {
 
 spawn-at-startup "noctalia"
 spawn-at-startup "easyeffects" "-w"
-spawn-at-startup "wayscriber" "-d"
+// Wayscriber daemon is managed by the enabled systemd user service.
 
 workspace "study" {
     open-on-output "DP-1"
-}
-
-window-rule {
-    match at-startup=true app-id=r#"^(app\.zen_browser\.zen|zen|md\.obsidian\.Obsidian)$"#
-    open-on-workspace "study"
 }
 
 workspace "utils" {
@@ -155,7 +146,7 @@ workspace "utils" {
 }
 
 window-rule {
-    match at-startup=true app-id=r#"^(org\.keepassxc\.KeePassXC|net\.thunderbird\.Thunderbird|com\.mitchellh\.ghostty)$"#
+    match at-startup=true app-id=r#"^(net\.thunderbird\.Thunderbird|com\.mitchellh\.ghostty)$"#
     open-on-workspace "utils"
 }
 
@@ -199,31 +190,26 @@ window-rule {
 }
 
 window-rule {
-    match app-id=r#"^(app\.zen_browser\.zen|libreoffice.*|gtkwave)$"#
+    match app-id=r#"^(libreoffice.*|gtkwave)$"#
     opacity 1.0
-}
-
-window-rule {
-    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-    block-out-from "screen-capture"
 }
 
 binds {
     // Terminal
     Mod+Return hotkey-overlay-title="Open a Terminal: Ghostty" { spawn "ghostty"; }
     // Browser
-    Mod+Alt+B hotkey-overlay-title="Open a Browser: Zen" { spawn "flatpak" "run" "app.zen_browser.zen"; }
-    // Note Taking
-    Mod+Alt+O hotkey-overlay-title="Open Notes: Obsidian" { spawn "flatpak" "run" "md.obsidian.Obsidian"; }
+    Mod+Alt+B hotkey-overlay-title="Open a Browser: Firefox" { spawn "firefox"; }
     // Editor
     Mod+Alt+N hotkey-overlay-title="Open Editor: Nvim" { spawn "ghostty" "-e" "nvim"; }
     // Zed
     Mod+Alt+Z hotkey-overlay-title="Open Zed" { spawn "zed"; }
-    //KeePassXC
-    Mod+Alt+K hotkey-overlay-title="Open Password Manager: Keepassxc" { spawn "keepassxc"; }
 
     // Screen annotation
     Mod+D hotkey-overlay-title="Toggle Screen Annotation: wayscriber" { spawn "wayscriber" "--daemon-toggle"; }
+
+    // Wayscriber light-passthrough controls (Niri has no automatic configurator hook).
+    Mod+Alt+L hotkey-overlay-title="Toggle Wayscriber Light Passthrough" { spawn "wayscriber" "--light-toggle"; }
+    Mod+Alt+D hotkey-overlay-title="Toggle Wayscriber Light Draw" { spawn "wayscriber" "--light-draw-toggle"; }
 
     // Lock screen: also turn outputs off
     Mod+Escape hotkey-overlay-title="Lock Screen" { spawn-sh "noctalia msg session lock"; }
@@ -256,8 +242,8 @@ binds {
     // Focus navigation
     Mod+Down  { focus-window-down; }
     Mod+Up    { focus-window-up; }
-    Mod+J     { focus-window-down; }
-    Mod+K     { focus-window-up; }
+    // Mod+J     { focus-window-down; }
+    // Mod+K     { focus-window-up; }
     Mod+Page_Down { focus-workspace-down; }
     Mod+Page_Up   { focus-workspace-up; }
     Mod+U         { focus-workspace-down; }
@@ -326,6 +312,8 @@ binds {
 
     // Workspace navigation ergonomics
     Mod+grave     { focus-workspace-previous; }
+    Mod+j     { focus-workspace-down; }
+    Mod+k     { focus-workspace-up; }
 
     // Sizing: backup used Mod+Shift+R to cycle presets backward
     Mod+R { switch-preset-column-width; }

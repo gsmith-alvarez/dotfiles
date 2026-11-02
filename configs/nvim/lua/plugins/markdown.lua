@@ -14,56 +14,6 @@ mini.on_filetype("markdown", function()
 			icons = { "󰲡 ", "󰲣 ", "󰲥 ", "󰲧 ", "󰲩 ", "󰲫 " },
 		},
 	})
-
--- 2. Obsidian.nvim
-	Config.safe_require("obsidian").setup({
-		workspaces = {
-			{
-				name = "vault",
-				path = "~/Documents/Obsidian",
-			},
-		},
-		completion = {
-			min_chars = 1,
-		},
-		note_id_func = function(title)
-			if title ~= nil then
-				return title:gsub("[^%w%s%-]", "")
-			else
-				return tostring(os.time())
-			end
-		end,
-		ui = { enabled = false },
-		legacy_commands = false,
-		picker = {
-			name = "snacks.picker",
-		},
-		attachments = {
-			---@param path obsidian.Path
-			img_text_func = function(path)
-				local name = vim.fs.basename(tostring(path))
-				local encoded_name = require("obsidian.util").urlencode(name)
-				return string.format("![%s](%s)", name, encoded_name)
-			end,
-		},
-		templates = {
-			folder = "500-Resources/Templates",
-			date_format = "%Y-%m-%d",
-			time_format = "%H:%M",
-			substitutions = {
-				today = function()
-					return os.date("%Y-%m-%d")
-				end,
-				yesterday = function()
-					return os.date("%Y-%m-%d", os.time() - 86400)
-				end,
-				tomorrow = function()
-					return os.date("%Y-%m-%d", os.time() + 86400)
-				end,
-			},
-		},
-	})
-
 	Config.safe_require("autolist").setup({
 		lists = {
 			markdown = {

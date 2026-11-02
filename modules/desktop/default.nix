@@ -32,7 +32,20 @@
             doCheck = false;
           });
       wayscriber-configurator =
-        inputs.wayscriber.packages.${prev.stdenv.hostPlatform.system}.wayscriber-configurator;
+        let
+          configurator =
+            inputs.wayscriber.packages.${prev.stdenv.hostPlatform.system}.wayscriber-configurator;
+        in
+        prev.symlinkJoin {
+          name = "${configurator.name}-with-gsettings";
+          paths = [ configurator ];
+          nativeBuildInputs = [ prev.makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/wayscriber-configurator \
+              --prefix PATH : ${prev.lib.makeBinPath [ prev.glib.bin ]}
+          '';
+          meta = configurator.meta;
+        };
     })
   ];
 
@@ -78,18 +91,5 @@
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
-  };
-  # Polkit authentication agent so privileged GUI dialogs get a password prompt
-  systemd.user.services.polkit-gnome-authentication-agent-1 = {
-    description = "polkit-gnome-authentication-agent-1";
-    wantedBy = [ "graphical-session.target" ];
-    partOf = [ "graphical-session.target" ];
-    after = [ "graphical-session.target" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
-    };
   };
 }

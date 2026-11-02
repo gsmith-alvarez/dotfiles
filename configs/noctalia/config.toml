@@ -176,6 +176,7 @@ corner_radius_scale = 2.0
 font_family = "Monaspace Neon"
 niri_overview_type_to_launch_enabled = true
 password_style = "random"
+polkit_agent = true
 telemetry_enabled = true
 time_format = "%H:%M"
 

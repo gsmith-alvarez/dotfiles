@@ -15,6 +15,7 @@ The current Nix configuration keeps keyboard ownership split by layer:
 - The `Alt+Tab` / `Alt+Shift+Tab` / `Alt+grave` / `Alt+Shift+grave` recent-window family is the sanctioned bare-Alt exception.
 - `Ctrl+Alt+Delete` remains the explicit compositor quit chord.
 - Ghostty must not bind `Mod` or `Super`; `Ctrl+Alt` and `Ctrl+Shift` remain terminal-owned.
+- Wayscriber: `Mod+D` toggles the daemon; `Mod+Alt+L` toggles light passthrough; `Mod+Alt+D` toggles light drawing.
 
 ## Source files
 

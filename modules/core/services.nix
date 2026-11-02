@@ -20,7 +20,7 @@
       enable = true;
       openDefaultPorts = true;
       user = "giovanni";
-      dataDir = "/home/giovanni/Documents/Obsidian";
+      dataDir = "/home/giovanni/Documents/obsidian_vault";
       configDir = "/home/giovanni/.config/syncthing";
     };
     # auto-mount USB drives / expose to file managers
@@ -30,13 +30,6 @@
     openssh.enable = true;
     tailscale.enable = true;
     fwupd.enable = true;
-    stash-clipboard = {
-      enable = true;
-      excludedApps = [
-        "KeePassXC"
-        "org.keepassxc.KeePassXC"
-      ];
-    };
     scx-loader = {
       enable = true;
       config = {
