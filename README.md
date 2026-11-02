@@ -29,7 +29,7 @@ If you are exploring this codebase to learn how to structure a NixOS flake, foll
 
 ```mermaid
 flowchart TD
-    Step1["1. flake.nix<br/>(Entry point, inputs & outputs)"] --> Step2["2. hosts/{wolfgang,easley}/<br/>(Machine hardware, bootloader, kernel)"]
+    Step1["1. flake.nix<br/>(Entry point, inputs & outputs)"] --> Step2["2. hosts/<br/>(Shared and machine-specific settings)"]
     Step2 --> Step3["3. modules/core/ & modules/desktop/<br/>(System-level services, audio, packages)"]
     Step3 --> Step4["4. home/default.nix & feature suites<br/>(User packages, dev tools, theming)"]
     Step4 --> Step5["5. home/dotfiles.nix & lib/out-of-store.nix<br/>(Live symlinks into configs/)"]
@@ -38,7 +38,7 @@ flowchart TD
 ```
 
 1. **[flake.nix](flake.nix)**: Start here. Observe how external flake inputs are declared, pinned, and passed down to NixOS and Home Manager via `specialArgs` and `extraSpecialArgs`.
-2. **Host definitions**: [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) describes the laptop and [hosts/easley/default.nix](hosts/easley/default.nix) describes the desktop; each host owns its hardware configuration, bootloader, kernel modules, networking, and `system.stateVersion`.
+2. **Host definitions**: [hosts/common_configuration.nix](hosts/common_configuration.nix) contains settings shared by both hosts. [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) describes the laptop and [hosts/easley/default.nix](hosts/easley/default.nix) describes the desktop; each imports the shared configuration and owns its hardware and host-specific settings.
 3. **[modules/core/](modules/core/) & [modules/desktop/](modules/desktop/)**: System-level concerns. Notice how [modules/core/default.nix](modules/core/default.nix) bundles focused files ([nix.nix](modules/core/nix.nix), [packages.nix](modules/core/packages.nix), [programs.nix](modules/core/programs.nix), [services.nix](modules/core/services.nix), [audio.nix](modules/core/audio.nix), [locale.nix](modules/core/locale.nix), [accounts.nix](modules/core/accounts.nix)), while [modules/desktop/default.nix](modules/desktop/default.nix) configures Niri and Noctalia.
 4. **[home/default.nix](home/default.nix)**: Home Manager user configuration. See how user packages are organized into focused modules: [development.nix](home/development.nix) (editors, compilers, LSPs), [tools.nix](home/tools.nix) (CLI inspection and utilities), [applications.nix](home/applications.nix) (GUI apps, Flatpaks), and [appearance.nix](home/appearance.nix) (GTK themes and fonts).
 5. **[home/dotfiles.nix](home/dotfiles.nix)** and **[lib/out-of-store.nix](lib/out-of-store.nix)**: The live-link manifest. Learn how dotfiles inside [configs/](configs/) are symlinked directly to `~/.config/` without writing them to the immutable Nix store.
@@ -75,6 +75,7 @@ flake.nix (outputs)
 │   └── hosts/easley/
 │       ├── default.nix
 │       └── hardware-configuration.nix
+├── hosts/common_configuration.nix (shared host settings)
 ├── modules/core/ & modules/desktop/ (shared system modules)
 ├── modules/secrets.nix
 ├── home-manager.nixosModules.home-manager
@@ -122,6 +123,7 @@ One of the biggest hurdles when starting with Nix on a workstation is understand
 - **Where it lives**: [home/](home/).
 - **How it integrates**: It is embedded directly as a NixOS module inside [flake.nix](flake.nix) (`home-manager.nixosModules.home-manager`). We configure `useGlobalPkgs = true` so Home Manager shares the exact same package evaluation as the system, and `useUserPackages = true` so user packages are installed to `/etc/profiles/per-user/giovanni`.
 - **How it applies**: Because it is embedded in the NixOS configuration, running `nh os switch .` switches **both** through one system rebuild. This is not an all-or-nothing transaction: activation can fail partway, and service status still needs checking.
+- **Zotero**: `home/applications.nix` installs `pkgs.zotero` and places Better BibTeX in the configured Zotero profile. Its pinned Nixpkgs package requires an exception for end-of-life Firefox ESR 140 in `modules/core/packages.nix`; that runtime receives no further security fixes.
 - **Read-only query target**: [flake.nix](flake.nix) also exports `homeConfigurations.giovanni`. This exists strictly for read-only inspection commands like `home-manager news --flake .`. **Never run `nh home switch` or activate this output independently.**
 
 ### Layer 3: Live Application Configs (Out-of-Store Symlinks)
@@ -192,7 +194,7 @@ To resolve conflicting scalar values or control list placement, use priority hel
 - `lib.mkAfter [ ... ]`: Appends items to the end of a merged list.
 
 ### 4. `stateVersion` Demystified
-In [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) and [hosts/easley/default.nix](hosts/easley/default.nix) (`system.stateVersion = "26.05";`), plus [home/default.nix](home/default.nix) (`home.stateVersion = "26.05";`):
+In [hosts/common_configuration.nix](hosts/common_configuration.nix) (`system.stateVersion = "26.05";`) and [home/default.nix](home/default.nix) (`home.stateVersion = "26.05";`):
 
 > [!CAUTION]
 > **Do NOT bump `stateVersion` when updating NixOS!** `stateVersion` is not the version of NixOS or packages currently running. Package versions come from the pinned inputs and your package selections, overrides, and local derivations—not `stateVersion`.

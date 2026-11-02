@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 let
   sources = pkgs.callPackage ../_sources/generated.nix { };
   zoteroProfile = "wr8e44xv.default";
@@ -37,7 +37,7 @@ in
     libreoffice
     ghostty
     bitwarden-desktop
-    inputs.zotero-pkg.packages.${pkgs.stdenv.hostPlatform.system}.zotero
+    zotero
 
     # Fonts
     jetbrains-mono

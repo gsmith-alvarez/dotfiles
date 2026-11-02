@@ -46,11 +46,6 @@
 
     yazi-flavors.url = "github:aguirre-matteo/nix-yazi-flavors";
 
-    zotero-pkg = {
-      url = "github:retorquere/zotero-pkg";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     wayscriber = {
       url = "github:devmobasa/wayscriber";
       inputs.nixpkgs.follows = "nixpkgs";

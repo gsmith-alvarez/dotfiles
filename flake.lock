@@ -350,8 +350,7 @@
         "rex": "rex",
         "sops-nix": "sops-nix",
         "wayscriber": "wayscriber",
-        "yazi-flavors": "yazi-flavors",
-        "zotero-pkg": "zotero-pkg"
+        "yazi-flavors": "yazi-flavors"
       }
     },
     "rust-overlay": {
@@ -499,26 +498,6 @@
       "original": {
         "owner": "aguirre-matteo",
         "repo": "nix-yazi-flavors",
-        "type": "github"
-      }
-    },
-    "zotero-pkg": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1793310853,
-        "narHash": "sha256-+rmo7Ki6wIdTLZVWFbrYNz0KGLSotwoXk9BXziq4f98=",
-        "owner": "retorquere",
-        "repo": "zotero-pkg",
-        "rev": "a9454360c08f079ec9b334838011cffe2f5e2ae1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "retorquere",
-        "repo": "zotero-pkg",
         "type": "github"
       }
     }
