@@ -179,7 +179,7 @@ in
 
   xdg.desktopEntries = {
     firefox = {
-      name = "Firefox (Personal)";
+      name = "Personal";
       exec = "firefox -P personal %U";
       icon = "${firefoxProfileIcons}/share/icons/hicolor/128x128/apps/firefox-personal.png";
       terminal = false;
@@ -203,7 +203,7 @@ in
     };
 
     firefox-school = {
-      name = "Firefox (School)";
+      name = "School";
       exec = "firefox -P school %U";
       icon = "${firefoxProfileIcons}/share/icons/hicolor/128x128/apps/firefox-school.png";
       terminal = false;
@@ -227,7 +227,7 @@ in
     };
 
     firefox-clubs = {
-      name = "Firefox (Clubs)";
+      name = "Clubs";
       exec = "firefox -P clubs %U";
       icon = "${firefoxProfileIcons}/share/icons/hicolor/128x128/apps/firefox-clubs.png";
       terminal = false;
