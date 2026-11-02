@@ -36,6 +36,7 @@ in
     wl-clipboard
     libreoffice
     ghostty
+    bitwarden-desktop
     inputs.zotero-pkg.packages.${pkgs.stdenv.hostPlatform.system}.zotero
 
     # Fonts

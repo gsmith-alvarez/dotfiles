@@ -86,8 +86,9 @@ in
         (asPolicyPreference "locked" lockedPreferences)
         // (asPolicyPreference "default" defaultPreferences);
 
-      # SearXNG is served over HTTP on the private tailnet.
+      # HTTP services on the private tailnet.
       HttpAllowlist = [
+        "http://socialism.tailb7b5f7.ts.net"
         "http://socialism.tailb7b5f7.ts.net:8888"
       ];
 
