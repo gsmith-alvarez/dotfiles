@@ -30,26 +30,12 @@
   networking.hostName = "easley";
 
   # Bootloader
-  boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
-    # Load exfat at boot so USBs can be mounted
-    kernelModules = [ "exfat" ];
-    loader = {
-      systemd-boot = {
-        enable = true;
-        configurationLimit = 5;
-        bootCounting.enable = true;
-        extraEntries."windows.conf" = ''
-          title Windows
-          efi /EFI/Microsoft/Boot/bootmgfw.efi
-          sort-key z_windows
-        '';
-      };
-      efi.canTouchEfiVariables = true;
-    };
-    binfmt.emulatedSystems = [ "riscv64-linux" ];
-    kernel.sysctl."vm.max_map_count" = 2147483642;
-  };
+  boot.loader.systemd-boot.extraEntries."windows.conf" = ''
+    title Windows
+    efi /EFI/Microsoft/Boot/bootmgfw.efi
+    sort-key z_windows
+  '';
+  boot.kernel.sysctl."vm.max_map_count" = 2147483642;
 
   # Gaming
   programs = {
@@ -70,17 +56,10 @@
   zramSwap.enable = true;
 
   hardware = {
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-    };
     opentabletdriver = {
       enable = true;
       daemon.enable = true;
     };
-    bluetooth.enable = true;
   };
 
-  # Pins compatibility defaults for stateful data and migrations; do not bump on system updates.
-  system.stateVersion = "26.05";
 }
