@@ -9,15 +9,18 @@
   ];
 
   # Easley has its own wallpaper and desktop output layout; Wolfgang keeps the shared defaults.
-  services.displayManager.noctalia-greeter.settings = {
-    appearance.wallpaper = {
-      path = "/home/giovanni/Pictures/wallpapers/neptune.png";
-      fill_mode = "crop";
+  services = {
+    displayManager.noctalia-greeter.settings = {
+      appearance.wallpaper = {
+        path = "/home/giovanni/Pictures/wallpapers/neptune.png";
+        fill_mode = "crop";
+      };
+      output = {
+        use_synced_settings = false;
+        layout = "DP-2:0,0; DP-1:2560,0";
+      };
     };
-    output = {
-      use_synced_settings = false;
-      layout = "DP-2:0,0; DP-1:2560,0";
-    };
+    resolved.enable = true;
   };
 
   home-manager.users.giovanni = {
@@ -26,11 +29,27 @@
 
   networking.hostName = "easley";
 
-  boot.loader.systemd-boot.extraEntries."windows.conf" = ''
-    title Windows
-    efi /EFI/Microsoft/Boot/bootmgfw.efi
-    sort-key z_windows
-  '';
+  # Bootloader
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+    # Load exfat at boot so USBs can be mounted
+    kernelModules = [ "exfat" ];
+    loader = {
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 5;
+        bootCounting.enable = true;
+        extraEntries."windows.conf" = ''
+          title Windows
+          efi /EFI/Microsoft/Boot/bootmgfw.efi
+          sort-key z_windows
+        '';
+      };
+      efi.canTouchEfiVariables = true;
+    };
+    binfmt.emulatedSystems = [ "riscv64-linux" ];
+    kernel.sysctl."vm.max_map_count" = 2147483642;
+  };
 
   # Gaming
   programs = {
@@ -48,8 +67,20 @@
   };
 
   environment.systemPackages = [ pkgs.mangohud ];
-  boot.kernel.sysctl."vm.max_map_count" = 2147483642;
   zramSwap.enable = true;
-  hardware.graphics.enable = true;
 
+  hardware = {
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+    opentabletdriver = {
+      enable = true;
+      daemon.enable = true;
+    };
+    bluetooth.enable = true;
+  };
+
+  # Pins compatibility defaults for stateful data and migrations; do not bump on system updates.
+  system.stateVersion = "26.05";
 }

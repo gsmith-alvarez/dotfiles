@@ -16,3 +16,6 @@ configs/ghostty/themes/dankcolors
 configs/niri/dms/*
 !configs/niri/dms/scripts/
 outputs.kdl
+
+# OpenTabletDriver runtime logs
+configs/OpenTabletDriver/Logs/
