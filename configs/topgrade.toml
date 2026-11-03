@@ -29,8 +29,7 @@
 
 # Disable specific steps - same options as the command line flag
 # disable = ["system", "emacs"]
-disable = ["home_manager", "antigravity_cli", "hermes_agent"]
-nix_handler = "nh"
+disable = ["home_manager", "antigravity_cli", "hermes_agent", "nix"]
 
 # Run these steps before all others
 # first = ["chezmoi"]
@@ -332,7 +331,6 @@ nix_handler = "nh"
 # Exclude encrypted files from update
 # (default: false)
 # exclude_encrypted = false
-
 
 
 [go]
