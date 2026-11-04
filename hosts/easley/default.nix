@@ -8,7 +8,6 @@
     ../../modules/desktop
   ];
 
-  # Easley has its own wallpaper and desktop output layout; Wolfgang keeps the shared defaults.
   services = {
     displayManager.noctalia-greeter.settings = {
       appearance.wallpaper = {

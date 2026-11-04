@@ -8,7 +8,6 @@
     ../../modules/desktop
   ];
 
-  # Wolfgang gets its own wallpaper while sharing the rest of the Noctalia config.
   services.displayManager.noctalia-greeter.settings.appearance.wallpaper = {
     path = "/home/giovanni/Pictures/Wallpapers/glitch.jpg";
     fill_mode = "crop";

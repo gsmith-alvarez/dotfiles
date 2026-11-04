@@ -38,6 +38,8 @@ in
     ghostty
     bitwarden-desktop
     zotero
+    obs-studio
+    vlc
 
     # Fonts
     jetbrains-mono
