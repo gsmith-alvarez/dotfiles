@@ -10,8 +10,11 @@
     ];
   };
 
-  services.resolved.enable = true;
-  services.gnome.gnome-keyring.enable = true;
+  services = {
+    resolved.enable = true;
+    gnome.gnome-keyring.enable = true;
+    udev.packages = [ pkgs.openocd ];
+  };
 
   # Bootloader
   boot = {
@@ -32,6 +35,14 @@
   };
 
   hardware.graphics.enable32Bit = true;
+
+  #USB Access for MCU
+  users.users.giovanni.extraGroups = [
+    "wheel"
+    "networkmanager"
+    "dialout"
+    "plugdev"
+  ];
 
   # Bluetooth
   hardware.bluetooth.enable = true;
