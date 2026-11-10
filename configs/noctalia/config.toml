@@ -22,7 +22,7 @@ end = [
     "session",
 ]
 font_scale = 0.79999998956918716
-layer = "overlay"
+layer = "top"
 margin_edge = 4
 margin_ends = 20
 margin_opposite_edge = 4

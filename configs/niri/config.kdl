@@ -110,6 +110,10 @@ window-rule {
     open-focused false
 }
 window-rule {
+    match app-id=r#"^steam_app_"#
+    open-fullscreen true
+}
+window-rule {
     match app-id="dev.noctalia.Noctalia"
     open-floating true
     default-column-width { fixed 1080; }
