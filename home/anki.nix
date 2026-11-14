@@ -1,19 +1,38 @@
 { pkgs, ... }:
 
 let
+  sources = pkgs.callPackage ../_sources/generated.nix { };
   catppuccinCss = pkgs.writeText "catppuccin_mocha.css" (
     builtins.readFile ../configs/anki/catppuccin_mocha.css
   );
 
-  synapsePro = pkgs.anki-utils.buildAnkiAddon {
-    pname = "synapse-pro";
-    version = "1.5.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "mobesamedia";
-      repo = "SynapsePro";
-      rev = "d9db156b8a0845c0e7344e4e33b871eedbe39b7a";
-      hash = "sha256-vSdsJdlxOa9lrhABNiTIsoT13rU0Nl5GufnMKit0HYY=";
-    };
+  flowTimer = pkgs.anki-utils.buildAnkiAddon {
+    pname = "flow-timer";
+    version = builtins.substring 2 10 sources.flow-timer.version;
+    src = sources.flow-timer.src;
+    nativeBuildInputs = [ pkgs.unzip ];
+    sourceRoot = "source";
+    unpackPhase = ''
+      runHook preUnpack
+      mkdir source
+      unzip -q "$src" -d source
+      runHook postUnpack
+    '';
+    postPatch = ''
+      substituteInPlace __init__.py \
+        --replace-fail 'USER_FILES_DIR = os.path.join(ADDON_DIR, "user_files")' \
+          'USER_FILES_DIR = os.path.join(os.environ.get("XDG_DATA_HOME") or os.path.expanduser("~/.local/share"), "anki", "flow-timer")' \
+        --replace-fail 'data = mw.addonManager.getConfig(__name__)' \
+          'data = _read_json_file(os.path.join(USER_FILES_DIR, "config.json"))' \
+        --replace-fail 'mw.addonManager.writeConfig(__name__, data)' \
+          'return _write_json_file(os.path.join(USER_FILES_DIR, "config.json"), data)'
+    '';
+  };
+
+  synapse = pkgs.anki-utils.buildAnkiAddon {
+    pname = "synapse";
+    src = sources.synapse.src;
+    version = sources.synapse.date;
     postPatch = ''
         cp ${catppuccinCss} theme/user_files/catppuccin_mocha.css
         substituteInPlace __init__.py \
@@ -65,7 +84,9 @@ in
           display_memory_state = true;
         };
       })
-      synapsePro
+      pkgs.ankiAddons.review-heatmap
+      flowTimer
+      synapse
     ])
   ];
 }

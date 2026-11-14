@@ -14,6 +14,28 @@
       sha256 = "sha256-pfHSuvj/QshXYbej2PZ5n/wwbwgugCTVuDzoDoWSvQs=";
     };
   };
+  flow-timer = {
+    pname = "flow-timer";
+    version = "t=1778452571&minpt=1&maxpt=1&bidx=0";
+    src = fetchurl {
+      url = "https://ankiweb.net/svc/shared/download-addon/1883599410?t=1778452571&minpt=1&maxpt=1&bidx=0";
+      sha256 = "sha256-DCLlW4f4HJX2LwDOth7WQ5CEWtp57WcREFtkM7x5XjI=";
+    };
+  };
+  synapse = {
+    pname = "synapse";
+    version = "a3ff1d92079da5f762222bf7dcfe0bc8e96cd78f";
+    src = fetchgit {
+      url = "https://github.com/mobesamedia/Synapse.git";
+      rev = "a3ff1d92079da5f762222bf7dcfe0bc8e96cd78f";
+      fetchSubmodules = false;
+      deepClone = false;
+      leaveDotGit = false;
+      sparseCheckout = [ ];
+      sha256 = "sha256-ijPvpviAbr4H2w8SHpB2C6QPbJFnt3aZ5+UBPP7Ye+E=";
+    };
+    date = "2026-10-29";
+  };
   tailtui = {
     pname = "tailtui";
     version = "1.5.0";

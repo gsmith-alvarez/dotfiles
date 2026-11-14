@@ -5,6 +5,16 @@ src.github = "retorquere/zotero-better-bibtex"
 src.prefix = "v"
 fetch.url = "https://github.com/retorquere/zotero-better-bibtex/releases/download/v$ver/zotero-better-bibtex-$ver.xpi"
 
+# AnkiWeb redirects to the current version-specific archive URL.
+[flow-timer]
+src.cmd = "curl -fsSL -o /dev/null -w '%{url_effective}' 'https://ankiweb.net/shared/download/1883599410?v=2.1&p=260904' | sed -n 's|^https://ankiweb.net/svc/shared/download-addon/1883599410?\\(t=[0-9][0-9]*&minpt=[0-9][0-9]*&maxpt=[0-9][0-9]*&bidx=[0-9][0-9]*\\)$|\\1|p'"
+fetch.url = "https://ankiweb.net/svc/shared/download-addon/1883599410?$ver"
+
+[synapse]
+src.git = "https://github.com/mobesamedia/Synapse.git"
+src.branch = "main"
+fetch.git = "https://github.com/mobesamedia/Synapse.git"
+
 [tailtui]
 src.github = "Phundahl/tailtui"
 src.prefix = "v"

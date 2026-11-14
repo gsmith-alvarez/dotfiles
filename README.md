@@ -137,7 +137,7 @@ One of the biggest hurdles when starting with Nix on a workstation is understand
 ### Layer 3b: The Store-Built Hybrid Exceptions
 Two applications in [home/](home/) read source files from [configs/](configs/) into the Nix store at build time:
 1. **[home/yazi.nix](home/yazi.nix)**: Reads `configs/yazi/*.toml` via `builtins.readFile`, converts them to Nix attrsets with `builtins.fromTOML`, and configures the `programs.yazi` module. This allows Home Manager to hermetically package Yazi plugins and Catppuccin flavors into store paths.
-2. **[home/anki.nix](home/anki.nix)**: Reads `configs/anki/catppuccin_mocha.css` via `builtins.readFile`, wraps it into a store path using `pkgs.writeText`, and injects it into a custom `synapsePro` Anki addon derivation.
+2. **[home/anki.nix](home/anki.nix)**: Packages PassFail2, FSRS Helper, Review Heatmap, and Flow Timer; pins Synapse and Flow Timer via [nvfetcher.toml](nvfetcher.toml) and injects `configs/anki/catppuccin_mocha.css` into Synapse. Update Flow Timer with `nix run nixpkgs#nvfetcher -- --filter '^flow-timer$'`; the update check follows the AnkiWeb download for Anki 26.09.4, and the build fails if its writable-data patches no longer apply. Flow Timer's configuration and timing data live in `${XDG_DATA_HOME:-~/.local/share}/anki/flow-timer`, outside the Nix store.
 
 > [!WARNING]
 > Because Yazi and Anki are store-built from config sources, edits in `configs/yazi/` or `configs/anki/` do **not** take effect immediately. They require running `nh os switch .`.
