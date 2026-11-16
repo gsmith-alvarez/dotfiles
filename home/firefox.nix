@@ -188,6 +188,7 @@ in
         "WebBrowser"
       ];
       mimeType = [
+        "application/pdf"
         "text/html"
         "text/xml"
         "application/xhtml+xml"
@@ -254,6 +255,7 @@ in
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
+      "application/pdf" = "firefox.desktop";
       "text/html" = "re.sonny.Junction.desktop";
       "text/xml" = "re.sonny.Junction.desktop";
       "application/xhtml+xml" = "re.sonny.Junction.desktop";

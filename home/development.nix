@@ -77,9 +77,8 @@ in
     ])
     ++ (with llmpkgs; [
       antigravity-cli
-      codex
+      antigravity-hub
       omp
-      t3code-desktop
     ]);
 
   programs.rex.enable = true;
