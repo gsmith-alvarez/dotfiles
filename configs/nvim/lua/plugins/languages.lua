@@ -94,6 +94,7 @@ vim.lsp.config("clangd", {
 	},
 	cmd = {
 		"clangd",
+		"--query-driver=" .. vim.env.HOME .. "/.espressif/tools/*/*/*/bin/*-gcc",
 		"--background-index", -- Force clangd to index the project in the background
 		"--clang-tidy", -- Enable linter diagnostics
 		"--header-insertion=never", -- Prevents auto-inserting unwanted headers
