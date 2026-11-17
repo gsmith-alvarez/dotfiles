@@ -1,5 +1,5 @@
 {
-  "Revision": "0.6.7",
+  "Revision": "0.6.8.1",
   "Profiles": [
     {
       "Tablet": "XP-Pen Deco 01 V3 (Variant 2)",
@@ -178,6 +178,7 @@
         "WheelBindings": [],
         "DisablePressure": false,
         "DisableTilt": false,
+        "DisableRotation": false,
         "EnableDragBindings": false
       }
     }

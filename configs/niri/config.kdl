@@ -227,9 +227,6 @@ binds {
     // Window Switcher
     Mod+Tab hotkey-overlay-title="Global Window Switcher" { spawn "noctalia" "msg" "panel-toggle" "launcher" "/win"; }
 
-    // Screen reader toggle
-    Mod+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
-
     // Media keys
     XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl play-pause"; }
     XF86AudioPause allow-when-locked=true { spawn-sh "playerctl play-pause"; }
