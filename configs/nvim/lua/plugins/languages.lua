@@ -126,10 +126,10 @@ vim.lsp.config("nil_ls", {
 			},
 			nix = {
 				binary = "nix",
-				maxMemoryMB = 2048,
+				maxMemoryMB = 4096,
 				flake = {
 					autoArchive = true,
-					autoEvalInputs = true,
+					autoEvalInputs = false,
 					nixpkgsInputName = "nixpkgs",
 				},
 			},
