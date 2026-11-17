@@ -1,12 +1,18 @@
 {
   pkgs,
   lib,
-  home,
+  homes,
 }:
 let
   src = ../.;
+  flake = import ../flake.nix;
+  caches = import ../lib/caches.nix;
+  cachesMatch =
+    flake.nixConfig.extra-substituters == caches.substituters
+    && flake.nixConfig.extra-trusted-public-keys == caches.trusted-public-keys;
+
   checkLinks =
-    cfg:
+    hostName: cfg:
     let
       homeDir = cfg.home.homeDirectory;
       relativeTarget = lib.removePrefix "${homeDir}/";
@@ -17,12 +23,20 @@ let
         ) files;
       targets =
         declared:
-        entries "" declared.home.file
-        // entries "${cfg.xdg.configHome}/" declared.xdg.configFile
-        // entries "${cfg.xdg.dataHome}/" declared.xdg.dataFile;
+        entries "" (declared.home.file or { })
+        // entries "${cfg.xdg.configHome}/" (declared.xdg.configFile or { })
+        // entries "${cfg.xdg.dataHome}/" (declared.xdg.dataFile or { });
+
+      declaredFor =
+        evalCfg:
+        let
+          base = import ../home/dotfiles.nix { config = evalCfg; };
+          host = import ../home/hosts/${hostName}.nix { config = evalCfg; };
+        in
+        lib.recursiveUpdate base host;
 
       # Compare real symlink derivations, not their external destination strings.
-      expected = targets (import ../home/dotfiles.nix { config = cfg; });
+      expected = targets (declaredFor cfg);
       effective = lib.groupBy (file: relativeTarget file.target) (
         builtins.filter (file: file.enable) (builtins.attrValues cfg.home.file)
       );
@@ -37,35 +51,36 @@ let
         && (builtins.head actual).force == (file.force or false);
       linksMatch = lib.all (target: matches target expected.${target}) (builtins.attrNames expected);
 
-      # The filesystem validator needs paths relative to configs/, not store paths.
-      manifest = targets (
-        import ../home/dotfiles.nix {
-          config = {
-            home.homeDirectory = homeDir;
-            lib.file.mkOutOfStoreSymlink = lib.removePrefix "${homeDir}/dotfiles/configs/";
-          };
-        }
-      );
+      # The filesystem validator needs paths relative to the repo root, not store paths.
+      mockCfg = {
+        home.homeDirectory = homeDir;
+        lib.file.mkOutOfStoreSymlink = lib.removePrefix "${homeDir}/dotfiles/";
+      };
+      manifest = targets (declaredFor mockCfg);
       links = builtins.mapAttrs (_: file: file.source) manifest;
       generated = builtins.filter (target: !(builtins.hasAttr target expected)) (
         builtins.attrNames effective
       );
     in
     # Validate every live owner before excluding its target from generated files.
+    assert cachesMatch;
     assert linksMatch;
+    pkgs.writeText "links-${hostName}.json" (builtins.toJSON { inherit links generated; });
+
+  wolfgangLinks = checkLinks "wolfgang" homes.wolfgang;
+  easleyLinks = checkLinks "easley" homes.easley;
+in
+{
+  link-contract =
     pkgs.runCommand "dotfiles-link-contract"
       {
         nativeBuildInputs = [ pkgs.python3 ];
       }
       ''
-        python ${src}/tests/link_contract.py ${src}/configs ${
-          pkgs.writeText "links.json" (builtins.toJSON { inherit links generated; })
-        }
+        python ${src}/tests/link_contract.py ${src} ${wolfgangLinks}
+        python ${src}/tests/link_contract.py ${src} ${easleyLinks}
         touch $out
       '';
-in
-{
-  link-contract = checkLinks home;
 
   nix-style =
     pkgs.runCommand "dotfiles-nix-style"
@@ -96,7 +111,7 @@ in
       }
       ''
         export HOME=$TMPDIR
-        python ${src}/tests/config_syntax.py ${src}/configs
+        python ${src}/tests/config_syntax.py ${src}/configs ${src}/hosts ${src}/nvfetcher.toml
         niri validate -c ${src}/configs/niri/config.kdl
         touch $out
       '';
