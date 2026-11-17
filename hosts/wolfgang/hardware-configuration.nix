@@ -33,18 +33,30 @@
     "/" = {
       device = "/dev/disk/by-uuid/46ca411e-7e18-4023-a565-0061eb698845";
       fsType = "btrfs";
+      options = [
+        "compress=zstd"
+        "noatime"
+      ];
     };
 
     "/home" = {
       device = "/dev/disk/by-uuid/46ca411e-7e18-4023-a565-0061eb698845";
       fsType = "btrfs";
-      options = [ "subvol=home" ];
+      options = [
+        "subvol=home"
+        "compress=zstd"
+        "noatime"
+      ];
     };
 
     "/nix" = {
       device = "/dev/disk/by-uuid/46ca411e-7e18-4023-a565-0061eb698845";
       fsType = "btrfs";
-      options = [ "subvol=nix" ];
+      options = [
+        "subvol=nix"
+        "compress=zstd"
+        "noatime"
+      ];
     };
 
     "/boot" = {

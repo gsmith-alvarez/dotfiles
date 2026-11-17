@@ -33,18 +33,30 @@
     "/" = {
       device = "/dev/disk/by-uuid/bd807694-1c79-48f0-af23-8a38aac6e303";
       fsType = "btrfs";
+      options = [
+        "compress=zstd"
+        "noatime"
+      ];
     };
 
     "/home" = {
       device = "/dev/disk/by-uuid/bd807694-1c79-48f0-af23-8a38aac6e303";
       fsType = "btrfs";
-      options = [ "subvol=home" ];
+      options = [
+        "subvol=home"
+        "compress=zstd"
+        "noatime"
+      ];
     };
 
     "/nix" = {
       device = "/dev/disk/by-uuid/bd807694-1c79-48f0-af23-8a38aac6e303";
       fsType = "btrfs";
-      options = [ "subvol=nix" ];
+      options = [
+        "subvol=nix"
+        "compress=zstd"
+        "noatime"
+      ];
     };
 
     "/boot" = {
