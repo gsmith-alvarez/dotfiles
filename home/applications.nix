@@ -18,6 +18,7 @@ in
     tailtui
     # Desktop applications
     easyeffects
+    wayscriber
     obsidian
     openbot
     playerctl
