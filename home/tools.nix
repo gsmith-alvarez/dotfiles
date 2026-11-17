@@ -1,9 +1,15 @@
 { pkgs, ... }:
 {
+  programs = {
+    nix-index = {
+      enable = true;
+      enableFishIntegration = false;
+    };
+    nix-index-database.comma.enable = true;
+  };
+
   home.packages = with pkgs; [
     # Nix
-    comma
-    nix-index
     nix-output-monitor
     nvd
 

@@ -2,6 +2,7 @@
 {
   imports = [
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
+    inputs.nix-index-database.homeModules.nix-index
     inputs.rex.homeManagerModules.default
     ./dotfiles.nix
     ./shell.nix
