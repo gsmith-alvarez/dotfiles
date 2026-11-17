@@ -40,7 +40,7 @@ flowchart TD
 1. **[flake.nix](flake.nix)**: Start here. Observe how external flake inputs are declared, pinned, and passed down to NixOS and Home Manager via `specialArgs` and `extraSpecialArgs`.
 2. **Host definitions**: [hosts/common_configuration.nix](hosts/common_configuration.nix) contains settings shared by both hosts. [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) describes the laptop and [hosts/easley/default.nix](hosts/easley/default.nix) describes the desktop; each imports the shared configuration and owns its hardware and host-specific settings.
 3. **[modules/core/](modules/core/) & [modules/desktop/](modules/desktop/)**: System-level concerns. Notice how [modules/core/default.nix](modules/core/default.nix) bundles focused files ([nix.nix](modules/core/nix.nix), [packages.nix](modules/core/packages.nix), [programs.nix](modules/core/programs.nix), [services.nix](modules/core/services.nix), [audio.nix](modules/core/audio.nix), [locale.nix](modules/core/locale.nix), [accounts.nix](modules/core/accounts.nix)), while [modules/desktop/default.nix](modules/desktop/default.nix) configures Niri and Noctalia.
-4. **[home/default.nix](home/default.nix)**: Home Manager user configuration. See how user packages are organized into focused modules: [development.nix](home/development.nix) (editors, compilers, LSPs), [tools.nix](home/tools.nix) (CLI inspection and utilities), [applications.nix](home/applications.nix) (GUI apps, Flatpaks), and [appearance.nix](home/appearance.nix) (GTK themes and fonts).
+4. **[home/default.nix](home/default.nix)**: Home Manager user configuration. See how user packages are organized into focused modules: [development.nix](home/development.nix) (editors, compilers, LSPs), [tools.nix](home/tools.nix) (CLI inspection and utilities), [applications.nix](home/applications.nix) (GUI apps, Flatpaks), [firefox.nix](home/firefox.nix) (Firefox profiles and policies), and [appearance.nix](home/appearance.nix) (GTK themes and fonts).
 5. **[home/dotfiles.nix](home/dotfiles.nix)** and **[lib/out-of-store.nix](lib/out-of-store.nix)**: The live-link manifest. Learn how dotfiles inside [configs/](configs/) are symlinked directly to `~/.config/` without writing them to the immutable Nix store.
 6. **[checks/default.nix](checks/default.nix)** and **[tests/](tests/)**: Automated verification suite. See how `nix flake check -L` enforces link integrity ([link_contract.py](tests/link_contract.py)), configuration syntax ([config_syntax.py](tests/config_syntax.py)), cache policy, and Nix code style.
 7. **[modules/secrets.nix](modules/secrets.nix)** and **[docs/secrets.md](docs/secrets.md)**: Encrypted secrets management architecture. Understand why plaintext secrets must never be placed in `/nix/store` and how `sops-nix` handles deferred enrollment.
@@ -70,26 +70,31 @@ flake.nix (outputs)
 ├── nixosConfigurations.wolfgang
 │   └── hosts/wolfgang/
 │       ├── default.nix
-│       └── hardware-configuration.nix
+│       ├── hardware-configuration.nix
+│       └── noctalia.toml
 ├── nixosConfigurations.easley
 │   └── hosts/easley/
 │       ├── default.nix
-│       └── hardware-configuration.nix
+│       ├── hardware-configuration.nix
+│       └── noctalia.toml
 ├── hosts/common_configuration.nix (shared host settings)
 ├── modules/core/ & modules/desktop/ (shared system modules)
 ├── modules/secrets.nix
 ├── home-manager.nixosModules.home-manager
 │   └── users.giovanni = import ./home (home/default.nix)
 │       ├── inputs.nix-flatpak.homeManagerModules.nix-flatpak
+│       ├── inputs.rex.homeManagerModules.default
 │       ├── home/dotfiles.nix (imports lib/out-of-store.nix)
 │       ├── home/shell.nix
 │       ├── home/yazi.nix
 │       ├── home/appearance.nix
-│       ├── home/stats.nix
 │       ├── home/anki.nix
 │       ├── home/development.nix
+│       ├── home/tools.nix
 │       ├── home/applications.nix
-│       └── home/ssh.nix
+│       ├── home/firefox.nix
+│       ├── home/ssh.nix
+│       └── home/hosts/{wolfgang,easley}.nix (per-host overrides)
 ├── homeConfigurations.giovanni (read-only query target; shares system pkgs)
 └── checks.x86_64-linux (checks/default.nix -> tests/)
 ```
@@ -414,7 +419,7 @@ another machine directly to either host's hardware configuration.
 
 - Generate hardware configuration for your own machine; review disks, mounts and bootloader settings.
 - Change the host output, account name, home directory, checkout path and host-specific services together.
-- Review the campus-network dispatcher and remove it if it does not apply to you.
+- Review private tailnet and SSH hostnames in [home/firefox.nix](home/firefox.nix) and [home/ssh.nix](home/ssh.nix) and remove or replace them for your environment.
 - Preserve state versions for an existing installation; choose appropriate initial versions for a new one.
 - The checks and live-link helper assume this checkout layout. Update their paths when adapting it.
 - Read [the secrets runbook](docs/secrets.md) before enrolling keys; encrypted files without recoverable keys are not a backup.
