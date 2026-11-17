@@ -1,5 +1,11 @@
 { config, ... }:
+let
+  inherit (config.lib.file) mkOutOfStoreSymlink;
+  hostDir = "${config.home.homeDirectory}/dotfiles/hosts/wolfgang";
+in
 {
-  xdg.configFile."noctalia/wolfgang.toml".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/hosts/wolfgang/noctalia.toml";
+  xdg.configFile = {
+    "niri/host.kdl".source = mkOutOfStoreSymlink "${hostDir}/niri.kdl";
+    "noctalia/wolfgang.toml".source = mkOutOfStoreSymlink "${hostDir}/noctalia.toml";
+  };
 }

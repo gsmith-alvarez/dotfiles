@@ -71,11 +71,13 @@ flake.nix (outputs)
 │   └── hosts/wolfgang/
 │       ├── default.nix
 │       ├── hardware-configuration.nix
+│       ├── niri.kdl
 │       └── noctalia.toml
 ├── nixosConfigurations.easley
 │   └── hosts/easley/
 │       ├── default.nix
 │       ├── hardware-configuration.nix
+│       ├── niri.kdl
 │       └── noctalia.toml
 ├── hosts/common_configuration.nix (shared host settings)
 ├── modules/core/ & modules/desktop/ (shared system modules)
@@ -83,6 +85,7 @@ flake.nix (outputs)
 ├── home-manager.nixosModules.home-manager
 │   └── users.giovanni = import ./home (home/default.nix)
 │       ├── inputs.nix-flatpak.homeManagerModules.nix-flatpak
+│       ├── inputs.nix-index-database.homeModules.nix-index
 │       ├── inputs.rex.homeManagerModules.default
 │       ├── home/dotfiles.nix (imports lib/out-of-store.nix)
 │       ├── home/shell.nix

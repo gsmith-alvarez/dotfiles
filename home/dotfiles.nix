@@ -17,7 +17,7 @@ in
       "btop"
       "lazygit"
       "navi"
-      "niri"
+      "niri/config.kdl"
       "noctalia/config.toml"
       "spotify-player"
       "starship.toml"

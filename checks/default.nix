@@ -112,7 +112,12 @@ in
       ''
         export HOME=$TMPDIR
         python ${src}/tests/config_syntax.py ${src}/configs ${src}/hosts ${src}/nvfetcher.toml
-        niri validate -c ${src}/configs/niri/config.kdl
+        for host in wolfgang easley; do
+          mkdir -p "$TMPDIR/niri-$host"
+          ln -s ${src}/configs/niri/config.kdl "$TMPDIR/niri-$host/config.kdl"
+          ln -s ${src}/hosts/$host/niri.kdl "$TMPDIR/niri-$host/host.kdl"
+          niri validate -c "$TMPDIR/niri-$host/config.kdl"
+        done
         touch $out
       '';
 }
