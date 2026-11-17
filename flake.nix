@@ -25,6 +25,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Kept on its own nixpkgs lock for fast-moving LLM packages and cache.numtide.com hits
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
     };
@@ -36,15 +37,26 @@
     };
 
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
-    noctalia.url = "github:noctalia-dev/noctalia";
+
+    noctalia-greeter = {
+      url = "github:noctalia-dev/noctalia-greeter";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    yazi-flavors.url = "github:aguirre-matteo/nix-yazi-flavors";
+    yazi-flavors = {
+      url = "github:aguirre-matteo/nix-yazi-flavors";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     wayscriber = {
       url = "github:devmobasa/wayscriber";
@@ -108,7 +120,10 @@
       checks.x86_64-linux = import ./checks {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         inherit (nixpkgs) lib;
-        home = self.nixosConfigurations.wolfgang.config.home-manager.users.giovanni;
+        homes = {
+          wolfgang = self.nixosConfigurations.wolfgang.config.home-manager.users.giovanni;
+          easley = self.nixosConfigurations.easley.config.home-manager.users.giovanni;
+        };
       };
       devShells.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.mkShell {
         packages = with nixpkgs.legacyPackages.x86_64-linux; [

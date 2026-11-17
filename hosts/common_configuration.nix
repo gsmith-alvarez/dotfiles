@@ -36,14 +36,6 @@
 
   hardware.graphics.enable32Bit = true;
 
-  #USB Access for MCU
-  users.users.giovanni.extraGroups = [
-    "wheel"
-    "networkmanager"
-    "dialout"
-    "plugdev"
-  ];
-
   # Bluetooth
   hardware.bluetooth.enable = true;
 

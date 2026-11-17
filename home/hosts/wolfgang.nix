@@ -1,5 +1,5 @@
 { config, ... }:
 {
   xdg.configFile."noctalia/wolfgang.toml".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/giovanni/dotfiles/hosts/wolfgang/noctalia.toml";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/hosts/wolfgang/noctalia.toml";
 }

@@ -18,7 +18,6 @@ in
     tailtui
     # Desktop applications
     easyeffects
-    pkgs.wayscriber
     obsidian
     openbot
     playerctl

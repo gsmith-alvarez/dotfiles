@@ -12,6 +12,11 @@ let
   '';
 in
 {
+  home.packages = with pkgs; [
+    exiftool
+    mediainfo
+  ];
+
   programs.yazi = {
     enable = true;
     enableFishIntegration = false;

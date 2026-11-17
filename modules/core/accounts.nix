@@ -6,6 +6,9 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      # USB access for MCU
+      "dialout"
+      "plugdev"
     ];
     # Keep these ahead of Home Manager's package environment.
     packages = lib.mkBefore (

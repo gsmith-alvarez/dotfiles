@@ -50,6 +50,7 @@ in
       typos-lsp
       vscode-langservers-extracted
       yaml-language-server
+      zls
 
       # Linters & formatters
       oxlint

@@ -8,18 +8,15 @@
     ../../modules/desktop
   ];
 
-  services = {
-    displayManager.noctalia-greeter.settings = {
-      appearance.wallpaper = {
-        path = "/home/giovanni/Pictures/wallpapers/neptune.png";
-        fill_mode = "crop";
-      };
-      output = {
-        use_synced_settings = false;
-        layout = "DP-2:0,0; DP-1:2560,0";
-      };
+  services.displayManager.noctalia-greeter.settings = {
+    appearance.wallpaper = {
+      path = "/home/giovanni/Pictures/wallpapers/neptune.png";
+      fill_mode = "crop";
     };
-    resolved.enable = true;
+    output = {
+      use_synced_settings = false;
+      layout = "DP-2:0,0; DP-1:2560,0";
+    };
   };
 
   home-manager.users.giovanni = {

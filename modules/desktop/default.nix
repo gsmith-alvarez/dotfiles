@@ -44,7 +44,7 @@
             wrapProgram $out/bin/wayscriber-configurator \
               --prefix PATH : ${prev.lib.makeBinPath [ prev.glib.bin ]}
           '';
-          meta = configurator.meta;
+          inherit (configurator) meta;
         };
     })
   ];
