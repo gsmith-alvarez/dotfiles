@@ -304,6 +304,5 @@ show_label = true
 [widget.workspaces]
 enabled = false
 max_label_chars = 20
-show_all_outputs = false
 show_icons = false
 style = "focus_hint"
