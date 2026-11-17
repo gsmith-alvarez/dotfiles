@@ -33,8 +33,6 @@ mini.now(function()
 		"sql",
 		"dockerfile",
 		"latex",
-		"r",
-		"rnoweb",
 		"gitcommit",
 		"gitignore",
 	})
@@ -157,7 +155,6 @@ vim.lsp.enable({
 	"taplo", -- TOML
 	"fish_lsp", -- Fish
 	"nil_ls", -- Nix
-	"r_language_server", -- R
 	"rust_analyzer", -- Rust
 	"zls", -- Zig
 	"html", -- HTML

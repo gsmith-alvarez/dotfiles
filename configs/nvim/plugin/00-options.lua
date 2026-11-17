@@ -58,8 +58,10 @@ set.switchbuf = "usetab"
 -- Nvim enables filetype detection & syntax at startup.
 vim.api.nvim_create_autocmd("FileType", {
 	desc = "Keep formatoptions clean for editing",
-	callback = function()
-		vim.opt_local.formatoptions:remove({ "c", "o" })
+	callback = function(ev)
+		if not vim.b[ev.buf].custom_formatoptions then
+			vim.opt_local.formatoptions:remove({ "c", "o" })
+		end
 	end,
 })
 
@@ -69,7 +71,7 @@ set.linebreak = true
 set.showbreak = "↪ "
 set.breakindent = true
 set.breakindentopt = "list:-1"
-set.colorcolumn = "" -- scoped to markdown ftplugin; +1 needs a textwidth to render correctly
+set.colorcolumn = ""
 set.cursorline = true
 set.cursorlineopt = "screenline,number"
 

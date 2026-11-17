@@ -519,4 +519,4 @@ end, "Visits: Remove Custom Label")
 -- Refactor
 u.map({ "n", "x" }, "<leader>cR", function()
 	require("refactoring").select_refactor()
-end, { desc = "Select refector" })
+end, { desc = "Select refactor" })

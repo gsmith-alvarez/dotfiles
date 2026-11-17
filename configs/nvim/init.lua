@@ -104,5 +104,3 @@ end
 -- 5. Runtime path cleanup
 local unwanted_paths = { "/usr/share/vim/vimfiles", "/usr/share/vim/vimfiles/after" }
 vim.opt.runtimepath:remove(unwanted_paths)
-
--- 6. Bootstrap

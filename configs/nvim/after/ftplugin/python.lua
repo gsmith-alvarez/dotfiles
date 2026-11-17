@@ -1,3 +1,5 @@
+vim.b.custom_formatoptions = true
+vim.opt_local.formatoptions:remove({ "c" })
 vim.opt_local.formatoptions:append({ "r", "o" })
 
 -- Ask ty for native workspace diagnostics when a Python buffer opens or changes.
