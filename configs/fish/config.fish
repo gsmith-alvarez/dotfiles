@@ -104,7 +104,7 @@ if status is-interactive
     #tuis
     abbr -a lg lazygit
     abbr -a ld lazydocker
-    abbr -a ll systemctl-tui
+    abbr -a lc systemctl-tui
     abbr -a li isd
     abbr -a lt tailtui
 end

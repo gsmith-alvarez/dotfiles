@@ -67,12 +67,16 @@ function fnav --description "Fuzzy navigate directories (up/down/zoxide)"
 
     else if test "$mode" = "down"
         # Bindings: ctrl-h to show/hide hidden, ctrl-g to toggle git-ignore logic
-        set target (fd --type d --hidden --exclude .git . | fzf --height=50% --popup=50% --layout=reverse --id-nth 1 \
+        set target (fd --type d --exclude .git . | fzf --height=50% --popup=50% --layout=reverse --id-nth 1 \
             --prompt="subdir> " \
             --preview="$preview_cmd" \
             --preview-window="right:60%" \
-            --bind "ctrl-h:reload(fd --type d --hidden --exclude .git .)" \
-            --bind "ctrl-g:reload(fd --type d --exclude .git .)")
+            --bind 'ctrl-h:transform:[ "$FZF_PROMPT" = "subdir (hidden)> " ] &&
+                echo "change-prompt(subdir> )+reload(fd --type d --exclude .git .)" ||
+                echo "change-prompt(subdir (hidden)> )+reload(fd --type d --hidden --exclude .git .)"' \
+            --bind 'ctrl-g:transform:[ "$FZF_PROMPT" = "subdir (no-ignore)> " ] &&
+                echo "change-prompt(subdir> )+reload(fd --type d --exclude .git .)" ||
+                echo "change-prompt(subdir (no-ignore)> )+reload(fd --type d --hidden --no-ignore --exclude .git .)"')
 
     else if test "$mode" = "zoxide"
         # query zoxide for frecency paths, exclude current directory
