@@ -27,9 +27,15 @@
 # Sudo command to be used
 # sudo_command = "sudo"
 
-# Disable specific steps - same options as the command line flag
+disable = [
+    "home_manager",
+    "antigravity_cli",
+    "antigravity",
+    "hermes_agent",
+    "system",
+    "tailscale",
+] # Disable specific steps - same options as the command line flag
 # disable = ["system", "emacs"]
-disable = ["home_manager", "antigravity_cli", "hermes_agent", "system"]
 
 # Run these steps before all others
 # first = ["chezmoi"]
