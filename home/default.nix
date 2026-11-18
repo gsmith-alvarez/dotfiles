@@ -10,15 +10,9 @@
     inputs.nix-index-database.homeModules.nix-index
     inputs.rex.homeManagerModules.default
     ./dotfiles.nix
-    ./shell.nix
-    ./yazi.nix
     ./appearance.nix
-    ./anki.nix
-    ./development.nix
-    ./tools.nix
-    ./applications.nix
-    ./firefox.nix
-    ./ssh.nix
+    ./packages
+    ./programs
   ];
 
   news.display = "show";

@@ -19,3 +19,7 @@ fetch.git = "https://github.com/mobesamedia/Synapse.git"
 src.github = "Phundahl/tailtui"
 src.prefix = "v"
 fetch.url = "https://github.com/Phundahl/tailtui/releases/download/v$ver/tailtui_$ver_linux_amd64.tar.gz"
+
+[pele]
+src.github = "obsidianmd/pele"
+fetch.url = "https://registry.npmjs.org/pele/-/pele-$ver.tgz"

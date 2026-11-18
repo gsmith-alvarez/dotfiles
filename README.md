@@ -17,9 +17,9 @@ A modular, reproducible NixOS configuration for `wolfgang` (laptop) and `easley`
 | **Terminal** | [Ghostty](https://ghostty.org/) | [configs/ghostty/config](configs/ghostty/config) (live link) |
 | **Shell** | [Fish](https://fishshell.com/) + [Starship](https://starship.rs/) + [Atuin](https://atuin.sh/) | [configs/fish/](configs/fish/), [configs/starship.toml](configs/starship.toml) (live links) |
 | **Editor** | [Neovim](https://neovim.io/) (via `neovim-nightly-overlay`) | [configs/nvim/](configs/nvim/) (live link) |
-| **File Manager** | [Yazi](https://github.com/sxyazi/yazi) | [home/yazi.nix](home/yazi.nix) (reads [configs/yazi/](configs/yazi/)) |
+| **File Manager** | [Yazi](https://github.com/sxyazi/yazi) | [home/programs/yazi.nix](home/programs/yazi.nix) (reads [configs/yazi/](configs/yazi/)) |
 | **System Runner** | [nh](https://github.com/viperML/nh) + [Home Manager](https://github.com/nix-community/home-manager) | [modules/core/programs.nix](modules/core/programs.nix), [home/default.nix](home/default.nix) |
-| **Secrets Engine** | [sops-nix](https://github.com/Mic92/sops-nix) (integration only) | [modules/secrets.nix](modules/secrets.nix), [docs/secrets.md](docs/secrets.md) |
+| **Secrets Engine** | [sops-nix](https://github.com/Mic92/sops-nix) (integration only) | [modules/core/secrets.nix](modules/core/secrets.nix), [docs/secrets.md](docs/secrets.md) |
 
 ---
 
@@ -29,21 +29,21 @@ If you are exploring this codebase to learn how to structure a NixOS flake, foll
 
 ```mermaid
 flowchart TD
-    Step1["1. flake.nix<br/>(Entry point, inputs & outputs)"] --> Step2["2. hosts/<br/>(Shared and machine-specific settings)"]
-    Step2 --> Step3["3. modules/core/ & modules/desktop/<br/>(System-level services, audio, packages)"]
+    Step1["1. flake.nix<br/>(Entry point, inputs & outputs)"] --> Step2["2. hosts/<br/>(Machine-specific hardware and host settings)"]
+    Step2 --> Step3["3. modules/core/ & modules/desktop/<br/>(System-level baseline, services, packages)"]
     Step3 --> Step4["4. home/default.nix & feature suites<br/>(User packages, dev tools, theming)"]
     Step4 --> Step5["5. home/dotfiles.nix & lib/out-of-store.nix<br/>(Live symlinks into configs/)"]
     Step5 --> Step6["6. checks/ & tests/<br/>(Fast link contract, syntax, and style tests)"]
-    Step6 --> Step7["7. modules/secrets.nix & docs/secrets.md<br/>(SOPS secrets architecture)"]
+    Step6 --> Step7["7. modules/core/secrets.nix & docs/secrets.md<br/>(SOPS secrets architecture)"]
 ```
 
 1. **[flake.nix](flake.nix)**: Start here. Observe how external flake inputs are declared, pinned, and passed down to NixOS and Home Manager via `specialArgs` and `extraSpecialArgs`.
-2. **Host definitions**: [hosts/common_configuration.nix](hosts/common_configuration.nix) contains settings shared by both hosts. [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) describes the laptop and [hosts/easley/default.nix](hosts/easley/default.nix) describes the desktop; each imports the shared configuration and owns its hardware and host-specific settings.
-3. **[modules/core/](modules/core/) & [modules/desktop/](modules/desktop/)**: System-level concerns. Notice how [modules/core/default.nix](modules/core/default.nix) bundles focused files ([nix.nix](modules/core/nix.nix), [packages.nix](modules/core/packages.nix), [programs.nix](modules/core/programs.nix), [services.nix](modules/core/services.nix), [audio.nix](modules/core/audio.nix), [locale.nix](modules/core/locale.nix), [accounts.nix](modules/core/accounts.nix)), while [modules/desktop/default.nix](modules/desktop/default.nix) configures Niri and Noctalia.
-4. **[home/default.nix](home/default.nix)**: Home Manager user configuration. See how user packages are organized into focused modules: [development.nix](home/development.nix) (editors, compilers, LSPs), [tools.nix](home/tools.nix) (CLI inspection and utilities), [applications.nix](home/applications.nix) (GUI apps, Flatpaks), [firefox.nix](home/firefox.nix) (Firefox profiles and policies), and [appearance.nix](home/appearance.nix) (GTK themes and fonts).
+2. **Host definitions**: [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) describes the laptop and [hosts/easley/default.nix](hosts/easley/default.nix) describes the desktop; each owns its hardware and machine-specific settings and imports the shared modules.
+3. **[modules/core/](modules/core/) & [modules/desktop/](modules/desktop/)**: System-level concerns. Notice how [modules/core/default.nix](modules/core/default.nix) bundles focused files ([nix.nix](modules/core/nix.nix), [system.nix](modules/core/system.nix), [packages.nix](modules/core/packages.nix), [programs.nix](modules/core/programs.nix), [services.nix](modules/core/services.nix), [syncthing.nix](modules/core/syncthing.nix), [audio.nix](modules/core/audio.nix), [locale.nix](modules/core/locale.nix), [accounts.nix](modules/core/accounts.nix), [secrets.nix](modules/core/secrets.nix)), while [modules/desktop/default.nix](modules/desktop/default.nix) configures Niri and Noctalia.
+4. **[home/default.nix](home/default.nix)**: Home Manager user configuration. User modules are split into flat package lists under [home/packages/](home/packages/) ([development.nix](home/packages/development.nix), [tools.nix](home/packages/tools.nix), [applications.nix](home/packages/applications.nix), [shell.nix](home/packages/shell.nix)), dedicated per-app modules under [home/programs/](home/programs/) ([anki.nix](home/programs/anki.nix), [firefox.nix](home/programs/firefox.nix), [pele.nix](home/programs/pele.nix), [ssh.nix](home/programs/ssh.nix), [yazi.nix](home/programs/yazi.nix)), and [appearance.nix](home/appearance.nix) (GTK/Qt themes and fonts).
 5. **[home/dotfiles.nix](home/dotfiles.nix)** and **[lib/out-of-store.nix](lib/out-of-store.nix)**: The live-link manifest. Learn how dotfiles inside [configs/](configs/) are symlinked directly to `~/.config/` without writing them to the immutable Nix store.
 6. **[checks/default.nix](checks/default.nix)** and **[tests/](tests/)**: Automated verification suite. See how `nix flake check -L` enforces link integrity ([link_contract.py](tests/link_contract.py)), configuration syntax ([config_syntax.py](tests/config_syntax.py)), cache policy, and Nix code style.
-7. **[modules/secrets.nix](modules/secrets.nix)** and **[docs/secrets.md](docs/secrets.md)**: Encrypted secrets management architecture. Understand why plaintext secrets must never be placed in `/nix/store` and how `sops-nix` handles deferred enrollment.
+7. **[modules/core/secrets.nix](modules/core/secrets.nix)** and **[docs/secrets.md](docs/secrets.md)**: Encrypted secrets management architecture. Understand why plaintext secrets must never be placed in `/nix/store` and how `sops-nix` handles deferred enrollment.
 
 ## Host selection
 
@@ -79,24 +79,16 @@ flake.nix (outputs)
 │       ├── hardware-configuration.nix
 │       ├── niri.kdl
 │       └── noctalia.toml
-├── hosts/common_configuration.nix (shared host settings)
-├── modules/core/ & modules/desktop/ (shared system modules)
-├── modules/secrets.nix
+├── modules/core/ & modules/desktop/ (shared system modules, including system.nix, syncthing.nix, secrets.nix)
 ├── home-manager.nixosModules.home-manager
 │   └── users.giovanni = import ./home (home/default.nix)
 │       ├── inputs.nix-flatpak.homeManagerModules.nix-flatpak
 │       ├── inputs.nix-index-database.homeModules.nix-index
 │       ├── inputs.rex.homeManagerModules.default
 │       ├── home/dotfiles.nix (imports lib/out-of-store.nix)
-│       ├── home/shell.nix
-│       ├── home/yazi.nix
 │       ├── home/appearance.nix
-│       ├── home/anki.nix
-│       ├── home/development.nix
-│       ├── home/tools.nix
-│       ├── home/applications.nix
-│       ├── home/firefox.nix
-│       ├── home/ssh.nix
+│       ├── home/packages/ (applications, development, shell, tools)
+│       ├── home/programs/ (anki, firefox, pele, ssh, yazi)
 │       └── home/hosts/{wolfgang,easley}.nix (per-host overrides)
 ├── homeConfigurations.giovanni (read-only query target; shares system pkgs)
 └── checks.x86_64-linux (checks/default.nix -> tests/)
@@ -109,7 +101,7 @@ flake.nix (outputs)
 | [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) | [flake.nix](flake.nix) | System (`root`) | `/nix/store`, `/etc` | `nh os switch .#wolfgang` (requires sudo) |
 | [hosts/easley/default.nix](hosts/easley/default.nix) | [flake.nix](flake.nix) | System (`root`) | `/nix/store`, `/etc` | `nh os switch .#easley` (requires sudo) |
 | [modules/core/](modules/core/) | Both host definitions | System (`root`) | `/nix/store`, `/etc` | `nh os switch .#<host>` (requires sudo) |
-| [modules/secrets.nix](modules/secrets.nix) | [flake.nix](flake.nix) | System (`root`) | `/run/secrets/` | `nh os switch .` (requires sudo) |
+| [modules/core/secrets.nix](modules/core/secrets.nix) | [modules/core/default.nix](modules/core/default.nix) | System (`root`) | `/run/secrets/` | `nh os switch .` (requires sudo) |
 | [home/default.nix](home/default.nix) | [flake.nix](flake.nix) (via Home Manager) | User (`giovanni`) | `/etc/profiles/per-user` | `nh os switch .` (switched together) |
 | [home/dotfiles.nix](home/dotfiles.nix) | [home/default.nix](home/default.nix) | User (`giovanni`) | `~/.config/`, `~/` | Instant symlink to [configs/](configs/) |
 | [configs/](configs/) (Live files) | Symlinked by [home/dotfiles.nix](home/dotfiles.nix) and feature modules | User (`giovanni`) | Target apps | **Instant edit** (app reload / new shell) |
@@ -122,7 +114,7 @@ One of the biggest hurdles when starting with Nix on a workstation is understand
 
 ### Layer 1: NixOS System Configuration
 - **What it controls**: The Linux kernel, hardware drivers, disks/filesystems, bootloader, system-wide background daemons (e.g. `upower`, `tailscale`, `syncthing`, `keyd`), user account privileges (`wheel`, `networkmanager`), and system environment.
-- **Where it lives**: [hosts/wolfgang/](hosts/wolfgang/) and [hosts/easley/](hosts/easley/), plus [modules/core/](modules/core/), [modules/desktop/](modules/desktop/), and [modules/secrets.nix](modules/secrets.nix).
+- **Where it lives**: [hosts/wolfgang/](hosts/wolfgang/) and [hosts/easley/](hosts/easley/), plus [modules/core/](modules/core/) and [modules/desktop/](modules/desktop/).
 - **How it builds**: Evaluated as a single immutable system closure in `/nix/store/<hash>-nixos-system-<host>-...`, where `<host>` is `wolfgang` or `easley`.
 - **How it applies**: Activated via `nh os switch .#<host>` (which calls `nixos-rebuild switch` with `sudo`).
 
@@ -131,7 +123,7 @@ One of the biggest hurdles when starting with Nix on a workstation is understand
 - **Where it lives**: [home/](home/).
 - **How it integrates**: It is embedded directly as a NixOS module inside [flake.nix](flake.nix) (`home-manager.nixosModules.home-manager`). We configure `useGlobalPkgs = true` so Home Manager shares the exact same package evaluation as the system, and `useUserPackages = true` so user packages are installed to `/etc/profiles/per-user/giovanni`.
 - **How it applies**: Because it is embedded in the NixOS configuration, running `nh os switch .` switches **both** through one system rebuild. This is not an all-or-nothing transaction: activation can fail partway, and service status still needs checking.
-- **Zotero**: `home/applications.nix` installs `pkgs.zotero` and places Better BibTeX in the configured Zotero profile. Its pinned Nixpkgs package requires an exception for end-of-life Firefox ESR 140 in `modules/core/packages.nix`; that runtime receives no further security fixes.
+- **Zotero**: `home/packages/applications.nix` installs `pkgs.zotero` and places Better BibTeX in the configured Zotero profile. Its pinned Nixpkgs package requires an exception for end-of-life Firefox ESR 140 in `modules/core/packages.nix`; that runtime receives no further security fixes.
 - **Read-only query target**: [flake.nix](flake.nix) also exports `homeConfigurations.giovanni`. This exists strictly for read-only inspection commands like `home-manager news --flake .`. **Never run `nh home switch` or activate this output independently.**
 
 ### Layer 3: Live Application Configs (Out-of-Store Symlinks)
@@ -143,9 +135,9 @@ One of the biggest hurdles when starting with Nix on a workstation is understand
   - No need to run `nh os switch` or wait for a Nix build just to tweak an editor shortcut!
 
 ### Layer 3b: The Store-Built Hybrid Exceptions
-Two applications in [home/](home/) read source files from [configs/](configs/) into the Nix store at build time:
-1. **[home/yazi.nix](home/yazi.nix)**: Reads `configs/yazi/*.toml` via `builtins.readFile`, converts them to Nix attrsets with `builtins.fromTOML`, and configures the `programs.yazi` module. This allows Home Manager to hermetically package Yazi plugins and Catppuccin flavors into store paths.
-2. **[home/anki.nix](home/anki.nix)**: Packages PassFail2, FSRS Helper, Review Heatmap, and Flow Timer; pins Synapse and Flow Timer via [nvfetcher.toml](nvfetcher.toml) and injects `configs/anki/catppuccin_mocha.css` into Synapse. Update Flow Timer with `nix run nixpkgs#nvfetcher -- --filter '^flow-timer$'`; the update check follows the AnkiWeb download for Anki 26.09.4, and the build fails if its writable-data patches no longer apply. Flow Timer's configuration and timing data live in `${XDG_DATA_HOME:-~/.local/share}/anki/flow-timer`, outside the Nix store.
+Two applications in [home/programs/](home/programs/) read source files from [configs/](configs/) into the Nix store at build time:
+1. **[home/programs/yazi.nix](home/programs/yazi.nix)**: Reads `configs/yazi/*.toml` via `builtins.readFile`, converts them to Nix attrsets with `builtins.fromTOML`, and configures the `programs.yazi` module. This allows Home Manager to hermetically package Yazi plugins and Catppuccin flavors into store paths.
+2. **[home/programs/anki.nix](home/programs/anki.nix)**: Packages PassFail2, FSRS Helper, Review Heatmap, and Flow Timer; pins Synapse and Flow Timer via [nvfetcher.toml](nvfetcher.toml) and injects `configs/anki/catppuccin_mocha.css` into Synapse. Update Flow Timer with `nix run nixpkgs#nvfetcher -- --filter '^flow-timer$'`; the update check follows the AnkiWeb download for Anki 26.09.4, and the build fails if its writable-data patches no longer apply. Flow Timer's configuration and timing data live in `${XDG_DATA_HOME:-~/.local/share}/anki/flow-timer`, outside the Nix store.
 
 > [!WARNING]
 > Because Yazi and Anki are store-built from config sources, edits in `configs/yazi/` or `configs/anki/` do **not** take effect immediately. They require running `nh os switch .`.
@@ -202,7 +194,7 @@ To resolve conflicting scalar values or control list placement, use priority hel
 - `lib.mkAfter [ ... ]`: Appends items to the end of a merged list.
 
 ### 4. `stateVersion` Demystified
-In [hosts/common_configuration.nix](hosts/common_configuration.nix) (`system.stateVersion = "26.05";`) and [home/default.nix](home/default.nix) (`home.stateVersion = "26.05";`):
+In [modules/core/system.nix](modules/core/system.nix) (`system.stateVersion = "26.05";`) and [home/default.nix](home/default.nix) (`home.stateVersion = "26.05";`):
 
 > [!CAUTION]
 > **Do NOT bump `stateVersion` when updating NixOS!** `stateVersion` is not the version of NixOS or packages currently running. Package versions come from the pinned inputs and your package selections, overrides, and local derivations—not `stateVersion`.
@@ -214,7 +206,7 @@ In [hosts/common_configuration.nix](hosts/common_configuration.nix) (`system.sta
 - [sops-nix](https://github.com/Mic92/sops-nix) encrypts secrets with age public keys. Encrypted ciphertext files (`secrets/<host>.yaml`) are safely committed to Git.
 - At system boot or switch, `sops-nix` runs an activation script as `root` to decrypt the secrets into a RAM-backed filesystem at `/run/secrets/`, with custom ownership and strict permissions (`0400`).
 - Consuming services reference the secret via `config.sops.secrets.<name>.path`.
-- **Status in this repo**: Tooling and module wiring are established in [modules/secrets.nix](modules/secrets.nix). Key generation and secret enrollment are deferred. See [docs/secrets.md](docs/secrets.md) for the operational runbook.
+- **Status in this repo**: Tooling and module wiring are established in [modules/core/secrets.nix](modules/core/secrets.nix). Key generation and secret enrollment are deferred. See [docs/secrets.md](docs/secrets.md) for the operational runbook.
 
 ---
 
@@ -225,10 +217,10 @@ Here are four accurate, concrete workflows for common tasks on this repository.
 ### Example 1: Adding a Package
 
 #### Case A: Adding a user CLI tool or utility
-1. Open [home/tools.nix](home/tools.nix) (or [home/development.nix](home/development.nix) if it is a compiler, LSP, or dev tool).
+1. Open [home/packages/tools.nix](home/packages/tools.nix) (or [home/packages/development.nix](home/packages/development.nix) if it is a compiler, LSP, or dev tool).
 2. Add the package attribute name from Nixpkgs (e.g. `htop`):
    ```nix
-   # home/tools.nix
+   # home/packages/tools.nix
    home.packages = with pkgs; [
      htop
      bat
@@ -422,7 +414,7 @@ another machine directly to either host's hardware configuration.
 
 - Generate hardware configuration for your own machine; review disks, mounts and bootloader settings.
 - Change the host output, account name, home directory, checkout path and host-specific services together.
-- Review private tailnet and SSH hostnames in [home/firefox.nix](home/firefox.nix) and [home/ssh.nix](home/ssh.nix) and remove or replace them for your environment.
+- Review private tailnet and SSH hostnames in [home/programs/firefox.nix](home/programs/firefox.nix) and [home/programs/ssh.nix](home/programs/ssh.nix) and remove or replace them for your environment.
 - Preserve state versions for an existing installation; choose appropriate initial versions for a new one.
 - The checks and live-link helper assume this checkout layout. Update their paths when adapting it.
 - Read [the secrets runbook](docs/secrets.md) before enrolling keys; encrypted files without recoverable keys are not a backup.

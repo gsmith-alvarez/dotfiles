@@ -15,5 +15,12 @@
 
   nixpkgs.overlays = [
     inputs.neovim-nightly-overlay.overlays.default
+    (_final: prev: {
+      openbot = inputs.openbot.packages.${prev.stdenv.hostPlatform.system}.openbot.overrideAttrs (old: {
+        extraInstallCommands =
+          builtins.replaceStrings [ "Exec=AppRun --no-sandbox %U" ] [ "Exec=AppRun %U" ]
+            old.extraInstallCommands;
+      });
+    })
   ];
 }

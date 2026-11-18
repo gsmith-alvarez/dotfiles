@@ -9,6 +9,9 @@ mini.on_filetype("markdown", function()
 	Config.safe_require("render-markdown").setup({
 		completions = { lsp = { enabled = true } },
 		latex = { enabled = false },
+		code = {
+			disable = { "mermaid" },
+		},
 		headings = {
 			sign = false,
 			icons = { "󰲡 ", "󰲣 ", "󰲥 ", "󰲧 ", "󰲩 ", "󰲫 " },

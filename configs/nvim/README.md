@@ -69,9 +69,9 @@ Following Neovim's native runtime engine:
 
 ## 📦 Dependencies
 
-Dependencies are declared in `home/development.nix` and installed by Nix/Home Manager, so the same toolchain is reproducible on both `wolfgang` and `easley`.
+Dependencies are declared in `home/packages/development.nix` and installed by Nix/Home Manager, so the same toolchain is reproducible on both `wolfgang` and `easley`.
 
-The Nix-managed development environment includes language runtimes, language servers, formatters, linters, compilers, and Neovim build tools. Add a package to `home/development.nix` when Neovim or a project needs another system tool.
+The Nix-managed development environment includes language runtimes, language servers, formatters, linters, compilers, and Neovim build tools. Add a package to `home/packages/development.nix` when Neovim or a project needs another system tool.
 
 ## 🔧 Installation
 

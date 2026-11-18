@@ -12,31 +12,28 @@ if status is-interactive
     if type -q fzf
         fzf --fish | source
         # Global fzf default options (UI/UX updates)
-        set -gx FZF_DEFAULT_OPTS "
-          --height=50%
-          --layout=reverse
-          --border=rounded
-          --margin=1
-          --padding=1
-          --info=inline-right
-          --color=border:#6c7086,header:#fab387,info:#cba6f7,pointer:#f5e0dc,prompt:#cba6f7,hl:#f38ba8,hl+:#f38ba8
-          --walker-skip .git,node_modules,target,.cache,dist,.next
-          --bind 'ctrl-b:preview-half-page-up,ctrl-d:preview-half-page-down'
-        "
+        set -gx FZF_DEFAULT_OPTS (string join ' ' -- \
+            --height=50% \
+            --layout=reverse \
+            --border=rounded \
+            --margin=1 \
+            --padding=1 \
+            --info=inline-right \
+            --color=border:#6c7086,header:#fab387,info:#cba6f7,pointer:#f5e0dc,prompt:#cba6f7,hl:#f38ba8,hl+:#f38ba8 \
+            --walker-skip .git,node_modules,target,.cache,dist,.next \
+            "--bind 'ctrl-b:preview-half-page-up,ctrl-d:preview-half-page-down'")
 
         # Ctrl-T (Files search) preview & copy binding
-        set -gx FZF_CTRL_T_OPTS "
-          --preview 'if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi'
-          --bind '?:toggle-preview,ctrl-y:execute-silent(echo -n {} | wl-copy)+abort'
-          --preview-window 'right:60%'
-        "
+        set -gx FZF_CTRL_T_OPTS (string join ' ' -- \
+            "--preview 'if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi'" \
+            "--bind '?:toggle-preview,ctrl-y:execute-silent(echo -n {} | wl-copy)+abort'" \
+            "--preview-window 'right:60%'")
 
         # Alt-C (Directory switcher) preview & copy binding
-        set -gx FZF_ALT_C_OPTS "
-          --preview 'eza --tree --color=always {} | head -200'
-          --bind 'ctrl-y:execute-silent(echo -n {} | wl-copy)+abort'
-          --preview-window 'right:60%'
-        "
+        set -gx FZF_ALT_C_OPTS (string join ' ' -- \
+            "--preview 'eza --tree --color=always {} | head -200'" \
+            "--bind 'ctrl-y:execute-silent(echo -n {} | wl-copy)+abort'" \
+            "--preview-window 'right:60%'")
     end
 
     type -q zoxide; and zoxide init fish --cmd cd | source

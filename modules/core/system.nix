@@ -10,12 +10,6 @@
     ];
   };
 
-  services = {
-    resolved.enable = true;
-    gnome.gnome-keyring.enable = true;
-    udev.packages = [ pkgs.openocd ];
-  };
-
   # Bootloader
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;

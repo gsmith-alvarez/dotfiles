@@ -1,6 +1,6 @@
 { pkgs, ... }:
 let
-  sources = pkgs.callPackage ../_sources/generated.nix { };
+  sources = pkgs.callPackage ../../_sources/generated.nix { };
   zoteroProfile = "wr8e44xv.default";
   tailtui = pkgs.stdenvNoCC.mkDerivation {
     pname = "tailtui";

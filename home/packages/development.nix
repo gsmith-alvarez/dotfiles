@@ -66,6 +66,7 @@ in
       yamllint
 
       # Docs & diagrams
+      imagemagick
       tectonic
 
       # Neovim plugin build toolchain

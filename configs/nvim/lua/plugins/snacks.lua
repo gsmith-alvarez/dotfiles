@@ -97,6 +97,11 @@ snacks.setup({
 	git = { enabled = true },
 	image = {
 		enabled = true,
+		doc = {
+			conceal = function(_, type)
+				return type == "math" or type == "chart"
+			end,
+		},
 		resolve = function(_, src)
 			local video_id = src:match("youtube%.com/embed/([%w_%-]+)")
 			if video_id then

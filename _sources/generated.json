@@ -29,6 +29,21 @@
         },
         "version": "t=1778452571&minpt=1&maxpt=1&bidx=0"
     },
+    "pele": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "pele",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-APh52Gxabs6JfvcOGP0iiplSu6M4oMsSk7NzkA10FL0=",
+            "type": "url",
+            "url": "https://registry.npmjs.org/pele/-/pele-1.13.0.tgz"
+        },
+        "version": "1.13.0"
+    },
     "synapse": {
         "cargoLock": null,
         "date": "2026-10-29",

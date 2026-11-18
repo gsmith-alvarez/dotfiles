@@ -114,7 +114,6 @@
           specialArgs = { inherit inputs; };
           modules = [
             host
-            ./modules/secrets.nix
           ]
           ++ homeManagerModules;
         };

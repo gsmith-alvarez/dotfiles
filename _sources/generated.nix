@@ -22,6 +22,14 @@
       sha256 = "sha256-DCLlW4f4HJX2LwDOth7WQ5CEWtp57WcREFtkM7x5XjI=";
     };
   };
+  pele = {
+    pname = "pele";
+    version = "1.13.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/pele/-/pele-1.13.0.tgz";
+      sha256 = "sha256-APh52Gxabs6JfvcOGP0iiplSu6M4oMsSk7NzkA10FL0=";
+    };
+  };
   synapse = {
     pname = "synapse";
     version = "a3ff1d92079da5f762222bf7dcfe0bc8e96cd78f";

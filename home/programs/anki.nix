@@ -1,9 +1,9 @@
 { pkgs, ... }:
 
 let
-  sources = pkgs.callPackage ../_sources/generated.nix { };
+  sources = pkgs.callPackage ../../_sources/generated.nix { };
   catppuccinCss = pkgs.writeText "catppuccin_mocha.css" (
-    builtins.readFile ../configs/anki/catppuccin_mocha.css
+    builtins.readFile ../../configs/anki/catppuccin_mocha.css
   );
 
   flowTimer = pkgs.anki-utils.buildAnkiAddon {

@@ -3,7 +3,7 @@
 This repository integrates [sops-nix](https://github.com/Mic92/sops-nix) for declarative, encrypted secrets management.
 
 > [!IMPORTANT]
-> **Integration Status: Tools Only.** `sops-nix` is imported as a NixOS module in [modules/secrets.nix](../modules/secrets.nix), and CLI tools (`sops`, `age`, `ssh-to-age`) are installed in the devShell. **No encryption keys have been generated, no secrets have been enrolled, and no existing service credentials (e.g. Wi-Fi profiles) have been migrated.**
+> **Integration Status: Tools Only.** `sops-nix` is imported as a NixOS module in [modules/core/secrets.nix](../modules/core/secrets.nix), and CLI tools (`sops`, `age`, `ssh-to-age`) are installed in the devShell. **No encryption keys have been generated, no secrets have been enrolled, and no existing service credentials (e.g. Wi-Fi profiles) have been migrated.**
 
 ---
 
@@ -88,7 +88,7 @@ git diff -- secrets/<host>.yaml
 ```
 
 ### Step 5: Configure the Host in NixOS
-In [modules/secrets.nix](../modules/secrets.nix):
+In [modules/core/secrets.nix](../modules/core/secrets.nix):
 ```nix
 { config, inputs, pkgs, ... }:
 {
@@ -101,7 +101,7 @@ In [modules/secrets.nix](../modules/secrets.nix):
   ];
 
   sops = {
-    defaultSopsFile = ../secrets/<host>.yaml;
+    defaultSopsFile = ../../secrets/<host>.yaml;
     defaultSopsFormat = "yaml";
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 

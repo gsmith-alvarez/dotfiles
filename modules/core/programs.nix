@@ -14,7 +14,10 @@
       enable = true;
       nix-direnv.enable = true;
     };
-    fish.enable = true;
+    fish = {
+      enable = true;
+      useBabelfish = true;
+    };
     appimage.enable = true;
     appimage.binfmt = true;
     compsize.enable = true;
