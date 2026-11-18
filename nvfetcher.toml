@@ -23,3 +23,56 @@ fetch.url = "https://github.com/Phundahl/tailtui/releases/download/v$ver/tailtui
 [pele]
 src.github = "obsidianmd/pele"
 fetch.url = "https://registry.npmjs.org/pele/-/pele-$ver.tgz"
+
+[freecad-fasteners]
+src.git = "https://github.com/shaise/FreeCAD_FastenersWB.git"
+src.branch = "master"
+fetch.git = "https://github.com/shaise/FreeCAD_FastenersWB.git"
+
+[freecad-sheetmetal]
+src.git = "https://github.com/shaise/FreeCAD_SheetMetal.git"
+src.branch = "master"
+fetch.git = "https://github.com/shaise/FreeCAD_SheetMetal.git"
+
+[freecad-curves]
+src.git = "https://github.com/tomate44/CurvesWB.git"
+src.branch = "main"
+fetch.git = "https://github.com/tomate44/CurvesWB.git"
+
+[freecad-gears]
+src.git = "https://github.com/looooo/freecad.gears.git"
+src.branch = "master"
+fetch.git = "https://github.com/looooo/freecad.gears.git"
+
+[freecad-kicadstepup]
+src.git = "https://github.com/easyw/kicadStepUpMod.git"
+src.branch = "master"
+fetch.git = "https://github.com/easyw/kicadStepUpMod.git"
+
+[freecad-lattice2]
+src.git = "https://github.com/DeepSOIC/Lattice2.git"
+src.branch = "master"
+fetch.git = "https://github.com/DeepSOIC/Lattice2.git"
+
+[freecad-catppuccin]
+src.git = "https://github.com/cnvuls/CatppuccinTheme.git"
+src.branch = "main"
+fetch.git = "https://github.com/cnvuls/CatppuccinTheme.git"
+
+[kicad-ibom]
+src.github = "openscopeproject/InteractiveHtmlBom"
+src.prefix = "v"
+fetch.url = "https://github.com/openscopeproject/InteractiveHtmlBom/releases/download/v$ver/InteractiveHtmlBom_v$ver_pcm.zip"
+
+[kicad-jlc-plugin]
+src.github = "bennymeg/JLC-Plugin-for-KiCad"
+fetch.url = "https://github.com/bennymeg/JLC-Plugin-for-KiCad/releases/download/$ver/Fabrication-Toolkit-$ver.zip"
+
+[kicad-board2pdf]
+src.manual = "1.9.3"
+fetch.url = "https://gitlab.com/dennevi/kicad-plugins-releases/-/raw/main/Board2Pdf/releases/Board2Pdf_v$ver.zip"
+
+[catppuccin-kicad]
+src.git = "https://github.com/catppuccin/kicad.git"
+src.branch = "main"
+fetch.git = "https://github.com/catppuccin/kicad.git"

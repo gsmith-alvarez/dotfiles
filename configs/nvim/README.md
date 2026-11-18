@@ -27,6 +27,7 @@ Designed for the "Learning-by-Doing" approach to programming:
 | **C / C++** | `make` / `cmake` detection; falls back to `zig run` (C23/C++23) |
 | **Lua** | `nvim -l <file>` (Neovim script mode) |
 | **Shell** | `bash <file>` |
+| **SPICE** | `ngspice -b <file>` (`.cir`, `.sp`, `.spice`, `.net`) |
 
 ## 🎨 UI & Aesthetics
 

@@ -14,6 +14,26 @@
         },
         "version": "9.0.77"
     },
+    "catppuccin-kicad": {
+        "cargoLock": null,
+        "date": "2024-09-22",
+        "extract": null,
+        "name": "catppuccin-kicad",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "rev": "aa83d8d09bddd93029c8f3e92d54a41002ddf70a",
+            "sha256": "sha256-VLJYmc+fcI2x1NDraHR5uGA6loY3dCPMEBptMgRZ5pc=",
+            "sparseCheckout": [],
+            "type": "git",
+            "url": "https://github.com/catppuccin/kicad.git"
+        },
+        "version": "aa83d8d09bddd93029c8f3e92d54a41002ddf70a"
+    },
     "flow-timer": {
         "cargoLock": null,
         "date": null,
@@ -28,6 +48,191 @@
             "url": "https://ankiweb.net/svc/shared/download-addon/1883599410?t=1778452571&minpt=1&maxpt=1&bidx=0"
         },
         "version": "t=1778452571&minpt=1&maxpt=1&bidx=0"
+    },
+    "freecad-catppuccin": {
+        "cargoLock": null,
+        "date": "2026-04-24",
+        "extract": null,
+        "name": "freecad-catppuccin",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "rev": "67157dc98fba2ec841162ece6db32cde169bacab",
+            "sha256": "sha256-OhAZVGKSFshAZ8f/10Sb/Y5+rJecnas2szH8ujSdgOY=",
+            "sparseCheckout": [],
+            "type": "git",
+            "url": "https://github.com/cnvuls/CatppuccinTheme.git"
+        },
+        "version": "67157dc98fba2ec841162ece6db32cde169bacab"
+    },
+    "freecad-curves": {
+        "cargoLock": null,
+        "date": "2026-11-12",
+        "extract": null,
+        "name": "freecad-curves",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "rev": "f16c6fddcd007247279fe968ba2ee3235917895e",
+            "sha256": "sha256-CJmn6JK2kyp/GmRFoxIv7P+ZTVqah/CX4B3brukZH0g=",
+            "sparseCheckout": [],
+            "type": "git",
+            "url": "https://github.com/tomate44/CurvesWB.git"
+        },
+        "version": "f16c6fddcd007247279fe968ba2ee3235917895e"
+    },
+    "freecad-fasteners": {
+        "cargoLock": null,
+        "date": "2026-11-12",
+        "extract": null,
+        "name": "freecad-fasteners",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "rev": "375a73d9706a30072c132fb061e7636e8ed99f82",
+            "sha256": "sha256-1/ui71+AW+GhkqdMPxzAKndAufXVba6u6c84mr4x6GM=",
+            "sparseCheckout": [],
+            "type": "git",
+            "url": "https://github.com/shaise/FreeCAD_FastenersWB.git"
+        },
+        "version": "375a73d9706a30072c132fb061e7636e8ed99f82"
+    },
+    "freecad-gears": {
+        "cargoLock": null,
+        "date": "2026-11-12",
+        "extract": null,
+        "name": "freecad-gears",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "rev": "4164073946282ee6e88594b0f7d1774a60b04f76",
+            "sha256": "sha256-OyshOfYmTXnXXlBQxTduoDZhBfU5jPt5JGVc6swUW44=",
+            "sparseCheckout": [],
+            "type": "git",
+            "url": "https://github.com/looooo/freecad.gears.git"
+        },
+        "version": "4164073946282ee6e88594b0f7d1774a60b04f76"
+    },
+    "freecad-kicadstepup": {
+        "cargoLock": null,
+        "date": "2026-09-04",
+        "extract": null,
+        "name": "freecad-kicadstepup",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "rev": "3db98be23aae40413eab041f19de5ab2e168157e",
+            "sha256": "sha256-VXhrY+lF5/9iToU1RYYzE90oPjiPbpVJ84B5WZtK4Xg=",
+            "sparseCheckout": [],
+            "type": "git",
+            "url": "https://github.com/easyw/kicadStepUpMod.git"
+        },
+        "version": "3db98be23aae40413eab041f19de5ab2e168157e"
+    },
+    "freecad-lattice2": {
+        "cargoLock": null,
+        "date": "2026-07-15",
+        "extract": null,
+        "name": "freecad-lattice2",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "rev": "9595449b80a634179ecaeae2525b91c93dc52cb1",
+            "sha256": "sha256-FIQtlJj22Dvfn2j4sPC+huAPSCxTOmu6HsaV3rRXUMo=",
+            "sparseCheckout": [],
+            "type": "git",
+            "url": "https://github.com/DeepSOIC/Lattice2.git"
+        },
+        "version": "9595449b80a634179ecaeae2525b91c93dc52cb1"
+    },
+    "freecad-sheetmetal": {
+        "cargoLock": null,
+        "date": "2026-11-07",
+        "extract": null,
+        "name": "freecad-sheetmetal",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "rev": "c505f5ea60f5e627bc3930ad846f7ba5a1edbb27",
+            "sha256": "sha256-kqOFoDyJzSrBMO/DQSxqkb5trbHvRgY2KfxualsIpEI=",
+            "sparseCheckout": [],
+            "type": "git",
+            "url": "https://github.com/shaise/FreeCAD_SheetMetal.git"
+        },
+        "version": "c505f5ea60f5e627bc3930ad846f7ba5a1edbb27"
+    },
+    "kicad-board2pdf": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "kicad-board2pdf",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-oaJSyy2wANG40TwnquXII3su2Vfk2vvmHdtJe0VNAkU=",
+            "type": "url",
+            "url": "https://gitlab.com/dennevi/kicad-plugins-releases/-/raw/main/Board2Pdf/releases/Board2Pdf_v1.9.3.zip"
+        },
+        "version": "1.9.3"
+    },
+    "kicad-ibom": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "kicad-ibom",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-3mT1943Nuf/nRFmeMQx5Mw0tnbqLdMy5aPkWl5BonLU=",
+            "type": "url",
+            "url": "https://github.com/openscopeproject/InteractiveHtmlBom/releases/download/v2.12.0/InteractiveHtmlBom_v2.12.0_pcm.zip"
+        },
+        "version": "2.12.0"
+    },
+    "kicad-jlc-plugin": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "kicad-jlc-plugin",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-gLBVMciHzKTH2AHGYT4/2+F65eyLgC6HptFsO5oPTEU=",
+            "type": "url",
+            "url": "https://github.com/bennymeg/JLC-Plugin-for-KiCad/releases/download/5.3.1/Fabrication-Toolkit-5.3.1.zip"
+        },
+        "version": "5.3.1"
     },
     "pele": {
         "cargoLock": null,

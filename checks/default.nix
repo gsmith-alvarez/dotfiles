@@ -31,7 +31,10 @@ let
         evalCfg:
         let
           base = import ../home/dotfiles.nix { config = evalCfg; };
-          host = import ../home/hosts/${hostName}.nix { config = evalCfg; };
+          host = import ../home/hosts/${hostName}.nix {
+            config = evalCfg;
+            inherit pkgs;
+          };
         in
         lib.recursiveUpdate base host;
 

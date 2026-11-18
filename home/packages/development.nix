@@ -69,6 +69,11 @@ in
       imagemagick
       tectonic
 
+      # Circuit simulation & plotting (Lessons in Electric Circuits)
+      gnuplot
+      ngspice
+      qucs-s
+
       # Neovim plugin build toolchain
       cargo
       cargo-update

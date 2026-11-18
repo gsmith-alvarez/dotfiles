@@ -6,6 +6,7 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "audio"
       # USB access for MCU
       "dialout"
       "plugdev"

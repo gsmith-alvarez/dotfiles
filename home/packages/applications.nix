@@ -39,6 +39,7 @@ in
   home.file.".zotero/zotero/${zoteroProfile}/extensions/better-bibtex@iris-advies.com.xpi".source =
     sources.better-bibtex.src;
   services.flatpak.packages = [
+    "com.bambulab.BambuStudio"
     "com.super_productivity.SuperProductivity"
   ];
 }
