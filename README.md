@@ -39,8 +39,8 @@ flowchart TD
 
 1. **[flake.nix](flake.nix)**: Start here. Observe how external flake inputs are declared, pinned, and passed down to NixOS and Home Manager via `specialArgs` and `extraSpecialArgs`.
 2. **Host definitions**: [hosts/wolfgang/default.nix](hosts/wolfgang/default.nix) describes the laptop and [hosts/easley/default.nix](hosts/easley/default.nix) describes the desktop; each owns its hardware and machine-specific settings and imports the shared modules.
-3. **[modules/core/](modules/core/) & [modules/desktop/](modules/desktop/)**: System-level concerns. Notice how [modules/core/default.nix](modules/core/default.nix) bundles focused files ([nix.nix](modules/core/nix.nix), [system.nix](modules/core/system.nix), [packages.nix](modules/core/packages.nix), [programs.nix](modules/core/programs.nix), [services.nix](modules/core/services.nix), [syncthing.nix](modules/core/syncthing.nix), [audio.nix](modules/core/audio.nix), [locale.nix](modules/core/locale.nix), [accounts.nix](modules/core/accounts.nix), [secrets.nix](modules/core/secrets.nix)), while [modules/desktop/default.nix](modules/desktop/default.nix) configures Niri and Noctalia.
-4. **[home/default.nix](home/default.nix)**: Home Manager user configuration. User modules are split into flat package lists under [home/packages/](home/packages/) ([development.nix](home/packages/development.nix), [tools.nix](home/packages/tools.nix), [applications.nix](home/packages/applications.nix), [shell.nix](home/packages/shell.nix)), dedicated per-app modules under [home/programs/](home/programs/) ([anki.nix](home/programs/anki.nix), [firefox.nix](home/programs/firefox.nix), [pele.nix](home/programs/pele.nix), [ssh.nix](home/programs/ssh.nix), [yazi.nix](home/programs/yazi.nix)), and [appearance.nix](home/appearance.nix) (GTK/Qt themes and fonts).
+3. **[modules/core/](modules/core/) & [modules/desktop/](modules/desktop/)**: System-level concerns. Notice how [modules/core/default.nix](modules/core/default.nix) bundles focused files ([nix.nix](modules/core/nix.nix), [system.nix](modules/core/system.nix), [packages.nix](modules/core/packages.nix), [programs.nix](modules/core/programs.nix), [services.nix](modules/core/services.nix), [syncthing.nix](modules/core/syncthing.nix), [audio.nix](modules/core/audio.nix), [locale.nix](modules/core/locale.nix), [accounts.nix](modules/core/accounts.nix), [secrets.nix](modules/core/secrets.nix), [virtualisation.nix](modules/core/virtualisation.nix)), while [modules/desktop/default.nix](modules/desktop/default.nix) configures Niri and Noctalia.
+4. **[home/default.nix](home/default.nix)**: Home Manager user configuration. User modules are split into flat package lists under [home/packages/](home/packages/) ([development.nix](home/packages/development.nix), [tools.nix](home/packages/tools.nix), [applications.nix](home/packages/applications.nix), [shell.nix](home/packages/shell.nix)), dedicated per-app modules under [home/programs/](home/programs/) ([anki.nix](home/programs/anki.nix), [firefox.nix](home/programs/firefox.nix), [pele.nix](home/programs/pele.nix), [ssh.nix](home/programs/ssh.nix), [winboat.nix](home/programs/winboat.nix), [yazi.nix](home/programs/yazi.nix)), and [appearance.nix](home/appearance.nix) (GTK/Qt themes and fonts).
 5. **[home/dotfiles.nix](home/dotfiles.nix)** and **[lib/out-of-store.nix](lib/out-of-store.nix)**: The live-link manifest. Learn how dotfiles inside [configs/](configs/) are symlinked directly to `~/.config/` without writing them to the immutable Nix store.
 6. **[checks/default.nix](checks/default.nix)** and **[tests/](tests/)**: Automated verification suite. See how `nix flake check -L` enforces link integrity ([link_contract.py](tests/link_contract.py)), configuration syntax ([config_syntax.py](tests/config_syntax.py)), cache policy, and Nix code style.
 7. **[modules/core/secrets.nix](modules/core/secrets.nix)** and **[docs/secrets.md](docs/secrets.md)**: Encrypted secrets management architecture. Understand why plaintext secrets must never be placed in `/nix/store` and how `sops-nix` handles deferred enrollment.
@@ -88,7 +88,7 @@ flake.nix (outputs)
 │       ├── home/dotfiles.nix (imports lib/out-of-store.nix)
 │       ├── home/appearance.nix
 │       ├── home/packages/ (applications, development, shell, tools)
-│       ├── home/programs/ (anki, firefox, pele, ssh, yazi)
+│       ├── home/programs/ (anki, firefox, pele, ssh, winboat, yazi)
 │       └── home/hosts/{wolfgang,easley}.nix (per-host overrides)
 ├── homeConfigurations.giovanni (read-only query target; shares system pkgs)
 └── checks.x86_64-linux (checks/default.nix -> tests/)
@@ -125,6 +125,12 @@ One of the biggest hurdles when starting with Nix on a workstation is understand
 - **How it applies**: Because it is embedded in the NixOS configuration, running `nh os switch .` switches **both** through one system rebuild. This is not an all-or-nothing transaction: activation can fail partway, and service status still needs checking.
 - **Zotero**: `home/packages/applications.nix` installs `pkgs.zotero` and places Better BibTeX in the configured Zotero profile. Its pinned Nixpkgs package requires an exception for end-of-life Firefox ESR 140 in `modules/core/packages.nix`; that runtime receives no further security fixes.
 - **Read-only query target**: [flake.nix](flake.nix) also exports `homeConfigurations.giovanni`. This exists strictly for read-only inspection commands like `home-manager news --flake .`. **Never run `nh home switch` or activate this output independently.**
+
+### WinBoat and Podman
+
+[modules/core/virtualisation.nix](modules/core/virtualisation.nix) enables Podman on both hosts, including Docker CLI compatibility and DNS on the default network. [home/programs/winboat.nix](home/programs/winboat.nix) installs [WinBoat](https://github.com/winboat-org/winboat), which runs Windows in a virtual machine inside a container. Select Podman in WinBoat's setup; the Nixpkgs WinBoat package supplies Podman Compose and FreeRDP.
+
+WinBoat currently does **not** support USB passthrough with Podman. See the [upstream known issues](https://github.com/winboat-org/winboat#known-issues-about-container-runtimes).
 
 ### Layer 3: Live Application Configs (Out-of-Store Symlinks)
 - **What it controls**: Fast-iterating application configurations (e.g., Neovim Lua plugins, Niri keybindings, Fish functions and abbreviations, Ghostty terminal settings, and Starship prompt).

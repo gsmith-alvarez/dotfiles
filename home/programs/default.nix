@@ -5,5 +5,6 @@
     ./pele.nix
     ./ssh.nix
     ./yazi.nix
+    ./winboat.nix
   ];
 }
