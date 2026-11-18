@@ -10,6 +10,5 @@
     ./syncthing.nix
     ./accounts.nix
     ./secrets.nix
-    ./virtualisation.nix
   ];
 }
