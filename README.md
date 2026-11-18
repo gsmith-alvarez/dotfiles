@@ -19,7 +19,7 @@ A modular, reproducible NixOS configuration for `wolfgang` (laptop) and `easley`
 | **Editor** | [Neovim](https://neovim.io/) (via `neovim-nightly-overlay`) | [configs/nvim/](configs/nvim/) (live link) |
 | **File Manager** | [Yazi](https://github.com/sxyazi/yazi) | [home/programs/yazi.nix](home/programs/yazi.nix) (reads [configs/yazi/](configs/yazi/)) |
 | **System Runner** | [nh](https://github.com/viperML/nh) + [Home Manager](https://github.com/nix-community/home-manager) | [modules/core/programs.nix](modules/core/programs.nix), [home/default.nix](home/default.nix) |
-| **Secrets Engine** | [sops-nix](https://github.com/Mic92/sops-nix) (integration only) | [modules/core/secrets.nix](modules/core/secrets.nix), [docs/secrets.md](docs/secrets.md) |
+| **Secrets Engine** | [sops-nix](https://github.com/Mic92/sops-nix) | [modules/core/secrets.nix](modules/core/secrets.nix), [docs/secrets.md](docs/secrets.md) |
 
 ---
 
@@ -212,7 +212,7 @@ In [modules/core/system.nix](modules/core/system.nix) (`system.stateVersion = "2
 - [sops-nix](https://github.com/Mic92/sops-nix) encrypts secrets with age public keys. Encrypted ciphertext files (`secrets/<host>.yaml`) are safely committed to Git.
 - At system boot or switch, `sops-nix` runs an activation script as `root` to decrypt the secrets into a RAM-backed filesystem at `/run/secrets/`, with custom ownership and strict permissions (`0400`).
 - Consuming services reference the secret via `config.sops.secrets.<name>.path`.
-- **Status in this repo**: Tooling and module wiring are established in [modules/core/secrets.nix](modules/core/secrets.nix). Key generation and secret enrollment are deferred. See [docs/secrets.md](docs/secrets.md) for the operational runbook.
+- **Status in this repo**: Easley declares an encrypted OpenRouter API key; Wolfgang has no secrets enrolled. See [docs/secrets.md](docs/secrets.md) for the operational runbook.
 
 ---
 

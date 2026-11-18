@@ -3,7 +3,7 @@
 This repository integrates [sops-nix](https://github.com/Mic92/sops-nix) for declarative, encrypted secrets management.
 
 > [!IMPORTANT]
-> **Integration Status: Tools Only.** `sops-nix` is imported as a NixOS module in [modules/core/secrets.nix](../modules/core/secrets.nix), and CLI tools (`sops`, `age`, `ssh-to-age`) are installed in the devShell. **No encryption keys have been generated, no secrets have been enrolled, and no existing service credentials (e.g. Wi-Fi profiles) have been migrated.**
+> **Current setup:** `secrets/easley.yaml` contains Easley's encrypted OpenRouter API key. Its recipients are the administrator age key and Easley's SSH host key. Only Easley declares this secret; Wolfgang does not yet have secrets enrolled.
 
 ---
 
@@ -34,11 +34,13 @@ services.<actual-service>.<its-secret-file-option> = config.sops.secrets."my-ser
 
 ---
 
-## 2. Deferred Enrollment Workflow
+## 2. Enrollment Workflow
 
-When you are ready to enroll encrypted secrets into this machine, follow this step-by-step procedure:
+Easley's existing secret is declared as `openrouter/api-key` and is available at `/run/secrets/openrouter/api-key` after a successful activation. Applications must be configured separately to read it.
 
-Use `wolfgang` for the laptop or `easley` for the desktop when naming host-specific secret files and outputs below.
+To edit it, run `sops secrets/easley.yaml` with the administrator identity at `~/.config/sops/age/keys.txt`. Back up that private identity securely. If Easley's SSH host key changes, add its new public recipient to `.sops.yaml` and run `sops updatekeys secrets/easley.yaml` before switching.
+
+The following steps describe enrolling another host. Do not replace the existing administrator identity or overwrite `.sops.yaml`. Use `wolfgang` for the laptop when naming host-specific files below.
 
 
 ### Step 1: Generate an Admin Age Key (Local Workstation)
@@ -62,8 +64,8 @@ ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub
 # Output: age1... (host recipient)
 ```
 
-### Step 3: Create the SOPS Creation Rules (`.sops.yaml`)
-Create `.sops.yaml` in the repo root to define encryption recipients:
+### Step 3: Add the Host to SOPS Creation Rules (`.sops.yaml`)
+Adjust the existing `.sops.yaml` to include the new host recipient. Use host-specific `path_regex` rules if the hosts should not be able to decrypt each other's files. For example:
 ```yaml
 creation_rules:
   - path_regex: secrets/.*\.yaml$
@@ -76,7 +78,7 @@ creation_rules:
 > Placing both keys in the same `age` list allows *either* key to decrypt the file. Do not use multiple `key_groups` unless you deliberately intend to require multi-party threshold decryption.
 
 ### Step 4: Encrypt Secrets File
-Create or edit the encrypted secrets file:
+Create or edit the encrypted secrets file (the existing Easley file is `secrets/easley.yaml`):
 ```bash
 mkdir -p secrets
 sops secrets/<host>.yaml
@@ -88,30 +90,7 @@ git diff -- secrets/<host>.yaml
 ```
 
 ### Step 5: Configure the Host in NixOS
-In [modules/core/secrets.nix](../modules/core/secrets.nix):
-```nix
-{ config, inputs, pkgs, ... }:
-{
-  imports = [ inputs.sops-nix.nixosModules.sops ];
-
-  environment.systemPackages = [
-    pkgs.sops
-    pkgs.age
-    pkgs.ssh-to-age
-  ];
-
-  sops = {
-    defaultSopsFile = ../../secrets/<host>.yaml;
-    defaultSopsFormat = "yaml";
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-
-    secrets."example-service-token" = {
-      owner = "giovanni";
-      mode = "0400";
-    };
-  };
-}
-```
+Update [modules/core/secrets.nix](../modules/core/secrets.nix) to select the new host's file and declare its secrets only on that host. Match each secret name to its YAML key; nested YAML keys use slashes, as in `openrouter/api-key`.
 
 ---
 

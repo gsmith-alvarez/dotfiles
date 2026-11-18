@@ -1,0 +1,9 @@
+keys:
+  - &server age1e8m0mjj97wu6r34uzsjjnhalmjm36qgdnr79q0ht4qpvawcklflqz56cxs
+  - &easley age1achfltemn5slczkjyh4ujmlvmuauztm05u6guwcfz362fecy6uuqfcyntp
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *server
+          - *easley
