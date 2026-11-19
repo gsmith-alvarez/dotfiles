@@ -1,3 +1,5 @@
+{ pkgs, ... }:
+
 {
   security = {
     rtkit.enable = true;
@@ -31,7 +33,9 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      jack.enable = true;
     };
   };
+
+  # Provide the pw-jack wrapper without setting a global LD_LIBRARY_PATH.
+  environment.systemPackages = [ pkgs.pipewire.jack ];
 }

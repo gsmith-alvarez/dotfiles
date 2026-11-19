@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   ...
 }:
 let
@@ -8,11 +7,9 @@ let
   hostDir = "${config.home.homeDirectory}/dotfiles/hosts/easley";
 in
 {
-  imports = [ ../programs/cad.nix ];
-
-  home.packages = with pkgs; [
-    # Audio production
-    bitwig-studio
+  imports = [
+    ../programs/bitwig.nix
+    ../programs/cad.nix
   ];
 
   xdg.configFile = {
