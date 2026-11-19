@@ -267,7 +267,6 @@ in
       "x-scheme-handler/mid" = "userapp-Thunderbird-DTOZV3.desktop";
       "message/rfc822" = "userapp-Thunderbird-DTOZV3.desktop";
       "x-scheme-handler/net.thunderbird" = "userapp-Thunderbird-XVWYV3.desktop";
-      "x-scheme-handler/openbot" = "openbot.desktop";
       "x-scheme-handler/t3code" = "com.t3tools.T3Code.desktop";
       "x-scheme-handler/bitwarden" = "bitwarden.desktop";
     };

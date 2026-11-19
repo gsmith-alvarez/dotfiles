@@ -68,11 +68,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    openbot = {
-      url = "github:nightly-labs/openbot";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     rex = {
       url = "https://pkgs.superlogical.com/rex/nix/snapshot.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -120,7 +115,6 @@
     in
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
-      packages.x86_64-linux.openbot = self.nixosConfigurations.wolfgang.pkgs.openbot;
       checks.x86_64-linux = import ./checks {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         inherit (nixpkgs) lib;

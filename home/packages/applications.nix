@@ -20,7 +20,6 @@ in
     easyeffects
     wayscriber
     obsidian
-    openbot
     playerctl
     spotify-player
     wl-clipboard

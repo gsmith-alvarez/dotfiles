@@ -282,26 +282,6 @@
         "type": "github"
       }
     },
-    "openbot": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1795037050,
-        "narHash": "sha256-cfkb6lvVCJONkfqoKvAY/gT21wxj4ab7wlcWmhOQSM4=",
-        "owner": "nightly-labs",
-        "repo": "openbot",
-        "rev": "73e9644231ab71ceca4519ec1358eeefb17c88af",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nightly-labs",
-        "repo": "openbot",
-        "type": "github"
-      }
-    },
     "rex": {
       "inputs": {
         "nixpkgs": [
@@ -329,7 +309,6 @@
         "nixpkgs": "nixpkgs_2",
         "noctalia": "noctalia",
         "noctalia-greeter": "noctalia-greeter",
-        "openbot": "openbot",
         "rex": "rex",
         "sops-nix": "sops-nix",
         "wayscriber": "wayscriber",
