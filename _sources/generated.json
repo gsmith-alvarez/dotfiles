@@ -71,7 +71,7 @@
     },
     "freecad-curves": {
         "cargoLock": null,
-        "date": "2026-11-12",
+        "date": "2026-11-21",
         "extract": null,
         "name": "freecad-curves",
         "passthru": null,
@@ -81,17 +81,17 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "f16c6fddcd007247279fe968ba2ee3235917895e",
-            "sha256": "sha256-CJmn6JK2kyp/GmRFoxIv7P+ZTVqah/CX4B3brukZH0g=",
+            "rev": "d55914005cd06e41d71b76fec5c9cf17dd6c8e9c",
+            "sha256": "sha256-Pwu0uKL88UeouK1a1pe/P18aldaWpitNqlfswQs1J8I=",
             "sparseCheckout": [],
             "type": "git",
             "url": "https://github.com/tomate44/CurvesWB.git"
         },
-        "version": "f16c6fddcd007247279fe968ba2ee3235917895e"
+        "version": "d55914005cd06e41d71b76fec5c9cf17dd6c8e9c"
     },
     "freecad-fasteners": {
         "cargoLock": null,
-        "date": "2026-11-12",
+        "date": "2026-11-19",
         "extract": null,
         "name": "freecad-fasteners",
         "passthru": null,
@@ -101,13 +101,13 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "rev": "375a73d9706a30072c132fb061e7636e8ed99f82",
-            "sha256": "sha256-1/ui71+AW+GhkqdMPxzAKndAufXVba6u6c84mr4x6GM=",
+            "rev": "a401d8e1d1d5fff9ebfa8f6e440cf95d82b7e2e2",
+            "sha256": "sha256-ewm9U3ihY+ShGc8ba4/7WWiMm7a3vh/xmJr1wKOUYcY=",
             "sparseCheckout": [],
             "type": "git",
             "url": "https://github.com/shaise/FreeCAD_FastenersWB.git"
         },
-        "version": "375a73d9706a30072c132fb061e7636e8ed99f82"
+        "version": "a401d8e1d1d5fff9ebfa8f6e440cf95d82b7e2e2"
     },
     "freecad-gears": {
         "cargoLock": null,
