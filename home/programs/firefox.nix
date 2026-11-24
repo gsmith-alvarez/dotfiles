@@ -15,7 +15,8 @@ let
     "network.trr.mode" = 2;
     "network.trr.uri" = "https://1.1.1.1/dns-query";
     "network.trr.excluded-domains" = "tailb7b5f7.ts.net,home.arpa";
-    "dom.security.https_only_mode" = true;
+    "dom.security.https_only_mode" = false;
+    "dom.security.https_only_mode_pbm" = false;
     "media.peerconnection.ice.no_host" = true;
     "datareporting.healthreport.uploadEnabled" = false;
     "datareporting.policy.dataSubmissionEnabled" = false;
