@@ -78,6 +78,16 @@ vim.lsp.config("lua_ls", {
 })
 
 -- C/C++ (clangd)
+local clangd_cmd = { "clangd" }
+if vim.env.CLANGD_QUERY_DRIVER and vim.env.CLANGD_QUERY_DRIVER ~= "" then
+	table.insert(clangd_cmd, "--query-driver=" .. vim.env.CLANGD_QUERY_DRIVER)
+end
+vim.list_extend(clangd_cmd, {
+	"--background-index",
+	"--clang-tidy",
+	"--header-insertion=never",
+})
+
 vim.lsp.config("clangd", {
 	filetypes = { "c", "cpp", "objc", "objcpp" },
 	settings = {
@@ -90,13 +100,7 @@ vim.lsp.config("clangd", {
 			},
 		},
 	},
-	cmd = {
-		"clangd",
-		"--query-driver=" .. vim.env.HOME .. "/.espressif/tools/*/*/*/bin/*-gcc",
-		"--background-index", -- Force clangd to index the project in the background
-		"--clang-tidy", -- Enable linter diagnostics
-		"--header-insertion=never", -- Prevents auto-inserting unwanted headers
-	},
+	cmd = clangd_cmd,
 })
 -- PYTHON (Astral: ty & ruff)
 vim.lsp.config("ty", {
