@@ -178,8 +178,6 @@ binds {
     Mod+Alt+B hotkey-overlay-title="Open a Browser: Firefox" { spawn "firefox"; }
     // Editor
     Mod+Alt+N hotkey-overlay-title="Open Editor: Nvim" { spawn "ghostty" "-e" "nvim"; }
-    // Zed
-    Mod+Alt+Z hotkey-overlay-title="Open Zed" { spawn "zed"; }
 
     // Screen annotation
     Mod+D hotkey-overlay-title="Toggle Screen Annotation: wayscriber" { spawn "wayscriber" "--daemon-toggle"; }

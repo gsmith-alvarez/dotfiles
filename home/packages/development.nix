@@ -14,7 +14,6 @@ in
       github-cli
       lazygit
       neovim
-      zed-editor
 
       # Containers
       distrobox
