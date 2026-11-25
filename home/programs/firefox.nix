@@ -116,7 +116,7 @@ in
       # HTTP services on the private tailnet.
       HttpAllowlist = [
         "http://socialism.tailb7b5f7.ts.net"
-        "http://socialism.tailb7b5f7.ts.net:8888"
+        "https://socialism.tailb7b5f7.ts.net:8888"
       ];
 
       SearchEngines = {
@@ -125,7 +125,7 @@ in
         Add = [
           {
             Name = "SearXNG";
-            URLTemplate = "http://socialism.tailb7b5f7.ts.net:8888/search?q={searchTerms}";
+            URLTemplate = "https://socialism.tailb7b5f7.ts.net:8888/search?q={searchTerms}";
             Method = "GET";
             Alias = "sx";
             Description = "Private SearXNG metasearch";
