@@ -32,28 +32,20 @@ in
       statix
 
       # Languages & runtimes
-      bun
-      luajit
       python3
       uv
-      zig
 
       # Language servers
       bash-language-server
-      clang-tools
       dockerfile-language-server
       fish-lsp
       lua-language-server
       nil
-      rust-analyzer
       typos-lsp
       vscode-langservers-extracted
       yaml-language-server
-      zls
 
       # Linters & formatters
-      oxlint
-      oxfmt
       ruff
       selene
       shellcheck
@@ -66,12 +58,6 @@ in
 
       # Docs & diagrams
       imagemagick
-      tectonic
-
-      # Circuit simulation & plotting (Lessons in Electric Circuits)
-      gnuplot
-      ngspice
-      qucs-s
 
       # Neovim plugin build toolchain
       cargo

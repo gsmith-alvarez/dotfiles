@@ -15,6 +15,7 @@ in
       "atuin"
       "bat"
       "btop"
+      "direnv"
       "lazygit"
       "navi"
       "niri/config.kdl"

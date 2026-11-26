@@ -146,7 +146,13 @@ if blink then
 	vim.lsp.config("*", { capabilities = blink.get_lsp_capabilities() })
 end
 
--- 4. Activation
+-- 4. Direnv (load project PATH/env before LSP attachment)
+Config.safe_require("direnv").setup({
+	bin = "direnv",
+	autoload_direnv = true,
+})
+
+-- 5. Activation
 vim.lsp.enable({
 	"ty", -- Python Type Checker
 	"ruff", -- Python Linter & Formatter

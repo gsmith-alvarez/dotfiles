@@ -15,7 +15,7 @@
         Obsidian = {
           id = "Obsidian";
           label = "Obsidian";
-          path = "/home/giovanni/Documents/Obsidian";
+          path = "/home/giovanni/Documents/obsidian_vault";
           devices = [
             "wolfgang"
             "Socialism"
