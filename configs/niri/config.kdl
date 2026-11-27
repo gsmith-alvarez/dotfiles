@@ -179,6 +179,9 @@ binds {
     // Editor
     Mod+Alt+N hotkey-overlay-title="Open Editor: Nvim" { spawn "ghostty" "-e" "nvim"; }
 
+    // Voice dictation
+    Ctrl+Alt+Space hotkey-overlay-title="Toggle Hex dictation" { spawn "hex" "dictation" "toggle"; }
+
     // Screen annotation
     Mod+D hotkey-overlay-title="Toggle Screen Annotation: wayscriber" { spawn "wayscriber" "--daemon-toggle"; }
 
