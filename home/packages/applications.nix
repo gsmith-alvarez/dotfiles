@@ -29,6 +29,7 @@ in
     zotero
     obs-studio
     vlc
+    readest
 
     # Fonts
     jetbrains-mono
